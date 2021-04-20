@@ -27,8 +27,8 @@ type RespIndustryList struct {
 	Code    int    `json:"code"`
 }
 
-// IndustryList 获取行业列表
-func (e EastMoney) IndustryList(ctx context.Context) ([]string, error) {
+// QueryIndustryList 获取行业列表
+func (e EastMoney) QueryIndustryList(ctx context.Context) ([]string, error) {
 	apiurl := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
 	reqData := map[string]string{
 		"source": "SELECT_SECURITIES",

@@ -185,13 +185,13 @@ type RespSelectStocks struct {
 	Code    int    `json:"code"`
 }
 
-// SelectStocks 按选股指标默认值筛选股票
-func (e EastMoney) SelectStocks(ctx context.Context) (StockInfoList, error) {
-	return e.SelectStocksWithFilter(ctx, DefaultFilter)
+// QuerySelectedStocks 按选股指标默认值筛选股票
+func (e EastMoney) QuerySelectedStocks(ctx context.Context) (StockInfoList, error) {
+	return e.QuerySelectedStocksWithFilter(ctx, DefaultFilter)
 }
 
-// SelectStocksWithFilter 自定义选股指标值筛选股票
-func (e EastMoney) SelectStocksWithFilter(ctx context.Context, filter Filter) (StockInfoList, error) {
+// QuerySelectedStocksWithFilter 自定义选股指标值筛选股票
+func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Filter) (StockInfoList, error) {
 	apiurl := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
 	reqData := map[string]string{
 		"source": "SELECT_SECURITIES",

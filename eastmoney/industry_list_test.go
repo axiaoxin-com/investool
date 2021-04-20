@@ -7,7 +7,7 @@ import (
 )
 
 func TestIndustryList(t *testing.T) {
-	data, err := _em.IndustryList(_ctx)
+	data, err := _em.QueryIndustryList(_ctx)
 	require.Nil(t, err)
 	require.Len(t, data, 105)
 }
