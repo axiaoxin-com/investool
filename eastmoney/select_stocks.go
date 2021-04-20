@@ -1,15 +1,21 @@
-// 按我的选股指标获取股票数据
-// 1. 总市值 > 500 亿
-// 2. 净资产收益率 >= 8%
-// 3. 最新股息率 >= 0.000001%
-// 4. 净利润 3 年复合增长率 > 0
-// 5. 营收 3 年复合增长率 > 0
-// 6. 预测净利润同比增长 > 0
-// 7. 预测营收同比增长 > 0
-// 8. 每股股利（税前） >= 0.000001
-// 9. 上市以来年化收益率 > 0
+// 按我的选股指标获取股票数据，筛选出优质公司（不代表股价涨）
+// 1. 净资产收益率 >= 8%， ROE_WEIGHT
+// 2. 净利润增长率 > 0 ， NETPROFIT_YOY_RATIO
+// 3. 营收增长率 > 0 ， TOI_YOY_RATIO
+// 4. 最新股息率 >= 0.000001%， ZXGXL
+// 5. 净利润 3 年复合增长率 > 0 ， NETPROFIT_GROWTHRATE_3Y
+// 6. 营收 3 年复合增长率 > 0 ， INCOME_GROWTHRATE_3Y
+// 7. 预测净利润同比增长 > 0 ， PREDICT_NETPROFIT_RATIO
+// 8. 预测营收同比增长 > 0 ， PREDICT_INCOME_RATIO
+// 9. 每股股利（税前） >= 0.000001 ， PAR_DIVIDEND_PRETAX
+// 10. 上市以来年化收益率 > 0 ， LISTING_YIELD_YEAR
+// 11. 总市值 > 500 亿， TOTAL_MARKET_CAP
+// 12. 是否按行业选择， INDUSTRY
+// 13. 按股价（低股价 10-30 元)， NEW_PRICE
+// 14. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
 //
-// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(ROE_WEIGHT>=8)(ZXGXL>0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(PAR_DIVIDEND_PRETAX>0.000001)(LISTING_YIELD_YEAR>0)
+// filter exp:
+// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(PAR_DIVIDEND_PRETAX>=0.000001)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")
 
 package eastmoney
 
@@ -17,40 +23,59 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"time"
+
+	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/logging"
+	"go.uber.org/zap"
 )
 
 // Filter 我的选股指标
 type Filter struct {
-	// 总市值，单位：亿
-	TotalMarketCap float64 `json:"total_market_cap"`
-	// 净资产收益率，单位：%
+	// ------ 最重要的指标！！！------
+	// 净资产收益率（%）
 	ROE float64 `json:"roe"`
-	// 最新股息率，单位：%
+
+	// ------ 必要参数 ------
+	// 净利润增长率（%）
+	NetprofitYoyRatio float64 `json:"netprofit_yoy_ratio"`
+	// 营收增长率（%）
+	ToiYoyRatio float64 `json:"toi_yoy_ratio"`
+	// 最新股息率（%）
 	ZXGXL float64 `json:"zxgxl"`
-	// 净利润 3 年复合增长率，单位：%
+	// 净利润 3 年复合增长率（%）
 	NetprofitGrowthrate3Y float64 `json:"netprofit_growthrate_3_y"`
-	// 营收 3 年复合增长率，单位：%
+	// 营收 3 年复合增长率（%）
 	IncomeGrowthrate3Y float64 `json:"income_growthrate_3_y"`
-	// 预测净利润同比增长，单位：%
+	// 预测净利润同比增长（%）
 	PredictNetprofitRatio float64 `json:"predict_netprofit_ratio"`
-	// 预测营收同比增长，单位：%
+	// 预测营收同比增长（%）
 	PredictIncomeRatio float64 `json:"predict_income_ratio"`
-	// 每股股利（税前），单位：元
+	// 每股股利（税前）（元）
 	ParDividendPretax float64 `json:"par_dividend_pretax"`
-	// 上市以来年化收益率，单位：%
+	// 上市以来年化收益率（%）
 	ListingYieldYear float64 `json:"listing_yield_year"`
-	// 行业名
+
+	// ------ 可选参数 ------
+	// 总市值（亿）
+	TotalMarketCap float64 `json:"total_market_cap"`
+	// 行业名（可选参数，不设置搜全行业）
 	Industry string `json:"industry"`
+	// 股价范围最小值（元）
+	MinPrice float64 `json:"min_price"`
+	// 股价范围最大值（元）
+	MaxPrice float64 `json:"max_price"`
+	// 上市时间是否超过 5 年
+	ListingOver5Y bool `json:"listing_over_5_y"`
 }
 
-// ToString 转为字符串的请求参数
-func (f Filter) ToString(ctx context.Context) string {
+// String 转为字符串的请求参数
+func (f Filter) String(ctx context.Context) string {
 	filter := ""
-	if f.Industry != "" {
-		filter += fmt.Sprintf(`(INDUSTRY in ("%s"))`, f.Industry)
-	}
-	filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>%f)`, f.TotalMarketCap*100000000)
+	// 必要参数
 	filter += fmt.Sprintf(`(ROE_WEIGHT>=%f)`, f.ROE)
+	filter += fmt.Sprintf(`(NETPROFIT_YOY_RATIO>%f)`, f.NetprofitYoyRatio)
+	filter += fmt.Sprintf(`(TOI_YOY_RATIO>%f)`, f.ToiYoyRatio)
 	filter += fmt.Sprintf(`(ZXGXL>=%f)`, f.ZXGXL)
 	filter += fmt.Sprintf(`(NETPROFIT_GROWTHRATE_3Y>%f)`, f.NetprofitGrowthrate3Y)
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>%f)`, f.IncomeGrowthrate3Y)
@@ -58,8 +83,45 @@ func (f Filter) ToString(ctx context.Context) string {
 	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>%f)`, f.PredictIncomeRatio)
 	filter += fmt.Sprintf(`(PAR_DIVIDEND_PRETAX>=%f)`, f.ParDividendPretax)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>%f)`, f.ListingYieldYear)
+	// 可选参数
+	if f.TotalMarketCap != 0 {
+		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>%f)`, f.TotalMarketCap*100000000)
+	}
+	if f.Industry != "" {
+		filter += fmt.Sprintf(`(INDUSTRY in ("%s"))`, f.Industry)
+	}
+	if f.MinPrice != 0 {
+		filter += fmt.Sprintf(`(NEW_PRICE>%f))`, f.MinPrice)
+	}
+	if f.MaxPrice != 0 {
+		filter += fmt.Sprintf(`(NEW_PRICE<%f))`, f.MaxPrice)
+	}
+	if f.ListingOver5Y {
+		filter += `(@LISTING_DATE="OVER5Y")`
+	}
 	return filter
 }
+
+var (
+	// DefaultFilter 默认指标值
+	DefaultFilter = Filter{
+		ROE:                   8.0,
+		NetprofitYoyRatio:     0,
+		ToiYoyRatio:           0,
+		ZXGXL:                 0.000001,
+		NetprofitGrowthrate3Y: 0.0,
+		IncomeGrowthrate3Y:    0.0,
+		PredictNetprofitRatio: 0.0,
+		PredictIncomeRatio:    0.0,
+		ParDividendPretax:     0.000001,
+		ListingYieldYear:      0.0,
+		TotalMarketCap:        500.0,
+		Industry:              "",
+		MinPrice:              0,
+		MaxPrice:              0,
+		ListingOver5Y:         false,
+	}
+)
 
 // StockInfo 接口返回的股票信息结构
 type StockInfo struct {
@@ -123,22 +185,6 @@ type RespSelectStocks struct {
 	Code    int    `json:"code"`
 }
 
-var (
-	// DefaultFilter 默认指标值
-	DefaultFilter = Filter{
-		TotalMarketCap:        500.0,
-		ROE:                   8.0,
-		ZXGXL:                 0.000001,
-		NetprofitGrowthrate3Y: 0.0,
-		IncomeGrowthrate3Y:    0.0,
-		PredictNetprofitRatio: 0.0,
-		PredictIncomeRatio:    0.0,
-		ParDividendPretax:     0.000001,
-		ListingYieldYear:      0.0,
-		Industry:              "",
-	}
-)
-
 // SelectStocks 按选股指标默认值筛选股票
 func (e EastMoney) SelectStocks(ctx context.Context) (StockInfoList, error) {
 	return e.SelectStocksWithFilter(ctx, DefaultFilter)
@@ -146,20 +192,33 @@ func (e EastMoney) SelectStocks(ctx context.Context) (StockInfoList, error) {
 
 // SelectStocksWithFilter 自定义选股指标值筛选股票
 func (e EastMoney) SelectStocksWithFilter(ctx context.Context, filter Filter) (StockInfoList, error) {
-	url := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
+	apiurl := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
 	reqData := map[string]string{
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
 		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,NEW_PRICE,CHANGE_RATE,INDUSTRY,TOTAL_MARKET_CAP,ROE_WEIGHT,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,PAR_DIVIDEND_PRETAX,LISTING_YIELD_YEAR",
-		"filter": filter.ToString(ctx),
+		"filter": filter.String(ctx),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
 	}
-	resp := RespSelectStocks{}
-	if err := e.Post(ctx, url, reqData, &resp); err != nil {
+	logging.Debug(ctx, "EastMoney IndustryList "+apiurl+" begin", zap.Any("reqData", reqData))
+	beginTime := time.Now()
+	req, err := goutils.NewHTTPMultipartReq(ctx, apiurl, reqData)
+	if err != nil {
 		return nil, err
 	}
+	resp := RespSelectStocks{}
+	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
+		return nil, err
+	}
+	latency := time.Now().Sub(beginTime).Milliseconds()
+	logging.Debug(
+		ctx,
+		"EastMoney SelectStocksWithFilter "+apiurl+" end",
+		zap.Int64("latency(ms)", latency),
+		zap.Any("resp", resp),
+	)
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%#v", resp)
 	}
@@ -167,5 +226,6 @@ func (e EastMoney) SelectStocksWithFilter(ctx context.Context, filter Filter) (S
 	for _, i := range resp.Result.Data {
 		result = append(result, i)
 	}
+	result.SortByROE()
 	return result, nil
 }

@@ -10,18 +10,15 @@ import (
 func TestSelectStocks(t *testing.T) {
 	data, err := _em.SelectStocks(_ctx)
 	require.Nil(t, err)
-	require.Equal(t, 98, len(data))
-	data.SortByROE()
-	b, _ := json.Marshal(data)
-	t.Log(string(b))
+	require.NotEmpty(t, data)
 }
 
 func TestSelectStocksWithFilter(t *testing.T) {
 	filter := DefaultFilter
-	filter.Industry = "玻璃"
+	filter.Industry = "白色家电"
+	filter.ListingOver5Y = true
 	data, err := _em.SelectStocksWithFilter(_ctx, filter)
 	require.Nil(t, err)
-	require.Equal(t, 1, len(data))
 	b, _ := json.Marshal(data)
 	t.Log(string(b))
 }
