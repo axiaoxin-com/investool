@@ -31,8 +31,8 @@ github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5
 github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da/go.mod h1:Q73ZrmVTwzkszR9V5SSuryQ31EELlFMUz1kKyl939pY=
 github.com/armon/go-radix v0.0.0-20180808171621-7fddfc383310/go.mod h1:ufUuZ+zHj4x4TnLV4JWEpy2hxWSpsRywHrMgIH9cCH8=
 github.com/axiaoxin-com/goutils v1.0.3-0.20201019024427-66fe97b27be4/go.mod h1:ZuL0c9e5Nw6b6eirSmB9VaOeojiHS3BrmzGyKiKYLD0=
-github.com/axiaoxin-com/goutils v1.0.3 h1:cSmM/6yNXNT9TE58yCVLmZKVY8tRwx6b+3EO0iuuttQ=
-github.com/axiaoxin-com/goutils v1.0.3/go.mod h1:EZjbLxxR1/iwaZr4Hs8zG0HooZnOxOHhB34fdp76f10=
+github.com/axiaoxin-com/goutils v1.0.4 h1:ijMO6yQfRiFahbMeJXHtDOMVDxc1ZlYZWPo9jsku+RY=
+github.com/axiaoxin-com/goutils v1.0.4/go.mod h1:OL6N2EvQqPpU08lu7MboM59ej8tUrw5b+bowliU6ekw=
 github.com/axiaoxin-com/logging v1.2.9 h1:DkoLMqVwRNZHETaaz0NRnx7TnyDYQeKJL7A2YXCroe4=
 github.com/axiaoxin-com/logging v1.2.9/go.mod h1:Jx322YD47doa/j9kn3pNPntze8b9bOVxf3So0LmdRMg=
 github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible/go.mod h1:osfaiScAUVup+UC9Nfq76eWqDhXlp+4UYaA8uhTBO6g=
