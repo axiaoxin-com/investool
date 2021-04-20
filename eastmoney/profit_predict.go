@@ -1,4 +1,4 @@
-// 获取机构评级统计
+// 获取盈利预测
 
 package eastmoney
 
@@ -13,51 +13,53 @@ import (
 	"go.uber.org/zap"
 )
 
-// RespOrgRating 统计评级接口返回结构
-type RespOrgRating struct {
+// RespProfitPredict 盈利预测接口返回结构
+type RespProfitPredict struct {
 	Version string `json:"version"`
 	Result  struct {
-		Pages int         `json:"pages"`
-		Data  []OrgRating `json:"data"`
-		Count int         `json:"count"`
+		Pages int             `json:"pages"`
+		Data  []ProfitPredict `json:"data"`
+		Count int             `json:"count"`
 	} `json:"result"`
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
 
-// OrgRating 机构评级统计
-type OrgRating struct {
-	// 时间段
-	DateType string `json:"DATE_TYPE"`
-	// 综合评级
-	CompreRating string `json:"COMPRE_RATING"`
+// ProfitPredict 盈利预测
+type ProfitPredict struct {
+	// 年份
+	PredictYear int `json:"PREDICT_YEAR"`
+	// 预测每股收益
+	Eps float64 `json:"EPS"`
+	// 预测市盈率
+	Pe float64 `json:"PE"`
 }
 
-// QueryOrgRating 获取评级统计
-func (e EastMoney) QueryOrgRating(ctx context.Context, secuCode string) ([]OrgRating, error) {
+// QueryProfitPredict 获取盈利预测
+func (e EastMoney) QueryProfitPredict(ctx context.Context, secuCode string) ([]ProfitPredict, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
 		"source": "SECURITIES",
 		"client": "APP",
-		"type":   "RPT_RES_ORGRATING",
-		"sty":    "DATE_TYPE,COMPRE_RATING",
+		"type":   "RPT_RES_PROFITPREDICT",
+		"sty":    "PREDICT_YEAR,EPS,PE",
 		"filter": fmt.Sprintf(`(SECUCODE="%s")`, strings.ToUpper(secuCode)),
 		"sr":     "1",
-		"st":     "DATE_TYPE_CODE",
+		"st":     "PREDICT_YEAR",
 	}
-	logging.Debug(ctx, "EastMoney QueryOrgRating "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryProfitPredict "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
 		return nil, err
 	}
-	resp := RespOrgRating{}
+	resp := RespProfitPredict{}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
 		return nil, err
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(ctx, "EastMoney QueryOrgRating "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
+	logging.Debug(ctx, "EastMoney QueryProfitPredict "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%#v", resp)
 	}
