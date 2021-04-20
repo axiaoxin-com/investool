@@ -15,9 +15,9 @@ import (
 
 // FinaMainData 财报主要指标
 type FinaMainData struct {
-	// 股票代码
+	// 股票代码: 111111.SZ
 	Secucode string `json:"SECUCODE"`
-	// 股票代码
+	// 股票代码: 111111
 	SecurityCode string `json:"SECURITY_CODE"`
 	// 股票名称
 	SecurityNameAbbr string `json:"SECURITY_NAME_ABBR"`
