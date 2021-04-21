@@ -45,7 +45,7 @@ type HistoryPE struct {
 type HistoryPEList []HistoryPE
 
 // GetMidValue 获取历史 pe 中位数
-func (h HistoryPEList) GetMidValue() (float64, error) {
+func (h HistoryPEList) GetMidValue(ctx context.Context) (float64, error) {
 	vlen := len(h)
 	if vlen == 0 {
 		return 0, errors.New("no data")
@@ -70,7 +70,7 @@ func (e EastMoney) QueryHistoryPEList(ctx context.Context, secuCode string) (His
 		"year": "4", // 10 年
 		"type": "1", // 市盈率
 	}
-	logging.Debug(ctx, "EastMoney QueryHistoryPE "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryHistoryPEList "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
@@ -81,7 +81,7 @@ func (e EastMoney) QueryHistoryPEList(ctx context.Context, secuCode string) (His
 		return nil, err
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(ctx, "EastMoney QueryHistoryPE "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
+	logging.Debug(ctx, "EastMoney QueryHistoryPEList "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
 	result := HistoryPEList{}
 	if len(resp.Data) == 0 {
 		return nil, errors.New("no history pe data")
@@ -89,7 +89,7 @@ func (e EastMoney) QueryHistoryPEList(ctx context.Context, secuCode string) (His
 	for _, i := range resp.Data[0] {
 		value, err := strconv.ParseFloat(i.Value, 64)
 		if err != nil {
-			logging.Error(ctx, "HistoryPE ParseFloat error:"+err.Error())
+			logging.Error(ctx, "QueryHistoryPEList ParseFloat error:"+err.Error())
 			continue
 		}
 		pe := HistoryPE{
