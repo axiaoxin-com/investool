@@ -1,6 +1,7 @@
 package eniu
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -15,5 +16,7 @@ func TestQueryHistoryStockPrice(t *testing.T) {
 	data, err := _e.QueryHistoryStockPrice(_ctx, "002459.SZ")
 	require.Nil(t, err)
 	require.NotEmpty(t, data.Date)
-	t.Log(data)
+	v, err := data.HistoryVolatility(_ctx)
+	require.Nil(t, err)
+	fmt.Println(v)
 }
