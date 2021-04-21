@@ -2,20 +2,17 @@
 // 1. 净资产收益率 >= 8%， ROE_WEIGHT
 // 2. 净利润增长率 > 0 ， NETPROFIT_YOY_RATIO
 // 3. 营收增长率 > 0 ， TOI_YOY_RATIO
-// 4. 最新股息率 >= 0.000001%， ZXGXL
+// 4. 最新股息率 >= 2.75%， ZXGXL
 // 5. 净利润 3 年复合增长率 > 0 ， NETPROFIT_GROWTHRATE_3Y
 // 6. 营收 3 年复合增长率 > 0 ， INCOME_GROWTHRATE_3Y
 // 7. 预测净利润同比增长 > 0 ， PREDICT_NETPROFIT_RATIO
 // 8. 预测营收同比增长 > 0 ， PREDICT_INCOME_RATIO
-// 9. 上市以来年化收益率 > 0 ， LISTING_YIELD_YEAR
+// 9. 上市以来年化收益率 > 20% ， LISTING_YIELD_YEAR
 // 10. 总市值 > 500 亿， TOTAL_MARKET_CAP
 // 11. 是否按行业选择， INDUSTRY
 // 12. 按股价（低股价 10-30 元)， NEW_PRICE
 // 13. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
 // 14. 市净率不小于1，PBNEWMRQ
-//
-// filter exp:
-// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")(PBNEWMRQ>=1)
 
 package eastmoney
 
@@ -108,12 +105,12 @@ var (
 		ROE:                   8.0,
 		NetprofitYoyRatio:     0,
 		ToiYoyRatio:           0,
-		ZXGXL:                 0.000001,
+		ZXGXL:                 2.75,
 		NetprofitGrowthrate3Y: 0.0,
 		IncomeGrowthrate3Y:    0.0,
 		PredictNetprofitRatio: 0.0,
 		PredictIncomeRatio:    0.0,
-		ListingYieldYear:      0.0,
+		ListingYieldYear:      20,
 		TotalMarketCap:        500.0,
 		Industry:              "",
 		MinPrice:              0,
