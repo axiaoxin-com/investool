@@ -34,9 +34,23 @@ type Stock struct {
 	// 预约财报披露日期
 	FinaAppointPublishDate string
 	// 机构评级
-	OrgRatings []eastmoney.OrgRating
+	OrgRatingList eastmoney.OrgRatingList
 	// 盈利预测
-	ProfitPredicts []eastmoney.ProfitPredict
+	ProfitPredictList eastmoney.ProfitPredictList
+}
+
+// ValuationStatusDesc 综合估值状态文字描述
+func (s Stock) ValuationStatusDesc() string {
+	desc := ""
+	switch s.ValuationStatus {
+	case eastmoney.ValuationLow:
+		desc = "估值较低"
+	case eastmoney.ValuationModerate:
+		desc = "估值中等"
+	case eastmoney.ValuationHigh:
+		desc = "估值较高"
+	}
+	return desc
 }
 
 // StockList 股票列表
@@ -67,8 +81,8 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	if err != nil {
 		return s, err
 	}
-	s.ValuationStatus = status
 	s.ValuationMap = valMap
+	s.ValuationStatus = status
 
 	// 历史市盈率
 	peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)
@@ -124,13 +138,13 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	if err != nil {
 		return s, err
 	}
-	s.OrgRatings = orgRatings
+	s.OrgRatingList = orgRatings
 
 	// 盈利预测
 	pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
 	if err != nil {
 		return s, err
 	}
-	s.ProfitPredicts = pps
+	s.ProfitPredictList = pps
 	return s, nil
 }

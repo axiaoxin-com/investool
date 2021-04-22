@@ -177,7 +177,11 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 // ROEList 获取历史 roe，最新的在最前面
 func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float64 {
 	r := []float64{}
-	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+	data := h.FilterByReportType(ctx, "年报")
+	if count > 0 {
+		data = data[:count]
+	}
+	for _, i := range data {
 		r = append(r, i.Roejq)
 	}
 	return r
@@ -186,7 +190,11 @@ func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float6
 // EPSList 获取历史 eps，最新的在最前面
 func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float64 {
 	r := []float64{}
-	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+	data := h.FilterByReportType(ctx, "年报")
+	if count > 0 {
+		data = data[:count]
+	}
+	for _, i := range data {
 		r = append(r, i.Epsjb)
 	}
 	return r
@@ -195,7 +203,11 @@ func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float6
 // RevenueList 获取历史营收，最新的在最前面
 func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []float64 {
 	r := []float64{}
-	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+	data := h.FilterByReportType(ctx, "年报")
+	if count > 0 {
+		data = data[:count]
+	}
+	for _, i := range data {
 		r = append(r, i.Totaloperatereve)
 	}
 	return r
@@ -204,7 +216,11 @@ func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []fl
 // ProfitList 获取历史利润，最新的在最前面
 func (h HistoricalFinaMainData) ProfitList(ctx context.Context, count int) []float64 {
 	r := []float64{}
-	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+	data := h.FilterByReportType(ctx, "年报")
+	if count > 0 {
+		data = data[:count]
+	}
+	for _, i := range data {
 		r = append(r, i.Parentnetprofit)
 	}
 	return r

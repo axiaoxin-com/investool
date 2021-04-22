@@ -135,11 +135,15 @@ type StockInfo struct {
 	// 行业
 	Industry string `json:"INDUSTRY"`
 	// 总市值
-	TotalMarketCap int64 `json:"TOTAL_MARKET_CAP"`
+	TotalMarketCap float64 `json:"TOTAL_MARKET_CAP"`
 	// 最新一期 ROE
 	RoeWeight float64 `json:"ROE_WEIGHT"`
 	// 最新股息率
 	Zxgxl float64 `json:"ZXGXL"`
+	// 净利润增长率（%）
+	NetprofitYoyRatio float64 `json:"NETPROFIT_YOY_RATIO"`
+	// 营收增长率（%）
+	ToiYoyRatio float64 `json:"TOI_YOY_RATIO"`
 	// 净利润 3 年复合增长率
 	NetprofitGrowthrate3Y float64 `json:"NETPROFIT_GROWTHRATE_3Y"`
 	//营收 3 年复合增长率

@@ -7,7 +7,7 @@ import (
 )
 
 func TestAutoFilterStocks(t *testing.T) {
-	result, err := AutoFilterStocks(_ctx, DefaultFilterOptions)
+	result, err := AutoFilterStocks(_ctx)
 	require.Nil(t, err)
 	t.Log(result)
 }

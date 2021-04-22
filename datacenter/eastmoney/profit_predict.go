@@ -36,8 +36,19 @@ type ProfitPredict struct {
 	Pe float64 `json:"PE"`
 }
 
+// ProfitPredictList 预测列表
+type ProfitPredictList []ProfitPredict
+
+func (p ProfitPredictList) String() string {
+	s := ""
+	for _, i := range p {
+		s += fmt.Sprintf("%d 预测每股收益：%f，预测市盈率：%f\n", i.PredictYear, i.Eps, i.Pe)
+	}
+	return s
+}
+
 // QueryProfitPredict 获取盈利预测
-func (e EastMoney) QueryProfitPredict(ctx context.Context, secuCode string) ([]ProfitPredict, error) {
+func (e EastMoney) QueryProfitPredict(ctx context.Context, secuCode string) (ProfitPredictList, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
 		"source": "SECURITIES",

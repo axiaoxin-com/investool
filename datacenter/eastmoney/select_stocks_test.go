@@ -7,13 +7,13 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestSelectStocks(t *testing.T) {
+func TestQuerySelectedStocks(t *testing.T) {
 	data, err := _em.QuerySelectedStocks(_ctx)
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
 }
 
-func TestSelectStocksWithFilter(t *testing.T) {
+func TestQuerySelectedStocksWithFilter(t *testing.T) {
 	filter := DefaultFilter
 	filter.Industry = "白色家电"
 	filter.ListingOver5Y = true
