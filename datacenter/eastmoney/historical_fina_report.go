@@ -174,22 +174,56 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 	return result
 }
 
-// IsIncreasingByYears roe/eps 是否逐年递增
+// ROEList 获取历史 roe，最新的在最前面
+func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float64 {
+	r := []float64{}
+	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+		r = append(r, i.Roejq)
+	}
+	return r
+}
+
+// EPSList 获取历史 eps，最新的在最前面
+func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float64 {
+	r := []float64{}
+	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+		r = append(r, i.Epsjb)
+	}
+	return r
+}
+
+// RevenueList 获取历史营收，最新的在最前面
+func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []float64 {
+	r := []float64{}
+	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+		r = append(r, i.Totaloperatereve)
+	}
+	return r
+}
+
+// ProfitList 获取历史利润，最新的在最前面
+func (h HistoricalFinaMainData) ProfitList(ctx context.Context, count int) []float64 {
+	r := []float64{}
+	for _, i := range h.FilterByReportType(ctx, "年报")[:count] {
+		r = append(r, i.Parentnetprofit)
+	}
+	return r
+}
+
+// IsIncreasingByYears roe/eps/revenue/profit 是否逐年递增
 func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, years int) bool {
 	data := h.FilterByReportType(ctx, "年报")
 	dataLen := len(data)
 	if dataLen == 0 {
 		return false
 	}
+	if years > dataLen {
+		years = dataLen
+	}
 
 	dataType = strings.ToUpper(dataType)
 	increasing := true
-	startIndex := dataLen - 1 - years
-	if startIndex < 0 {
-		startIndex = 0
-	}
-
-	for i := startIndex; i < dataLen-1; i++ {
+	for i := 0; i < years-1; i++ {
 		switch dataType {
 		case "ROE":
 			if data[i].Roejq <= data[i+1].Roejq {
@@ -198,6 +232,16 @@ func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataTyp
 			}
 		case "EPS":
 			if data[i].Epsjb <= data[i+1].Epsjb {
+				increasing = false
+				break
+			}
+		case "REVENUE":
+			if data[i].Totaloperatereve <= data[i+1].Totaloperatereve {
+				increasing = false
+				break
+			}
+		case "PROFIT":
+			if data[i].Parentnetprofit <= data[i+1].Parentnetprofit {
 				increasing = false
 				break
 			}
@@ -234,8 +278,8 @@ func (h HistoricalFinaMainData) MidValue(ctx context.Context, dataType string, y
 	return values[mid]
 }
 
-// Q1RevenueInreasingRatio 获取今年一季报的营收增长比 (%)
-func (h HistoricalFinaMainData) Q1RevenueInreasingRatio(ctx context.Context) (float64, error) {
+// Q1RevenueIncreasingRatio 获取今年一季报的营收增长比 (%)
+func (h HistoricalFinaMainData) Q1RevenueIncreasingRatio(ctx context.Context) (float64, error) {
 	year := time.Now().Year()
 	data := h.FilterByReportYear(ctx, year)
 	if len(data) > 0 {
@@ -257,7 +301,7 @@ type RespFinaMainData struct {
 	Code    int    `json:"code"`
 }
 
-// QueryHistoricalFinaMainData 获取财报主要指标
+// QueryHistoricalFinaMainData 获取财报主要指标，最新的在最前面
 func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode string) (HistoricalFinaMainData, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
@@ -270,7 +314,7 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		"ps":     "100",
 		"sr":     "-1",
 	}
-	logging.Debug(ctx, "EastMoney QueryFinaMainData "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryHistoricalFinaMainData "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
@@ -281,7 +325,12 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		return nil, err
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(ctx, "EastMoney QueryFinaMainData "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
+	logging.Debug(
+		ctx,
+		"EastMoney QueryHistoricalFinaMainData "+apiurl+" end",
+		zap.Int64("latency(ms)", latency),
+		zap.Any("resp", resp),
+	)
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%#v", resp)
 	}
