@@ -148,12 +148,12 @@ type FinaMainData struct {
 	Yszkzzl float64 `json:"YSZKZZL"`
 }
 
-// HistoryFinaMainData 主要指标历史数据列表
-type HistoryFinaMainData []FinaMainData
+// HistoricalFinaMainData 主要指标历史数据列表
+type HistoricalFinaMainData []FinaMainData
 
 // FilterByReportType 按财报类型过滤：一季报，中报，三季报，年报
-func (h HistoryFinaMainData) FilterByReportType(ctx context.Context, reportType string) HistoryFinaMainData {
-	result := HistoryFinaMainData{}
+func (h HistoricalFinaMainData) FilterByReportType(ctx context.Context, reportType string) HistoricalFinaMainData {
+	result := HistoricalFinaMainData{}
 	for _, i := range h {
 		if i.ReportType == reportType {
 			result = append(result, i)
@@ -163,8 +163,8 @@ func (h HistoryFinaMainData) FilterByReportType(ctx context.Context, reportType 
 }
 
 // FilterByReportYear 按财报年份过滤： 2021
-func (h HistoryFinaMainData) FilterByReportYear(ctx context.Context, reportYear int) HistoryFinaMainData {
-	result := HistoryFinaMainData{}
+func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYear int) HistoricalFinaMainData {
+	result := HistoricalFinaMainData{}
 	year := fmt.Sprint(reportYear)
 	for _, i := range h {
 		if i.ReportYear == year {
@@ -175,7 +175,7 @@ func (h HistoryFinaMainData) FilterByReportYear(ctx context.Context, reportYear 
 }
 
 // IsIncreasingByYears roe/eps 是否逐年递增
-func (h HistoryFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, years int) bool {
+func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, years int) bool {
 	data := h.FilterByReportType(ctx, "年报")
 	dataLen := len(data)
 	if dataLen == 0 {
@@ -207,7 +207,7 @@ func (h HistoryFinaMainData) IsIncreasingByYears(ctx context.Context, dataType s
 }
 
 // MidValue 历史年报 roe/eps 中位数
-func (h HistoryFinaMainData) MidValue(ctx context.Context, dataType string, years int) float64 {
+func (h HistoricalFinaMainData) MidValue(ctx context.Context, dataType string, years int) float64 {
 	dataType = strings.ToUpper(dataType)
 	values := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
@@ -235,7 +235,7 @@ func (h HistoryFinaMainData) MidValue(ctx context.Context, dataType string, year
 }
 
 // Q1RevenueInreasingRatio 获取今年一季报的营收增长比 (%)
-func (h HistoryFinaMainData) Q1RevenueInreasingRatio(ctx context.Context) (float64, error) {
+func (h HistoricalFinaMainData) Q1RevenueInreasingRatio(ctx context.Context) (float64, error) {
 	year := time.Now().Year()
 	data := h.FilterByReportYear(ctx, year)
 	if len(data) > 0 {
@@ -248,17 +248,17 @@ func (h HistoryFinaMainData) Q1RevenueInreasingRatio(ctx context.Context) (float
 type RespFinaMainData struct {
 	Version string `json:"version"`
 	Result  struct {
-		Pages int                 `json:"pages"`
-		Data  HistoryFinaMainData `json:"data"`
-		Count int                 `json:"count"`
+		Pages int                    `json:"pages"`
+		Data  HistoricalFinaMainData `json:"data"`
+		Count int                    `json:"count"`
 	} `json:"result"`
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
 
-// QueryHistoryFinaMainData 获取财报主要指标
-func (e EastMoney) QueryHistoryFinaMainData(ctx context.Context, secuCode string) (HistoryFinaMainData, error) {
+// QueryHistoricalFinaMainData 获取财报主要指标
+func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode string) (HistoricalFinaMainData, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
 		"filter": fmt.Sprintf(`(SECUCODE="%s")`, strings.ToUpper(secuCode)),
