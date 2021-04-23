@@ -9,26 +9,36 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/logging"
+	"github.com/axiaoxin-com/x-stock/core"
+	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/model"
-	"github.com/axiaoxin-com/x-stock/parser"
 )
+
+// Descriptions 数据备注信息
+type Descriptions struct {
+	Filter         eastmoney.Filter    `json:"filter"`
+	CheckerOptions core.CheckerOptions `json:"checker_options"`
+}
 
 // Exportor exportor 实例
 type Exportor struct {
-	Stocks        DataList
-	FilterOptions parser.FilterOptions
+	Stocks       DataList
+	Descriptions Descriptions
 }
 
 // New 创建要导出的数据列表
-func New(ctx context.Context, stocks model.StockList, filterOptions parser.FilterOptions) Exportor {
+func New(ctx context.Context, stocks model.StockList, filter eastmoney.Filter, checkerOptions core.CheckerOptions) Exportor {
 	dlist := DataList{}
 	for _, s := range stocks {
 		dlist = append(dlist, NewData(s))
 	}
 
 	return Exportor{
-		Stocks:        dlist,
-		FilterOptions: filterOptions,
+		Stocks: dlist,
+		Descriptions: Descriptions{
+			Filter:         filter,
+			CheckerOptions: checkerOptions,
+		},
 	}
 }
 
@@ -54,11 +64,11 @@ func Export(ctx context.Context, exportFilename string) {
 
 	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
 	var err error
-	stocks, err := parser.AutoFilterStocks(ctx)
+	stocks, err := core.AutoFilterStocks(ctx)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	e := New(ctx, stocks, parser.DefaultFilterOptions)
+	e := New(ctx, stocks, core.DefaultFilter, core.DefaultCheckerOptions)
 	e.Stocks.SortByROE()
 
 	switch exportType {
@@ -75,6 +85,5 @@ func Export(ctx context.Context, exportFilename string) {
 		logging.Fatal(ctx, err.Error())
 	}
 
-	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Infof(ctx, "x-stock exportor export %s succuss, latency:%+v", exportType, latency)
+	logging.Infof(ctx, "x-stock exportor export %s succuss, latency:%#v", exportType, time.Now().Sub(beginTime))
 }

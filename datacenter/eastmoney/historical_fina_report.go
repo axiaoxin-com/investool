@@ -178,6 +178,9 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
+	if len(data) == 0 {
+		return r
+	}
 	if count > 0 {
 		data = data[:count]
 	}
@@ -191,6 +194,9 @@ func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float6
 func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
+	if len(data) == 0 {
+		return r
+	}
 	if count > 0 {
 		data = data[:count]
 	}
@@ -204,6 +210,9 @@ func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float6
 func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
+	if len(data) == 0 {
+		return r
+	}
 	if count > 0 {
 		data = data[:count]
 	}
@@ -217,6 +226,9 @@ func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []fl
 func (h HistoricalFinaMainData) ProfitList(ctx context.Context, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
+	if len(data) == 0 {
+		return r
+	}
 	if count > 0 {
 		data = data[:count]
 	}

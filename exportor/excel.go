@@ -71,6 +71,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	}
 
 	headers := e.Stocks[0].GetHeaders()
+	headersLen := len(headers)
 	headerStyle, err := f.NewStyle(HeaderStyle)
 	if err != nil {
 		logging.Error(ctx, "New HeaderStyle error:"+err.Error())
@@ -112,7 +113,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue
 		}
-		vcell, err := excelize.CoordinatesToCellName(len(headers), 1)
+		vcell, err := excelize.CoordinatesToCellName(headersLen, 1)
 		if err != nil {
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue
@@ -125,7 +126,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue
 		}
-		vcell, err = excelize.CoordinatesToCellName(len(headers), stocksCount)
+		vcell, err = excelize.CoordinatesToCellName(headersLen, stocksCount+3)
 		if err != nil {
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue
@@ -133,8 +134,17 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 		f.SetCellStyle(sheet, hcell, vcell, bodyStyle)
 	}
 
-	// 写 header
+	desc, _ := json.Marshal(e.Descriptions)
+	descStartCell, err := excelize.CoordinatesToCellName(1, stocksCount+3)
+	if err != nil {
+		logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
+	}
+	descEndCell, err := excelize.CoordinatesToCellName(headersLen, stocksCount+3)
+	if err != nil {
+		logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
+	}
 	for _, sheet := range sheets {
+		// 写 header
 		for i, header := range headers {
 			axis, err := excelize.CoordinatesToCellName(i+1, 1)
 			if err != nil {
@@ -143,7 +153,11 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			}
 			f.SetCellValue(sheet, axis, header)
 		}
+		// 写 tail desc
+		f.MergeCell(sheet, descStartCell, descEndCell)
+		f.SetCellValue(sheet, descStartCell, "筛选条件: "+string(desc))
 	}
+
 	// 写 body
 	e.Stocks.SortByROE()
 	for _, sheet := range sheets {
@@ -181,11 +195,10 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			row++
 		}
 	}
-	filter, _ := json.Marshal(e.FilterOptions)
 	f.SetDocProps(&excelize.DocProperties{
 		Created:     time.Now().Format("2006-01-02 15:04:05"),
 		Creator:     "axiaoxin",
-		Description: "filter: " + string(filter),
+		Description: string(desc),
 		Keywords:    "x-stock: https://github.com/axiaoxin-com/x-stock",
 	})
 
