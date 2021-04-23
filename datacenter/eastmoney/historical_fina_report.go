@@ -349,9 +349,7 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		return nil, err
 	}
 	resp := RespFinaMainData{}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
-		return nil, err
-	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -359,6 +357,9 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return nil, err
+	}
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
@@ -407,9 +408,7 @@ func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode
 		return "", err
 	}
 	resp := RespFinaPublishDate{}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
-		return "", err
-	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -417,6 +416,9 @@ func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return "", err
+	}
 	if resp.Code != 0 {
 		return "", fmt.Errorf("%s %#v", securityCode, resp)
 	}

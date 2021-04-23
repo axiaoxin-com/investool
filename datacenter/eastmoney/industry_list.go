@@ -43,11 +43,12 @@ func (e EastMoney) QueryIndustryList(ctx context.Context) ([]string, error) {
 		return nil, err
 	}
 	resp := RespIndustryList{}
-	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
-		return nil, err
-	}
+	err = goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "EastMoney IndustryList "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
+	if err != nil {
+		return nil, err
+	}
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%#v", resp)
 	}

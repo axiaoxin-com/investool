@@ -65,11 +65,12 @@ func (e EastMoney) QueryOrgRating(ctx context.Context, secuCode string) (OrgRati
 		return nil, err
 	}
 	resp := RespOrgRating{}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
-		return nil, err
-	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "EastMoney QueryOrgRating "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
+	if err != nil {
+		return nil, err
+	}
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}

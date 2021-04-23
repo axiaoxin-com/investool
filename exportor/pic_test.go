@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestExportExcel(t *testing.T) {
+func TestExportPic(t *testing.T) {
 	e := Exportor{
 		Stocks: []Data{
 			{
@@ -19,6 +19,6 @@ func TestExportExcel(t *testing.T) {
 		},
 	}
 
-	_, err := e.ExportExcel(_ctx, "/tmp/test.xlsx")
+	_, err := e.ExportPic(_ctx, "/tmp/test.png")
 	require.Nil(t, err)
 }

@@ -77,9 +77,7 @@ func (e EastMoney) QueryHistoricalPEList(ctx context.Context, secuCode string) (
 		return nil, err
 	}
 	resp := RespHistoricalPE{}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
-		return nil, err
-	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -87,6 +85,9 @@ func (e EastMoney) QueryHistoricalPEList(ctx context.Context, secuCode string) (
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return nil, err
+	}
 	result := HistoricalPEList{}
 	if len(resp.Data) == 0 {
 		return nil, errors.New("no historical pe data")

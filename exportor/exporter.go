@@ -79,7 +79,7 @@ func Export(ctx context.Context, exportFilename string) {
 	case "excel":
 		_, err = e.ExportExcel(ctx, exportFilename)
 	case "pic":
-		// _, err = e.ExportPic(ctx, exportFilename)
+		_, err = e.ExportPic(ctx, exportFilename)
 	}
 	if err != nil {
 		logging.Fatal(ctx, err.Error())

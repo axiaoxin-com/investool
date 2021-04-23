@@ -128,7 +128,8 @@ func (f Filter) String() string {
 var (
 	// DefaultFilter 默认指标值
 	DefaultFilter = Filter{
-		MinROE: 8.0,
+		MinROE:            8.0,
+		MinTotalMarketCap: 20.0,
 	}
 )
 
@@ -235,9 +236,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		return nil, err
 	}
 	resp := RespSelectStocks{}
-	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
-		return nil, err
-	}
+	err = goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -245,6 +244,9 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return nil, err
+	}
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", filter.String(), resp)
 	}

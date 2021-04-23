@@ -141,9 +141,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 	if err != nil {
 		return 0, nil, err
 	}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl4, &resp); err != nil {
-		return 0, nil, err
-	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl4, &resp)
 	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -151,6 +149,9 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return 0, nil, err
+	}
 	if resp.Code != 0 {
 		return 0, nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}

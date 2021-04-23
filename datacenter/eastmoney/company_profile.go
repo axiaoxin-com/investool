@@ -273,12 +273,22 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 	reqData := map[string]interface{}{
 		"fc": fc,
 	}
+	logging.Debug(ctx, "EastMoney QueryCompanyProfile "+apiurl+" begin", zap.Any("reqData", reqData))
+	beginTime := time.Now()
 	req, err := goutils.NewHTTPJSONReq(ctx, apiurl, reqData)
 	if err != nil {
 		return profile, err
 	}
 	resp := RespJBZL{}
-	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
+	err = goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp)
+	latency := time.Now().Sub(beginTime).Milliseconds()
+	logging.Debug(
+		ctx,
+		"EastMoney QueryCompanyProfile "+apiurl+" end",
+		zap.Int64("latency(ms)", latency),
+		zap.Any("resp", resp),
+	)
+	if err != nil {
 		return profile, err
 	}
 	if resp.Status != 0 {
@@ -297,22 +307,23 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 		"fc": fc,
 	}
 	logging.Debug(ctx, "EastMoney QueryCompanyProfile "+apiurl+" begin", zap.Any("params", params))
-	beginTime := time.Now()
+	beginTime = time.Now()
 	apiurl, err = goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
 		return profile, err
 	}
 	resp1 := RespCPBD{}
-	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp1); err != nil {
-		return profile, err
-	}
-	latency := time.Now().Sub(beginTime).Milliseconds()
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp1)
+	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
 		"EastMoney QueryCompanyProfile "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp1),
 	)
+	if err != nil {
+		return profile, err
+	}
 	if resp1.Status != 0 {
 		return profile, fmt.Errorf("%s %#v", secuCode, resp1.Message)
 	}
