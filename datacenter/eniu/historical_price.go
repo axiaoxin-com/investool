@@ -26,7 +26,7 @@ type RespHistoricalStockPrice struct {
 // 2、对于每个时间段，求出该时间段末的股价与该时段初的股价之比的自然对数。
 // 3、求出这些对数值的标准差即为历史波动率的估计值
 // 4、若将日、周等标准差转化为年标准差，需要再乘以一年中包含的时段数量的平方根(如，选取时间间隔为每天，则若扣除闭市，每年中有250个交易日，应乘以根号250)
-func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, interval string) (float64, error) {
+func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, period string) (float64, error) {
 	// 求末初股价比自然对数
 	logs := []float64{}
 	for i := len(p.Price) - 1; i >= 1; i-- {
@@ -42,19 +42,19 @@ func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, inte
 	}
 	logging.Debugs(ctx, "stdev:", stdev)
 
-	intervalValue := float64(250)
-	interval = strings.ToUpper(interval)
-	switch interval {
+	periodValue := float64(250)
+	period = strings.ToUpper(period)
+	switch period {
 	case "DAY":
-		intervalValue = 1
+		periodValue = 1
 	case "WEEK":
-		intervalValue = 5
+		periodValue = 5
 	case "MONTH":
-		intervalValue = 21.75
+		periodValue = 21.75
 	case "YEAR":
-		intervalValue = 250
+		periodValue = 250
 	}
-	volatility := stdev * math.Sqrt(intervalValue)
+	volatility := stdev * math.Sqrt(periodValue)
 	return volatility, nil
 }
 

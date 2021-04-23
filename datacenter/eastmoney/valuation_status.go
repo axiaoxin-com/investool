@@ -13,6 +13,22 @@ import (
 	"go.uber.org/zap"
 )
 
+var (
+	// ValuationLow 估值较低
+	ValuationLow float64 = 0
+	// ValuationModerate 估值中等
+	ValuationModerate float64 = 1
+	// ValuationHigh 估值较高
+	ValuationHigh float64 = 2
+
+	// ValuationMap 估值描述与数字的映射
+	ValuationMap = map[string]float64{
+		"估值较低": ValuationLow,
+		"估值中等": ValuationModerate,
+		"估值较高": ValuationHigh,
+	}
+)
+
 // RespValuation 估值状态接口返回结构
 type RespValuation struct {
 	Version string `json:"version"`
@@ -29,7 +45,7 @@ type RespValuation struct {
 }
 
 // QueryValuationStatus 获取估值状态
-func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (map[string]string, error) {
+func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (float64, map[string]string, error) {
 	valuations := map[string]string{}
 	secuCode = strings.ToUpper(secuCode)
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
@@ -47,11 +63,11 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 	apiurl1, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	logging.Debug(ctx, "EastMoney QueryValuationStatus "+apiurl1+" begin", zap.Any("params", params))
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	resp := RespValuation{}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl1, &resp); err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
@@ -61,7 +77,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%#v", resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市盈率"] = resp.Result.Data[0].ValationStatus
@@ -73,10 +89,10 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 	apiurl2, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	logging.Debug(ctx, "EastMoney QueryValuationStatus "+apiurl2+" begin", zap.Any("params", params))
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl2, &resp); err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
@@ -86,7 +102,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%#v", resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市净率"] = resp.Result.Data[0].ValationStatus
@@ -98,10 +114,10 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 	apiurl3, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	logging.Debug(ctx, "EastMoney QueryValuationStatus "+apiurl3+" begin", zap.Any("params", params))
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl3, &resp); err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
@@ -111,7 +127,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%#v", resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市销率"] = resp.Result.Data[0].ValationStatus
@@ -123,10 +139,10 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 	apiurl4, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	logging.Debug(ctx, "EastMoney QueryValuationStatus "+apiurl4+" begin", zap.Any("params", params))
 	if err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl4, &resp); err != nil {
-		return nil, err
+		return 0, nil, err
 	}
 	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
@@ -136,11 +152,26 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%#v", resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市现率"] = resp.Result.Data[0].ValationStatus
 	}
 
-	return valuations, nil
+	// 4 种估值，综合评估一个结果
+	val := float64(0)
+	for _, v := range valuations {
+		val += ValuationMap[v]
+	}
+	status := ValuationHigh
+	switch {
+	case val >= 0 && val < 4:
+		status = ValuationLow
+	case val >= 4 && val <= 6:
+		status = ValuationModerate
+	case val > 6:
+		status = ValuationHigh
+	}
+
+	return status, valuations, nil
 }

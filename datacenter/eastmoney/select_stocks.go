@@ -2,7 +2,7 @@
 // 1. 净资产收益率 >= 8%， ROE_WEIGHT
 // 2. 净利润增长率 > 0 ， NETPROFIT_YOY_RATIO
 // 3. 营收增长率 > 0 ， TOI_YOY_RATIO
-// 4. 最新股息率 >= 2.75%， ZXGXL
+// 4. 最新股息率 > 0.1%， ZXGXL
 // 5. 净利润 3 年复合增长率 > 0 ， NETPROFIT_GROWTHRATE_3Y
 // 6. 营收 3 年复合增长率 > 0 ， INCOME_GROWTHRATE_3Y
 // 7. 预测净利润同比增长 > 0 ， PREDICT_NETPROFIT_RATIO
@@ -73,7 +73,7 @@ func (f Filter) String(ctx context.Context) string {
 	filter += fmt.Sprintf(`(ROE_WEIGHT>=%f)`, f.ROE)
 	filter += fmt.Sprintf(`(NETPROFIT_YOY_RATIO>%f)`, f.NetprofitYoyRatio)
 	filter += fmt.Sprintf(`(TOI_YOY_RATIO>%f)`, f.ToiYoyRatio)
-	filter += fmt.Sprintf(`(ZXGXL>=%f)`, f.ZXGXL)
+	filter += fmt.Sprintf(`(ZXGXL>%f)`, f.ZXGXL)
 	filter += fmt.Sprintf(`(NETPROFIT_GROWTHRATE_3Y>%f)`, f.NetprofitGrowthrate3Y)
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>%f)`, f.IncomeGrowthrate3Y)
 	filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>%f)`, f.PredictNetprofitRatio)
@@ -105,7 +105,7 @@ var (
 		ROE:                   8.0,
 		NetprofitYoyRatio:     0,
 		ToiYoyRatio:           0,
-		ZXGXL:                 2.75,
+		ZXGXL:                 0.1,
 		NetprofitGrowthrate3Y: 0.0,
 		IncomeGrowthrate3Y:    0.0,
 		PredictNetprofitRatio: 0.0,

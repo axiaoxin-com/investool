@@ -7,8 +7,8 @@ import (
 )
 
 func TestQueryValuationStatus(t *testing.T) {
-	data, err := _em.QueryValuationStatus(_ctx, "600149.sh")
+	status, data, err := _em.QueryValuationStatus(_ctx, "600149.sh")
 	require.Nil(t, err)
 	require.Len(t, data, 4)
-	t.Log(data)
+	t.Log("status:", status, " data:", data)
 }
