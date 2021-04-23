@@ -25,12 +25,6 @@ var PicChuckSize = 50
 
 // ExportPic 导出股票名称+代码图片，一张图片最多 50 个，超过则导出多张图片
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {
-	height := 3200
-	width := 650
-
-	leftTop := image.Point{0, 0}
-	rightBottom := image.Point{width, height}
-
 	bgColor, fgColor := image.White, image.Black
 	// set font
 	fontBytes, err := staticfiles.FS.ReadFile("font.ttf")
@@ -53,10 +47,19 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 
 	// 按分组写入股票名称+代码到不同图片
 	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
+		// 设置图片大小
+		height := 3200 / 50 * len(stocks)
+		width := 650
+
+		leftTop := image.Point{0, 0}
+		rightBottom := image.Point{width, height}
+
 		img := image.NewRGBA(image.Rectangle{leftTop, rightBottom})
 		draw.Draw(img, img.Bounds(), bgColor, image.ZP, draw.Src)
 		fc.SetDst(img)
 		fc.SetClip(img.Bounds())
+
+		// 写入图片
 		for j, stock := range stocks {
 			pt := freetype.Pt(40, (j+1)*int(fc.PointToFixed(fontSize)>>6)+40)
 			line := fmt.Sprintf("%d.%s    %s", j+1, stock.Name, stock.Code)
