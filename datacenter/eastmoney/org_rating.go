@@ -39,11 +39,11 @@ type OrgRatingList []OrgRating
 
 // String 字符串输出
 func (o OrgRatingList) String() string {
-	s := ""
+	s := []string{}
 	for _, i := range o {
-		s += fmt.Sprintf("%s: %s\n", i.DateType, i.CompreRating)
+		s = append(s, fmt.Sprintf("%s:%s", i.DateType, i.CompreRating))
 	}
-	return s
+	return strings.Join(s, "\n")
 }
 
 // QueryOrgRating 获取评级统计

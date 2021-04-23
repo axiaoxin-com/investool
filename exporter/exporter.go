@@ -26,8 +26,10 @@ type Data struct {
 	Keywords string `json:"keywords"`
 	// 主营构成
 	MainForms string `json:"main_forms"`
-	// 总市值（亿）
+	// 总市值（数字）
 	TotalMarketCap float64 `json:"total_market_cap"`
+	// 总市值（字符串）
+	TotalMarketCapString string `json:"total_market_cap_string"`
 	// 市盈率估值
 	ValuationSYL string `json:"valuation_syl"`
 	// 市净率估值
@@ -46,6 +48,8 @@ type Data struct {
 	RightPrice float64 `json:"right_price"`
 	// 当前价格是否合理
 	HasRightPrice bool `json:"has_right_price"`
+	// 合理价格与现价的价格差
+	PriceSpace float64 `json:"price_space"`
 	// 历史波动率
 	HV float64 `json:"hv"`
 	// 净利润增长率（%）
@@ -87,6 +91,7 @@ func NewData(stock model.Stock) Data {
 		Keywords:               stock.CompanyProfile.KeywordsString(),
 		MainForms:              stock.CompanyProfile.MainFormsString(),
 		TotalMarketCap:         stock.BaseInfo.TotalMarketCap,
+		TotalMarketCapString:   stock.BaseInfo.TotalMarketCapString(),
 		ValuationSYL:           stock.ValuationMap["市盈率"],
 		ValuationSJL:           stock.ValuationMap["市净率"],
 		ValuationSXOL:          stock.ValuationMap["市销率"],
@@ -96,6 +101,7 @@ func NewData(stock model.Stock) Data {
 		Price:                  stock.BaseInfo.NewPrice,
 		RightPrice:             stock.RightPrice,
 		HasRightPrice:          hasRightPrice,
+		PriceSpace:             stock.RightPrice - stock.BaseInfo.NewPrice,
 		HV:                     stock.HistoricalVolatility,
 		NetprofitYoyRatio:      stock.BaseInfo.NetprofitYoyRatio,
 		ToiYoyRatio:            stock.BaseInfo.ToiYoyRatio,
@@ -124,7 +130,21 @@ func (e ExportData) SortByROE() {
 // SortByPrice 股票列表按股价排序
 func (e ExportData) SortByPrice() {
 	sort.Slice(e, func(i, j int) bool {
-		return e[i].Price > e[j].Price
+		return e[i].Price < e[j].Price
+	})
+}
+
+// SortByZXGXL 股票列表按最新股息率排序
+func (e ExportData) SortByZXGXL() {
+	sort.Slice(e, func(i, j int) bool {
+		return e[i].ZXGXL > e[j].ZXGXL
+	})
+}
+
+// SortByPriceSpace 股票列表按合理价格空间排序
+func (e ExportData) SortByPriceSpace() {
+	sort.Slice(e, func(i, j int) bool {
+		return e[i].PriceSpace > e[j].PriceSpace
 	})
 }
 

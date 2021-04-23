@@ -19,8 +19,9 @@ func main() {
 		logging.Fatal(ctx, err.Error())
 	}
 	data := exporter.InitExportData(ctx, stocks)
-	filename := fmt.Sprintf("./selected_stocks_%s.json", time.Now().Format("20060102150405"))
-	data.ExportJSON(ctx, filename)
+	data.SortByPriceSpace()
+	filename := fmt.Sprintf("./docs/selected_stocks_%s.json", time.Now().Format("20060102"))
+	_, err = data.ExportJSON(ctx, filename)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}

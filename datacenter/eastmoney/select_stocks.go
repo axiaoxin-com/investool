@@ -1,14 +1,14 @@
 // 按我的选股指标获取股票数据，对优质公司进行初步筛选（好公司不代表股价涨）
-// 1. 净资产收益率 >= 8%， ROE_WEIGHT
-// 2. 净利润增长率 > 0 ， NETPROFIT_YOY_RATIO
-// 3. 营收增长率 > 0 ， TOI_YOY_RATIO
-// 4. 最新股息率 > 0.1%， ZXGXL
-// 5. 净利润 3 年复合增长率 > 0 ， NETPROFIT_GROWTHRATE_3Y
-// 6. 营收 3 年复合增长率 > 0 ， INCOME_GROWTHRATE_3Y
-// 7. 预测净利润同比增长 > 0 ， PREDICT_NETPROFIT_RATIO
-// 8. 预测营收同比增长 > 0 ， PREDICT_INCOME_RATIO
-// 9. 上市以来年化收益率 > 20% ， LISTING_YIELD_YEAR
-// 10. 总市值 > 500 亿， TOTAL_MARKET_CAP
+// 1. 净资产收益率， ROE_WEIGHT
+// 2. 净利润增长率 ， NETPROFIT_YOY_RATIO
+// 3. 营收增长率 ， TOI_YOY_RATIO
+// 4. 最新股息率， ZXGXL
+// 5. 净利润 3 年复合增长率， NETPROFIT_GROWTHRATE_3Y
+// 6. 营收 3 年复合增长率， INCOME_GROWTHRATE_3Y
+// 7. 预测净利润同比增长， PREDICT_NETPROFIT_RATIO
+// 8. 预测营收同比增长， PREDICT_INCOME_RATIO
+// 9. 上市以来年化收益率 ， LISTING_YIELD_YEAR
+// 10. 总市值， TOTAL_MARKET_CAP
 // 11. 是否按行业选择， INDUSTRY
 // 12. 按股价（低股价 10-30 元)， NEW_PRICE
 // 13. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
@@ -27,71 +27,78 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	// YI 亿
+	YI = float64(100000000)
+	// WAN 万
+	WAN = float64(10000)
+)
+
 // Filter 我的选股指标
 type Filter struct {
 	// ------ 最重要的指标！！！------
-	// 净资产收益率（%）
-	ROE float64 `json:"roe"`
+	// 最低净资产收益率（%）
+	MinROE float64
 
 	// ------ 必要参数 ------
-	// 净利润增长率（%）
-	NetprofitYoyRatio float64 `json:"netprofit_yoy_ratio"`
-	// 营收增长率（%）
-	ToiYoyRatio float64 `json:"toi_yoy_ratio"`
-	// 最新股息率（%）
-	ZXGXL float64 `json:"zxgxl"`
-	// 净利润 3 年复合增长率（%）
-	NetprofitGrowthrate3Y float64 `json:"netprofit_growthrate_3_y"`
-	// 营收 3 年复合增长率（%）
-	IncomeGrowthrate3Y float64 `json:"income_growthrate_3_y"`
-	// 预测净利润同比增长（%）
-	PredictNetprofitRatio float64 `json:"predict_netprofit_ratio"`
-	// 预测营收同比增长（%）
-	PredictIncomeRatio float64 `json:"predict_income_ratio"`
-	// 上市以来年化收益率（%）
-	ListingYieldYear float64 `json:"listing_yield_year"`
-	// 市净率
-	PBNewMRQ float64 `json:"pb_new_mrq"`
+	// 最低净利润增长率（%）
+	MinNetprofitYoyRatio float64
+	// 最低营收增长率（%）
+	MinToiYoyRatio float64
+	// 最低最新股息率（%）
+	MinZXGXL float64
+	// 最低净利润 3 年复合增长率（%）
+	MinNetprofitGrowthrate3Y float64
+	// 最低营收 3 年复合增长率（%）
+	MinIncomeGrowthrate3Y float64
+	// 最低预测净利润同比增长（%）
+	MinPredictNetprofitRatio float64
+	// 最低预测营收同比增长（%）
+	MinPredictIncomeRatio float64
+	// 最低上市以来年化收益率（%）
+	MinListingYieldYear float64
+	// 最低市净率
+	MinPBNewMRQ float64
 
 	// ------ 可选参数 ------
-	// 总市值（亿）
-	TotalMarketCap float64 `json:"total_market_cap"`
+	// 最低总市值（亿）
+	MinTotalMarketCap float64
 	// 行业名（可选参数，不设置搜全行业）
-	Industry string `json:"industry"`
+	Industry string
 	// 股价范围最小值（元）
-	MinPrice float64 `json:"min_price"`
+	MinPrice float64
 	// 股价范围最大值（元）
-	MaxPrice float64 `json:"max_price"`
+	MaxPrice float64
 	// 上市时间是否超过 5 年
-	ListingOver5Y bool `json:"listing_over_5_y"`
+	ListingOver5Y bool
 }
 
 // String 转为字符串的请求参数
-func (f Filter) String(ctx context.Context) string {
+func (f Filter) String() string {
 	filter := ""
 	// 必要参数
-	filter += fmt.Sprintf(`(ROE_WEIGHT>=%f)`, f.ROE)
-	filter += fmt.Sprintf(`(NETPROFIT_YOY_RATIO>%f)`, f.NetprofitYoyRatio)
-	filter += fmt.Sprintf(`(TOI_YOY_RATIO>%f)`, f.ToiYoyRatio)
-	filter += fmt.Sprintf(`(ZXGXL>%f)`, f.ZXGXL)
-	filter += fmt.Sprintf(`(NETPROFIT_GROWTHRATE_3Y>%f)`, f.NetprofitGrowthrate3Y)
-	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>%f)`, f.IncomeGrowthrate3Y)
-	filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>%f)`, f.PredictNetprofitRatio)
-	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>%f)`, f.PredictIncomeRatio)
-	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>%f)`, f.ListingYieldYear)
-	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.PBNewMRQ)
+	filter += fmt.Sprintf(`(ROE_WEIGHT>=%f)`, f.MinROE)
+	filter += fmt.Sprintf(`(NETPROFIT_YOY_RATIO>=%f)`, f.MinNetprofitYoyRatio)
+	filter += fmt.Sprintf(`(TOI_YOY_RATIO>=%f)`, f.MinToiYoyRatio)
+	filter += fmt.Sprintf(`(ZXGXL>=%f)`, f.MinZXGXL)
+	filter += fmt.Sprintf(`(NETPROFIT_GROWTHRATE_3Y>=%f)`, f.MinNetprofitGrowthrate3Y)
+	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>=%f)`, f.MinIncomeGrowthrate3Y)
+	filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>=%f)`, f.MinPredictNetprofitRatio)
+	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>=%f)`, f.MinPredictIncomeRatio)
+	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>=%f)`, f.MinListingYieldYear)
+	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.MinPBNewMRQ)
 	// 可选参数
-	if f.TotalMarketCap != 0 {
-		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>%f)`, f.TotalMarketCap*100000000)
+	if f.MinTotalMarketCap != 0 {
+		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>=%f)`, f.MinTotalMarketCap*100000000)
 	}
 	if f.Industry != "" {
 		filter += fmt.Sprintf(`(INDUSTRY in ("%s"))`, f.Industry)
 	}
 	if f.MinPrice != 0 {
-		filter += fmt.Sprintf(`(NEW_PRICE>%f))`, f.MinPrice)
+		filter += fmt.Sprintf(`(NEW_PRICE>=%f))`, f.MinPrice)
 	}
 	if f.MaxPrice != 0 {
-		filter += fmt.Sprintf(`(NEW_PRICE<%f))`, f.MaxPrice)
+		filter += fmt.Sprintf(`(NEW_PRICE<=%f))`, f.MaxPrice)
 	}
 	if f.ListingOver5Y {
 		filter += `(@LISTING_DATE="OVER5Y")`
@@ -102,21 +109,21 @@ func (f Filter) String(ctx context.Context) string {
 var (
 	// DefaultFilter 默认指标值
 	DefaultFilter = Filter{
-		ROE:                   8.0,
-		NetprofitYoyRatio:     0,
-		ToiYoyRatio:           0,
-		ZXGXL:                 0.1,
-		NetprofitGrowthrate3Y: 0.0,
-		IncomeGrowthrate3Y:    0.0,
-		PredictNetprofitRatio: 0.0,
-		PredictIncomeRatio:    0.0,
-		ListingYieldYear:      20,
-		TotalMarketCap:        500.0,
-		Industry:              "",
-		MinPrice:              0,
-		MaxPrice:              0,
-		ListingOver5Y:         false,
-		PBNewMRQ:              1,
+		MinROE:                   8.0,
+		MinNetprofitYoyRatio:     0.0,
+		MinToiYoyRatio:           0.0,
+		MinZXGXL:                 0.0,
+		MinNetprofitGrowthrate3Y: 0.0,
+		MinIncomeGrowthrate3Y:    0.0,
+		MinPredictNetprofitRatio: 0.0,
+		MinPredictIncomeRatio:    0.0,
+		MinListingYieldYear:      0.0,
+		MinTotalMarketCap:        0.0,
+		Industry:                 "",
+		MinPrice:                 0.0,
+		MaxPrice:                 0.0,
+		ListingOver5Y:            false,
+		MinPBNewMRQ:              0.0,
 	}
 )
 
@@ -128,34 +135,45 @@ type StockInfo struct {
 	SecurityCode string `json:"SECURITY_CODE"`
 	// 股票名
 	SecurityNameAbbr string `json:"SECURITY_NAME_ABBR"`
-	// 最新价（元）
-	NewPrice float64 `json:"NEW_PRICE"`
-	// 涨跌幅（%）
-	ChangeRate float64 `json:"CHANGE_RATE"`
 	// 行业
 	Industry string `json:"INDUSTRY"`
-	// 总市值
-	TotalMarketCap float64 `json:"TOTAL_MARKET_CAP"`
 	// 最新一期 ROE
 	RoeWeight float64 `json:"ROE_WEIGHT"`
-	// 最新股息率
-	Zxgxl float64 `json:"ZXGXL"`
 	// 净利润增长率（%）
 	NetprofitYoyRatio float64 `json:"NETPROFIT_YOY_RATIO"`
 	// 营收增长率（%）
 	ToiYoyRatio float64 `json:"TOI_YOY_RATIO"`
+	// 最新股息率
+	Zxgxl float64 `json:"ZXGXL"`
 	// 净利润 3 年复合增长率
 	NetprofitGrowthrate3Y float64 `json:"NETPROFIT_GROWTHRATE_3Y"`
 	//营收 3 年复合增长率
 	IncomeGrowthrate3Y float64 `json:"INCOME_GROWTHRATE_3Y"`
 	// 预测净利润同比增长
 	PredictNetprofitRatio float64 `json:"PREDICT_NETPROFIT_RATIO"`
-	//	预测营收同比增长
+	// 预测营收同比增长
 	PredictIncomeRatio float64 `json:"PREDICT_INCOME_RATIO"`
 	// 上市以来年化收益率
 	ListingYieldYear float64 `json:"LISTING_YIELD_YEAR"`
-	// 最近交易日期
-	MaxTradeDate string `json:"MAX_TRADE_DATE"`
+	// 总市值
+	TotalMarketCap float64 `json:"TOTAL_MARKET_CAP"`
+	// 最新价（元）
+	NewPrice float64 `json:"NEW_PRICE"`
+	// 市净率
+	PBNewMRQ float64 `json:"PBNEWMRQ"`
+}
+
+// TotalMarketCapString 总市值可读字符串
+func (s StockInfo) TotalMarketCapString() string {
+	yi := s.TotalMarketCap / YI
+	if yi >= 1 {
+		return fmt.Sprint(yi, "亿")
+	}
+	wan := s.TotalMarketCap / WAN
+	if wan >= 1 {
+		return fmt.Sprint(wan, "万")
+	}
+	return fmt.Sprint(s.TotalMarketCap)
 }
 
 // StockInfoList 股票列表
@@ -196,8 +214,8 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,NEW_PRICE,CHANGE_RATE,INDUSTRY,TOTAL_MARKET_CAP,ROE_WEIGHT,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,LISTING_YIELD_YEAR",
-		"filter": filter.String(ctx),
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,LISTING_YIELD_YEAR,TOTAL_MARKET_CAP,NEW_PRICE,PBNEWMRQ",
+		"filter": filter.String(),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
 	}

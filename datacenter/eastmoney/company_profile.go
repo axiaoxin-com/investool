@@ -216,27 +216,28 @@ func (c CompanyProfile) MainFormsString() string {
 	for _, m := range c.MainForms {
 		group[m.Type] = append(group[m.Type], m)
 	}
-	s := "按行业：\n"
+	s := []string{"按行业:"}
 	for _, m := range group["1"] {
-		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+		s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
 	}
-	s += "\n"
-	s += "按产品：\n"
+	s = append(s, "按产品:")
 	for _, m := range group["3"] {
-		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+		s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
 	}
-	s += "\n"
-	s += "按地区：\n"
+	s = append(s, "按地区:")
 	for _, m := range group["2"] {
-		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+		s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
 	}
-
-	return s
+	return strings.Join(s, "\n")
 }
 
 // ProfileString 简介+主营业务
 func (c CompanyProfile) ProfileString() string {
-	return fmt.Sprintf("简介：%s\n主营业务：%s", c.Profile, c.MainBusiness)
+	s := []string{"公司简介:"}
+	s = append(s, c.Profile)
+	s = append(s, "主营业务:")
+	s = append(s, c.MainBusiness)
+	return strings.Join(s, "\n")
 }
 
 // KeywordsString 关键词字符串

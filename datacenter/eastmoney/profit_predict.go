@@ -40,11 +40,11 @@ type ProfitPredict struct {
 type ProfitPredictList []ProfitPredict
 
 func (p ProfitPredictList) String() string {
-	s := ""
+	s := []string{}
 	for _, i := range p {
-		s += fmt.Sprintf("%d 预测每股收益：%f，预测市盈率：%f\n", i.PredictYear, i.Eps, i.Pe)
+		s = append(s, fmt.Sprintf("%d | 预测每股收益:%f 预测市盈率:%f", i.PredictYear, i.Eps, i.Pe))
 	}
-	return s
+	return strings.Join(s, "\n")
 }
 
 // QueryProfitPredict 获取盈利预测
