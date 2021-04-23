@@ -20,6 +20,9 @@ import (
 	"golang.org/x/image/font"
 )
 
+// PicChuckSize 每张图片最多展示股票数
+var PicChuckSize = 50
+
 // ExportPic 导出股票名称+代码图片，一张图片最多 50 个，超过则导出多张图片
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {
 	height := 3200
@@ -27,10 +30,8 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 
 	leftTop := image.Point{0, 0}
 	rightBottom := image.Point{width, height}
-	img := image.NewRGBA(image.Rectangle{leftTop, rightBottom})
 
 	bgColor, fgColor := image.White, image.Black
-	draw.Draw(img, img.Bounds(), bgColor, image.ZP, draw.Src)
 	// set font
 	fontBytes, err := staticfiles.FS.ReadFile("font.ttf")
 	if err != nil {
@@ -44,19 +45,21 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 	}
 	fontSize := float64(15)
 	fc := freetype.NewContext()
-	fc.SetDst(img)
 	fc.SetFont(ffont)
-	fc.SetClip(img.Bounds())
 	fc.SetFontSize(fontSize)
 	fc.SetSrc(fgColor)
 	fc.SetDPI(300)
 	fc.SetHinting(font.HintingNone)
 
 	// 按分组写入股票名称+代码到不同图片
-	for i, stocks := range e.Stocks.ChunkedBySize(50) {
+	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
+		img := image.NewRGBA(image.Rectangle{leftTop, rightBottom})
+		draw.Draw(img, img.Bounds(), bgColor, image.ZP, draw.Src)
+		fc.SetDst(img)
+		fc.SetClip(img.Bounds())
 		for j, stock := range stocks {
 			pt := freetype.Pt(40, (j+1)*int(fc.PointToFixed(fontSize)>>6)+40)
-			line := fmt.Sprintf("%d.%s    %s", i+1, stock.Name, stock.Code)
+			line := fmt.Sprintf("%d.%s    %s", j+1, stock.Name, stock.Code)
 			_, err = fc.DrawString(line, pt)
 			if err != nil {
 				logging.Errorf(ctx, "draw %s error: %s", line, err.Error())

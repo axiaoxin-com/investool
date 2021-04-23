@@ -19,6 +19,7 @@ func TestExportPic(t *testing.T) {
 		},
 	}
 
+	PicChuckSize = 1
 	_, err := e.ExportPic(_ctx, "/tmp/test.png")
 	require.Nil(t, err)
 }
