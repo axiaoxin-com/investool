@@ -66,7 +66,7 @@ type Filter struct {
 	// 最低总市值（亿）， TOTAL_MARKET_CAP
 	MinTotalMarketCap float64 `json:"min_total_market_cap"`
 	// 行业名（可选参数，不设置搜全行业）， INDUSTRY
-	Industry string `json:"industry"`
+	IndustryList []string `json:"industry_list"`
 	// 股价范围最小值（元）， NEW_PRICE
 	MinPrice float64 `json:"min_price"`
 	// 股价范围最大值（元）， NEW_PRICE
@@ -103,8 +103,12 @@ func (f Filter) String() string {
 	if f.MinTotalMarketCap != 0 {
 		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>=%f)`, f.MinTotalMarketCap*100000000)
 	}
-	if f.Industry != "" {
-		filter += fmt.Sprintf(`(INDUSTRY in ("%s"))`, f.Industry)
+	if len(f.IndustryList) != 0 {
+		industryIn := []string{}
+		for _, i := range f.IndustryList {
+			industryIn = append(industryIn, fmt.Sprintf(`"%s"`, i))
+		}
+		filter += fmt.Sprintf(`(INDUSTRY in (%s))`, strings.Join(industryIn, ","))
 	}
 	if f.MinPrice != 0 {
 		filter += fmt.Sprintf(`(NEW_PRICE>=%f))`, f.MinPrice)

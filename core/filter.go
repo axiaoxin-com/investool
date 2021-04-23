@@ -41,7 +41,7 @@ var DefaultFilter = eastmoney.Filter{
 	MinPredictNetprofitRatio: 0.0,
 	MinPredictIncomeRatio:    0.0,
 	MinTotalMarketCap:        0.0,
-	Industry:                 "",
+	IndustryList:             []string{},
 	MinPrice:                 0.0,
 	MaxPrice:                 0.0,
 	ListingOver5Y:            false,

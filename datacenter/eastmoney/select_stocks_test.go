@@ -15,7 +15,7 @@ func TestQuerySelectedStocks(t *testing.T) {
 
 func TestQuerySelectedStocksWithFilter(t *testing.T) {
 	filter := DefaultFilter
-	filter.Industry = "白色家电"
+	filter.IndustryList = []string{"白色家电", "玻璃"}
 	filter.ListingOver5Y = true
 	data, err := _em.QuerySelectedStocksWithFilter(_ctx, filter)
 	require.Nil(t, err)
