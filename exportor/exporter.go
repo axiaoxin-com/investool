@@ -39,13 +39,17 @@ func Export(ctx context.Context, exportFilename string) {
 	switch fileext {
 	case ".json":
 		exportType = "json"
-	case ".csv":
+	case ".csv", ".txt":
 		exportType = "csv"
+	case ".xlsx", ".xls":
+		exportType = "excel"
 	}
 	if _, err := os.Stat(filedir); os.IsNotExist(err) {
 		os.Mkdir(filedir, 0755)
 	}
+
 	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
+	var err error
 	stocks, err := parser.AutoFilterStocks(ctx)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
@@ -55,15 +59,14 @@ func Export(ctx context.Context, exportFilename string) {
 
 	switch exportType {
 	case "json":
-		_, err := e.ExportJSON(ctx, exportFilename)
-		if err != nil {
-			logging.Fatal(ctx, err.Error())
-		}
+		_, err = e.ExportJSON(ctx, exportFilename)
 	case "csv":
-		_, err := e.ExportCSV(ctx, exportFilename)
-		if err != nil {
-			logging.Fatal(ctx, err.Error())
-		}
+		_, err = e.ExportCSV(ctx, exportFilename)
+	case "excel":
+		_, err = e.ExportExcel(ctx, exportFilename)
+	}
+	if err != nil {
+		logging.Fatal(ctx, err.Error())
 	}
 
 	latency := time.Now().Sub(beginTime).Milliseconds()

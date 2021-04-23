@@ -3,7 +3,8 @@ module github.com/axiaoxin-com/x-stock
 go 1.16
 
 require (
-	github.com/axiaoxin-com/goutils v1.0.7
+	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
+	github.com/axiaoxin-com/goutils v1.0.10
 	github.com/axiaoxin-com/logging v1.2.9
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/gin-gonic/gin v1.7.1 // indirect
@@ -23,10 +24,10 @@ require (
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/ugorji/go v1.2.5 // indirect
+	go.opentelemetry.io/otel v0.20.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
-	golang.org/x/net v0.0.0-20210415231046-e915ea6b2b7d // indirect
-	golang.org/x/sys v0.0.0-20210421221651-33663a62ff08 // indirect
+	golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/mysql v1.0.5 // indirect
 	gorm.io/driver/postgres v1.0.8 // indirect
