@@ -34,8 +34,20 @@ type OrgRating struct {
 	CompreRating string `json:"COMPRE_RATING"`
 }
 
+// OrgRatingList 评级列表
+type OrgRatingList []OrgRating
+
+// String 字符串输出
+func (o OrgRatingList) String() string {
+	s := ""
+	for _, i := range o {
+		s += fmt.Sprintf("%s: %s\n", i.DateType, i.CompreRating)
+	}
+	return s
+}
+
 // QueryOrgRating 获取评级统计
-func (e EastMoney) QueryOrgRating(ctx context.Context, secuCode string) ([]OrgRating, error) {
+func (e EastMoney) QueryOrgRating(ctx context.Context, secuCode string) (OrgRatingList, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
 		"source": "SECURITIES",

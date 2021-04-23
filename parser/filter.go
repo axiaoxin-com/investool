@@ -153,8 +153,13 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 	return
 }
 
-// AutoFilterStocks 自动筛选股票
-func AutoFilterStocks(ctx context.Context, options FilterOptions) (result model.StockList, err error) {
+// AutoFilterStocks 按默认设置自动筛选股票
+func AutoFilterStocks(ctx context.Context) (model.StockList, error) {
+	return AutoFilterStocksWithOptions(ctx, DefaultFilterOptions)
+}
+
+// AutoFilterStocksWithOptions 按设置自动筛选股票
+func AutoFilterStocksWithOptions(ctx context.Context, options FilterOptions) (result model.StockList, err error) {
 	emFilter := eastmoney.DefaultFilter
 	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, emFilter)
 	if err != nil {

@@ -210,6 +210,40 @@ type CompanyProfile struct {
 	MainForms []MainForm `json:"main_forms"`
 }
 
+// MainFormsString 主营构成字符串
+func (c CompanyProfile) MainFormsString() string {
+	group := map[string][]MainForm{}
+	for _, m := range c.MainForms {
+		group[m.Type] = append(group[m.Type], m)
+	}
+	s := "按行业：\n"
+	for _, m := range group["1"] {
+		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+	}
+	s += "\n"
+	s += "按产品：\n"
+	for _, m := range group["3"] {
+		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+	}
+	s += "\n"
+	s += "按地区：\n"
+	for _, m := range group["2"] {
+		s += fmt.Sprintf("%s: %s\n", m.MainForm, m.MainIncomeRatio)
+	}
+
+	return s
+}
+
+// ProfileString 简介+主营业务
+func (c CompanyProfile) ProfileString() string {
+	return fmt.Sprintf("简介：%s\n主营业务：%s", c.Profile, c.MainBusiness)
+}
+
+// KeywordsString 关键词字符串
+func (c CompanyProfile) KeywordsString() string {
+	return strings.Join(c.Keywords, "、")
+}
+
 // QueryCompanyProfile 获取公司信息
 func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (CompanyProfile, error) {
 	profile := CompanyProfile{}
