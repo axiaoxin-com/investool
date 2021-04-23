@@ -1,14 +1,15 @@
 // filter 对给定股票进行分析，筛出其中的优质公司。（好公司，但不代表当前股价在涨）
 // 选股规则：
-// 1. 最新 ROE 高于 10%
+// 0. 行业要分散
+// 1. 最新 ROE 高于 8%
 // 2. ROE 平均值小于 20 时，至少 3 年内逐年递增
 // 3. EPS 至少 3 年内逐年递增
 // 4. 营业总收入至少 3 年内逐年递增
 // 5. 净利润至少 3 年内逐年递增
 // 6. 估值较低或中等
 // 7. 股价低于合理价格
-// 8. 历史波动率在 1 以内（持仓占比： 0.1:0.1-0.5:0.5-1 = 3:3:4）
-// 9. 行业要分散
+// 8. 历史波动率在 1 以内（持仓占比： 0.1:0.1-0.5:0.5-1 = 3:3:4 ）
+// 9. 负债率低于 60%
 
 package parser
 
@@ -24,18 +25,46 @@ import (
 	"github.com/axiaoxin-com/x-stock/model"
 )
 
+// MaxWorkerCount 最大并发请求 worker 数
+var MaxWorkerCount = 128
+
 // FilterOptions 过滤条件选项
 type FilterOptions struct {
-	// 最低 roe
-	MinROE float64
+	// eastmoney 中的过滤条件
+	eastmoney.Filter
 	// 连续增长年数
 	CheckYears int
+	// ROE 高于该值时不做连续增长检查
+	NoCheckYearsROE float64
+	// 最大负债率百分比(%)
+	MaxDebtRatio float64
+	// 最大历史波动率
+	MaxHV float64
 }
 
 // DefaultFilterOptions 默认过滤条件值
 var DefaultFilterOptions = FilterOptions{
-	MinROE:     10.0,
-	CheckYears: 3,
+	Filter: eastmoney.Filter{
+		MinROE:                   8.0,
+		MinNetprofitYoyRatio:     0.0,
+		MinToiYoyRatio:           0.0,
+		MinZXGXL:                 0.0,
+		MinNetprofitGrowthrate3Y: 0.0,
+		MinIncomeGrowthrate3Y:    0.0,
+		MinPredictNetprofitRatio: 0.0,
+		MinPredictIncomeRatio:    0.0,
+		MinListingYieldYear:      0.0,
+		MinPBNewMRQ:              0.0,
+		MinTotalMarketCap:        0.0,
+		Industry:                 "",
+		MinPrice:                 0.0,
+		MaxPrice:                 0.0,
+		ListingOver5Y:            false,
+	},
+	CheckYears:      3,
+	NoCheckYearsROE: 20,
+	MaxDebtRatio:    60,
+	MaxHV:           2,
 }
 
 // IsGoodStock 判断给定股票是否是好股票
@@ -47,7 +76,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 	}
 	// 1. 最新 ROE 高于 n%
 	if stock.BaseInfo.RoeWeight < options.MinROE {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s: Latest ROE:%v is not greater than:%+v",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -63,8 +92,8 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 	if err != nil {
 		logging.Error(ctx, "roe avg error:"+err.Error())
 	}
-	if roeavg < 20 && !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
-		logging.Infof(
+	if roeavg < options.NoCheckYearsROE && !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s: ROE is not increasing in %d years. fina:%+v",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -77,7 +106,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 
 	// 3. EPS 至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", options.CheckYears) {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s EPS is not increasing in %d years. fina:%+v",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -90,7 +119,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 
 	// 4. 营业总收入至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", options.CheckYears) {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s REVENUE is not increasing in %d years. fina:%+v",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -103,7 +132,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 
 	// 5. 净利润至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", options.CheckYears) {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s PROFIT is not increasing in %d years. fina:%+v",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -116,7 +145,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 
 	// 6. 估值较低或中等
 	if stock.ValuationStatus == eastmoney.ValuationHigh {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s ValuationStatus is high",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -127,7 +156,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 
 	// 7. 股价低于合理价格
 	if stock.RightPrice != -1 && stock.BaseInfo.NewPrice > stock.RightPrice {
-		logging.Infof(
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s NewPrice:%f is higher than RightPrice:%f",
 			stock.BaseInfo.SecurityNameAbbr,
@@ -139,13 +168,25 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 	}
 
 	// 8. 历史波动率在 1 以内
-	if stock.HistoricalVolatility > 1 {
-		logging.Infof(
+	if stock.HistoricalVolatility > options.MaxHV {
+		logging.Debugf(
 			ctx,
 			"IsGoodStock skip %s %s HistoricalVolatility:%f is greater than 1",
 			stock.BaseInfo.SecurityNameAbbr,
 			stock.BaseInfo.Secucode,
 			stock.HistoricalVolatility,
+		)
+		return
+	}
+
+	if stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtRatio {
+		logging.Debugf(
+			ctx,
+			"IsGoodStock skip %s %s Zcfzl:%f is greater than %f",
+			stock.BaseInfo.SecurityNameAbbr,
+			stock.BaseInfo.Secucode,
+			stock.HistoricalFinaMainData[0].Zcfzl,
+			options.MaxDebtRatio,
 		)
 		return
 	}
@@ -160,15 +201,14 @@ func AutoFilterStocks(ctx context.Context) (model.StockList, error) {
 
 // AutoFilterStocksWithOptions 按设置自动筛选股票
 func AutoFilterStocksWithOptions(ctx context.Context, options FilterOptions) (result model.StockList, err error) {
-	emFilter := eastmoney.DefaultFilter
-	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, emFilter)
+	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, options.Filter)
 	if err != nil {
 		return
 	}
 	logging.Infof(ctx, "AutoFilterStock will filter from %d stocks", len(stocks))
 
-	// 最多 100 个 groutine 并发执行筛选任务
-	workerCount := int(math.Min(float64(len(stocks)), 100))
+	// 最多 MaxWorkerCount 个 groutine 并发执行筛选任务
+	workerCount := int(math.Min(float64(len(stocks)), float64(MaxWorkerCount)))
 	jobChan := make(chan struct{}, workerCount)
 	wg := sync.WaitGroup{}
 
@@ -192,6 +232,7 @@ func AutoFilterStocksWithOptions(ctx context.Context, options FilterOptions) (re
 	}
 	wg.Wait()
 	logging.Infof(ctx, "AutoFilterStock selected %d stocks", len(result))
+	result.SortByROE()
 	return
 }
 

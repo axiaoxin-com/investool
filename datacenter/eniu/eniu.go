@@ -16,7 +16,7 @@ type Eniu struct {
 // NewEniu 创建 Eniu 实例
 func NewEniu() Eniu {
 	hc := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: 60 * time.Second,
 	}
 	return Eniu{
 		HTTPClient: hc,
