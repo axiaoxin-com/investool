@@ -68,7 +68,7 @@ func Export(ctx context.Context, exportFilename string) {
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	e := New(ctx, stocks, core.DefaultFilter, core.DefaultCheckerOptions)
+	e := New(ctx, stocks, eastmoney.DefaultFilter, core.DefaultCheckerOptions)
 	e.Stocks.SortByROE()
 
 	switch exportType {

@@ -80,9 +80,11 @@ func (f Filter) String() string {
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>=%f)`, f.MinIncomeGrowthrate3Y)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>=%f)`, f.MinListingYieldYear)
 	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.MinPBNewMRQ)
-	filter += fmt.Sprintf(`(DEBT_ASSET_RATIO<=%f)`, f.MaxDebtAssetRatio)
 
 	// 可选参数
+	if f.MaxDebtAssetRatio != 0 {
+		filter += fmt.Sprintf(`(DEBT_ASSET_RATIO<=%f)`, f.MaxDebtAssetRatio)
+	}
 	if f.MinPredictNetprofitRatio != 0 {
 		filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>=%f)`, f.MinPredictNetprofitRatio)
 	}
@@ -121,6 +123,8 @@ var (
 		MinTotalMarketCap: 20.0,
 		MinPBNewMRQ:       1.0,
 		MaxDebtAssetRatio: 60.0,
+		ExcludeCYB:        true,
+		ExcludeKCB:        true,
 	}
 )
 

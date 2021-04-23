@@ -10,6 +10,8 @@ import (
 	"image/draw"
 	"image/png"
 	"io/ioutil"
+	"path/filepath"
+	"strings"
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/staticfiles"
@@ -18,10 +20,10 @@ import (
 	"golang.org/x/image/font"
 )
 
-// ExportPic 导出股票名称+代码图片
+// ExportPic 导出股票名称+代码图片，一张图片最多 50 个，超过则导出多张图片
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {
-	height := 27 * len(e.Stocks)
-	width := height * 9 / 16
+	height := 3200
+	width := 650
 
 	leftTop := image.Point{0, 0}
 	rightBottom := image.Point{width, height}
@@ -40,36 +42,48 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 		err = errors.Wrap(err, "parse font error")
 		return
 	}
-	fontSize := float64(12)
+	fontSize := float64(15)
 	fc := freetype.NewContext()
 	fc.SetDst(img)
 	fc.SetFont(ffont)
 	fc.SetClip(img.Bounds())
 	fc.SetFontSize(fontSize)
 	fc.SetSrc(fgColor)
-	fc.SetDPI(72)
-	fc.SetHinting(font.HintingFull)
+	fc.SetDPI(300)
+	fc.SetHinting(font.HintingNone)
 
-	// 写入股票名称+代码
-	for i, stock := range e.Stocks {
-		pt := freetype.Pt(10, 10+int(fc.PointToFixed(fontSize)>>8))
-		line := fmt.Sprintf("%d.%s    %s", i+1, stock.Name, stock.Code)
-		_, err := fc.DrawString(line, pt)
-		if err != nil {
-			logging.Errorf(ctx, "draw %s error: %s", line, err.Error())
-			continue
+	// 按分组写入股票名称+代码到不同图片
+	for i, stocks := range e.Stocks.ChunkedBySize(50) {
+		for j, stock := range stocks {
+			pt := freetype.Pt(40, (j+1)*int(fc.PointToFixed(fontSize)>>6)+40)
+			line := fmt.Sprintf("%d.%s    %s", i+1, stock.Name, stock.Code)
+			_, err = fc.DrawString(line, pt)
+			if err != nil {
+				logging.Errorf(ctx, "draw %s error: %s", line, err.Error())
+				continue
+			}
 		}
-	}
 
-	// 生成图片
-	picbuff := new(bytes.Buffer)
-	err = png.Encode(picbuff, img)
-	if err != nil {
-		err = errors.Wrap(err, "png encode error")
-		return
+		// 生成图片
+		picbuff := new(bytes.Buffer)
+		err = png.Encode(picbuff, img)
+		if err != nil {
+			err = errors.Wrap(err, "png encode error")
+			return
+		}
+		result = picbuff.Bytes()
+		oriFilename := filename
+		if i > 0 {
+			dir, base := filepath.Split(filename)
+			ext := filepath.Ext(base)
+			fn := strings.TrimSuffix(base, ext)
+
+			base = fmt.Sprint(fn, "_", i, ext)
+			filename = filepath.Join(dir, base)
+		}
+		err = ioutil.WriteFile(filename, result, 0666)
+		err = errors.Wrap(err, "write file error")
+		filename = oriFilename
 	}
-	result = picbuff.Bytes()
-	err = ioutil.WriteFile(filename, result, 0666)
-	err = errors.Wrap(err, "write file error")
 	return
 }

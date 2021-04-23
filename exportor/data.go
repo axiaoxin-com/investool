@@ -172,13 +172,27 @@ func (d DataList) SortByHV() {
 	})
 }
 
-// IndustryList 获取行业分类列表
+// GetIndustryList 获取行业分类列表
 func (d DataList) GetIndustryList() []string {
 	result := []string{}
 	for _, stock := range d {
 		if !goutils.IsStrInSlice(stock.Industry, result) {
 			result = append(result, stock.Industry)
 		}
+	}
+	return result
+}
+
+// ChunkedBySize 将 stock 列表按大小切割分组
+func (d DataList) ChunkedBySize(chunkSize int) []DataList {
+	result := []DataList{}
+	dataLen := len(d)
+	for i := 0; i < dataLen; i += chunkSize {
+		end := i + chunkSize
+		if end > dataLen {
+			end = dataLen
+		}
+		result = append(result, d[i:end])
 	}
 	return result
 }

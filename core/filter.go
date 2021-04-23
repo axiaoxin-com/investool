@@ -28,30 +28,10 @@ import (
 // MaxWorkerCount 最大并发请求 worker 数
 var MaxWorkerCount = 64
 
-// DefaultFilter 默认过滤条件值
-var DefaultFilter = eastmoney.Filter{
-	MinROE:                   8.0,
-	MinNetprofitYoyRatio:     0.0,
-	MinToiYoyRatio:           0.0,
-	MinZXGXL:                 0.0,
-	MinNetprofitGrowthrate3Y: 0.0,
-	MinIncomeGrowthrate3Y:    0.0,
-	MinListingYieldYear:      0.0,
-	MinPBNewMRQ:              0.0,
-	MinPredictNetprofitRatio: 0.0,
-	MinPredictIncomeRatio:    0.0,
-	MinTotalMarketCap:        0.0,
-	IndustryList:             []string{},
-	MinPrice:                 0.0,
-	MaxPrice:                 0.0,
-	ListingOver5Y:            false,
-	ExcludeCYB:               true,
-	ExcludeKCB:               true,
-}
-
 // AutoFilterStocks 按默认设置自动筛选股票
 func AutoFilterStocks(ctx context.Context) (model.StockList, error) {
-	return AutoFilterStocksWithFilter(ctx, DefaultFilter)
+	filter := eastmoney.DefaultFilter
+	return AutoFilterStocksWithFilter(ctx, filter)
 }
 
 // AutoFilterStocksWithFilter 按设置自动筛选股票
