@@ -20,19 +20,22 @@ type CheckerOptions struct {
 	CheckYears int `json:"check_years"`
 	// ROE 高于该值时不做连续增长检查
 	NoCheckYearsROE float64 `json:"no_check_years_roe"`
-	// 最大负债率百分比(%)
-	MaxDebtRatio float64 `json:"max_debt_ratio"`
+	// 最大资产负债率百分比(%)
+	MaxDebtAssetRatio float64 `json:"max_debt_ratio"`
 	// 最小历史波动率
 	MinHV float64 `json:"min_hv"`
+	// 最小市值（亿）
+	MinTotalMarketCap float64 `json:"min_total_market_cap"`
 }
 
 // DefaultCheckerOptions 默认检测值
 var DefaultCheckerOptions = CheckerOptions{
-	MinROE:          8.0,
-	CheckYears:      3,
-	NoCheckYearsROE: 16.0,
-	MaxDebtRatio:    60.0,
-	MinHV:           0.0,
+	MinROE:            8.0,
+	CheckYears:        3,
+	NoCheckYearsROE:   16.0,
+	MaxDebtAssetRatio: 60.0,
+	MinHV:             0.0,
+	MinTotalMarketCap: 20.0,
 }
 
 // Checker 检测器实例
@@ -120,11 +123,11 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 
 	// 负债率低于 MaxDebtRatio
-	if len(c.Stock.HistoricalFinaMainData) > 0 && c.Stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtRatio {
+	if len(c.Stock.HistoricalFinaMainData) > 0 && c.Stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtAssetRatio {
 		defect := fmt.Sprintf(
 			"DebtRatio(Zcfzl):%f is greater than %f",
 			c.Stock.HistoricalFinaMainData[0].Zcfzl,
-			options.MaxDebtRatio,
+			options.MaxDebtAssetRatio,
 		)
 		defects = append(defects, defect)
 	}
@@ -139,6 +142,16 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 			)
 			defects = append(defects, defect)
 		}
+	}
+
+	// 市值
+	if c.Stock.BaseInfo.TotalMarketCap < options.MinTotalMarketCap {
+		defect := fmt.Sprintf(
+			"TotalMarketCap:%f is less than %f",
+			c.Stock.BaseInfo.TotalMarketCap,
+			options.MinTotalMarketCap,
+		)
+		defects = append(defects, defect)
 	}
 	return
 }

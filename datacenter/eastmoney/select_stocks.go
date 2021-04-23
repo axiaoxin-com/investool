@@ -1,19 +1,4 @@
 // 按我的选股指标获取股票数据，对优质公司进行初步筛选（好公司不代表股价涨）
-// 净资产收益率
-// 净利润增长率
-// 营收增长率
-// 最新股息率
-// 净利润 3 年复合增长率
-// 营收 3 年复合增长率
-// 预测净利润同比增长
-// 预测营收同比增长
-// 上市以来年化收益率
-// 总市值
-// 行业
-// 股价（低股价 10-30 元)
-// 上市时间是否大于 5 年
-// 市净率
-// 上市以来年化波动率
 
 package eastmoney
 
@@ -57,6 +42,8 @@ type Filter struct {
 	MinListingYieldYear float64 `json:"min_listing_yield_year"`
 	// 最低市净率， PBNEWMRQ
 	MinPBNewMRQ float64 `json:"min_pb_new_mrq"`
+	// 最大资产负债率 (%)
+	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"`
 
 	// ------ 可选参数 ------
 	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
@@ -93,6 +80,8 @@ func (f Filter) String() string {
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>=%f)`, f.MinIncomeGrowthrate3Y)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>=%f)`, f.MinListingYieldYear)
 	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.MinPBNewMRQ)
+	filter += fmt.Sprintf(`(DEBT_ASSET_RATIO<=%f)`, f.MaxDebtAssetRatio)
+
 	// 可选参数
 	if f.MinPredictNetprofitRatio != 0 {
 		filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>=%f)`, f.MinPredictNetprofitRatio)
@@ -130,6 +119,8 @@ var (
 	DefaultFilter = Filter{
 		MinROE:            8.0,
 		MinTotalMarketCap: 20.0,
+		MinPBNewMRQ:       1.0,
+		MaxDebtAssetRatio: 60.0,
 	}
 )
 
@@ -171,6 +162,8 @@ type StockInfo struct {
 	ListingVolatilityYear float64 `json:"LISTING_VOLATILITY_YEAR"`
 	// 上市时间
 	ListingDate string `json:"LISTING_DATE"`
+	// 资产负债率
+	DebtAssetRatio float64 `json:"DEBT_ASSET_RATIO"`
 }
 
 // TotalMarketCapString 总市值可读字符串
@@ -224,7 +217,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE",
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE,DEBT_ASSET_RATIO",
 		"filter": filter.String(),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
