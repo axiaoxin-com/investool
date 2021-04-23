@@ -35,13 +35,13 @@ var (
 // 解析命令行启动参数
 func parseFlags() {
 
-	flag.StringVar(&processor, "run", "", "processor: exportor|tview|webserver")
-	flag.StringVar(&loglevel, "l", "info", "loglevel: debug|info|warn|error")
+	flag.StringVar(&processor, "run", "", "set processor to run: exportor|tview|webserver")
+	flag.StringVar(&loglevel, "l", "info", "set log level: debug|info|warn|error")
 	flag.StringVar(
 		&exportFilename,
 		"f",
 		fmt.Sprintf("./docs/x-stock.%s.xlsx", time.Now().Format("20060102")),
-		"export filename",
+		"set exportor filename, support .json .csv .xlsx .png",
 	)
 	flag.Parse()
 }

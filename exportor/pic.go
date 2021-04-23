@@ -20,8 +20,8 @@ import (
 
 // ExportPic 导出股票名称+代码图片
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {
-	width := 500
-	height := 36 * len(e.Stocks)
+	height := 27 * len(e.Stocks)
+	width := height * 9 / 16
 
 	leftTop := image.Point{0, 0}
 	rightBottom := image.Point{width, height}
@@ -40,19 +40,19 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 		err = errors.Wrap(err, "parse font error")
 		return
 	}
-	fontSize := float64(18)
+	fontSize := float64(12)
 	fc := freetype.NewContext()
 	fc.SetDst(img)
 	fc.SetFont(ffont)
 	fc.SetClip(img.Bounds())
 	fc.SetFontSize(fontSize)
 	fc.SetSrc(fgColor)
-	fc.SetDPI(144)
+	fc.SetDPI(72)
 	fc.SetHinting(font.HintingFull)
 
 	// 写入股票名称+代码
 	for i, stock := range e.Stocks {
-		pt := freetype.Pt(50, (i+1)*int(fc.PointToFixed(fontSize)>>6))
+		pt := freetype.Pt(10, 10+int(fc.PointToFixed(fontSize)>>8))
 		line := fmt.Sprintf("%d.%s    %s", i+1, stock.Name, stock.Code)
 		_, err := fc.DrawString(line, pt)
 		if err != nil {

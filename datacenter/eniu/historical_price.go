@@ -58,7 +58,7 @@ func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, peri
 	return volatility, nil
 }
 
-// QueryHistoricalStockPrice 获取历史股价
+// QueryHistoricalStockPrice 获取历史股价，最新数据在最后
 func (e Eniu) QueryHistoricalStockPrice(ctx context.Context, secuCode string) (RespHistoricalStockPrice, error) {
 	apiurl := fmt.Sprintf("https://eniu.com/chart/pricea/%s/t/all", e.GetPathCode(ctx, secuCode))
 	logging.Debug(ctx, "EastMoney QueryOrgRating "+apiurl+" begin")

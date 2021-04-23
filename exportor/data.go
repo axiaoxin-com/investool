@@ -99,10 +99,10 @@ func NewData(stock model.Stock) Data {
 	if stock.RightPrice > 0 {
 		rightPrice = stock.RightPrice
 		hasRightPrice = false
-		if stock.BaseInfo.NewPrice < stock.RightPrice {
+		if stock.GetPrice() < stock.RightPrice {
 			hasRightPrice = true
 		}
-		priceSpace = stock.RightPrice - stock.BaseInfo.NewPrice
+		priceSpace = stock.RightPrice - stock.GetPrice()
 	}
 	return Data{
 		Name:                   stock.BaseInfo.SecurityNameAbbr,
@@ -119,7 +119,7 @@ func NewData(stock model.Stock) Data {
 		ValuationSXNL:          stock.ValuationMap["市现率"],
 		ValuationStatusDesc:    stock.ValuationStatusDesc(),
 		LatestROE:              stock.BaseInfo.RoeWeight,
-		Price:                  stock.BaseInfo.NewPrice,
+		Price:                  stock.GetPrice(),
 		RightPrice:             rightPrice,
 		HasRightPrice:          hasRightPrice,
 		PriceSpace:             priceSpace,

@@ -110,7 +110,7 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 
 	// 股价低于合理价格
-	if c.Stock.RightPrice != -1 && c.Stock.BaseInfo.NewPrice > c.Stock.RightPrice {
+	if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {
 		defect := fmt.Sprintf(
 			"NewPrice:%f is higher than RightPrice:%f",
 			c.Stock.BaseInfo.NewPrice,

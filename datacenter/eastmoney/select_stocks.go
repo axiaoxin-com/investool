@@ -165,8 +165,8 @@ type StockInfo struct {
 	PredictIncomeRatio float64 `json:"PREDICT_INCOME_RATIO"`
 	// 总市值
 	TotalMarketCap float64 `json:"TOTAL_MARKET_CAP"`
-	// 最新价（元）
-	NewPrice float64 `json:"NEW_PRICE"`
+	// 最新价（元） 未开盘价格显示为 -
+	NewPrice interface{} `json:"NEW_PRICE"`
 	// 上市以来年化波动率
 	ListingVolatilityYear float64 `json:"LISTING_VOLATILITY_YEAR"`
 	// 上市时间

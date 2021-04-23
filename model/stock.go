@@ -54,6 +54,15 @@ func (s Stock) ValuationStatusDesc() string {
 	return desc
 }
 
+// GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价
+func (s Stock) GetPrice() float64 {
+	p, ok := s.BaseInfo.NewPrice.(float64)
+	if ok {
+		return p
+	}
+	return s.HistoricalPrice.Price[len(s.HistoricalPrice.Price)-1]
+}
+
 // StockList 股票列表
 type StockList []Stock
 

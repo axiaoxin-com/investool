@@ -4,18 +4,16 @@ go 1.16
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
-	github.com/antlabs/strsim v0.0.2
-	github.com/axiaoxin-com/goutils v1.0.10
+	github.com/antlabs/strsim v0.0.2 // indirect
+	github.com/axiaoxin-com/goutils v1.0.11
 	github.com/axiaoxin-com/logging v1.2.9
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/gin-gonic/gin v1.7.1 // indirect
-	github.com/go-dedup/megophone v0.0.0-20170830025436-f01be21026f5 // indirect
-	github.com/go-dedup/simhash v0.0.0-20170904020510-9ecaca7b509c
-	github.com/go-dedup/text v0.0.0-20170907015346-8bb1b95e3cb7 // indirect
 	github.com/go-playground/validator/v10 v10.5.0 // indirect
 	github.com/go-redis/redis/v8 v8.8.2 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/gocarina/gocsv v0.0.0-20210408192840-02d7211d929d
+	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
 	github.com/jackc/pgx/v4 v4.11.0 // indirect
@@ -24,6 +22,7 @@ require (
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/pelletier/go-toml v1.9.0 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/rivo/tview v0.0.0-20210312174852-ae9464cc3598
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/stretchr/testify v1.7.0
@@ -31,6 +30,7 @@ require (
 	go.opentelemetry.io/otel v0.20.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
+	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb
 	golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gorm.io/driver/mysql v1.0.5 // indirect
