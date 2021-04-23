@@ -26,21 +26,26 @@
 
 ## 我的选股规则
 
-### 财务优质
+根据各种指标筛选值得长期持有其股票进行投资的优质公司。（优质公司不代表当前股价在涨，长线存股）
 
-TODO
+### 1. 财务优质
 
-### 估值优质
+- 最新 ROE 高于 8%
+- ROE 平均值小于 20 时，至少 3 年内逐年递增
+- EPS 至少 3 年内逐年递增
+- 营业总收入至少 3 年内逐年递增
+- 净利润至少 3 年内逐年递增
+- 负债率低于 60%
 
-TODO
+### 2. 估值优质
 
-### 行业均衡
+- 估值较低或中等
+- 股价低于合理价格（合理价格 = 历史市盈率中位数 _ (EPS _ (1 + 今年 Q1 营收增长比))）
 
-TODO
+### 3. 低波动
 
-### 关于低价股
-
-TODO
+- 行业分散，均衡配置
+- 历史波动率在 1 以内（持仓占比： 0.1:0.1-0.5:0.5-1 = 3:3:4 ）
 
 ## 我的交易纪律
 
@@ -54,4 +59,4 @@ TODO
 
 ## 欢迎 Star
 
-[![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://starchart.cc/axiaoxin-com/x-stock)
+[![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://githuv.com/axiaoxin-com/x-stock)

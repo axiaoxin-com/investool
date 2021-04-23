@@ -1,18 +1,18 @@
 // 按我的选股指标获取股票数据，对优质公司进行初步筛选（好公司不代表股价涨）
-// 1. 净资产收益率， ROE_WEIGHT
-// 2. 净利润增长率 ， NETPROFIT_YOY_RATIO
-// 3. 营收增长率 ， TOI_YOY_RATIO
-// 4. 最新股息率， ZXGXL
-// 5. 净利润 3 年复合增长率， NETPROFIT_GROWTHRATE_3Y
-// 6. 营收 3 年复合增长率， INCOME_GROWTHRATE_3Y
-// 7. 预测净利润同比增长， PREDICT_NETPROFIT_RATIO
-// 8. 预测营收同比增长， PREDICT_INCOME_RATIO
-// 9. 上市以来年化收益率 ， LISTING_YIELD_YEAR
-// 10. 总市值， TOTAL_MARKET_CAP
-// 11. 是否按行业选择， INDUSTRY
-// 12. 按股价（低股价 10-30 元)， NEW_PRICE
-// 13. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
-// 14. 市净率不小于 1 ， PBNEWMRQ
+// 1. 净资产收益率
+// 2. 净利润增长率
+// 3. 营收增长率
+// 4. 最新股息率
+// 5. 净利润 3 年复合增长率
+// 6. 营收 3 年复合增长率
+// 7. 预测净利润同比增长
+// 8. 预测营收同比增长
+// 9. 上市以来年化收益率
+// 10. 总市值
+// 11. 行业
+// 12. 股价（低股价 10-30 元)
+// 13. 上市时间是否大于 5 年
+// 14. 市净率
 
 package eastmoney
 
@@ -38,39 +38,39 @@ const (
 // Filter 我的选股指标
 type Filter struct {
 	// ------ 最重要的指标！！！------
-	// 最低净资产收益率（%）
+	// 最低净资产收益率（%）， ROE_WEIGHT
 	MinROE float64
 
 	// ------ 必要参数 ------
-	// 最低净利润增长率（%）
+	// 最低净利润增长率（%） ， NETPROFIT_YOY_RATIO
 	MinNetprofitYoyRatio float64
-	// 最低营收增长率（%）
+	// 最低营收增长率（%） ， TOI_YOY_RATIO
 	MinToiYoyRatio float64
-	// 最低最新股息率（%）
+	// 最低最新股息率（%）， ZXGXL
 	MinZXGXL float64
-	// 最低净利润 3 年复合增长率（%）
+	// 最低净利润 3 年复合增长率（%）， NETPROFIT_GROWTHRATE_3Y
 	MinNetprofitGrowthrate3Y float64
-	// 最低营收 3 年复合增长率（%）
+	// 最低营收 3 年复合增长率（%）， INCOME_GROWTHRATE_3Y
 	MinIncomeGrowthrate3Y float64
-	// 最低预测净利润同比增长（%）
+	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
 	MinPredictNetprofitRatio float64
-	// 最低预测营收同比增长（%）
+	// 最低预测营收同比增长（%）， PREDICT_INCOME_RATIO
 	MinPredictIncomeRatio float64
-	// 最低上市以来年化收益率（%）
+	// 最低上市以来年化收益率（%） ， LISTING_YIELD_YEAR
 	MinListingYieldYear float64
-	// 最低市净率
+	// 最低市净率， PBNEWMRQ
 	MinPBNewMRQ float64
 
 	// ------ 可选参数 ------
-	// 最低总市值（亿）
+	// 最低总市值（亿）， TOTAL_MARKET_CAP
 	MinTotalMarketCap float64
-	// 行业名（可选参数，不设置搜全行业）
+	// 行业名（可选参数，不设置搜全行业）， INDUSTRY
 	Industry string
-	// 股价范围最小值（元）
+	// 股价范围最小值（元）， NEW_PRICE
 	MinPrice float64
-	// 股价范围最大值（元）
+	// 股价范围最大值（元）， NEW_PRICE
 	MaxPrice float64
-	// 上市时间是否超过 5 年
+	// 上市时间是否超过 5 年，@LISTING_DATE="OVER5Y"
 	ListingOver5Y bool
 	// 是否排除创业板 300XXX
 	ExcludeCYB bool
