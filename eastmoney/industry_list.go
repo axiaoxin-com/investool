@@ -5,6 +5,11 @@ package eastmoney
 import (
 	"context"
 	"fmt"
+	"time"
+
+	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/logging"
+	"go.uber.org/zap"
 )
 
 // RespIndustryList 接口返回的 json 结构
@@ -24,17 +29,25 @@ type RespIndustryList struct {
 
 // IndustryList 获取行业列表
 func (e EastMoney) IndustryList(ctx context.Context) ([]string, error) {
-	url := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
-	body := map[string]string{
+	apiurl := "https://datacenter.eastmoney.com/stock/selection/api/data/get/"
+	reqData := map[string]string{
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_INDUSTRY",
 		"sty":    "ALL",
 	}
-	resp := RespIndustryList{}
-	if err := e.Post(ctx, url, body, &resp); err != nil {
+	logging.Debug(ctx, "EastMoney IndustryList "+apiurl+" begin", zap.Any("reqData", reqData))
+	beginTime := time.Now()
+	req, err := goutils.NewHTTPMultipartReq(ctx, apiurl, reqData)
+	if err != nil {
 		return nil, err
 	}
+	resp := RespIndustryList{}
+	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
+		return nil, err
+	}
+	latency := time.Now().Sub(beginTime).Milliseconds()
+	logging.Debug(ctx, "EastMoney IndustryList "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%#v", resp)
 	}
