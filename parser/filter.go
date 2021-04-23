@@ -8,13 +8,13 @@
 // 5. 净利润至少 3 年内逐年递增
 // 6. 估值较低或中等
 // 7. 股价低于合理价格
-// 8. 历史波动率在 1 以内（持仓占比： 0.1:0.1-0.5:0.5-1 = 3:3:4 ）
-// 9. 负债率低于 60%
+// 8. 负债率低于 60%
 
 package parser
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"sync"
 
@@ -23,6 +23,7 @@ import (
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/model"
+	"go.uber.org/zap"
 )
 
 // MaxWorkerCount 最大并发请求 worker 数
@@ -38,8 +39,6 @@ type FilterOptions struct {
 	NoCheckYearsROE float64
 	// 最大负债率百分比(%)
 	MaxDebtRatio float64
-	// 最大历史波动率
-	MaxHV float64
 }
 
 // DefaultFilterOptions 默认过滤条件值
@@ -66,134 +65,89 @@ var DefaultFilterOptions = FilterOptions{
 	CheckYears:      3,
 	NoCheckYearsROE: 20,
 	MaxDebtRatio:    60,
-	MaxHV:           6,
 }
 
-// IsGoodStock 判断给定股票是否是好股票
-func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options FilterOptions) (stock model.Stock, ok bool) {
-	stock, err := model.NewStock(ctx, baseInfo, false)
-	if err != nil {
-		logging.Error(ctx, "NewStock error:"+err.Error())
-		return
-	}
+// GoodStockChecker 判断给定股票是否是好股票
+func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOptions) (defects []string) {
 	// 1. 最新 ROE 高于 n%
 	if stock.BaseInfo.RoeWeight < options.MinROE {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s: Latest ROE:%v is not greater than:%+v",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"Latest ROE:%v is not greater than:%+v",
 			stock.BaseInfo.RoeWeight,
 			options.MinROE,
 		)
-		return
+		defects = append(defects, defect)
 	}
 
 	// 2. ROE 均值小于 20 时，至少 n 年内逐年递增
 	roeavg, err := goutils.AvgFloat64(stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears))
 	if err != nil {
-		logging.Error(ctx, "roe avg error:"+err.Error())
+		logging.Warn(ctx, "roe avg error:"+err.Error())
 	}
 	if roeavg < options.NoCheckYearsROE && !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s: ROE is not increasing in %d years. fina:%+v",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"ROE is not increasing in %d years. fina:%+v",
 			options.CheckYears,
 			stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears),
 		)
-		return
+		defects = append(defects, defect)
 	}
 
 	// 3. EPS 至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", options.CheckYears) {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s EPS is not increasing in %d years. fina:%+v",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"EPS is not increasing in %d years. fina:%+v",
 			options.CheckYears,
 			stock.HistoricalFinaMainData.EPSList(ctx, options.CheckYears),
 		)
-		return
+		defects = append(defects, defect)
 	}
 
 	// 4. 营业总收入至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", options.CheckYears) {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s REVENUE is not increasing in %d years. fina:%+v",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"REVENUE is not increasing in %d years. fina:%+v",
 			options.CheckYears,
 			stock.HistoricalFinaMainData.RevenueList(ctx, options.CheckYears),
 		)
-		return
+		defects = append(defects, defect)
 	}
 
 	// 5. 净利润至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", options.CheckYears) {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s PROFIT is not increasing in %d years. fina:%+v",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"PROFIT is not increasing in %d years. fina:%+v",
 			options.CheckYears,
 			stock.HistoricalFinaMainData.ProfitList(ctx, options.CheckYears),
 		)
-		return
+		defects = append(defects, defect)
 	}
 
 	// 6. 估值较低或中等
 	if stock.ValuationStatus == eastmoney.ValuationHigh {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s ValuationStatus is high",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
-		)
-		return
+		defect := "ValuationStatus is high"
+		defects = append(defects, defect)
 	}
 
 	// 7. 股价低于合理价格
 	if stock.RightPrice != -1 && stock.BaseInfo.NewPrice > stock.RightPrice {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s NewPrice:%f is higher than RightPrice:%f",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"NewPrice:%f is higher than RightPrice:%f",
 			stock.BaseInfo.NewPrice,
 			stock.RightPrice,
 		)
-		return
+		defects = append(defects, defect)
 	}
 
-	// 8. 历史波动率在 1 以内
-	if stock.HistoricalVolatility > options.MaxHV {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s HistoricalVolatility:%f is greater than 1",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
-			stock.HistoricalVolatility,
-		)
-		return
-	}
-
-	// 9. 负债率低于 60%
+	// 8. 负债率低于 60%
 	if stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtRatio {
-		logging.Debugf(
-			ctx,
-			"IsGoodStock skip %s %s Zcfzl:%f is greater than %f",
-			stock.BaseInfo.SecurityNameAbbr,
-			stock.BaseInfo.Secucode,
+		defect := fmt.Sprintf(
+			"DebtRatio(Zcfzl):%f is greater than %f",
 			stock.HistoricalFinaMainData[0].Zcfzl,
 			options.MaxDebtRatio,
 		)
-		return
+		defects = append(defects, defect)
 	}
-	ok = true
 	return
 }
 
@@ -227,9 +181,17 @@ func AutoFilterStocksWithOptions(ctx context.Context, options FilterOptions) (re
 					logging.Errorf(ctx, "recover from:%v", r)
 				}
 			}()
-			// 按添加判断是否为优质股票
-			if stock, ok := IsGoodStock(ctx, baseInfo, options); ok {
+			// 按条件判断是否为优质股票
+			stock, err := model.NewStock(ctx, baseInfo, false)
+			if err != nil {
+				logging.Error(ctx, "NewStock error:"+err.Error())
+				return
+			}
+
+			if defects := GoodStockChecker(ctx, stock, options); len(defects) == 0 {
 				result = append(result, stock)
+			} else {
+				logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("defects", defects))
 			}
 		}(ctx, baseInfo)
 	}
