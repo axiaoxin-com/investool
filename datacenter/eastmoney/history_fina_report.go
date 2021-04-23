@@ -5,6 +5,7 @@ package eastmoney
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strings"
 	"time"
 
@@ -27,15 +28,15 @@ type FinaMainData struct {
 	ReportDate string `json:"REPORT_DATE"`
 	// 财报类型：年报、三季报、中报、一季报
 	ReportType string `json:"REPORT_TYPE"`
-	// 财报名称: 2021一季报
+	// 财报名称: 2021 一季报
 	ReportDateName string `json:"REPORT_DATE_NAME"`
-	// 财报年份：2021
+	// 财报年份： 2021
 	ReportYear       string `json:"REPORT_YEAR"`
 	SecurityTypeCode string `json:"SECURITY_TYPE_CODE"`
 	NoticeDate       string `json:"NOTICE_DATE"`
 	// 财报更新时间
 	UpdateDate string `json:"UPDATE_DATE"`
-	// 货币类型：CNY
+	// 货币类型： CNY
 	Currency string `json:"CURRENCY"`
 
 	// ------ 每股指标 ------
@@ -145,35 +146,6 @@ type FinaMainData struct {
 	Chzzl float64 `json:"CHZZL"`
 	// 应收账款周转率（次）
 	Yszkzzl float64 `json:"YSZKZZL"`
-
-	// ------ ??? ------
-	Totaldeposits     interface{} `json:"TOTALDEPOSITS"`
-	Grossloans        interface{} `json:"GROSSLOANS"`
-	Ltdrr             interface{} `json:"LTDRR"`
-	Newcapitalader    interface{} `json:"NEWCAPITALADER"`
-	Hxyjbczl          interface{} `json:"HXYJBCZL"`
-	Nonperloan        interface{} `json:"NONPERLOAN"`
-	Bldkbbl           interface{} `json:"BLDKBBL"`
-	Nzbje             interface{} `json:"NZBJE"`
-	TotalRoi          interface{} `json:"TOTAL_ROI"`
-	NetRoi            interface{} `json:"NET_ROI"`
-	EarnedPremium     interface{} `json:"EARNED_PREMIUM"`
-	CompensateExpense interface{} `json:"COMPENSATE_EXPENSE"`
-	SurrenderRateLife interface{} `json:"SURRENDER_RATE_LIFE"`
-	SolvencyAr        interface{} `json:"SOLVENCY_AR"`
-	Jzb               interface{} `json:"JZB"`
-	Jzc               interface{} `json:"JZC"`
-	Jzbjzc            interface{} `json:"JZBJZC"`
-	Zygpgmjzc         interface{} `json:"ZYGPGMJZC"`
-	Zygdsylzqjzb      interface{} `json:"ZYGDSYLZQJZB"`
-	Yyfxzb            interface{} `json:"YYFXZB"`
-	Jjywfxzb          interface{} `json:"JJYWFXZB"`
-	Zqzyywfxzb        interface{} `json:"ZQZYYWFXZB"`
-	Zqcxywfxzb        interface{} `json:"ZQCXYWFXZB"`
-	Rzrqywfxzb        interface{} `json:"RZRQYWFXZB"`
-	NbvLife           interface{} `json:"NBV_LIFE"`
-	NbvRate           interface{} `json:"NBV_RATE"`
-	NhjzCurrentAmt    interface{} `json:"NHJZ_CURRENT_AMT"`
 }
 
 // HistoryFinaMainData 主要指标历史数据列表
@@ -190,15 +162,86 @@ func (h HistoryFinaMainData) FilterByReportType(ctx context.Context, reportType 
 	return result
 }
 
-// FilterByReportYear 按财报年份过滤：2021
-func (h HistoryFinaMainData) FilterByReportYear(ctx context.Context, reportYear string) HistoryFinaMainData {
+// FilterByReportYear 按财报年份过滤： 2021
+func (h HistoryFinaMainData) FilterByReportYear(ctx context.Context, reportYear int) HistoryFinaMainData {
 	result := HistoryFinaMainData{}
+	year := fmt.Sprint(reportYear)
 	for _, i := range h {
-		if i.ReportYear == reportYear {
+		if i.ReportYear == year {
 			result = append(result, i)
 		}
 	}
 	return result
+}
+
+// IsIncreasingByYears roe/eps 是否逐年递增
+func (h HistoryFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, years int) bool {
+	data := h.FilterByReportType(ctx, "年报")
+	dataLen := len(data)
+	if dataLen == 0 {
+		return false
+	}
+
+	dataType = strings.ToUpper(dataType)
+	increasing := true
+	startIndex := dataLen - 1 - years
+	if startIndex < 0 {
+		startIndex = 0
+	}
+
+	for i := startIndex; i < dataLen-1; i++ {
+		switch dataType {
+		case "ROE":
+			if data[i].Roejq <= data[i+1].Roejq {
+				increasing = false
+				break
+			}
+		case "EPS":
+			if data[i].Epsjb <= data[i+1].Epsjb {
+				increasing = false
+				break
+			}
+		}
+	}
+	return increasing
+}
+
+// MidValue 历史年报 roe/eps 中位数
+func (h HistoryFinaMainData) MidValue(ctx context.Context, dataType string, years int) float64 {
+	dataType = strings.ToUpper(dataType)
+	values := []float64{}
+	data := h.FilterByReportType(ctx, "年报")
+	if years > 0 {
+		data = data[:years]
+	}
+	dataLen := len(data)
+	if dataLen == 0 {
+		return 0
+	}
+	for _, i := range data {
+		switch dataType {
+		case "ROE":
+			values = append(values, i.Roejq)
+		case "EPS":
+			values = append(values, i.Epsjb)
+		}
+	}
+	sort.Float64s(values)
+	mid := dataLen / 2
+	if dataLen%2 == 0 {
+		return (values[mid-1] + values[mid]) / 2
+	}
+	return values[mid]
+}
+
+// Q1RevenueInreasingRatio 获取今年一季报的营收增长比 (%)
+func (h HistoryFinaMainData) Q1RevenueInreasingRatio(ctx context.Context) (float64, error) {
+	year := time.Now().Year()
+	data := h.FilterByReportYear(ctx, year)
+	if len(data) > 0 {
+		return data[0].Totaloperaterevetz, nil
+	}
+	return 0, fmt.Errorf("%dQ1 report has not yet been published", year)
 }
 
 // RespFinaMainData 接口返回 json 结构
@@ -214,8 +257,8 @@ type RespFinaMainData struct {
 	Code    int    `json:"code"`
 }
 
-// QueryFinaMainData 获取财报主要指标
-func (e EastMoney) QueryFinaMainData(ctx context.Context, secuCode string) (HistoryFinaMainData, error) {
+// QueryHistoryFinaMainData 获取财报主要指标
+func (e EastMoney) QueryHistoryFinaMainData(ctx context.Context, secuCode string) (HistoryFinaMainData, error) {
 	apiurl := "https://datacenter.eastmoney.com/securities/api/data/get"
 	params := map[string]string{
 		"filter": fmt.Sprintf(`(SECUCODE="%s")`, strings.ToUpper(secuCode)),
@@ -256,10 +299,8 @@ type RespFinaPublishDate struct {
 			AppointPublishDate string      `json:"APPOINT_PUBLISH_DATE"`
 			ReportDate         string      `json:"REPORT_DATE"`
 			ActualPublishDate  interface{} `json:"ACTUAL_PUBLISH_DATE"`
-			ResidualDays       int         `json:"RESIDUAL_DAYS"`
 			ReportTypeName     string      `json:"REPORT_TYPE_NAME"`
 			IsPublish          string      `json:"IS_PUBLISH"`
-			Market             string      `json:"MARKET"`
 		} `json:"data"`
 		Count int `json:"count"`
 	} `json:"result"`
@@ -268,21 +309,21 @@ type RespFinaPublishDate struct {
 	Code    int    `json:"code"`
 }
 
-// QueryFinaPublishDate 查询财报预约披露日期
-func (e EastMoney) QueryFinaPublishDate(ctx context.Context, securityCode string) (string, error) {
+// QueryAppointFinaPublishDate 查询最新财报预约披露日期
+func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode string) (string, error) {
 	apiurl := "https://datacenter.eastmoney.com/api/data/get"
 	params := map[string]string{
 		"filter": fmt.Sprintf(`(SECURITY_CODE="%s")`, strings.ToUpper(securityCode)),
 		"client": "APP",
 		"source": "DataCenter",
 		"type":   "RPT_PUBLIC_BS_APPOIN",
-		"sty":    "SECURITY_CODE,SECURITY_NAME_ABBR,APPOINT_PUBLISH_DATE,REPORT_DATE,ACTUAL_PUBLISH_DATE,RESIDUAL_DAYS,REPORT_TYPE_NAME,IS_PUBLISH,MARKET",
+		"sty":    "SECURITY_CODE,SECURITY_NAME_ABBR,APPOINT_PUBLISH_DATE,REPORT_DATE,ACTUAL_PUBLISH_DATE,REPORT_TYPE_NAME,IS_PUBLISH",
 		"st":     "SECURITY_CODE,EITIME",
 		"ps":     "20",
 		"p":      "1",
 		"sr":     "-1,-1",
 	}
-	logging.Debug(ctx, "EastMoney QueryFinaPublishDate "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryAppointFinaPublishDate "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
@@ -295,7 +336,7 @@ func (e EastMoney) QueryFinaPublishDate(ctx context.Context, securityCode string
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
-		"EastMoney QueryFinaPublishDate "+apiurl+" end",
+		"EastMoney QueryAppointFinaPublishDate "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)

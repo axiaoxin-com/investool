@@ -1,4 +1,4 @@
-// 按我的选股指标获取股票数据，筛选出优质公司（不代表股价涨）
+// 按我的选股指标获取股票数据，对优质公司进行初步筛选（好公司不代表股价涨）
 // 1. 净资产收益率 >= 8%， ROE_WEIGHT
 // 2. 净利润增长率 > 0 ， NETPROFIT_YOY_RATIO
 // 3. 营收增长率 > 0 ， TOI_YOY_RATIO
@@ -7,16 +7,15 @@
 // 6. 营收 3 年复合增长率 > 0 ， INCOME_GROWTHRATE_3Y
 // 7. 预测净利润同比增长 > 0 ， PREDICT_NETPROFIT_RATIO
 // 8. 预测营收同比增长 > 0 ， PREDICT_INCOME_RATIO
-// 9. 每股股利（税前） >= 0.000001 ， PAR_DIVIDEND_PRETAX
-// 10. 上市以来年化收益率 > 0 ， LISTING_YIELD_YEAR
-// 11. 总市值 > 500 亿， TOTAL_MARKET_CAP
-// 12. 是否按行业选择， INDUSTRY
-// 13. 按股价（低股价 10-30 元)， NEW_PRICE
-// 14. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
-// 15. 市净率不小于1，PBNEWMRQ
+// 9. 上市以来年化收益率 > 0 ， LISTING_YIELD_YEAR
+// 10. 总市值 > 500 亿， TOTAL_MARKET_CAP
+// 11. 是否按行业选择， INDUSTRY
+// 12. 按股价（低股价 10-30 元)， NEW_PRICE
+// 13. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
+// 14. 市净率不小于1，PBNEWMRQ
 //
 // filter exp:
-// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(PAR_DIVIDEND_PRETAX>=0.000001)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")(PBNEWMRQ>=1)
+// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")(PBNEWMRQ>=1)
 
 package eastmoney
 
@@ -52,8 +51,6 @@ type Filter struct {
 	PredictNetprofitRatio float64 `json:"predict_netprofit_ratio"`
 	// 预测营收同比增长（%）
 	PredictIncomeRatio float64 `json:"predict_income_ratio"`
-	// 每股股利（税前）（元）
-	ParDividendPretax float64 `json:"par_dividend_pretax"`
 	// 上市以来年化收益率（%）
 	ListingYieldYear float64 `json:"listing_yield_year"`
 	// 市净率
@@ -84,7 +81,6 @@ func (f Filter) String(ctx context.Context) string {
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>%f)`, f.IncomeGrowthrate3Y)
 	filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>%f)`, f.PredictNetprofitRatio)
 	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>%f)`, f.PredictIncomeRatio)
-	filter += fmt.Sprintf(`(PAR_DIVIDEND_PRETAX>=%f)`, f.ParDividendPretax)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>%f)`, f.ListingYieldYear)
 	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.PBNewMRQ)
 	// 可选参数
@@ -117,7 +113,6 @@ var (
 		IncomeGrowthrate3Y:    0.0,
 		PredictNetprofitRatio: 0.0,
 		PredictIncomeRatio:    0.0,
-		ParDividendPretax:     0.000001,
 		ListingYieldYear:      0.0,
 		TotalMarketCap:        500.0,
 		Industry:              "",
@@ -156,8 +151,6 @@ type StockInfo struct {
 	PredictNetprofitRatio float64 `json:"PREDICT_NETPROFIT_RATIO"`
 	//	预测营收同比增长
 	PredictIncomeRatio float64 `json:"PREDICT_INCOME_RATIO"`
-	//每股股利（税前）
-	ParDividendPretax float64 `json:"PAR_DIVIDEND_PRETAX"`
 	// 上市以来年化收益率
 	ListingYieldYear float64 `json:"LISTING_YIELD_YEAR"`
 	// 最近交易日期
@@ -202,7 +195,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,NEW_PRICE,CHANGE_RATE,INDUSTRY,TOTAL_MARKET_CAP,ROE_WEIGHT,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,PAR_DIVIDEND_PRETAX,LISTING_YIELD_YEAR",
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,NEW_PRICE,CHANGE_RATE,INDUSTRY,TOTAL_MARKET_CAP,ROE_WEIGHT,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,LISTING_YIELD_YEAR",
 		"filter": filter.String(ctx),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
