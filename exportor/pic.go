@@ -46,6 +46,7 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 	fc.SetHinting(font.HintingNone)
 
 	// 按分组写入股票名称+代码到不同图片
+	num := 1
 	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
 		// 设置图片大小
 		height := 64*len(stocks) + 64
@@ -62,12 +63,13 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 		// 写入图片
 		for j, stock := range stocks {
 			pt := freetype.Pt(40, (j+1)*int(fc.PointToFixed(fontSize)>>6)+40)
-			line := fmt.Sprintf("%d.%s    %s", j+1, stock.Name, stock.Code)
+			line := fmt.Sprintf("%d.%s    %s", num, stock.Name, stock.Code)
 			_, err = fc.DrawString(line, pt)
 			if err != nil {
 				logging.Errorf(ctx, "draw %s error: %s", line, err.Error())
 				continue
 			}
+			num++
 		}
 
 		// 生成图片
