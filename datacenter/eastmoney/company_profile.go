@@ -219,7 +219,7 @@ func (c CompanyProfile) MainFormsString() string {
 	s := []string{"按行业:"}
 	if len(group["1"]) > 0 {
 		for _, m := range group["1"] {
-			s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
+			s = append(s, fmt.Sprintf("    %s: %s", m.MainForm, m.MainIncomeRatio))
 		}
 	} else {
 		s = append(s, "暂无数据")
@@ -228,7 +228,7 @@ func (c CompanyProfile) MainFormsString() string {
 	s = append(s, "按产品:")
 	if len(group["3"]) > 0 {
 		for _, m := range group["3"] {
-			s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
+			s = append(s, fmt.Sprintf("    %s: %s", m.MainForm, m.MainIncomeRatio))
 		}
 	} else {
 		s = append(s, "暂无数据")
@@ -237,7 +237,7 @@ func (c CompanyProfile) MainFormsString() string {
 	s = append(s, "按地区:")
 	if len(group["2"]) > 0 {
 		for _, m := range group["2"] {
-			s = append(s, fmt.Sprintf("%s: %s", m.MainForm, m.MainIncomeRatio))
+			s = append(s, fmt.Sprintf("    %s: %s", m.MainForm, m.MainIncomeRatio))
 		}
 	} else {
 		s = append(s, "暂无数据")
@@ -246,12 +246,15 @@ func (c CompanyProfile) MainFormsString() string {
 	return strings.Join(s, "\n")
 }
 
-// ProfileString 简介+主营业务
+// ProfileString 公司信息
 func (c CompanyProfile) ProfileString() string {
 	s := []string{"公司简介:"}
 	s = append(s, c.Profile)
 	s = append(s, "主营业务:")
 	s = append(s, "    "+c.MainBusiness)
+	s = append(s, "所属概念:")
+	s = append(s, "    "+c.Concept)
+
 	return strings.Join(s, "\n")
 }
 

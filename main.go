@@ -19,7 +19,7 @@ func main() {
 		logging.Fatal(ctx, err.Error())
 	}
 	data := exportor.New(ctx, stocks)
-	data.SortByPriceSpace()
+	data.SortByROE()
 	filename := fmt.Sprintf("./docs/selected_stocks_%s.json", time.Now().Format("20060102"))
 	c, err := data.ExportJSON(ctx, filename)
 	if err != nil {
