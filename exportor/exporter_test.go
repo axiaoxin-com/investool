@@ -1,4 +1,4 @@
-package exporter
+package exportor
 
 import (
 	"context"

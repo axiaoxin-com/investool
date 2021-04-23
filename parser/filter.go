@@ -64,7 +64,7 @@ var DefaultFilterOptions = FilterOptions{
 	CheckYears:      3,
 	NoCheckYearsROE: 20,
 	MaxDebtRatio:    60,
-	MaxHV:           2,
+	MaxHV:           6,
 }
 
 // IsGoodStock 判断给定股票是否是好股票
@@ -179,6 +179,7 @@ func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options Filt
 		return
 	}
 
+	// 9. 负债率低于 60%
 	if stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtRatio {
 		logging.Debugf(
 			ctx,

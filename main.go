@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/exporter"
+	"github.com/axiaoxin-com/x-stock/exportor"
 	"github.com/axiaoxin-com/x-stock/parser"
 )
 
@@ -18,11 +18,18 @@ func main() {
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	data := exporter.InitExportData(ctx, stocks)
+	data := exportor.New(ctx, stocks)
 	data.SortByPriceSpace()
 	filename := fmt.Sprintf("./docs/selected_stocks_%s.json", time.Now().Format("20060102"))
-	_, err = data.ExportJSON(ctx, filename)
+	c, err := data.ExportJSON(ctx, filename)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
+	logging.Debug(ctx, "json content:"+string(c))
+	filename = fmt.Sprintf("./docs/selected_stocks_%s.csv", time.Now().Format("20060102"))
+	c, err = data.ExportCSV(ctx, filename)
+	if err != nil {
+		logging.Fatal(ctx, err.Error())
+	}
+	logging.Debug(ctx, "csv content:"+string(c))
 }
