@@ -14,8 +14,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// RespHistoryPE 历史市盈率接口返回结构
-type RespHistoryPE struct {
+// RespHistoricalPE 历史市盈率接口返回结构
+type RespHistoricalPE struct {
 	Data [][]struct {
 		Securitycode string `json:"SECURITYCODE"`
 		Datetype     string `json:"DATETYPE"`
@@ -35,17 +35,17 @@ type RespHistoryPE struct {
 	} `json:"pe"`
 }
 
-// HistoryPE 历史 pe
-type HistoryPE struct {
+// HistoricalPE 历史 pe
+type HistoricalPE struct {
 	Value float64
 	Date  string
 }
 
-// HistoryPEList 历史 pe 列表
-type HistoryPEList []HistoryPE
+// HistoricalPEList 历史 pe 列表
+type HistoricalPEList []HistoricalPE
 
 // GetMidValue 获取历史 pe 中位数
-func (h HistoryPEList) GetMidValue(ctx context.Context) (float64, error) {
+func (h HistoricalPEList) GetMidValue(ctx context.Context) (float64, error) {
 	vlen := len(h)
 	if vlen == 0 {
 		return 0, errors.New("no data")
@@ -62,37 +62,42 @@ func (h HistoryPEList) GetMidValue(ctx context.Context) (float64, error) {
 	return values[mid], nil
 }
 
-// QueryHistoryPEList 获取历史市盈率
-func (e EastMoney) QueryHistoryPEList(ctx context.Context, secuCode string) (HistoryPEList, error) {
+// QueryHistoricalPEList 获取历史市盈率
+func (e EastMoney) QueryHistoricalPEList(ctx context.Context, secuCode string) (HistoricalPEList, error) {
 	apiurl := "https://emfront.eastmoney.com/APP_HSF10/CPBD/GZFX"
 	params := map[string]string{
 		"code": e.GetFC(secuCode),
 		"year": "4", // 10 年
 		"type": "1", // 市盈率
 	}
-	logging.Debug(ctx, "EastMoney QueryHistoryPEList "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryHistoricalPEList "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
 		return nil, err
 	}
-	resp := RespHistoryPE{}
+	resp := RespHistoricalPE{}
 	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp); err != nil {
 		return nil, err
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(ctx, "EastMoney QueryHistoryPEList "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
-	result := HistoryPEList{}
+	logging.Debug(
+		ctx,
+		"EastMoney QueryHistoricalPEList "+apiurl+" end",
+		zap.Int64("latency(ms)", latency),
+		zap.Any("resp", resp),
+	)
+	result := HistoricalPEList{}
 	if len(resp.Data) == 0 {
-		return nil, errors.New("no history pe data")
+		return nil, errors.New("no historical pe data")
 	}
 	for _, i := range resp.Data[0] {
 		value, err := strconv.ParseFloat(i.Value, 64)
 		if err != nil {
-			logging.Error(ctx, "QueryHistoryPEList ParseFloat error:"+err.Error())
+			logging.Error(ctx, "QueryHistoricalPEList ParseFloat error:"+err.Error())
 			continue
 		}
-		pe := HistoryPE{
+		pe := HistoricalPE{
 			Date:  i.Endate,
 			Value: value,
 		}

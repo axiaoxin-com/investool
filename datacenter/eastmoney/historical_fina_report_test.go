@@ -6,8 +6,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestQueryHistoryFinaMainData(t *testing.T) {
-	data, err := _em.QueryHistoryFinaMainData(_ctx, "600188.SH")
+func TestQueryHistoricalFinaMainData(t *testing.T) {
+	data, err := _em.QueryHistoricalFinaMainData(_ctx, "600188.SH")
 	require.Nil(t, err)
 	require.NotEmpty(t, data)
 	data1 := data.FilterByReportType(_ctx, "年报")
