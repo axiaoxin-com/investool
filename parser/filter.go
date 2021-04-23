@@ -71,7 +71,7 @@ var DefaultFilterOptions = FilterOptions{
 
 // IsGoodStock 判断给定股票是否是好股票
 func IsGoodStock(ctx context.Context, baseInfo eastmoney.StockInfo, options FilterOptions) (stock model.Stock, ok bool) {
-	stock, err := model.NewStock(ctx, baseInfo)
+	stock, err := model.NewStock(ctx, baseInfo, false)
 	if err != nil {
 		logging.Error(ctx, "NewStock error:"+err.Error())
 		return

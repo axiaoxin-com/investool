@@ -6,6 +6,7 @@ import (
 	"context"
 	"sort"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/datacenter/eniu"
@@ -64,7 +65,7 @@ func (s StockList) SortByROE() {
 }
 
 // NewStock 创建 Stock 对象
-func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) {
+func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (Stock, error) {
 	s := Stock{
 		BaseInfo: baseInfo,
 	}
@@ -72,14 +73,20 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	// 获取财报
 	hf, err := datacenter.EastMoney.QueryHistoricalFinaMainData(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.HistoricalFinaMainData = hf
 
 	// 获取综合估值
 	status, valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.ValuationMap = valMap
 	s.ValuationStatus = status
@@ -87,7 +94,10 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	// 历史市盈率
 	peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.HistoricalPEList = peList
 
@@ -95,9 +105,13 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	// 今年一季报营收增长比
 	ratio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
 	if err == nil {
+		if strict {
+			return s, err
+		}
 		peMidVal, err := peList.GetMidValue(ctx)
 		if err != nil {
-			return s, err
+			logging.Warn(ctx, err.Error())
+			s.RightPrice = -1
 		}
 		s.RightPrice = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + ratio))
 	} else {
@@ -108,42 +122,60 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 	// 历史股价
 	hisPrice, err := datacenter.Eniu.QueryHistoricalStockPrice(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.HistoricalPrice = hisPrice
 
 	// 历史波动率
 	hv, err := hisPrice.HistoricalVolatility(ctx, "YEAR")
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.HistoricalVolatility = hv
 
 	// 公司资料
 	cp, err := datacenter.EastMoney.QueryCompanyProfile(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.CompanyProfile = cp
 
 	// 最新财报预约披露时间
 	finaPubDate, err := datacenter.EastMoney.QueryAppointFinaPublishDate(ctx, s.BaseInfo.SecurityCode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.FinaAppointPublishDate = finaPubDate
 
 	// 机构评级统计
 	orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.OrgRatingList = orgRatings
 
 	// 盈利预测
 	pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
 	if err != nil {
-		return s, err
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
 	}
 	s.ProfitPredictList = pps
 	return s, nil
