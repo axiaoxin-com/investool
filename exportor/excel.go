@@ -52,7 +52,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	f := excelize.NewFile()
 
 	// 创建全部数据表
-	defaultSheet := "Sheet1"
+	defaultSheet := "总览"
 	lowPriceSheet := "30元内"
 	hv1Sheet := "波动率低于0.1"
 	hv2Sheet := "波动率0.1-0.5"
@@ -74,6 +74,9 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	}
 	// 创建 sheet
 	for _, sheet := range sheets {
+		if sheet == defaultSheet {
+			f.SetSheetName("Sheet1", defaultSheet)
+		}
 		f.NewSheet(sheet)
 		for i, header := range headers {
 			// 设置列宽
@@ -83,7 +86,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			case "主营构成", "每股收益预测":
 				width = 45.0
 			case "公司信息":
-				width = 75.0
+				width = 65.0
 			}
 			col, err := excelize.ColumnNumberToName(colNum)
 			if err != nil {
