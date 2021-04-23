@@ -57,6 +57,47 @@ TODO
 
 TODO
 
+## 使用方法
+
+[点击下载对应系统最新版本的可执行文件](https://github.com/axiaoxin-com/x-stock/releases/)，按下列使用说明操作，可执行文件名需替换为你下载的版本。
+
+查看使用说明：
+
+```
+./x-stock_darwin_amd64 -h
+Usage of ./x-stock_darwin_amd64:
+  -f string
+    	export filename (default "./docs/x-stock.20210424.xlsx")
+  -l string
+    	loglevel: debug|info|warn|error (default "info")
+  -run string
+    	processor: exportor|tview|webserver
+```
+
+### exportor
+
+exportor 是数据导出器，不使用参数默认导出 EXCEL 文件。
+
+支持导出以下类型的数据：
+
+- 导出 JSON 文件：
+
+```
+./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.json
+```
+
+- 导出 CSV 文件：
+
+```
+./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.csv
+```
+
+- 导出 EXCEL 文件：
+
+```
+./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.xlsx
+```
+
 ## 欢迎 Star
 
 [![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://githuv.com/axiaoxin-com/x-stock)
