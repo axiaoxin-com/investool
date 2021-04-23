@@ -40,15 +40,15 @@ func parseFlags() {
 	flag.StringVar(
 		&exportFilename,
 		"f",
-		fmt.Sprintf("./docs/x-stock.%s.csv", time.Now().Format("200601021504")),
+		fmt.Sprintf("./docs/x-stock.%s.csv", time.Now().Format("20060102")),
 		"export filename",
 	)
 	flag.Parse()
 }
 
 func init() {
-	logging.SetLevel(loglevel)
 	parseFlags()
+	logging.SetLevel(loglevel)
 }
 
 func main() {

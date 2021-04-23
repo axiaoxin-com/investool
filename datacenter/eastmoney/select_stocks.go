@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/axiaoxin-com/goutils"
@@ -71,6 +72,10 @@ type Filter struct {
 	MaxPrice float64
 	// 上市时间是否超过 5 年
 	ListingOver5Y bool
+	// 是否排除创业板 300XXX
+	ExcludeCYB bool
+	// 是否排除科创板 688XXX
+	ExcludeKCB bool
 }
 
 // String 转为字符串的请求参数
@@ -118,12 +123,14 @@ var (
 		MinPredictNetprofitRatio: 0.0,
 		MinPredictIncomeRatio:    0.0,
 		MinListingYieldYear:      0.0,
+		MinPBNewMRQ:              0.0,
 		MinTotalMarketCap:        0.0,
 		Industry:                 "",
 		MinPrice:                 0.0,
 		MaxPrice:                 0.0,
 		ListingOver5Y:            false,
-		MinPBNewMRQ:              0.0,
+		ExcludeCYB:               false,
+		ExcludeKCB:               false,
 	}
 )
 
@@ -241,6 +248,16 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 	}
 	result := StockInfoList{}
 	for _, i := range resp.Result.Data {
+		// 排除创业板
+		if filter.ExcludeCYB && strings.HasPrefix(i.Secucode, "300") {
+			logging.Debugf(ctx, "EastMoney SelectStocksWithFilter ExcludeCYB %s %s", i.SecurityNameAbbr, i.Secucode)
+			continue
+		}
+		// 排除科创板
+		if filter.ExcludeKCB && strings.HasPrefix(i.Secucode, "688") {
+			logging.Debugf(ctx, "EastMoney SelectStocksWithFilter ExcludeKCB %s %s", i.SecurityNameAbbr, i.Secucode)
+			continue
+		}
 		result = append(result, i)
 	}
 	result.SortByROE()
