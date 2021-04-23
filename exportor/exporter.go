@@ -47,7 +47,7 @@ func Export(ctx context.Context, exportFilename string) {
 	beginTime := time.Now()
 	filedir := path.Dir(exportFilename)
 	fileext := strings.ToLower(path.Ext(exportFilename))
-	exportType := "csv"
+	exportType := "excel"
 	switch fileext {
 	case ".json":
 		exportType = "json"

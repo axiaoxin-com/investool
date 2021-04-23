@@ -4,10 +4,14 @@ go 1.16
 
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
+	github.com/antlabs/strsim v0.0.2
 	github.com/axiaoxin-com/goutils v1.0.10
 	github.com/axiaoxin-com/logging v1.2.9
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/gin-gonic/gin v1.7.1 // indirect
+	github.com/go-dedup/megophone v0.0.0-20170830025436-f01be21026f5 // indirect
+	github.com/go-dedup/simhash v0.0.0-20170904020510-9ecaca7b509c
+	github.com/go-dedup/text v0.0.0-20170907015346-8bb1b95e3cb7 // indirect
 	github.com/go-playground/validator/v10 v10.5.0 // indirect
 	github.com/go-redis/redis/v8 v8.8.2 // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
