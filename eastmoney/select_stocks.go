@@ -125,9 +125,9 @@ var (
 
 // StockInfo 接口返回的股票信息结构
 type StockInfo struct {
-	// 股票代码
+	// 股票代码：带后缀
 	Secucode string `json:"SECUCODE"`
-	// 股票代码
+	// 股票代码：无后缀
 	SecurityCode string `json:"SECURITY_CODE"`
 	// 股票名
 	SecurityNameAbbr string `json:"SECURITY_NAME_ABBR"`
@@ -202,7 +202,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"p":      "1",      // page
 		"ps":     "100000", // page size
 	}
-	logging.Debug(ctx, "EastMoney IndustryList "+apiurl+" begin", zap.Any("reqData", reqData))
+	logging.Debug(ctx, "EastMoney QuerySelectedStocksWithFilter "+apiurl+" begin", zap.Any("reqData", reqData))
 	beginTime := time.Now()
 	req, err := goutils.NewHTTPMultipartReq(ctx, apiurl, reqData)
 	if err != nil {
