@@ -4,8 +4,10 @@ package exportor
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"github.com/axiaoxin-com/logging"
@@ -60,10 +62,9 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	// 创建全部数据表
 	defaultSheet := "总览"
 	lowPriceSheet := "30元内"
-	hv1Sheet := "历史波动率低于0.1"
-	hv2Sheet := "历史波动率0.1-0.5"
-	hv3Sheet := "历史波动率高于0.5"
-	sheets := []string{defaultSheet, lowPriceSheet, hv1Sheet, hv2Sheet, hv3Sheet}
+	hv1Sheet := "历史波动率低于0.5"
+	hv2Sheet := "历史波动率高于0.5"
+	sheets := []string{defaultSheet, lowPriceSheet, hv1Sheet, hv2Sheet}
 	// 添加行业
 	for _, industry := range e.Stocks.GetIndustryList() {
 		sheets = append(sheets, industry+"行业")
@@ -155,14 +156,10 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 					continue
 				}
 			case hv1Sheet:
-				if stock.HV > 0.1 {
+				if stock.HV > 0.5 {
 					continue
 				}
 			case hv2Sheet:
-				if stock.HV <= 0.1 || stock.HV > 0.5 {
-					continue
-				}
-			case hv3Sheet:
 				if stock.HV <= 0.5 {
 					continue
 				}
@@ -184,6 +181,13 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			row++
 		}
 	}
+	filter, _ := json.Marshal(e.FilterOptions)
+	f.SetDocProps(&excelize.DocProperties{
+		Created:     time.Now().Format("2006-01-02 15:04:05"),
+		Creator:     "axiaoxin",
+		Description: "filter: " + string(filter),
+		Keywords:    "x-stock: https://github.com/axiaoxin-com/x-stock",
+	})
 
 	buf, err := f.WriteToBuffer()
 	result = buf.Bytes()

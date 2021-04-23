@@ -40,45 +40,45 @@ const (
 type Filter struct {
 	// ------ 最重要的指标！！！------
 	// 最低净资产收益率（%）， ROE_WEIGHT
-	MinROE float64
+	MinROE float64 `json:"min_roe"`
 
 	// ------ 必要参数 ------
 	// 最低净利润增长率（%） ， NETPROFIT_YOY_RATIO
-	MinNetprofitYoyRatio float64
+	MinNetprofitYoyRatio float64 `json:"min_netprofit_yoy_ratio"`
 	// 最低营收增长率（%） ， TOI_YOY_RATIO
-	MinToiYoyRatio float64
+	MinToiYoyRatio float64 `json:"min_toi_yoy_ratio"`
 	// 最低最新股息率（%）， ZXGXL
-	MinZXGXL float64
+	MinZXGXL float64 `json:"min_zxgxl"`
 	// 最低净利润 3 年复合增长率（%）， NETPROFIT_GROWTHRATE_3Y
-	MinNetprofitGrowthrate3Y float64
+	MinNetprofitGrowthrate3Y float64 `json:"min_netprofit_growthrate_3_y"`
 	// 最低营收 3 年复合增长率（%）， INCOME_GROWTHRATE_3Y
-	MinIncomeGrowthrate3Y float64
+	MinIncomeGrowthrate3Y float64 `json:"min_income_growthrate_3_y"`
 	// 最低上市以来年化收益率（%） ， LISTING_YIELD_YEAR
-	MinListingYieldYear float64
+	MinListingYieldYear float64 `json:"min_listing_yield_year"`
 	// 最低市净率， PBNEWMRQ
-	MinPBNewMRQ float64
+	MinPBNewMRQ float64 `json:"min_pb_new_mrq"`
 
 	// ------ 可选参数 ------
 	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
-	MinPredictNetprofitRatio float64
+	MinPredictNetprofitRatio float64 `json:"min_predict_netprofit_ratio"`
 	// 最低预测营收同比增长（%）， PREDICT_INCOME_RATIO
-	MinPredictIncomeRatio float64
+	MinPredictIncomeRatio float64 `json:"min_predict_income_ratio"`
 	// 最低总市值（亿）， TOTAL_MARKET_CAP
-	MinTotalMarketCap float64
+	MinTotalMarketCap float64 `json:"min_total_market_cap"`
 	// 行业名（可选参数，不设置搜全行业）， INDUSTRY
-	Industry string
+	Industry string `json:"industry"`
 	// 股价范围最小值（元）， NEW_PRICE
-	MinPrice float64
+	MinPrice float64 `json:"min_price"`
 	// 股价范围最大值（元）， NEW_PRICE
-	MaxPrice float64
+	MaxPrice float64 `json:"max_price"`
 	// 上市时间是否超过 5 年，@LISTING_DATE="OVER5Y"
-	ListingOver5Y bool
+	ListingOver5Y bool `json:"listing_over_5_y"`
 	// 最低上市以来年化波动率， LISTING_VOLATILITY_YEAR
-	MinListingVolatilityYear float64
+	MinListingVolatilityYear float64 `json:"min_listing_volatility_year"`
 	// 是否排除创业板 300XXX
-	ExcludeCYB bool
+	ExcludeCYB bool `json:"exclude_cyb"`
 	// 是否排除科创板 688XXX
-	ExcludeKCB bool
+	ExcludeKCB bool `json:"exclude_kcb"`
 }
 
 // String 转为字符串的请求参数

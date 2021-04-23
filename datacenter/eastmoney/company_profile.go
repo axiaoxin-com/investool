@@ -260,7 +260,7 @@ func (c CompanyProfile) ProfileString() string {
 
 // KeywordsString 关键词字符串
 func (c CompanyProfile) KeywordsString() string {
-	return strings.Join(c.Keywords, "、")
+	return strings.Join(c.Keywords, ",")
 }
 
 // QueryCompanyProfile 获取公司信息

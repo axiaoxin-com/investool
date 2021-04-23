@@ -15,18 +15,20 @@ import (
 
 // Exportor exportor 实例
 type Exportor struct {
-	Stocks DataList
+	Stocks        DataList
+	FilterOptions parser.FilterOptions
 }
 
 // New 创建要导出的数据列表
-func New(ctx context.Context, stocks model.StockList) Exportor {
+func New(ctx context.Context, stocks model.StockList, filterOptions parser.FilterOptions) Exportor {
 	dlist := DataList{}
 	for _, s := range stocks {
 		dlist = append(dlist, NewData(s))
 	}
 
 	return Exportor{
-		Stocks: dlist,
+		Stocks:        dlist,
+		FilterOptions: filterOptions,
 	}
 }
 
@@ -43,6 +45,8 @@ func Export(ctx context.Context, exportFilename string) {
 		exportType = "csv"
 	case ".xlsx", ".xls":
 		exportType = "excel"
+	case ".png", ".jpg", ".jpeg", ".pic":
+		exportType = "pic"
 	}
 	if _, err := os.Stat(filedir); os.IsNotExist(err) {
 		os.Mkdir(filedir, 0755)
@@ -54,7 +58,7 @@ func Export(ctx context.Context, exportFilename string) {
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	e := New(ctx, stocks)
+	e := New(ctx, stocks, parser.DefaultFilterOptions)
 	e.Stocks.SortByROE()
 
 	switch exportType {
@@ -64,6 +68,8 @@ func Export(ctx context.Context, exportFilename string) {
 		_, err = e.ExportCSV(ctx, exportFilename)
 	case "excel":
 		_, err = e.ExportExcel(ctx, exportFilename)
+	case "pic":
+		// _, err = e.ExportPic(ctx, exportFilename)
 	}
 	if err != nil {
 		logging.Fatal(ctx, err.Error())

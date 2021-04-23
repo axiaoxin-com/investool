@@ -34,13 +34,13 @@ type FilterOptions struct {
 	// eastmoney 中的过滤条件
 	eastmoney.Filter
 	// 连续增长年数
-	CheckYears int
+	CheckYears int `json:"check_years"`
 	// ROE 高于该值时不做连续增长检查
-	NoCheckYearsROE float64
+	NoCheckYearsROE float64 `json:"no_check_years_roe"`
 	// 最大负债率百分比(%)
-	MaxDebtRatio float64
+	MaxDebtRatio float64 `json:"max_debt_ratio"`
 	// 最小历史波动率
-	MinHV float64
+	MinHV float64 `json:"min_hv"`
 }
 
 // DefaultFilterOptions 默认过滤条件值
