@@ -348,7 +348,7 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	return resp.Result.Data, nil
 }
@@ -406,7 +406,7 @@ func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return "", fmt.Errorf("%#v", resp)
+		return "", fmt.Errorf("%s %#v", securityCode, resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		return resp.Result.Data[0].AppointPublishDate, nil

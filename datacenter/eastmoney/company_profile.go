@@ -281,6 +281,9 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 	if err := goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp); err != nil {
 		return profile, err
 	}
+	if resp.Status != 0 {
+		return profile, fmt.Errorf("%s %#v", secuCode, resp.Message)
+	}
 	profile.Secucode = resp.Result.Jibenziliao.Secucode
 	profile.Name = resp.Result.Jibenziliao.Companyname
 	profile.Industry = resp.Result.Jibenziliao.Industry
@@ -311,7 +314,7 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 		zap.Any("resp", resp1),
 	)
 	if resp1.Status != 0 {
-		return profile, fmt.Errorf("%#v", resp1.Message)
+		return profile, fmt.Errorf("%s %#v", secuCode, resp1.Message)
 	}
 	for _, i := range resp1.Result.Ticaixiangqinglist {
 		profile.Keywords = append(profile.Keywords, i.Keyword)

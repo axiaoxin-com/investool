@@ -77,7 +77,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return 0, nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市盈率"] = resp.Result.Data[0].ValationStatus
@@ -102,7 +102,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return 0, nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市净率"] = resp.Result.Data[0].ValationStatus
@@ -127,7 +127,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return 0, nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市销率"] = resp.Result.Data[0].ValationStatus
@@ -152,7 +152,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return 0, nil, fmt.Errorf("%#v", resp)
+		return 0, nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	if len(resp.Result.Data) > 0 {
 		valuations["市现率"] = resp.Result.Data[0].ValationStatus

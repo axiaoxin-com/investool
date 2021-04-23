@@ -1,18 +1,18 @@
 // 按我的选股指标获取股票数据，对优质公司进行初步筛选（好公司不代表股价涨）
-// 1. 净资产收益率
-// 2. 净利润增长率
-// 3. 营收增长率
-// 4. 最新股息率
-// 5. 净利润 3 年复合增长率
-// 6. 营收 3 年复合增长率
-// 7. 预测净利润同比增长
-// 8. 预测营收同比增长
-// 9. 上市以来年化收益率
-// 10. 总市值
-// 11. 行业
-// 12. 股价（低股价 10-30 元)
-// 13. 上市时间是否大于 5 年
-// 14. 市净率
+// 净资产收益率
+// 净利润增长率
+// 营收增长率
+// 最新股息率
+// 净利润 3 年复合增长率
+// 营收 3 年复合增长率
+// 预测净利润同比增长
+// 预测营收同比增长
+// 上市以来年化收益率
+// 总市值
+// 行业
+// 股价（低股价 10-30 元)
+// 上市时间是否大于 5 年
+// 市净率
 
 package eastmoney
 
@@ -52,16 +52,16 @@ type Filter struct {
 	MinNetprofitGrowthrate3Y float64
 	// 最低营收 3 年复合增长率（%）， INCOME_GROWTHRATE_3Y
 	MinIncomeGrowthrate3Y float64
-	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
-	MinPredictNetprofitRatio float64
-	// 最低预测营收同比增长（%）， PREDICT_INCOME_RATIO
-	MinPredictIncomeRatio float64
 	// 最低上市以来年化收益率（%） ， LISTING_YIELD_YEAR
 	MinListingYieldYear float64
 	// 最低市净率， PBNEWMRQ
 	MinPBNewMRQ float64
 
 	// ------ 可选参数 ------
+	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
+	MinPredictNetprofitRatio float64
+	// 最低预测营收同比增长（%）， PREDICT_INCOME_RATIO
+	MinPredictIncomeRatio float64
 	// 最低总市值（亿）， TOTAL_MARKET_CAP
 	MinTotalMarketCap float64
 	// 行业名（可选参数，不设置搜全行业）， INDUSTRY
@@ -88,11 +88,15 @@ func (f Filter) String() string {
 	filter += fmt.Sprintf(`(ZXGXL>=%f)`, f.MinZXGXL)
 	filter += fmt.Sprintf(`(NETPROFIT_GROWTHRATE_3Y>=%f)`, f.MinNetprofitGrowthrate3Y)
 	filter += fmt.Sprintf(`(INCOME_GROWTHRATE_3Y>=%f)`, f.MinIncomeGrowthrate3Y)
-	filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>=%f)`, f.MinPredictNetprofitRatio)
-	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>=%f)`, f.MinPredictIncomeRatio)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>=%f)`, f.MinListingYieldYear)
 	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.MinPBNewMRQ)
 	// 可选参数
+	if f.MinPredictNetprofitRatio != 0 {
+		filter += fmt.Sprintf(`(PREDICT_NETPROFIT_RATIO>=%f)`, f.MinPredictNetprofitRatio)
+	}
+	if f.MinPredictIncomeRatio != 0 {
+		filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>=%f)`, f.MinPredictIncomeRatio)
+	}
 	if f.MinTotalMarketCap != 0 {
 		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>=%f)`, f.MinTotalMarketCap*100000000)
 	}
@@ -244,7 +248,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%#v", resp)
+		return nil, fmt.Errorf("%s %#v", filter.String(), resp)
 	}
 	result := StockInfoList{}
 	for _, i := range resp.Result.Data {
