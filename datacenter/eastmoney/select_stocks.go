@@ -12,7 +12,7 @@
 // 11. 是否按行业选择， INDUSTRY
 // 12. 按股价（低股价 10-30 元)， NEW_PRICE
 // 13. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
-// 14. 市净率不小于1，PBNEWMRQ
+// 14. 市净率不小于 1 ， PBNEWMRQ
 
 package eastmoney
 
@@ -167,11 +167,11 @@ type StockInfo struct {
 func (s StockInfo) TotalMarketCapString() string {
 	yi := s.TotalMarketCap / YI
 	if yi >= 1 {
-		return fmt.Sprint(yi, "亿")
+		return fmt.Sprintf("%.2f 亿", yi)
 	}
 	wan := s.TotalMarketCap / WAN
 	if wan >= 1 {
-		return fmt.Sprint(wan, "万")
+		return fmt.Sprintf("%.2f 万", wan)
 	}
 	return fmt.Sprint(s.TotalMarketCap)
 }
