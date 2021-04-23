@@ -13,6 +13,7 @@
 // 股价（低股价 10-30 元)
 // 上市时间是否大于 5 年
 // 市净率
+// 上市以来年化波动率
 
 package eastmoney
 
@@ -72,6 +73,8 @@ type Filter struct {
 	MaxPrice float64
 	// 上市时间是否超过 5 年，@LISTING_DATE="OVER5Y"
 	ListingOver5Y bool
+	// 最低上市以来年化波动率， LISTING_VOLATILITY_YEAR
+	MinListingVolatilityYear float64
 	// 是否排除创业板 300XXX
 	ExcludeCYB bool
 	// 是否排除科创板 688XXX
@@ -112,29 +115,16 @@ func (f Filter) String() string {
 	if f.ListingOver5Y {
 		filter += `(@LISTING_DATE="OVER5Y")`
 	}
+	if f.MinListingVolatilityYear != 0 {
+		filter += fmt.Sprintf(`(LISTING_VOLATILITY_YEAR>=%f))`, f.MinListingVolatilityYear)
+	}
 	return filter
 }
 
 var (
 	// DefaultFilter 默认指标值
 	DefaultFilter = Filter{
-		MinROE:                   8.0,
-		MinNetprofitYoyRatio:     0.0,
-		MinToiYoyRatio:           0.0,
-		MinZXGXL:                 0.0,
-		MinNetprofitGrowthrate3Y: 0.0,
-		MinIncomeGrowthrate3Y:    0.0,
-		MinPredictNetprofitRatio: 0.0,
-		MinPredictIncomeRatio:    0.0,
-		MinListingYieldYear:      0.0,
-		MinPBNewMRQ:              0.0,
-		MinTotalMarketCap:        0.0,
-		Industry:                 "",
-		MinPrice:                 0.0,
-		MaxPrice:                 0.0,
-		ListingOver5Y:            false,
-		ExcludeCYB:               false,
-		ExcludeKCB:               false,
+		MinROE: 8.0,
 	}
 )
 
@@ -158,20 +148,24 @@ type StockInfo struct {
 	Zxgxl float64 `json:"ZXGXL"`
 	// 净利润 3 年复合增长率
 	NetprofitGrowthrate3Y float64 `json:"NETPROFIT_GROWTHRATE_3Y"`
-	//营收 3 年复合增长率
+	// 营收 3 年复合增长率
 	IncomeGrowthrate3Y float64 `json:"INCOME_GROWTHRATE_3Y"`
+	// 上市以来年化收益率
+	ListingYieldYear float64 `json:"LISTING_YIELD_YEAR"`
+	// 市净率
+	PBNewMRQ float64 `json:"PBNEWMRQ"`
 	// 预测净利润同比增长
 	PredictNetprofitRatio float64 `json:"PREDICT_NETPROFIT_RATIO"`
 	// 预测营收同比增长
 	PredictIncomeRatio float64 `json:"PREDICT_INCOME_RATIO"`
-	// 上市以来年化收益率
-	ListingYieldYear float64 `json:"LISTING_YIELD_YEAR"`
 	// 总市值
 	TotalMarketCap float64 `json:"TOTAL_MARKET_CAP"`
 	// 最新价（元）
 	NewPrice float64 `json:"NEW_PRICE"`
-	// 市净率
-	PBNewMRQ float64 `json:"PBNEWMRQ"`
+	// 上市以来年化波动率
+	HistoricalHV float64 `json:"LISTING_VOLATILITY_YEAR"`
+	// 上市时间
+	ListingDate string `json:"LISTING_DATE"`
 }
 
 // TotalMarketCapString 总市值可读字符串
@@ -225,7 +219,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,LISTING_YIELD_YEAR,TOTAL_MARKET_CAP,NEW_PRICE,PBNEWMRQ",
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE",
 		"filter": filter.String(),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
