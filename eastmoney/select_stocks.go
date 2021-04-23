@@ -13,9 +13,10 @@
 // 12. 是否按行业选择， INDUSTRY
 // 13. 按股价（低股价 10-30 元)， NEW_PRICE
 // 14. 上市时间是否大于 5 年，@LISTING_DATE="OVER5Y"
+// 15. 市净率不小于1，PBNEWMRQ
 //
 // filter exp:
-// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(PAR_DIVIDEND_PRETAX>=0.000001)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")
+// (INDUSTRY in ("行业名"))(TOTAL_MARKET_CAP>50000000000)(NETPROFIT_YOY_RATIO>0)(TOI_YOY_RATIO>0)(ROE_WEIGHT>=8)(ZXGXL>=0.000001)(NETPROFIT_GROWTHRATE_3Y>0)(INCOME_GROWTHRATE_3Y>0)(PREDICT_NETPROFIT_RATIO>0)(PREDICT_INCOME_RATIO>0)(PAR_DIVIDEND_PRETAX>=0.000001)(NEW_PRICE>10)(NEW_PRICE<=30)(LISTING_YIELD_YEAR>0)(@LISTING_DATE="OVER5Y")(PBNEWMRQ>=1)
 
 package eastmoney
 
@@ -55,6 +56,8 @@ type Filter struct {
 	ParDividendPretax float64 `json:"par_dividend_pretax"`
 	// 上市以来年化收益率（%）
 	ListingYieldYear float64 `json:"listing_yield_year"`
+	// 市净率
+	PBNewMRQ float64 `json:"pb_new_mrq"`
 
 	// ------ 可选参数 ------
 	// 总市值（亿）
@@ -83,6 +86,7 @@ func (f Filter) String(ctx context.Context) string {
 	filter += fmt.Sprintf(`(PREDICT_INCOME_RATIO>%f)`, f.PredictIncomeRatio)
 	filter += fmt.Sprintf(`(PAR_DIVIDEND_PRETAX>=%f)`, f.ParDividendPretax)
 	filter += fmt.Sprintf(`(LISTING_YIELD_YEAR>%f)`, f.ListingYieldYear)
+	filter += fmt.Sprintf(`(PBNEWMRQ>=%f)`, f.PBNewMRQ)
 	// 可选参数
 	if f.TotalMarketCap != 0 {
 		filter += fmt.Sprintf(`(TOTAL_MARKET_CAP>%f)`, f.TotalMarketCap*100000000)
@@ -120,6 +124,7 @@ var (
 		MinPrice:              0,
 		MaxPrice:              0,
 		ListingOver5Y:         false,
+		PBNewMRQ:              1,
 	}
 )
 
