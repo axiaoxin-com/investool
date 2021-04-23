@@ -4,6 +4,7 @@ package exportor
 
 import (
 	"context"
+	"errors"
 	"strings"
 
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
@@ -49,6 +50,11 @@ var (
 
 // ExportExcel 导出 excel
 func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []byte, err error) {
+	stocksCount := len(e.Stocks)
+	if stocksCount == 0 {
+		err = errors.New("no stocks data")
+		return
+	}
 	f := excelize.NewFile()
 
 	// 创建全部数据表
@@ -118,7 +124,7 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue
 		}
-		vcell, err = excelize.CoordinatesToCellName(len(headers), len(e.Stocks))
+		vcell, err = excelize.CoordinatesToCellName(len(headers), stocksCount)
 		if err != nil {
 			logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
 			continue

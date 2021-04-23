@@ -7,7 +7,10 @@ import (
 )
 
 func TestExportExcel(t *testing.T) {
-	e := Exportor{}
-	_, err := e.ExportExcel(_ctx, "./test.xlsx")
+	dummyData := Data{}
+	e := Exportor{
+		Stocks: []Data{dummyData},
+	}
+	_, err := e.ExportExcel(_ctx, "/tmp/test.xlsx")
 	require.Nil(t, err)
 }
