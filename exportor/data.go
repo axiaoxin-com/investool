@@ -51,8 +51,8 @@ type Data struct {
 	PriceSpace interface{} `json:"price_space"               csv:"合理价格与当时价的价格差"`
 	// 预约财报披露日期
 	FinaAppointPublishDate string `json:"fina_appoint_publish_date" csv:"预约财报披露日期"`
-	// 历史波动率
-	HV float64 `json:"hv"                        csv:"历史波动率"`
+	// 历史波动率 (%)
+	HV float64 `json:"hv"                        csv:"历史波动率 (%)"`
 	// 净利润增长率 (%)
 	NetprofitYoyRatio float64 `json:"netprofit_yoy_ratio"       csv:"净利润增长率 (%)"`
 	// 营收增长率 (%)
@@ -67,6 +67,8 @@ type Data struct {
 	IncomeGrowthrate3Y float64 `json:"income_growthrate_3_y"     csv:"营收 3 年复合增长率 (%)"`
 	// 上市以来年化收益率 (%)
 	ListingYieldYear float64 `json:"listing_yield_year"        csv:"上市以来年化收益率 (%)"`
+	// 上市以来年化波动率 (%)
+	ListingVolatilityYear float64 `json:"listing_volatility_year"   csv:"年化波动率 (%)"`
 	// 预测净利润同比增长 (%)
 	PredictNetprofitRatio float64 `json:"predict_netprofit_ratio"   csv:"预测净利润同比增长 (%)"`
 	// 预测营收同比增长 (%)
@@ -75,6 +77,8 @@ type Data struct {
 	OrgRating string `json:"org_rating"                csv:"机构评级"`
 	// 每股收益预测
 	EPSPredict string `json:"eps_predict"               csv:"每股收益预测"`
+	// 上市时间
+	ListingDate string `json:"listing_date"              csv:"上市时间"`
 }
 
 // GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
@@ -121,6 +125,7 @@ func NewData(stock model.Stock) Data {
 		PriceSpace:             priceSpace,
 		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
 		HV:                     stock.HistoricalVolatility,
+		ListingVolatilityYear:  stock.BaseInfo.ListingVolatilityYear,
 		NetprofitYoyRatio:      stock.BaseInfo.NetprofitYoyRatio,
 		ToiYoyRatio:            stock.BaseInfo.ToiYoyRatio,
 		ZXFZL:                  stock.HistoricalFinaMainData[0].Zcfzl,
@@ -132,6 +137,7 @@ func NewData(stock model.Stock) Data {
 		PredictIncomeRatio:     stock.BaseInfo.PredictIncomeRatio,
 		OrgRating:              stock.OrgRatingList.String(),
 		EPSPredict:             stock.ProfitPredictList.String(),
+		ListingDate:            stock.BaseInfo.ListingDate,
 	}
 }
 

@@ -1,14 +1,14 @@
 // filter 对给定股票进行分析，筛出其中的优质公司。（好公司，但不代表当前股价在涨）
 // 选股规则：
-// 0. 行业要分散
-// 1. 最新 ROE 高于 8%
-// 2. ROE 平均值小于 20 时，至少 3 年内逐年递增
-// 3. EPS 至少 3 年内逐年递增
-// 4. 营业总收入至少 3 年内逐年递增
-// 5. 净利润至少 3 年内逐年递增
-// 6. 估值较低或中等
-// 7. 股价低于合理价格
-// 8. 负债率低于 60%
+// 行业要分散
+// 最新 ROE 高于 8%
+// ROE 平均值小于 20 时，至少 3 年内逐年递增
+// EPS 至少 3 年内逐年递增
+// 营业总收入至少 3 年内逐年递增
+// 净利润至少 3 年内逐年递增
+// 估值较低或中等
+// 股价低于合理价格
+// 负债率低于 60%
 
 package parser
 
@@ -39,6 +39,8 @@ type FilterOptions struct {
 	NoCheckYearsROE float64
 	// 最大负债率百分比(%)
 	MaxDebtRatio float64
+	// 最小历史波动率
+	MinHV float64
 }
 
 // DefaultFilterOptions 默认过滤条件值
@@ -65,11 +67,12 @@ var DefaultFilterOptions = FilterOptions{
 	CheckYears:      3,
 	NoCheckYearsROE: 20,
 	MaxDebtRatio:    60,
+	MinHV:           0,
 }
 
-// GoodStockChecker 判断给定股票是否是好股票
-func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOptions) (defects []string) {
-	// 1. 最新 ROE 高于 n%
+// StockChecker 判断给定股票是否是好股票
+func StockChecker(ctx context.Context, stock model.Stock, options FilterOptions) (defects []string) {
+	// 最新 ROE 高于 n%
 	if stock.BaseInfo.RoeWeight < options.MinROE {
 		defect := fmt.Sprintf(
 			"Latest ROE:%v is not greater than:%+v",
@@ -79,7 +82,7 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 2. ROE 均值小于 20 时，至少 n 年内逐年递增
+	// ROE 均值小于 NoCheckYearsROE 时，至少 n 年内逐年递增
 	roeavg, err := goutils.AvgFloat64(stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears))
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
@@ -93,7 +96,7 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 3. EPS 至少 n 年内逐年递增
+	// EPS 至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", options.CheckYears) {
 		defect := fmt.Sprintf(
 			"EPS is not increasing in %d years. fina:%+v",
@@ -103,7 +106,7 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 4. 营业总收入至少 n 年内逐年递增
+	// 营业总收入至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", options.CheckYears) {
 		defect := fmt.Sprintf(
 			"REVENUE is not increasing in %d years. fina:%+v",
@@ -113,7 +116,7 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 5. 净利润至少 n 年内逐年递增
+	// 净利润至少 n 年内逐年递增
 	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", options.CheckYears) {
 		defect := fmt.Sprintf(
 			"PROFIT is not increasing in %d years. fina:%+v",
@@ -123,13 +126,13 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 6. 估值较低或中等
+	// 估值较低或中等
 	if stock.ValuationStatus == eastmoney.ValuationHigh {
 		defect := "ValuationStatus is high"
 		defects = append(defects, defect)
 	}
 
-	// 7. 股价低于合理价格
+	// 股价低于合理价格
 	if stock.RightPrice != -1 && stock.BaseInfo.NewPrice > stock.RightPrice {
 		defect := fmt.Sprintf(
 			"NewPrice:%f is higher than RightPrice:%f",
@@ -139,7 +142,7 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 		defects = append(defects, defect)
 	}
 
-	// 8. 负债率低于 60%
+	// 负债率低于 MaxDebtRatio
 	if stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtRatio {
 		defect := fmt.Sprintf(
 			"DebtRatio(Zcfzl):%f is greater than %f",
@@ -147,6 +150,18 @@ func GoodStockChecker(ctx context.Context, stock model.Stock, options FilterOpti
 			options.MaxDebtRatio,
 		)
 		defects = append(defects, defect)
+	}
+
+	// 历史波动率 （可选条件）
+	if options.MinHV != 0 {
+		if stock.HistoricalVolatility > options.MinHV {
+			defect := fmt.Sprintf(
+				"HistoricalVolatility:%f is greater than %f",
+				stock.HistoricalVolatility,
+				options.MinHV,
+			)
+			defects = append(defects, defect)
+		}
 	}
 	return
 }
@@ -188,7 +203,7 @@ func AutoFilterStocksWithOptions(ctx context.Context, options FilterOptions) (re
 				return
 			}
 
-			if defects := GoodStockChecker(ctx, stock, options); len(defects) == 0 {
+			if defects := StockChecker(ctx, stock, options); len(defects) == 0 {
 				result = append(result, stock)
 			} else {
 				logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("defects", defects))

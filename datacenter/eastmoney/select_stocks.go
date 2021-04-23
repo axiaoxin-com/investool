@@ -163,7 +163,7 @@ type StockInfo struct {
 	// 最新价（元）
 	NewPrice float64 `json:"NEW_PRICE"`
 	// 上市以来年化波动率
-	HistoricalHV float64 `json:"LISTING_VOLATILITY_YEAR"`
+	ListingVolatilityYear float64 `json:"LISTING_VOLATILITY_YEAR"`
 	// 上市时间
 	ListingDate string `json:"LISTING_DATE"`
 }
