@@ -50,3 +50,7 @@ TODO
 ### 短线
 
 TODO
+
+## 欢迎 Star
+
+[![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://starchart.cc/axiaoxin-com/x-stock)
