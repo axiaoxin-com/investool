@@ -48,7 +48,7 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 	// 按分组写入股票名称+代码到不同图片
 	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
 		// 设置图片大小
-		height := 3200 / 50 * len(stocks)
+		height := 64*len(stocks) + 64
 		width := 650
 
 		leftTop := image.Point{0, 0}

@@ -57,6 +57,8 @@ func Export(ctx context.Context, exportFilename string) {
 		exportType = "excel"
 	case ".png", ".jpg", ".jpeg", ".pic":
 		exportType = "pic"
+	case ".all":
+		exportType = "all"
 	}
 	if _, err := os.Stat(filedir); os.IsNotExist(err) {
 		os.Mkdir(filedir, 0755)
@@ -64,7 +66,8 @@ func Export(ctx context.Context, exportFilename string) {
 
 	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
 	var err error
-	stocks, err := core.AutoFilterStocks(ctx)
+	selector := core.NewSelector(ctx)
+	stocks, err := selector.AutoFilterStocks(ctx)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
@@ -80,6 +83,15 @@ func Export(ctx context.Context, exportFilename string) {
 		_, err = e.ExportExcel(ctx, exportFilename)
 	case "pic":
 		_, err = e.ExportPic(ctx, exportFilename)
+	case "all":
+		jsonFilename := strings.ReplaceAll(exportFilename, ".all", ".json")
+		_, err = e.ExportJSON(ctx, jsonFilename)
+		csvFilename := strings.ReplaceAll(exportFilename, ".all", ".csv")
+		_, err = e.ExportCSV(ctx, csvFilename)
+		xlsxFilename := strings.ReplaceAll(exportFilename, ".all", ".xlsx")
+		_, err = e.ExportExcel(ctx, xlsxFilename)
+		pngFilename := strings.ReplaceAll(exportFilename, ".all", ".png")
+		_, err = e.ExportPic(ctx, pngFilename)
 	}
 	if err != nil {
 		logging.Fatal(ctx, err.Error())

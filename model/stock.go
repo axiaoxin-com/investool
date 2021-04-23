@@ -54,11 +54,14 @@ func (s Stock) ValuationStatusDesc() string {
 	return desc
 }
 
-// GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价
+// GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
 func (s Stock) GetPrice() float64 {
 	p, ok := s.BaseInfo.NewPrice.(float64)
 	if ok {
 		return p
+	}
+	if len(s.HistoricalPrice.Price) == 0 {
+		return -1.0
 	}
 	return s.HistoricalPrice.Price[len(s.HistoricalPrice.Price)-1]
 }

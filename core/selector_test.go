@@ -7,7 +7,8 @@ import (
 )
 
 func TestAutoFilterStocks(t *testing.T) {
-	result, err := AutoFilterStocks(_ctx)
+	f := NewSelector(_ctx)
+	result, err := f.AutoFilterStocks(_ctx)
 	require.Nil(t, err)
 	t.Log(result)
 }

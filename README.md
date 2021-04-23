@@ -107,6 +107,18 @@ exportor 是数据导出器，不使用参数默认导出 EXCEL 文件。
 ./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.xlsx
 ```
 
+- 导出 PNG 图片：
+
+```
+./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.png
+```
+
+- 导出全部支持的类型：
+
+```
+./x-stock_darwin_amd64 -run exportor -l info -f docs/x-stock.20210426.all
+```
+
 ## 欢迎 Star
 
 [![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://githuv.com/axiaoxin-com/x-stock)
