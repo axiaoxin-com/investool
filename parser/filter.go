@@ -26,7 +26,7 @@ import (
 )
 
 // MaxWorkerCount 最大并发请求 worker 数
-var MaxWorkerCount = 128
+var MaxWorkerCount = 64
 
 // FilterOptions 过滤条件选项
 type FilterOptions struct {
