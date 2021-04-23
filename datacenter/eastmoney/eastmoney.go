@@ -16,7 +16,7 @@ type EastMoney struct {
 // NewEastMoney 创建 EastMoney 实例
 func NewEastMoney() EastMoney {
 	hc := &http.Client{
-		Timeout: 60 * time.Second,
+		Timeout: time.Second * 60 * 5,
 	}
 	return EastMoney{
 		HTTPClient: hc,
