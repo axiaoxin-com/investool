@@ -21,8 +21,28 @@ func TestQueryHistoricalStockPrice(t *testing.T) {
 
 func TestHistoricalVolatility(t *testing.T) {
 	data := RespHistoricalStockPrice{
-		Date:  []string{"1", "2"},
-		Price: []float64{27.74, 29.45},
+		Price: []float64{
+			8.47,
+			8.54,
+			8.3,
+			7.57,
+			7.77,
+			7.4,
+			8.23,
+			7.83,
+			7.43,
+			7.02,
+			6.75,
+			6.73,
+			6.7,
+			6.5,
+			7.45,
+			7.4,
+			7.25,
+			7.15,
+			7.25,
+			7.0,
+		},
 	}
 	d, err := data.HistoricalVolatility(_ctx, "DAY")
 	require.Nil(t, err)

@@ -21,7 +21,7 @@ type RespHistoricalStockPrice struct {
 }
 
 // HistoricalVolatility 计算历史波动率
-// 历史波动率计算方法：
+// 历史波动率计算方法：https://goodcalculators.com/historical-volatility-calculator/
 // 1、从市场上获得标的股票在固定时间间隔(如每天DAY、每周WEEK或每月MONTH等)上的价格。
 // 2、对于每个时间段，求出该时间段末的股价与该时段初的股价之比的自然对数。
 // 3、求出这些对数值的标准差即为历史波动率的估计值
