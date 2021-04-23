@@ -60,6 +60,8 @@ var DefaultFilterOptions = FilterOptions{
 		MinPrice:                 0.0,
 		MaxPrice:                 0.0,
 		ListingOver5Y:            false,
+		ExcludeCYB:               true,
+		ExcludeKCB:               true,
 	},
 	CheckYears:      3,
 	NoCheckYearsROE: 20,
