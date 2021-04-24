@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/x-stock/model"
 )
 
@@ -74,6 +75,16 @@ type Data struct {
 	OrgRating string `json:"org_rating"                csv:"机构评级"`
 	// 每股收益预测
 	EPSPredict string `json:"eps_predict"               csv:"每股收益预测"`
+}
+
+// GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
+func (d Data) GetHeaderValueMap() map[string]interface{} {
+	return goutils.StructToMap(&d, "csv")
+}
+
+// GetHeaders 获取 csv tag 列表
+func (d Data) GetHeaders() []string {
+	return goutils.StructTagList(&d, "csv")
 }
 
 // NewData 创建 Data 对象
@@ -153,6 +164,17 @@ func (d DataList) SortByHV() {
 	sort.Slice(d, func(i, j int) bool {
 		return d[i].HV > d[j].HV
 	})
+}
+
+// IndustryList 获取行业分类列表
+func (d DataList) GetIndustryList() []string {
+	result := []string{}
+	for _, stock := range d {
+		if !goutils.IsStrInSlice(stock.Industry, result) {
+			result = append(result, stock.Industry)
+		}
+	}
+	return result
 }
 
 // NewDataList 创建要导出的数据列表
