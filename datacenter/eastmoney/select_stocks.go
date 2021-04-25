@@ -66,11 +66,24 @@ type Filter struct {
 	ExcludeCYB bool `json:"exclude_cyb"`
 	// 是否排除科创板 688XXX
 	ExcludeKCB bool `json:"exclude_kcb"`
+	// 查询指定名称
+	SpecialSecurityNameAbbr string `json:"special_security_name_abbr"`
+	// 查询指定代码
+	SpecialSecurityCode string `json:"special_security_code"`
 }
 
 // String 转为字符串的请求参数
 func (f Filter) String() string {
 	filter := ""
+	// 特定查询
+	if f.SpecialSecurityNameAbbr != "" {
+		filter += fmt.Sprintf(`(SECURITY_NAME_ABBR="%s")`, f.SpecialSecurityNameAbbr)
+		return filter
+	}
+	if f.SpecialSecurityCode != "" {
+		filter += fmt.Sprintf(`(SECURITY_CODE="%s")`, f.SpecialSecurityCode)
+		return filter
+	}
 	// 必要参数
 	filter += fmt.Sprintf(`(ROE_WEIGHT>=%f)`, f.MinROE)
 	filter += fmt.Sprintf(`(NETPROFIT_YOY_RATIO>=%f)`, f.MinNetprofitYoyRatio)
@@ -122,7 +135,6 @@ var (
 		MinROE:            8.0,
 		MinTotalMarketCap: 20.0,
 		MinPBNewMRQ:       1.0,
-		MaxDebtAssetRatio: 60.0,
 		ExcludeCYB:        true,
 		ExcludeKCB:        true,
 	}

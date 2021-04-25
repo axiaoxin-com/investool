@@ -66,13 +66,13 @@ func Export(ctx context.Context, exportFilename string) {
 
 	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
 	var err error
+	// 自动筛选股票
 	selector := core.NewSelector(ctx)
 	stocks, err := selector.AutoFilterStocks(ctx)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
 	e := New(ctx, stocks, eastmoney.DefaultFilter, core.DefaultCheckerOptions)
-	e.Stocks.SortByROE()
 
 	switch exportType {
 	case "json":

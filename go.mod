@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/antlabs/strsim v0.0.2 // indirect
-	github.com/axiaoxin-com/goutils v1.0.11
+	github.com/axiaoxin-com/goutils v1.0.12
 	github.com/axiaoxin-com/logging v1.2.9
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/gin-gonic/gin v1.7.1 // indirect
@@ -20,7 +20,9 @@ require (
 	github.com/jmoiron/sqlx v1.3.3 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mattn/go-runewidth v0.0.12 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
+	github.com/olekukonko/tablewriter v0.0.5
 	github.com/pelletier/go-toml v1.9.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/rivo/tview v0.0.0-20210312174852-ae9464cc3598

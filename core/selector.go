@@ -71,13 +71,13 @@ func (s Selector) AutoFilterStocksWithFilter(
 					logging.Errorf(ctx, "recover from:%v", r)
 				}
 			}()
-			// 按条件判断是否为优质股票
+
 			stock, err := model.NewStock(ctx, baseInfo, false)
 			if err != nil {
 				logging.Error(ctx, "NewStock error:"+err.Error())
 				return
 			}
-
+			// 检测是否为优质股票
 			checker := NewChecker(ctx, stock)
 			if defects := checker.CheckFundamentals(ctx); len(defects) == 0 {
 				result = append(result, stock)
