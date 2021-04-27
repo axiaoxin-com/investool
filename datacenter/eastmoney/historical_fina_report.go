@@ -212,8 +212,11 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 	return result
 }
 
-// ROEList 获取历史 roe，最新的在最前面
-func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float64 {
+// ValueList 获取历史数据值，最新的在最前面
+// NETVALUE 净利润
+// REVENUE 营收
+// ROE/EPS/ROA
+func (h HistoricalFinaMainData) ValueList(ctx context.Context, valueType string, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
 	if len(data) == 0 {
@@ -222,72 +225,22 @@ func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float6
 	if count > 0 {
 		data = data[:count]
 	}
+	valueType = strings.ToUpper(valueType)
 	for _, i := range data {
-		r = append(r, i.Roejq)
-	}
-	return r
-}
-
-// ROAList 获取历史 roa，最新的在最前面
-func (h HistoricalFinaMainData) ROAList(ctx context.Context, count int) []float64 {
-	r := []float64{}
-	data := h.FilterByReportType(ctx, "年报")
-	if len(data) == 0 {
-		return r
-	}
-	if count > 0 {
-		data = data[:count]
-	}
-	for _, i := range data {
-		r = append(r, i.Zzcjll)
-	}
-	return r
-}
-
-// EPSList 获取历史 eps，最新的在最前面
-func (h HistoricalFinaMainData) EPSList(ctx context.Context, count int) []float64 {
-	r := []float64{}
-	data := h.FilterByReportType(ctx, "年报")
-	if len(data) == 0 {
-		return r
-	}
-	if count > 0 {
-		data = data[:count]
-	}
-	for _, i := range data {
-		r = append(r, i.Epsjb)
-	}
-	return r
-}
-
-// RevenueList 获取历史营收，最新的在最前面
-func (h HistoricalFinaMainData) RevenueList(ctx context.Context, count int) []float64 {
-	r := []float64{}
-	data := h.FilterByReportType(ctx, "年报")
-	if len(data) == 0 {
-		return r
-	}
-	if count > 0 {
-		data = data[:count]
-	}
-	for _, i := range data {
-		r = append(r, i.Totaloperatereve)
-	}
-	return r
-}
-
-// ProfitList 获取历史利润，最新的在最前面
-func (h HistoricalFinaMainData) ProfitList(ctx context.Context, count int) []float64 {
-	r := []float64{}
-	data := h.FilterByReportType(ctx, "年报")
-	if len(data) == 0 {
-		return r
-	}
-	if count > 0 {
-		data = data[:count]
-	}
-	for _, i := range data {
-		r = append(r, i.Parentnetprofit)
+		value := float64(-1)
+		switch valueType {
+		case "NETPROFIT":
+			value = i.Parentnetprofit
+		case "REVENUE":
+			value = i.Totaloperatereve
+		case "EPS":
+			value = i.Epsjb
+		case "ROA":
+			value = i.Zzcjll
+		case "ROE":
+			value = i.Roejq
+		}
+		r = append(r, value)
 	}
 	return r
 }

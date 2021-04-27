@@ -71,18 +71,15 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 
 	// ROE 均值小于 NoCheckYearsROE 时，至少 n 年内逐年递增
-	roeavg, err := goutils.AvgFloat64(c.Stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears))
+	roelist := c.Stock.HistoricalFinaMainData.ValueList(ctx, "ROE", options.CheckYears)
+	roeavg, err := goutils.AvgFloat64(roelist)
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
 	}
 	if roeavg < options.NoCheckYearsROE &&
 		!c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
 		checkItemName := "ROE 逐年递增"
-		defect := fmt.Sprintf(
-			"%d 年内未逐年递增:%+v",
-			options.CheckYears,
-			c.Stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears),
-		)
+		defect := fmt.Sprintf("%d 年内未逐年递增:%+v", options.CheckYears, roelist)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
@@ -92,7 +89,7 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defect := fmt.Sprintf(
 			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
-			c.Stock.HistoricalFinaMainData.EPSList(ctx, options.CheckYears),
+			c.Stock.HistoricalFinaMainData.ValueList(ctx, "EPS", options.CheckYears),
 		)
 		defects = append(defects, []string{checkItemName, defect})
 	}
@@ -103,7 +100,7 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defect := fmt.Sprintf(
 			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
-			c.Stock.HistoricalFinaMainData.RevenueList(ctx, options.CheckYears),
+			c.Stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", options.CheckYears),
 		)
 		defects = append(defects, []string{checkItemName, defect})
 	}
@@ -114,7 +111,7 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defect := fmt.Sprintf(
 			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
-			c.Stock.HistoricalFinaMainData.ProfitList(ctx, options.CheckYears),
+			c.Stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", options.CheckYears),
 		)
 		defects = append(defects, []string{checkItemName, defect})
 	}
