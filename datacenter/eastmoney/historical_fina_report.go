@@ -94,7 +94,7 @@ type FinaMainData struct {
 	Roekcjq float64 `json:"ROEKCJQ"`
 	// 净资产收益率同比增长（%）
 	Roejqtz float64 `json:"ROEJQTZ"`
-	// 总资产收益率（加权）（%）
+	// 总资产收益率（加权） ROA （%）
 	Zzcjll float64 `json:"ZZCJLL"`
 	// 总资产收益率同比增长（%）
 	Zzcjlltz float64 `json:"ZZCJLLTZ"`
@@ -146,6 +146,44 @@ type FinaMainData struct {
 	Chzzl float64 `json:"CHZZL"`
 	// 应收账款周转率（次）
 	Yszkzzl float64 `json:"YSZKZZL"`
+
+	// ------ 银行股专项指标 ------
+	// 存款总额
+	TotalDeposits float64 `json:"TOTALDEPOSITS"`
+	// 贷款总额
+	GrossLoans float64 `json:"GROSSLOANS"`
+	// 存贷款比例
+	Ltdrr float64 `json:"LTDRR"`
+	// 资本充足率
+	Newcapitalader float64 `json:"NEWCAPITALADER"`
+	// 核心资产充足率
+	Hxyjbczl float64 `json:"HXYJBCZL"`
+	// 不良贷款率
+	NonPerLoan float64 `json:"NONPERLOAN"`
+	// 不良贷款拨备覆盖率
+	Bldkbbl float64 `json:"BLDKBBL"`
+	// 资本净额
+	Nzbje float64 `json:"NZBJE"`
+
+	// ------ 保险股专项指标 ------
+	// 总投资收益率
+	TotalRoi float64 `json:"TOTAL_ROI"`
+	// 净投资收益率
+	NetRoi float64 `json:"NET_ROI"`
+	// 已赚保费
+	EarnedPremium float64 `json:"EARNED_PREMIUM"`
+	// 赔付支出
+	CompensateExpense float64 `json:"COMPENSATE_EXPENSE"`
+	// 退保率
+	SurrenderRateLife float64 `json:"SURRENDER_RATE_LIFE"`
+	// 偿付能力充足率
+	SolvencyAr float64 `json:"SOLVENCY_AR"`
+	// 新业务价值（寿险）
+	NbvLife float64 `json:"NBV_LIFE"`
+	// 新业务价值率（寿险）
+	NbvRate float64 `json:"NBV_RATE"`
+	// 内含价值（寿险）
+	NhjzCurrentAmt float64 `json:"NHJZ_CURRENT_AMT"`
 }
 
 // HistoricalFinaMainData 主要指标历史数据列表
@@ -186,6 +224,22 @@ func (h HistoricalFinaMainData) ROEList(ctx context.Context, count int) []float6
 	}
 	for _, i := range data {
 		r = append(r, i.Roejq)
+	}
+	return r
+}
+
+// ROAList 获取历史 roa，最新的在最前面
+func (h HistoricalFinaMainData) ROAList(ctx context.Context, count int) []float64 {
+	r := []float64{}
+	data := h.FilterByReportType(ctx, "年报")
+	if len(data) == 0 {
+		return r
+	}
+	if count > 0 {
+		data = data[:count]
+	}
+	for _, i := range data {
+		r = append(r, i.Zzcjll)
 	}
 	return r
 }

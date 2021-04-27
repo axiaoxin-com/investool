@@ -26,6 +26,14 @@ type CheckerOptions struct {
 	MinHV float64 `json:"min_hv"`
 	// 最小市值（亿）
 	MinTotalMarketCap float64 `json:"min_total_market_cap"`
+	// 银行股最小 ROA
+	BankMinROA float64 `json:"bank_min_roa"`
+	// 银行股最小资本充足率
+	BankMinZBCZL float64 `json:"bank_min_zbczl"`
+	// 银行股最大不良贷款率
+	BankMaxBLDKL float64 `json:"bank_max_bldkl"`
+	// 银行股最低不良贷款拨备覆盖率
+	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -34,8 +42,11 @@ var DefaultCheckerOptions = CheckerOptions{
 	CheckYears:        3,
 	NoCheckYearsROE:   16.0,
 	MaxDebtAssetRatio: 60.0,
-	MinHV:             0.0,
 	MinTotalMarketCap: 20.0,
+	BankMinROA:        0.5,
+	BankMinZBCZL:      8.0,
+	BankMaxBLDKL:      3.0,
+	BankMinBLDKBBFGL:  100.0,
 }
 
 // Checker 检测器实例
@@ -54,12 +65,8 @@ func NewChecker(ctx context.Context, stock model.Stock) Checker {
 func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options CheckerOptions) (defects [][]string) {
 	// 最新 ROE 高于 n%
 	if c.Stock.BaseInfo.RoeWeight < options.MinROE {
-		checkItemName := "ROE VALUE"
-		defect := fmt.Sprintf(
-			"Latest ROE:%v is not greater than:%+v",
-			c.Stock.BaseInfo.RoeWeight,
-			options.MinROE,
-		)
+		checkItemName := "净资产收益率 (ROE)"
+		defect := fmt.Sprintf("最新 ROE:%v 低于:%+v", c.Stock.BaseInfo.RoeWeight, options.MinROE)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
@@ -70,9 +77,9 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 	if roeavg < options.NoCheckYearsROE &&
 		!c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
-		checkItemName := "ROE INCREASING"
+		checkItemName := "ROE 逐年递增"
 		defect := fmt.Sprintf(
-			"ROE is not increasing in %d years. fina:%+v",
+			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
 			c.Stock.HistoricalFinaMainData.ROEList(ctx, options.CheckYears),
 		)
@@ -81,9 +88,9 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 
 	// EPS 至少 n 年内逐年递增
 	if !c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", options.CheckYears) {
-		checkItemName := "EPS INCREASING"
+		checkItemName := "EPS 逐年递增"
 		defect := fmt.Sprintf(
-			"EPS is not increasing in %d years. fina:%+v",
+			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
 			c.Stock.HistoricalFinaMainData.EPSList(ctx, options.CheckYears),
 		)
@@ -92,9 +99,9 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 
 	// 营业总收入至少 n 年内逐年递增
 	if !c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", options.CheckYears) {
-		checkItemName := "REVENUE INCREASING"
+		checkItemName := "营收逐年递增"
 		defect := fmt.Sprintf(
-			"REVENUE is not increasing in %d years. fina:%+v",
+			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
 			c.Stock.HistoricalFinaMainData.RevenueList(ctx, options.CheckYears),
 		)
@@ -103,9 +110,9 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 
 	// 净利润至少 n 年内逐年递增
 	if !c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", options.CheckYears) {
-		checkItemName := "PROFIT INCREASING"
+		checkItemName := "净利润逐年递增"
 		defect := fmt.Sprintf(
-			"PROFIT is not increasing in %d years. fina:%+v",
+			"%d 年内未逐年递增:%+v",
 			options.CheckYears,
 			c.Stock.HistoricalFinaMainData.ProfitList(ctx, options.CheckYears),
 		)
@@ -114,58 +121,69 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 
 	// 估值较低或中等
 	if c.Stock.ValuationStatus == eastmoney.ValuationHigh {
-		checkItemName := "VALUATION STATUS"
-		defect := "Valuation status is high"
+		checkItemName := "估值"
+		defect := "较高"
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
 	// 股价低于合理价格
 	if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {
-		checkItemName := "PRICE"
-		defect := fmt.Sprintf(
-			"NewPrice:%f is higher than RightPrice:%f",
-			c.Stock.BaseInfo.NewPrice,
-			c.Stock.RightPrice,
-		)
+		checkItemName := "股价"
+		defect := fmt.Sprintf("最新股价:%f 高于合理价:%f", c.Stock.BaseInfo.NewPrice, c.Stock.RightPrice)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
-	// 负债率低于 MaxDebtRatio （可选条件）
-	if options.MaxDebtAssetRatio != 0 {
-		checkItemName := "DEBT ASSET RATIO"
-		if len(c.Stock.HistoricalFinaMainData) > 0 && c.Stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtAssetRatio {
-			defect := fmt.Sprintf(
-				"DebtAssetRatio(Zcfzl):%f is greater than %f",
-				c.Stock.HistoricalFinaMainData[0].Zcfzl,
-				options.MaxDebtAssetRatio,
-			)
-			defects = append(defects, []string{checkItemName, defect})
+	// 负债率低于 MaxDebtRatio （可选条件），金融股不检测该项
+	if !goutils.IsStrInSlice(c.Stock.GetOrgType(), []string{"银行", "保险"}) {
+		if options.MaxDebtAssetRatio != 0 && len(c.Stock.HistoricalFinaMainData) > 0 {
+			if c.Stock.HistoricalFinaMainData[0].Zcfzl > options.MaxDebtAssetRatio {
+				checkItemName := "负债率"
+				defect := fmt.Sprintf("负债率:%f 高于:%f", c.Stock.HistoricalFinaMainData[0].Zcfzl, options.MaxDebtAssetRatio)
+				defects = append(defects, []string{checkItemName, defect})
+			}
 		}
 	}
 
 	// 历史波动率 （可选条件）
-	if options.MinHV != 0 {
-		checkItemName := "HV"
-		if c.Stock.HistoricalVolatility > options.MinHV {
-			defect := fmt.Sprintf(
-				"HistoricalVolatility:%f is greater than %f",
-				c.Stock.HistoricalVolatility,
-				options.MinHV,
-			)
-			defects = append(defects, []string{checkItemName, defect})
-		}
+	if options.MinHV != 0 && c.Stock.HistoricalVolatility > options.MinHV {
+		checkItemName := "历史波动率"
+		defect := fmt.Sprintf("历史波动率:%f 高于:%f", c.Stock.HistoricalVolatility, options.MinHV)
+		defects = append(defects, []string{checkItemName, defect})
+
 	}
 
 	// 市值
 	if c.Stock.BaseInfo.TotalMarketCap < options.MinTotalMarketCap {
-		checkItemName := "TOTAL MARKET CAP"
-		defect := fmt.Sprintf(
-			"TotalMarketCap:%f is less than %f",
-			c.Stock.BaseInfo.TotalMarketCap,
-			options.MinTotalMarketCap,
-		)
+		checkItemName := "市值"
+		defect := fmt.Sprintf("市值:%f 低于:%f", c.Stock.BaseInfo.TotalMarketCap, options.MinTotalMarketCap)
 		defects = append(defects, []string{checkItemName, defect})
 	}
+
+	// 银行股特殊检测
+	if c.Stock.GetOrgType() == "银行" && len(c.Stock.HistoricalFinaMainData) > 0 {
+		fmd := c.Stock.HistoricalFinaMainData[0]
+		if c.Stock.BaseInfo.ROA < options.BankMinROA {
+			checkItemName := "总资产收益率 (ROA)"
+			defect := fmt.Sprintf("ROA:%f 低于:%f", c.Stock.BaseInfo.ROA, options.BankMinROA)
+			defects = append(defects, []string{checkItemName, defect})
+		}
+		if fmd.Newcapitalader < options.BankMinZBCZL {
+			checkItemName := "资本充足率"
+			defect := fmt.Sprintf("资本充足率:%f 低于:%f", fmd.Newcapitalader, options.BankMinZBCZL)
+			defects = append(defects, []string{checkItemName, defect})
+		}
+		if options.BankMaxBLDKL != 0 && fmd.NonPerLoan > options.BankMaxBLDKL {
+			checkItemName := "不良贷款率"
+			defect := fmt.Sprintf("不良贷款率:%f 高于:%f", fmd.Newcapitalader, options.BankMinZBCZL)
+			defects = append(defects, []string{checkItemName, defect})
+		}
+		if fmd.Bldkbbl < options.BankMinBLDKBBFGL {
+			checkItemName := "不良贷款拨备覆盖率"
+			defect := fmt.Sprintf("不良贷款拨备覆盖率:%f 低于:%f", fmd.Newcapitalader, options.BankMinZBCZL)
+			defects = append(defects, []string{checkItemName, defect})
+		}
+	}
+
 	return
 }
 

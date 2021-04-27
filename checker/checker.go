@@ -16,12 +16,20 @@ import (
 
 // Check 对给定名称或代码进行检测，输出检测结果
 func Check(ctx context.Context, keyword string) {
+	table := tablewriter.NewWriter(os.Stdout)
+	table.SetAlignment(tablewriter.ALIGN_LEFT)
+	table.SetRowLine(true)
+	desc := "OK"
+	descColor := tablewriter.FgHiGreenColor
+
 	results, err := datacenter.QQ.KeywordSearch(ctx, keyword)
 	if err != nil {
-		logging.Fatal(ctx, err.Error())
+		renderFail(table, err.Error())
+		return
 	}
 	if len(results) == 0 {
-		logging.Fatal(ctx, "invalid keyword:"+keyword)
+		renderFail(table, "无对应股票")
+		return
 	}
 	result := results[0]
 	logging.Infof(ctx, "search result:%+v", result)
@@ -29,23 +37,22 @@ func Check(ctx context.Context, keyword string) {
 	filter.SpecialSecurityCode = result.SecurityCode
 	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, filter)
 	if err != nil {
-		logging.Fatal(ctx, "QuerySelectedStocksWithFilter error:"+err.Error())
+		renderFail(table, err.Error())
+		return
 	}
 	if len(stocks) == 0 {
-		logging.Fatal(ctx, "no stock data")
+		renderFail(table, "无股票数据")
+		return
 	}
 	stock, err := model.NewStock(ctx, stocks[0], false)
 	if err != nil {
-		logging.Fatal(ctx, "NewStock error:"+err.Error())
+		renderFail(table, err.Error())
+		return
 	}
 	checker := core.NewChecker(ctx, stock)
 	defects := checker.CheckFundamentals(ctx)
-	table := tablewriter.NewWriter(os.Stdout)
-	table.SetRowLine(true)
-	desc := "OK"
-	descColor := tablewriter.FgHiGreenColor
 	if len(defects) > 0 {
-		table.SetHeader([]string{"FAILED ITEM", "FAILED REASON"})
+		table.SetHeader([]string{"未通过检测的指标", "原因"})
 		table.SetHeaderColor(tablewriter.Colors{tablewriter.Bold}, tablewriter.Colors{tablewriter.Bold})
 		desc = "FAILED"
 		descColor = tablewriter.FgHiRedColor
@@ -54,5 +61,12 @@ func Check(ctx context.Context, keyword string) {
 	table.SetFooterColor(tablewriter.Colors{}, tablewriter.Colors{tablewriter.Bold, descColor})
 
 	table.AppendBulk(defects) // Add Bulk Data
+	table.Render()
+}
+
+func renderFail(table *tablewriter.Table, desc string) {
+	descColor := tablewriter.FgHiRedColor
+	table.SetFooter([]string{"", desc})
+	table.SetFooterColor(tablewriter.Colors{}, tablewriter.Colors{tablewriter.Bold, descColor})
 	table.Render()
 }

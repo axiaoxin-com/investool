@@ -66,6 +66,13 @@ func (s Stock) GetPrice() float64 {
 	return s.HistoricalPrice.Price[len(s.HistoricalPrice.Price)-1]
 }
 
+func (s Stock) GetOrgType() string {
+	if len(s.HistoricalFinaMainData) == 0 {
+		return ""
+	}
+	return s.HistoricalFinaMainData[0].OrgType
+}
+
 // StockList 股票列表
 type StockList []Stock
 

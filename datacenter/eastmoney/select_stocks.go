@@ -70,6 +70,8 @@ type Filter struct {
 	SpecialSecurityNameAbbr string `json:"special_security_name_abbr"`
 	// 查询指定代码
 	SpecialSecurityCode string `json:"special_security_code"`
+	// 最小总资产收益率 ROA
+	MinROA float64 `json:"min_roa"`
 }
 
 // String 转为字符串的请求参数
@@ -126,6 +128,9 @@ func (f Filter) String() string {
 	if f.MinListingVolatilityYear != 0 {
 		filter += fmt.Sprintf(`(LISTING_VOLATILITY_YEAR>=%f))`, f.MinListingVolatilityYear)
 	}
+	if f.MinROA != 0 {
+		filter += fmt.Sprintf(`(JROA>=%f)`, f.MinROA)
+	}
 	return filter
 }
 
@@ -180,6 +185,8 @@ type StockInfo struct {
 	ListingDate string `json:"LISTING_DATE"`
 	// 资产负债率
 	DebtAssetRatio float64 `json:"DEBT_ASSET_RATIO"`
+	// ROA (%)
+	ROA float64 `json:"JROA"`
 }
 
 // TotalMarketCapString 总市值可读字符串
@@ -233,7 +240,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE,DEBT_ASSET_RATIO",
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE,DEBT_ASSET_RATIO,JROA",
 		"filter": filter.String(),
 		"p":      "1",      // page
 		"ps":     "100000", // page size
