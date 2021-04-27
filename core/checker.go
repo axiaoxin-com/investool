@@ -22,8 +22,8 @@ type CheckerOptions struct {
 	NoCheckYearsROE float64 `json:"no_check_years_roe"`
 	// 最大资产负债率百分比(%)
 	MaxDebtAssetRatio float64 `json:"max_debt_ratio"`
-	// 最小历史波动率
-	MinHV float64 `json:"min_hv"`
+	// 最大历史波动率
+	MaxHV float64 `json:"min_hv"`
 	// 最小市值（亿）
 	MinTotalMarketCap float64 `json:"min_total_market_cap"`
 	// 银行股最小 ROA
@@ -34,19 +34,26 @@ type CheckerOptions struct {
 	BankMaxBLDKL float64 `json:"bank_max_bldkl"`
 	// 银行股最低不良贷款拨备覆盖率
 	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"`
+	// 是否检测毛利率稳定性
+	IsCheckMLLStability bool `json:"is_check_mll_stability"`
+	// 是否检测净利率稳定性
+	IsCheckJLLStability bool `json:"is_check_jll_stability"`
 }
 
 // DefaultCheckerOptions 默认检测值
 var DefaultCheckerOptions = CheckerOptions{
-	MinROE:            8.0,
-	CheckYears:        3,
-	NoCheckYearsROE:   16.0,
-	MaxDebtAssetRatio: 60.0,
-	MinTotalMarketCap: 20.0,
-	BankMinROA:        0.5,
-	BankMinZBCZL:      8.0,
-	BankMaxBLDKL:      3.0,
-	BankMinBLDKBBFGL:  100.0,
+	MinROE:              8.0,
+	CheckYears:          3,
+	NoCheckYearsROE:     16.0,
+	MaxDebtAssetRatio:   60.0,
+	MaxHV:               3.0,
+	MinTotalMarketCap:   20.0,
+	BankMinROA:          0.5,
+	BankMinZBCZL:        8.0,
+	BankMaxBLDKL:        3.0,
+	BankMinBLDKBBFGL:    100.0,
+	IsCheckJLLStability: true,
+	IsCheckMLLStability: true,
 }
 
 // Checker 检测器实例
@@ -142,9 +149,9 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 
 	// 历史波动率 （可选条件）
-	if options.MinHV != 0 && c.Stock.HistoricalVolatility > options.MinHV {
+	if options.MaxHV != 0 && c.Stock.HistoricalVolatility > options.MaxHV {
 		checkItemName := "历史波动率"
-		defect := fmt.Sprintf("历史波动率:%f 高于:%f", c.Stock.HistoricalVolatility, options.MinHV)
+		defect := fmt.Sprintf("历史波动率:%f 高于:%f", c.Stock.HistoricalVolatility, options.MaxHV)
 		defects = append(defects, []string{checkItemName, defect})
 
 	}
@@ -179,6 +186,30 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 			defect := fmt.Sprintf("不良贷款拨备覆盖率:%f 低于:%f", fmd.Newcapitalader, options.BankMinZBCZL)
 			defects = append(defects, []string{checkItemName, defect})
 		}
+	}
+
+	// 毛利率稳定性 （只检测非金融股）
+	if options.IsCheckMLLStability && !goutils.IsStrInSlice(c.Stock.GetOrgType(), []string{"银行", "保险"}) {
+		if c.Stock.HistoricalFinaMainData.IsStability(ctx, "MLL", options.CheckYears) {
+			checkItemName := "毛利率稳定性"
+			defect := fmt.Sprintf(
+				"%d 年内稳定性较差:%v",
+				options.CheckYears,
+				c.Stock.HistoricalFinaMainData.ValueList(ctx, "MLL", options.CheckYears),
+			)
+			defects = append(defects, []string{checkItemName, defect})
+		}
+	}
+
+	// 净利率稳定性
+	if options.IsCheckMLLStability && c.Stock.HistoricalFinaMainData.IsStability(ctx, "JLL", options.CheckYears) {
+		checkItemName := "净利率稳定性"
+		defect := fmt.Sprintf(
+			"%d 年内稳定性较差:%v",
+			options.CheckYears,
+			c.Stock.HistoricalFinaMainData.ValueList(ctx, "JLL", options.CheckYears),
+		)
+		defects = append(defects, []string{checkItemName, defect})
 	}
 
 	return

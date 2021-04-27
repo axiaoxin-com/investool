@@ -16,8 +16,10 @@ func TestQueryHistoricalFinaMainData(t *testing.T) {
 	require.Equal(t, 4, len(data2))
 	ratio, err := data.Q1RevenueIncreasingRatio(_ctx)
 	t.Log("ratio:", ratio, " err:", err)
-	em := data.MidValue(_ctx, "EPS", 10)
-	rm := data.MidValue(_ctx, "ROE", 0)
+	em, err := data.MidValue(_ctx, "EPS", 10)
+	require.Nil(t, err)
+	rm, err := data.MidValue(_ctx, "ROE", 0)
+	require.Nil(t, err)
 	t.Log("eps mid:", em, " roe mid:", rm)
 }
 

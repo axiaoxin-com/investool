@@ -62,8 +62,8 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	// 创建全部数据表
 	defaultSheet := "总览"
 	lowPriceSheet := "30元内"
-	hv1Sheet := "历史波动率低于0.5"
-	hv2Sheet := "历史波动率高于0.5"
+	hv1Sheet := "历史波动率低于1"
+	hv2Sheet := "历史波动率高于1"
 	sheets := []string{defaultSheet, lowPriceSheet, hv1Sheet, hv2Sheet}
 	// 添加行业
 	for _, industry := range e.Stocks.GetIndustryList() {
@@ -172,11 +172,11 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 					continue
 				}
 			case hv1Sheet:
-				if stock.HV > 0.5 {
+				if stock.HV > 1 {
 					continue
 				}
 			case hv2Sheet:
-				if stock.HV <= 0.5 {
+				if stock.HV <= 1 {
 					continue
 				}
 			}

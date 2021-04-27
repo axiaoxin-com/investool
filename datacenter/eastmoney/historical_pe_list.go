@@ -5,7 +5,6 @@ package eastmoney
 import (
 	"context"
 	"errors"
-	"sort"
 	"strconv"
 	"time"
 
@@ -46,20 +45,11 @@ type HistoricalPEList []HistoricalPE
 
 // GetMidValue 获取历史 pe 中位数
 func (h HistoricalPEList) GetMidValue(ctx context.Context) (float64, error) {
-	vlen := len(h)
-	if vlen == 0 {
-		return 0, errors.New("no data")
-	}
 	values := []float64{}
 	for _, i := range h {
 		values = append(values, i.Value)
 	}
-	sort.Float64s(values)
-	mid := vlen / 2
-	if vlen%2 == 0 {
-		return (values[mid-1] + values[mid]) / 2.0, nil
-	}
-	return values[mid], nil
+	return goutils.MidValueFloat64(values)
 }
 
 // QueryHistoricalPEList 获取历史市盈率

@@ -48,8 +48,8 @@ github.com/aws/aws-lambda-go v1.13.3/go.mod h1:4UKl9IzQMoD+QF79YdCuzCwp8VbmG4VAQ
 github.com/aws/aws-sdk-go v1.27.0/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/aws/aws-sdk-go-v2 v0.18.0/go.mod h1:JWVYvqSMppoMJC0x5wdwiImzgXTI9FuZwxzkQq9wy+g=
 github.com/axiaoxin-com/goutils v1.0.3-0.20201019024427-66fe97b27be4/go.mod h1:ZuL0c9e5Nw6b6eirSmB9VaOeojiHS3BrmzGyKiKYLD0=
-github.com/axiaoxin-com/goutils v1.0.12 h1:2CzNV76baNtTDLnqO7dqepjL+YCOwKQUaIjzmlAmTgw=
-github.com/axiaoxin-com/goutils v1.0.12/go.mod h1:OL6N2EvQqPpU08lu7MboM59ej8tUrw5b+bowliU6ekw=
+github.com/axiaoxin-com/goutils v1.0.14 h1:wJMvS06e51d24IxR89oCzqX4eGSAuogGhafwkPck6cI=
+github.com/axiaoxin-com/goutils v1.0.14/go.mod h1:OL6N2EvQqPpU08lu7MboM59ej8tUrw5b+bowliU6ekw=
 github.com/axiaoxin-com/logging v1.2.9 h1:DkoLMqVwRNZHETaaz0NRnx7TnyDYQeKJL7A2YXCroe4=
 github.com/axiaoxin-com/logging v1.2.9/go.mod h1:Jx322YD47doa/j9kn3pNPntze8b9bOVxf3So0LmdRMg=
 github.com/aymerick/raymond v2.0.3-0.20180322193309-b565731e1464+incompatible/go.mod h1:osfaiScAUVup+UC9Nfq76eWqDhXlp+4UYaA8uhTBO6g=
