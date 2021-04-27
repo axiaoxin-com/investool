@@ -15,7 +15,7 @@ func TestQuerySelectedStocks(t *testing.T) {
 
 func TestQuerySelectedStocksWithFilter(t *testing.T) {
 	filter := DefaultFilter
-	filter.SpecialSecurityCode = "000666"
+	filter.SpecialSecurityCodeList = []string{"000666"}
 	data, err := _em.QuerySelectedStocksWithFilter(_ctx, filter)
 	require.Nil(t, err)
 	b, _ := json.Marshal(data)

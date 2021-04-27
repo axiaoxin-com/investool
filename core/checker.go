@@ -69,6 +69,7 @@ func NewChecker(ctx context.Context, stock model.Stock) Checker {
 }
 
 // CheckFundamentalsWithOptions 按条件检测股票基本面
+// [[检测失败项, 原因], ...]
 func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options CheckerOptions) (defects [][]string) {
 	// 最新 ROE 高于 n%
 	if c.Stock.BaseInfo.RoeWeight < options.MinROE {

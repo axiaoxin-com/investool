@@ -5,6 +5,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/axiaoxin-com/logging"
@@ -48,7 +49,7 @@ func parseFlags() {
 		fmt.Sprintf("./docs/x-stock.%s.xlsx", time.Now().Format("20060102")),
 		"exportor arg to set filename, support .json .csv .xlsx .png",
 	)
-	flag.StringVar(&checkKeyword, "k", "", "checker arg set check keyword: <name>|<code>")
+	flag.StringVar(&checkKeyword, "k", "", "checker arg set check keyword: <name>|<code>, mutil keywords use / split")
 	flag.Parse()
 }
 
@@ -64,7 +65,8 @@ func main() {
 		exportor.Export(ctx, exportFilename)
 	case ProcessorChecker:
 		ctx := context.Background()
-		checker.Check(ctx, checkKeyword)
+		checkKeywords := strings.Split(checkKeyword, "/")
+		checker.Check(ctx, checkKeywords)
 	case ProcessorTview:
 		terminal.Run()
 	case ProcessorWebserver:

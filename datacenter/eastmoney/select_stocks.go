@@ -67,9 +67,9 @@ type Filter struct {
 	// 是否排除科创板 688XXX
 	ExcludeKCB bool `json:"exclude_kcb"`
 	// 查询指定名称
-	SpecialSecurityNameAbbr string `json:"special_security_name_abbr"`
+	SpecialSecurityNameAbbrList []string `json:"special_security_name_abbr_list"`
 	// 查询指定代码
-	SpecialSecurityCode string `json:"special_security_code"`
+	SpecialSecurityCodeList []string `json:"special_security_code_list"`
 	// 最小总资产收益率 ROA
 	MinROA float64 `json:"min_roa"`
 }
@@ -78,12 +78,12 @@ type Filter struct {
 func (f Filter) String() string {
 	filter := ""
 	// 特定查询
-	if f.SpecialSecurityNameAbbr != "" {
-		filter += fmt.Sprintf(`(SECURITY_NAME_ABBR="%s")`, f.SpecialSecurityNameAbbr)
+	if len(f.SpecialSecurityNameAbbrList) > 0 {
+		filter += fmt.Sprintf(`(SECURITY_NAME_ABBR in (%s))`, strings.Join(f.SpecialSecurityNameAbbrList, ","))
 		return filter
 	}
-	if f.SpecialSecurityCode != "" {
-		filter += fmt.Sprintf(`(SECURITY_CODE="%s")`, f.SpecialSecurityCode)
+	if len(f.SpecialSecurityCodeList) > 0 {
+		filter += fmt.Sprintf(`(SECURITY_CODE in (%s))`, strings.Join(f.SpecialSecurityCodeList, ","))
 		return filter
 	}
 	// 必要参数

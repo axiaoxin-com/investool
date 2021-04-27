@@ -6,67 +6,54 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/datacenter"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/model"
 	"github.com/olekukonko/tablewriter"
 )
 
 // Check 对给定名称或代码进行检测，输出检测结果
-func Check(ctx context.Context, keyword string) {
+func Check(ctx context.Context, keywords []string) (map[string][][]string, error) {
+	searcher := core.NewSearcher(ctx)
+	stocks, err := searcher.Search(ctx, keywords)
+	if err != nil {
+		table := newTable()
+		data := []string{"内部错误", err.Error()}
+		renderTable(table, [][]string{data}, []string{"", "ERROR"})
+		return nil, err
+	}
+	results := map[string][][]string{}
+	for _, stock := range stocks {
+		checker := core.NewChecker(ctx, stock)
+		defects := checker.CheckFundamentals(ctx)
+		table := newTable()
+		k := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
+		if len(defects) > 0 {
+			results[k] = defects
+			renderTable(table, defects, []string{k, "FAILED"})
+		} else {
+			data := []string{"--", "--"}
+			renderTable(table, [][]string{data}, []string{k, "OK"})
+		}
+	}
+	return results, nil
+}
+
+func newTable() *tablewriter.Table {
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetAlignment(tablewriter.ALIGN_LEFT)
 	table.SetRowLine(true)
-	desc := "OK"
-	descColor := tablewriter.FgHiGreenColor
-
-	results, err := datacenter.QQ.KeywordSearch(ctx, keyword)
-	if err != nil {
-		renderFail(table, err.Error())
-		return
-	}
-	if len(results) == 0 {
-		renderFail(table, "无对应股票")
-		return
-	}
-	result := results[0]
-	logging.Infof(ctx, "search result:%+v", result)
-	filter := eastmoney.DefaultFilter
-	filter.SpecialSecurityCode = result.SecurityCode
-	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, filter)
-	if err != nil {
-		renderFail(table, err.Error())
-		return
-	}
-	if len(stocks) == 0 {
-		renderFail(table, "无股票数据")
-		return
-	}
-	stock, err := model.NewStock(ctx, stocks[0], false)
-	if err != nil {
-		renderFail(table, err.Error())
-		return
-	}
-	checker := core.NewChecker(ctx, stock)
-	defects := checker.CheckFundamentals(ctx)
-	if len(defects) > 0 {
-		table.SetHeader([]string{"未通过检测的指标", "原因"})
-		table.SetHeaderColor(tablewriter.Colors{tablewriter.Bold}, tablewriter.Colors{tablewriter.Bold})
-		desc = "FAILED"
-		descColor = tablewriter.FgHiRedColor
-	}
-	table.SetFooter([]string{fmt.Sprintf("%s %s", result.Name, result.Secucode), desc}) // Add Footer
-	table.SetFooterColor(tablewriter.Colors{}, tablewriter.Colors{tablewriter.Bold, descColor})
-
-	table.AppendBulk(defects) // Add Bulk Data
-	table.Render()
+	headers := []string{"未通过检测的指标", "原因"}
+	table.SetHeader(headers)
+	table.SetHeaderColor(tablewriter.Colors{tablewriter.Bold}, tablewriter.Colors{tablewriter.Bold})
+	return table
 }
 
-func renderFail(table *tablewriter.Table, desc string) {
-	descColor := tablewriter.FgHiRedColor
-	table.SetFooter([]string{"", desc})
-	table.SetFooterColor(tablewriter.Colors{}, tablewriter.Colors{tablewriter.Bold, descColor})
+func renderTable(table *tablewriter.Table, data [][]string, footers []string) {
+	footerValColor := tablewriter.FgHiRedColor
+	if footers[1] == "OK" {
+		footerValColor = tablewriter.FgHiGreenColor
+	}
+	table.SetFooter(footers)
+	table.SetFooterColor(tablewriter.Colors{}, tablewriter.Colors{tablewriter.Bold, footerValColor})
+	table.AppendBulk(data)
 	table.Render()
 }
