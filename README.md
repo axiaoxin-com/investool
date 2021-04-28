@@ -23,6 +23,7 @@
 - 检测器支持对银行股按不同规则进行检测
 - 检测器增加净利率和毛利率稳定性检测
 - TODO:
+- 筛选参数和检测参数支持命令行自定义
 - 按选择策略自动选择筛选并导出结果
 - 提供终端界面操作
 - 实现支持完整的东方财富选股器条件
@@ -46,7 +47,7 @@
 - 净利润至少 3 年内逐年递增
 - 负债率低于 60% （金融股除外）
 - 配发股利
-- 营收本业比高于 80%
+- 营收本业比高于 80%，经营内容具备基础、垄断、必要性服务等特征
 - 净利率、毛利率稳定（标准差不高于 1 ）
 
 ### 2. 估值优质
@@ -89,13 +90,13 @@ TODO
 
 ## 使用方法
 
-[点击下载对应系统最新版本的可执行文件](https://github.com/axiaoxin-com/x-stock/releases/)，按下列使用说明操作，可执行文件名需替换为你下载的版本。
+[点击下载对应系统最新版本解压得到可执行文件](https://github.com/axiaoxin-com/x-stock/releases/)
 
 查看使用说明：
 
 ```
-./x-stock_darwin_amd64 -h
-Usage of ./x-stock_darwin_amd64:
+./x-stock -h
+Usage of ./x-stock:
   -f string
     	export filename (default "./docs/x-stock.20210424.xlsx")
   -l string
@@ -113,31 +114,31 @@ exportor 是数据导出器，不使用参数默认导出 EXCEL 文件。
 - 导出 JSON 文件：
 
 ```
-./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.json
+./x-stock -run exportor -f ./x-stock.20210424.json
 ```
 
 - 导出 CSV 文件：
 
 ```
-./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.csv
+./x-stock -run exportor -f ./x-stock.20210424.csv
 ```
 
 - 导出 EXCEL 文件：
 
 ```
-./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.xlsx
+./x-stock -run exportor -f ./x-stock.20210424.xlsx
 ```
 
 - 导出 PNG 图片：
 
 ```
-./x-stock_darwin_amd64 -run exportor -f ./x-stock.20210424.png
+./x-stock -run exportor -f ./x-stock.20210424.png
 ```
 
 - 导出全部支持的类型：
 
 ```
-./x-stock_darwin_amd64 -run exportor -l info -f docs/x-stock.20210426.all
+./x-stock -run exportor -l info -f docs/x-stock.20210426.all
 ```
 
 ### checker
