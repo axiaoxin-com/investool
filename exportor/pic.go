@@ -50,7 +50,7 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
 		// 设置图片大小
 		height := 64*len(stocks) + 64
-		width := 650
+		width := 900
 
 		leftTop := image.Point{0, 0}
 		rightBottom := image.Point{width, height}
