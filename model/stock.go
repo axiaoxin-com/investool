@@ -154,7 +154,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "HistoricalVolatility error:"+err.Error())
 	}
 	s.HistoricalVolatility = hv
 

@@ -168,9 +168,9 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (f
 	switch {
 	case val >= 0 && val < 4:
 		status = ValuationLow
-	case val >= 4 && val <= 6:
+	case val >= 4 && val < 6:
 		status = ValuationModerate
-	case val > 6:
+	case val >= 6:
 		status = ValuationHigh
 	}
 

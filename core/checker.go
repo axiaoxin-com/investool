@@ -14,7 +14,7 @@ import (
 
 // CheckerOptions 检测条件选项
 type CheckerOptions struct {
-	// ROE 不低于该值
+	// 最新一期年报 ROE 不低于该值
 	MinROE float64 `json:"min_roe"`
 	// 连续增长年数
 	CheckYears int `json:"check_years"`
@@ -71,23 +71,23 @@ func NewChecker(ctx context.Context, stock model.Stock) Checker {
 // CheckFundamentalsWithOptions 按条件检测股票基本面
 // [[检测失败项, 原因], ...]
 func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options CheckerOptions) (defects [][]string) {
-	// 最新 ROE 高于 n%
-	if c.Stock.BaseInfo.RoeWeight < options.MinROE {
+	// 最近年报 ROE 高于 n%
+	roeList := c.Stock.HistoricalFinaMainData.ValueList(ctx, "ROE", options.CheckYears)
+	if len(roeList) > 0 && roeList[0] < options.MinROE {
 		checkItemName := "净资产收益率 (ROE)"
-		defect := fmt.Sprintf("最新 ROE:%v 低于:%+v", c.Stock.BaseInfo.RoeWeight, options.MinROE)
+		defect := fmt.Sprintf("最新年报 ROE:%v 低于:%+v (当前最新 ROE:%v)", roeList[0], options.MinROE, c.Stock.BaseInfo.RoeWeight)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
 	// ROE 均值小于 NoCheckYearsROE 时，至少 n 年内逐年递增
-	roelist := c.Stock.HistoricalFinaMainData.ValueList(ctx, "ROE", options.CheckYears)
-	roeavg, err := goutils.AvgFloat64(roelist)
+	roeavg, err := goutils.AvgFloat64(roeList)
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
 	}
 	if roeavg < options.NoCheckYearsROE &&
 		!c.Stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", options.CheckYears) {
 		checkItemName := "ROE 逐年递增"
-		defect := fmt.Sprintf("%d 年内未逐年递增:%+v", options.CheckYears, roelist)
+		defect := fmt.Sprintf("%d 年内未逐年递增:%+v", options.CheckYears, roeList)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 

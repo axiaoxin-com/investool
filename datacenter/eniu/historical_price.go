@@ -4,6 +4,7 @@ package eniu
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math"
 	"strings"
@@ -27,9 +28,13 @@ type RespHistoricalStockPrice struct {
 // 3、求出这些对数值的标准差即为历史波动率的估计值
 // 4、若将日、周等标准差转化为年标准差，需要再乘以一年中包含的时段数量的平方根(如，选取时间间隔为每天，则若扣除闭市，每年中有250个交易日，应乘以根号250)
 func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, period string) (float64, error) {
+	priceLen := len(p.Price)
+	if priceLen == 0 {
+		return -1.0, errors.New("no historical price data")
+	}
 	// 求末初股价比自然对数
 	logs := []float64{}
-	for i := len(p.Price) - 1; i >= 1; i-- {
+	for i := priceLen - 1; i >= 1; i-- {
 		endPrice := p.Price[i]
 		startPrice := p.Price[i-1]
 		log := math.Log(endPrice / startPrice)
@@ -38,7 +43,7 @@ func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, peri
 	// 标准差
 	stdev, err := goutils.StdDeviationFloat64(logs)
 	if err != nil {
-		return 0, err
+		return -1.0, err
 	}
 	logging.Debugs(ctx, "stdev:", stdev)
 
@@ -55,6 +60,10 @@ func (p RespHistoricalStockPrice) HistoricalVolatility(ctx context.Context, peri
 		periodValue = 250
 	}
 	volatility := stdev * math.Sqrt(periodValue)
+	// 数据异常时全部股价为 0 导致返回 NaN
+	if math.IsNaN(volatility) {
+		return -1, errors.New("volatility is NaN")
+	}
 	return volatility, nil
 }
 

@@ -44,15 +44,12 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (model.StockList, error)
 }
 
 // AutoFilterStocksWithFilter 按设置自动筛选股票
-func (s Selector) AutoFilterStocksWithFilter(
-	ctx context.Context,
-	filter eastmoney.Filter,
-) (result model.StockList, err error) {
+func (s Selector) AutoFilterStocksWithFilter(ctx context.Context, filter eastmoney.Filter) (result model.StockList, err error) {
 	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, filter)
 	if err != nil {
 		return
 	}
-	logging.Infof(ctx, "AutoFilterStocksWithFilter will filter from %d stocks", len(stocks))
+	logging.Infof(ctx, "AutoFilterStocksWithFilter will filter from %d stocks by %s", len(stocks), filter.String())
 
 	// 最多 MaxWorkerCount 个 groutine 并发执行筛选任务
 	workerCount := int(math.Min(float64(len(stocks)), float64(MaxWorkerCount)))

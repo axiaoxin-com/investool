@@ -46,7 +46,7 @@ func parseFlags() {
 	flag.StringVar(
 		&exportFilename,
 		"f",
-		fmt.Sprintf("./docs/x-stock.%s.xlsx", time.Now().Format("20060102")),
+		fmt.Sprintf("./dist/x-stock.%s.xlsx", time.Now().Format("20060102")),
 		"exportor arg to set filename, support .json .csv .xlsx .png",
 	)
 	flag.StringVar(&checkKeyword, "k", "", "checker arg set check keyword: <name>|<code>, mutil keywords use / split")

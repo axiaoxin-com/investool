@@ -161,7 +161,6 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	}
 
 	// 写 body
-	e.Stocks.SortByROE()
 	for _, sheet := range sheets {
 		row := 2
 		for _, stock := range e.Stocks {

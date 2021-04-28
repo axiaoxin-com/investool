@@ -30,7 +30,7 @@ type Exportor struct {
 func New(ctx context.Context, stocks model.StockList, filter eastmoney.Filter, checkerOptions core.CheckerOptions) Exportor {
 	dlist := DataList{}
 	for _, s := range stocks {
-		dlist = append(dlist, NewData(s))
+		dlist = append(dlist, NewData(ctx, s))
 	}
 
 	return Exportor{
@@ -68,11 +68,13 @@ func Export(ctx context.Context, exportFilename string) {
 	var err error
 	// 自动筛选股票
 	selector := core.NewSelector(ctx)
-	stocks, err := selector.AutoFilterStocks(ctx)
+	filter := eastmoney.DefaultFilter
+	stocks, err := selector.AutoFilterStocksWithFilter(ctx, filter)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	e := New(ctx, stocks, eastmoney.DefaultFilter, core.DefaultCheckerOptions)
+	checkOpt := core.DefaultCheckerOptions
+	e := New(ctx, stocks, filter, checkOpt)
 
 	switch exportType {
 	case "json":

@@ -25,6 +25,14 @@ type Data struct {
 	CompanyProfile string `json:"company_profile"           csv:"公司信息"`
 	// 主营构成
 	MainForms string `json:"main_forms"                csv:"主营构成"`
+	// 财报年份-类型
+	ReportDateName string `json:"report_date_name"          csv:"数据源"`
+	// 最新一期 ROE
+	LatestROE float64 `json:"latest_roe"                csv:"最新一期 ROE"`
+	// 历史年报 ROE 中位数
+	ROEMidVal interface{} `json:"roe_mid_val"               csv:"ROE 中位数"`
+	// 预约财报披露日期
+	FinaAppointPublishDate string `json:"fina_appoint_publish_date" csv:"预约财报披露日期"`
 	// 总市值（数字）
 	TotalMarketCap float64 `json:"total_market_cap"          csv:"-"`
 	// 总市值（字符串）
@@ -39,18 +47,12 @@ type Data struct {
 	ValuationSXNL string `json:"valuation_sxnl"            csv:"市现率估值"`
 	// 综合估值状态
 	ValuationStatusDesc string `json:"valuation_status_desc"     csv:"综合估值状态"`
-	// 最新一期 ROE
-	LatestROE float64 `json:"latest_roe"                csv:"最新一期 ROE"`
 	// 当时价格
 	Price float64 `json:"price"                     csv:"价格"`
 	// 估算合理价格
 	RightPrice interface{} `json:"right_price"               csv:"估算合理价格"`
-	// 当前价格是否合理
-	HasRightPrice interface{} `json:"has_right_price"           csv:"当前价格是否合理"`
 	// 合理价格与当时价的价格差
-	PriceSpace interface{} `json:"price_space"               csv:"合理价格与当时价的价格差"`
-	// 预约财报披露日期
-	FinaAppointPublishDate string `json:"fina_appoint_publish_date" csv:"预约财报披露日期"`
+	PriceSpace interface{} `json:"price_space"               csv:"合理价差"`
 	// 历史波动率 (%)
 	HV float64 `json:"hv"                        csv:"历史波动率 (%)"`
 	// 净利润增长率 (%)
@@ -92,17 +94,17 @@ func (d Data) GetHeaders() []string {
 }
 
 // NewData 创建 Data 对象
-func NewData(stock model.Stock) Data {
+func NewData(ctx context.Context, stock model.Stock) Data {
 	var rightPrice interface{} = "--"
-	var hasRightPrice interface{} = "--"
 	var priceSpace interface{} = "--"
 	if stock.RightPrice > 0 {
 		rightPrice = stock.RightPrice
-		hasRightPrice = false
-		if stock.GetPrice() < stock.RightPrice {
-			hasRightPrice = true
-		}
 		priceSpace = stock.RightPrice - stock.GetPrice()
+	}
+	var roeMidVal interface{} = "--"
+	roeMidValFloat64, err := stock.HistoricalFinaMainData.MidValue(ctx, "ROE", -1)
+	if err == nil {
+		roeMidVal = roeMidValFloat64
 	}
 	return Data{
 		Name:                   stock.BaseInfo.SecurityNameAbbr,
@@ -111,6 +113,10 @@ func NewData(stock model.Stock) Data {
 		Keywords:               stock.CompanyProfile.KeywordsString(),
 		CompanyProfile:         stock.CompanyProfile.ProfileString(),
 		MainForms:              stock.CompanyProfile.MainFormsString(),
+		ReportDateName:         stock.HistoricalFinaMainData[0].ReportDateName,
+		LatestROE:              stock.BaseInfo.RoeWeight,
+		ROEMidVal:              roeMidVal,
+		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
 		TotalMarketCap:         stock.BaseInfo.TotalMarketCap,
 		TotalMarketCapString:   stock.BaseInfo.TotalMarketCapString(),
 		ValuationSYL:           stock.ValuationMap["市盈率"],
@@ -118,12 +124,9 @@ func NewData(stock model.Stock) Data {
 		ValuationSXOL:          stock.ValuationMap["市销率"],
 		ValuationSXNL:          stock.ValuationMap["市现率"],
 		ValuationStatusDesc:    stock.ValuationStatusDesc(),
-		LatestROE:              stock.BaseInfo.RoeWeight,
 		Price:                  stock.GetPrice(),
 		RightPrice:             rightPrice,
-		HasRightPrice:          hasRightPrice,
 		PriceSpace:             priceSpace,
-		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
 		HV:                     stock.HistoricalVolatility,
 		ListingVolatilityYear:  stock.BaseInfo.ListingVolatilityYear,
 		NetprofitYoyRatio:      stock.BaseInfo.NetprofitYoyRatio,
@@ -200,7 +203,7 @@ func (d DataList) ChunkedBySize(chunkSize int) []DataList {
 // NewDataList 创建要导出的数据列表
 func NewDataList(ctx context.Context, stocks model.StockList) (result DataList) {
 	for _, s := range stocks {
-		result = append(result, NewData(s))
+		result = append(result, NewData(ctx, s))
 	}
 	return
 }

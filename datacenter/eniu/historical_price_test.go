@@ -12,7 +12,7 @@ func TestGetPathCode(t *testing.T) {
 }
 
 func TestQueryHistoricalStockPrice(t *testing.T) {
-	data, err := _e.QueryHistoricalStockPrice(_ctx, "002459.SZ")
+	data, err := _e.QueryHistoricalStockPrice(_ctx, "002312.SZ")
 	require.Nil(t, err)
 	require.NotEmpty(t, data.Date)
 	v, _ := data.HistoricalVolatility(_ctx, "YEAR")

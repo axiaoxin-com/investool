@@ -22,6 +22,7 @@ const (
 )
 
 // Filter 我的选股指标
+// 注意：指标数据取决于最新一期的财报数据，可能是年报也可能是其他季报，使用时需注意应该同期对比
 type Filter struct {
 	// ------ 最重要的指标！！！------
 	// 最低净资产收益率（%）， ROE_WEIGHT
@@ -137,6 +138,7 @@ func (f Filter) String() string {
 var (
 	// DefaultFilter 默认指标值
 	DefaultFilter = Filter{
+		// 存在年报 ROE 大于 8，但季报小于 8 的情况会筛选不出来
 		MinROE:            8.0,
 		MinTotalMarketCap: 20.0,
 		MinPBNewMRQ:       1.0,
