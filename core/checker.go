@@ -8,7 +8,6 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/model"
 )
 
@@ -124,12 +123,7 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
-	// 估值较低或中等
-	if c.Stock.ValuationStatus == eastmoney.ValuationHigh {
-		checkItemName := "估值"
-		defect := "较高"
-		defects = append(defects, []string{checkItemName, defect})
-	}
+	// TODO:公司总体质地良好或优秀
 
 	// 股价低于合理价格
 	if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {

@@ -20,8 +20,6 @@ type Stock struct {
 	HistoricalFinaMainData eastmoney.HistoricalFinaMainData `json:"historical_fina_main_data"`
 	// 市盈率、市净率、市销率、市现率估值
 	ValuationMap map[string]string
-	// 4 种估值综合估值状态
-	ValuationStatus float64
 	// 历史市盈率
 	HistoricalPEList eastmoney.HistoricalPEList
 	// 合理价格：历史市盈率中位数 * (EPS * (1 + 今年 Q1 营收增长比))
@@ -40,20 +38,6 @@ type Stock struct {
 	ProfitPredictList eastmoney.ProfitPredictList
 }
 
-// ValuationStatusDesc 综合估值状态文字描述
-func (s Stock) ValuationStatusDesc() string {
-	desc := ""
-	switch s.ValuationStatus {
-	case eastmoney.ValuationLow:
-		desc = "估值较低"
-	case eastmoney.ValuationModerate:
-		desc = "估值中等"
-	case eastmoney.ValuationHigh:
-		desc = "估值较高"
-	}
-	return desc
-}
-
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
 func (s Stock) GetPrice() float64 {
 	p, ok := s.BaseInfo.NewPrice.(float64)
@@ -66,6 +50,7 @@ func (s Stock) GetPrice() float64 {
 	return s.HistoricalPrice.Price[len(s.HistoricalPrice.Price)-1]
 }
 
+// GetOrgType 获取机构类型
 func (s Stock) GetOrgType() string {
 	if len(s.HistoricalFinaMainData) == 0 {
 		return ""
@@ -100,7 +85,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 	s.HistoricalFinaMainData = hf
 
 	// 获取综合估值
-	status, valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
+	valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
 	if err != nil {
 		if strict {
 			return s, err
@@ -108,7 +93,6 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		logging.Warn(ctx, err.Error())
 	}
 	s.ValuationMap = valMap
-	s.ValuationStatus = status
 
 	// 历史市盈率
 	peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)

@@ -45,8 +45,6 @@ type Data struct {
 	ValuationSXOL string `json:"valuation_sxol"            csv:" 市销率估值"`
 	// 市现率估值
 	ValuationSXNL string `json:"valuation_sxnl"            csv:"市现率估值"`
-	// 综合估值状态
-	ValuationStatusDesc string `json:"valuation_status_desc"     csv:"综合估值状态"`
 	// 当时价格
 	Price float64 `json:"price"                     csv:"价格"`
 	// 估算合理价格
@@ -123,7 +121,6 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		ValuationSJL:           stock.ValuationMap["市净率"],
 		ValuationSXOL:          stock.ValuationMap["市销率"],
 		ValuationSXNL:          stock.ValuationMap["市现率"],
-		ValuationStatusDesc:    stock.ValuationStatusDesc(),
 		Price:                  stock.GetPrice(),
 		RightPrice:             rightPrice,
 		PriceSpace:             priceSpace,
