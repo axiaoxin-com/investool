@@ -14,13 +14,6 @@ import (
 	"go.uber.org/zap"
 )
 
-const (
-	// YI 亿
-	YI = float64(100000000)
-	// WAN 万
-	WAN = float64(10000)
-)
-
 // Filter 我的选股指标
 // 注意：指标数据取决于最新一期的财报数据，可能是年报也可能是其他季报，使用时需注意应该同期对比
 type Filter struct {
@@ -189,19 +182,6 @@ type StockInfo struct {
 	DebtAssetRatio float64 `json:"DEBT_ASSET_RATIO"`
 	// ROA (%)
 	ROA float64 `json:"JROA"`
-}
-
-// TotalMarketCapString 总市值可读字符串
-func (s StockInfo) TotalMarketCapString() string {
-	yi := s.TotalMarketCap / YI
-	if yi >= 1 {
-		return fmt.Sprintf("%.2f 亿", yi)
-	}
-	wan := s.TotalMarketCap / WAN
-	if wan >= 1 {
-		return fmt.Sprintf("%.2f 万", wan)
-	}
-	return fmt.Sprint(s.TotalMarketCap)
 }
 
 // StockInfoList 股票列表

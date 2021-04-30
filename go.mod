@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/antlabs/strsim v0.0.2 // indirect
-	github.com/axiaoxin-com/goutils v1.0.14
+	github.com/axiaoxin-com/goutils v1.0.15
 	github.com/axiaoxin-com/logging v1.2.9
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/gin-gonic/gin v1.7.1 // indirect
