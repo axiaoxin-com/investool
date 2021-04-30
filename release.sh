@@ -34,4 +34,4 @@ else
 fi
 
 echo "Realeasing ..."
-goreleaser release
+goreleaser release --rm-dist
