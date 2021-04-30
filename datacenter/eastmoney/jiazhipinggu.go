@@ -40,19 +40,54 @@ type JZPG struct {
 	Valuationscore string `json:"ValuationScore"`
 }
 
+// GetValueRanking 当前排名
+func (j JZPG) GetValueRanking() string {
+	return strings.Split(j.Valueranking, "|")[0]
+}
+
+// GetProfitabilityScore 盈利能力
+func (j JZPG) GetProfitabilityScore() string {
+	return strings.Split(j.Profitabilityscore, "|")[0]
+}
+
+// GetGrowUpScore 成长能力
+func (j JZPG) GetGrowUpScore() string {
+	return strings.Split(j.Growupscore, "|")[0]
+}
+
+// GetOperationScore 营运偿债能力
+func (j JZPG) GetOperationScore() string {
+	return strings.Split(j.Operationscore, "|")[0]
+}
+
+// GetCashFlowScore 现金流能力
+func (j JZPG) GetCashFlowScore() string {
+	return strings.Split(j.Cashflowscore, "|")[0]
+}
+
+// GetValuationScore 估值能力
+func (j JZPG) GetValuationScore() string {
+	return strings.Split(j.Valuationscore, "|")[0]
+}
+
+// GetValueTotalScore 整体质地
+func (j JZPG) GetValueTotalScore() string {
+	return strings.Split(j.Valuetotalscore, "|")[0]
+}
+
 func (j JZPG) String() string {
 	return fmt.Sprintf(
 		"%s属于%s行业，排名%s/%s。\n盈利能力%s，成长能力%s，营运偿债能力%s，现金流%s，估值%s，整体质地%s。",
 		j.Secname,
 		j.Industryname,
-		strings.Split(j.Valueranking, "|")[0],
+		j.GetValueRanking(),
 		j.Total,
-		strings.Split(j.Profitabilityscore, "|")[0],
-		strings.Split(j.Growupscore, "|")[0],
-		strings.Split(j.Operationscore, "|")[0],
-		strings.Split(j.Cashflowscore, "|")[0],
-		strings.Split(j.Valuationscore, "|")[0],
-		strings.Split(j.Valuetotalscore, "|")[0],
+		j.GetProfitabilityScore(),
+		j.GetGrowUpScore(),
+		j.GetOperationScore(),
+		j.GetCashFlowScore(),
+		j.GetValuationScore(),
+		j.GetValueTotalScore(),
 	)
 }
 

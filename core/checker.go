@@ -123,7 +123,19 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
-	// TODO:公司总体质地良好或优秀
+	// 整体质地
+	if !goutils.IsStrInSlice(c.Stock.JZPG.GetValueTotalScore(), []string{"优秀", "良好"}) {
+		checkItemName := "整体质地"
+		defect := c.Stock.JZPG.GetValueTotalScore()
+		defects = append(defects, []string{checkItemName, defect})
+	}
+
+	// 估值
+	if c.Stock.JZPG.GetValuationScore() == "高于行业均值水平" {
+		checkItemName := "估值"
+		defect := c.Stock.JZPG.GetValuationScore()
+		defects = append(defects, []string{checkItemName, defect})
+	}
 
 	// 股价低于合理价格
 	if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {

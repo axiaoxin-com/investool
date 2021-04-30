@@ -27,6 +27,8 @@ type Data struct {
 	MainForms string `json:"main_forms"                csv:"主营构成"`
 	// 财报年份-类型
 	ReportDateName string `json:"report_date_name"          csv:"数据源"`
+	// 价值评估
+	JZPG string `json:"jzpg"                      csv:"价值评估"`
 	// 最新一期 ROE
 	LatestROE float64 `json:"latest_roe"                csv:"最新一期 ROE"`
 	// ROE 同比增长
@@ -109,6 +111,7 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		CompanyProfile:         stock.CompanyProfile.ProfileString(),
 		MainForms:              stock.CompanyProfile.MainFormsString(),
 		ReportDateName:         fina.ReportDateName,
+		JZPG:                   stock.JZPG.String(),
 		LatestROE:              fina.Roejq,
 		ROETBZZ:                fina.Roejqtz,
 		LatestEPS:              fina.Epsjb,

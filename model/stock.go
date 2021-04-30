@@ -36,6 +36,8 @@ type Stock struct {
 	OrgRatingList eastmoney.OrgRatingList
 	// 盈利预测
 	ProfitPredictList eastmoney.ProfitPredictList
+	// 价值评估
+	JZPG eastmoney.JZPG
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -181,5 +183,15 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		logging.Warn(ctx, err.Error())
 	}
 	s.ProfitPredictList = pps
+
+	// 价值评估
+	jzpg, err := datacenter.EastMoney.QueryJiaZhiPingGu(ctx, s.BaseInfo.Secucode)
+	if err != nil {
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
+	}
+	s.JZPG = jzpg
 	return s, nil
 }
