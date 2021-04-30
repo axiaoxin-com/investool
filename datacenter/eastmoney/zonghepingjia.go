@@ -1,4 +1,5 @@
 // 获取智能诊股中的综合评价
+
 package eastmoney
 
 import (
