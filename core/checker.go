@@ -183,30 +183,6 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		}
 	}
 
-	// 毛利率稳定性 （只检测非金融股）
-	if options.IsCheckMLLStability && !goutils.IsStrInSlice(c.Stock.GetOrgType(), []string{"银行", "保险"}) {
-		if c.Stock.HistoricalFinaMainData.IsStability(ctx, "MLL", options.CheckYears) {
-			checkItemName := "毛利率稳定性"
-			defect := fmt.Sprintf(
-				"%d 年内稳定性较差:%v",
-				options.CheckYears,
-				c.Stock.HistoricalFinaMainData.ValueList(ctx, "MLL", options.CheckYears),
-			)
-			defects = append(defects, []string{checkItemName, defect})
-		}
-	}
-
-	// 净利率稳定性
-	if options.IsCheckMLLStability && c.Stock.HistoricalFinaMainData.IsStability(ctx, "JLL", options.CheckYears) {
-		checkItemName := "净利率稳定性"
-		defect := fmt.Sprintf(
-			"%d 年内稳定性较差:%v",
-			options.CheckYears,
-			c.Stock.HistoricalFinaMainData.ValueList(ctx, "JLL", options.CheckYears),
-		)
-		defects = append(defects, []string{checkItemName, defect})
-	}
-
 	return
 }
 
