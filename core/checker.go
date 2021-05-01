@@ -46,7 +46,7 @@ type CheckerOptions struct {
 var DefaultCheckerOptions = CheckerOptions{
 	MinROE:              8.0,
 	CheckYears:          3,
-	NoCheckYearsROE:     16.0,
+	NoCheckYearsROE:     20.0,
 	MaxDebtAssetRatio:   60.0,
 	MaxHV:               3.0,
 	MinTotalMarketCap:   20.0,
