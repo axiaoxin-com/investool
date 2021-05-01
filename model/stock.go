@@ -118,7 +118,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 			logging.Warn(ctx, err.Error())
 			s.RightPrice = -1
 		}
-		s.RightPrice = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + ratio))
+		s.RightPrice = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + ratio/100.0))
 	} else {
 		// 一季报没有发布则设置合理价为 -1
 		s.RightPrice = -1

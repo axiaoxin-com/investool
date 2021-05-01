@@ -37,6 +37,8 @@ type CheckerOptions struct {
 	IsCheckMLLStability bool `json:"is_check_mll_stability"`
 	// 是否检测净利率稳定性
 	IsCheckJLLStability bool `json:"is_check_jll_stability"`
+	// 是否使用估算合理价进行检测，高于估算价将被过滤
+	IsCheckPriceByCalc bool
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -130,18 +132,20 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
-	// 估值
+	// 行业均值水平估值
 	if c.Stock.JZPG.GetValuationScore() == "高于行业均值水平" {
-		checkItemName := "估值"
+		checkItemName := "行业均值水平估值"
 		defect := c.Stock.JZPG.GetValuationScore()
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
 	// 股价低于合理价格
-	if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {
-		checkItemName := "股价"
-		defect := fmt.Sprintf("最新股价:%f 高于合理价:%f", c.Stock.BaseInfo.NewPrice, c.Stock.RightPrice)
-		defects = append(defects, []string{checkItemName, defect})
+	if options.IsCheckPriceByCalc {
+		if c.Stock.RightPrice != -1 && c.Stock.GetPrice() > c.Stock.RightPrice {
+			checkItemName := "股价"
+			defect := fmt.Sprintf("最新股价:%f 高于合理价:%f", c.Stock.BaseInfo.NewPrice, c.Stock.RightPrice)
+			defects = append(defects, []string{checkItemName, defect})
+		}
 	}
 
 	// 负债率低于 MaxDebtRatio （可选条件），金融股不检测该项
