@@ -5,6 +5,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
@@ -136,6 +137,22 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	if c.Stock.JZPG.GetValuationScore() == "高于行业均值水平" {
 		checkItemName := "行业均值水平估值"
 		defect := c.Stock.JZPG.GetValuationScore()
+		defects = append(defects, []string{checkItemName, defect})
+	}
+
+	// 市盈率、市净率、市现率、市销率全部估值较高
+	highValuation := true
+	highValuationDesc := []string{}
+	for k, v := range c.Stock.ValuationMap {
+		if v != "估值较高" {
+			highValuation = false
+			break
+		}
+		highValuationDesc = append(highValuationDesc, k+v)
+	}
+	if highValuation {
+		checkItemName := "四率估值全部较高"
+		defect := strings.Join(highValuationDesc, "\n")
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
