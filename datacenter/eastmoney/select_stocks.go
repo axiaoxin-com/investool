@@ -133,7 +133,7 @@ var (
 	DefaultFilter = Filter{
 		// 存在年报 ROE 大于 8，但季报小于 8 的情况会筛选不出来
 		MinROE:            8.0,
-		MinTotalMarketCap: 20.0,
+		MinTotalMarketCap: 100.0,
 		MinPBNewMRQ:       1.0,
 		ExcludeCYB:        true,
 		ExcludeKCB:        true,
@@ -182,6 +182,8 @@ type StockInfo struct {
 	DebtAssetRatio float64 `json:"DEBT_ASSET_RATIO"`
 	// ROA (%)
 	ROA float64 `json:"JROA"`
+	// 市盈率
+	PE float64 `json:"PE9"`
 }
 
 // StockInfoList 股票列表
@@ -222,7 +224,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"source": "SELECT_SECURITIES",
 		"client": "APP",
 		"type":   "RPTA_APP_STOCKSELECT",
-		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE,DEBT_ASSET_RATIO,JROA",
+		"sty":    "SECUCODE,SECURITY_CODE,SECURITY_NAME_ABBR,INDUSTRY,ROE_WEIGHT,NETPROFIT_YOY_RATIO,TOI_YOY_RATIO,ZXGXL,NETPROFIT_GROWTHRATE_3Y,INCOME_GROWTHRATE_3Y,LISTING_YIELD_YEAR,PBNEWMRQ,PREDICT_NETPROFIT_RATIO,PREDICT_INCOME_RATIO,TOTAL_MARKET_CAP,NEW_PRICE,LISTING_VOLATILITY_YEAR,LISTING_DATE,DEBT_ASSET_RATIO,JROA,PE9",
 		"filter": filter.String(),
 		"p":      "1",      // page
 		"ps":     "100000", // page size

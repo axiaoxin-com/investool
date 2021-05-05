@@ -69,8 +69,12 @@ type Data struct {
 	ListingYieldYear float64 `json:"listing_yield_year"        csv:"上市以来年化收益率 (%)"`
 	// 上市以来年化波动率 (%)
 	ListingVolatilityYear float64 `json:"listing_volatility_year"   csv:"年化波动率 (%)"`
+	// 市盈率
+	PE float64 `json:"pe"                        csv:"市盈率"`
 	// 机构评级
 	OrgRating string `json:"org_rating"                csv:"机构评级"`
+	// 盈利预测
+	ProfitPredict string `json:"profit_predict"            csv:"盈利预测"`
 	// 市盈率估值
 	ValuationSYL string `json:"valuation_syl"             csv:"市盈率估值"`
 	// 市净率估值
@@ -132,7 +136,9 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		NetprofitGrowthrate3Y:  stock.BaseInfo.NetprofitGrowthrate3Y,
 		IncomeGrowthrate3Y:     stock.BaseInfo.IncomeGrowthrate3Y,
 		ListingYieldYear:       stock.BaseInfo.ListingYieldYear,
+		PE:                     stock.BaseInfo.PE,
 		OrgRating:              stock.OrgRatingList.String(),
+		ProfitPredict:          stock.ProfitPredictList.String(),
 		ValuationSYL:           stock.ValuationMap["市盈率"],
 		ValuationSJL:           stock.ValuationMap["市净率"],
 		ValuationSXOL:          stock.ValuationMap["市销率"],
