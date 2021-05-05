@@ -50,7 +50,7 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 	for i, stocks := range e.Stocks.ChunkedBySize(PicChuckSize) {
 		// 设置图片大小
 		height := 64*len(stocks) + 64
-		width := 750
+		width := 600
 
 		leftTop := image.Point{0, 0}
 		rightBottom := image.Point{width, height}
@@ -63,7 +63,7 @@ func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte
 		// 写入图片
 		for j, stock := range stocks {
 			pt := freetype.Pt(40, (j+1)*int(fc.PointToFixed(fontSize)>>6)+40)
-			line := fmt.Sprintf("%d.%s    %s", num, stock.Name, stock.Code)
+			line := fmt.Sprintf("%s    %s", strings.Split(stock.Code, ".")[0], stock.Name)
 			_, err = fc.DrawString(line, pt)
 			if err != nil {
 				logging.Errorf(ctx, "draw %s error: %s", line, err.Error())
