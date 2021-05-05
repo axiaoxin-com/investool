@@ -22,7 +22,7 @@ type Stock struct {
 	ValuationMap map[string]string
 	// 历史市盈率
 	HistoricalPEList eastmoney.HistoricalPEList
-	// 合理价格：历史市盈率中位数 * (EPS * (1 + 今年 Q1 营收增长比))
+	// 合理价格：历史市盈率中位数 * (去年EPS * (1 + 今年 Q1 营收增长比))
 	RightPrice float64
 	// 历史股价
 	HistoricalPrice eniu.RespHistoricalStockPrice
@@ -106,22 +106,27 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 	}
 	s.HistoricalPEList = peList
 
-	// 合理价格
+	// 合理价格判断，一季报没有发布则设置合理价为 -1
+	s.RightPrice = -1
 	// 今年一季报营收增长比
 	ratio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
-	if err == nil {
+	if err != nil {
 		if strict {
 			return s, err
 		}
-		peMidVal, err := peList.GetMidValue(ctx)
-		if err != nil {
-			logging.Warn(ctx, err.Error())
-			s.RightPrice = -1
+		logging.Warn(ctx, err.Error())
+	}
+	// pe 中位数
+	peMidVal, err := peList.GetMidValue(ctx)
+	if err != nil {
+		if strict {
+			return s, err
 		}
-		s.RightPrice = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + ratio/100.0))
-	} else {
-		// 一季报没有发布则设置合理价为 -1
-		s.RightPrice = -1
+		logging.Warn(ctx, err.Error())
+	}
+	reports := s.HistoricalFinaMainData.FilterByReportType(ctx, "年报")
+	if len(reports) > 0 {
+		s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
 	}
 
 	// 历史股价

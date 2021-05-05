@@ -56,6 +56,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	BankMinBLDKBBFGL:    100.0,
 	IsCheckJLLStability: true,
 	IsCheckMLLStability: true,
+	IsCheckPriceByCalc:  false,
 }
 
 // Checker 检测器实例
