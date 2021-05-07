@@ -15,29 +15,31 @@ import (
 // Stock 接口返回的股票信息结构
 type Stock struct {
 	// 东方财富接口返回的基本信息
-	BaseInfo eastmoney.StockInfo
+	BaseInfo eastmoney.StockInfo `json:"base_info"`
 	// 历史财报信息
 	HistoricalFinaMainData eastmoney.HistoricalFinaMainData `json:"historical_fina_main_data"`
 	// 市盈率、市净率、市销率、市现率估值
-	ValuationMap map[string]string
+	ValuationMap map[string]string `json:"valuation_map"`
 	// 历史市盈率
-	HistoricalPEList eastmoney.HistoricalPEList
+	HistoricalPEList eastmoney.HistoricalPEList `json:"historical_pe_list"`
 	// 合理价格：历史市盈率中位数 * (去年EPS * (1 + 今年 Q1 营收增长比))
-	RightPrice float64
+	RightPrice float64 `json:"right_price"`
 	// 历史股价
-	HistoricalPrice eniu.RespHistoricalStockPrice
+	HistoricalPrice eniu.RespHistoricalStockPrice `json:"historical_price"`
 	// 历史波动率
-	HistoricalVolatility float64
+	HistoricalVolatility float64 `json:"historical_volatility"`
 	// 公司资料
-	CompanyProfile eastmoney.CompanyProfile
+	CompanyProfile eastmoney.CompanyProfile `json:"company_profile"`
 	// 预约财报披露日期
-	FinaAppointPublishDate string
+	FinaAppointPublishDate string `json:"fina_appoint_publish_date"`
 	// 机构评级
-	OrgRatingList eastmoney.OrgRatingList
+	OrgRatingList eastmoney.OrgRatingList `json:"org_rating_list"`
 	// 盈利预测
-	ProfitPredictList eastmoney.ProfitPredictList
+	ProfitPredictList eastmoney.ProfitPredictList `json:"profit_predict_list"`
 	// 价值评估
-	JZPG eastmoney.JZPG
+	JZPG eastmoney.JZPG `json:"jzpg"`
+	// PEG=PE/净利润复合增长率
+	PEG float64 `json:"peg"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -198,5 +200,9 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		logging.Warn(ctx, err.Error())
 	}
 	s.JZPG = jzpg
+
+	// PEG
+	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
+
 	return s, nil
 }

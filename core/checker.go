@@ -39,7 +39,9 @@ type CheckerOptions struct {
 	// 是否检测净利率稳定性
 	IsCheckJLLStability bool `json:"is_check_jll_stability"`
 	// 是否使用估算合理价进行检测，高于估算价将被过滤
-	IsCheckPriceByCalc bool
+	IsCheckPriceByCalc bool `json:"is_check_price_by_calc"`
+	// 最大 PEG
+	MaxPEG float64 `json:"max_peg"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -57,6 +59,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	IsCheckJLLStability: true,
 	IsCheckMLLStability: true,
 	IsCheckPriceByCalc:  false,
+	MaxPEG:              1.5,
 }
 
 // Checker 检测器实例
@@ -238,6 +241,13 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 			options.CheckYears,
 			c.Stock.HistoricalFinaMainData.ValueList(ctx, "JLL", options.CheckYears),
 		)
+		defects = append(defects, []string{checkItemName, defect})
+	}
+
+	// PEG
+	if c.Stock.PEG > options.MaxPEG {
+		checkItemName := "PEG"
+		defect := fmt.Sprintf("PEG:%v 高于:%v", c.Stock.PEG, options.MaxPEG)
 		defects = append(defects, []string{checkItemName, defect})
 	}
 
