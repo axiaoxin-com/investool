@@ -42,6 +42,10 @@ type CheckerOptions struct {
 	IsCheckPriceByCalc bool `json:"is_check_price_by_calc"`
 	// 最大 PEG
 	MaxPEG float64 `json:"max_peg"`
+	// 最小本业营收比
+	MinBYYSRatio float64 `json:"min_byys_ratio"`
+	// 最大本业营收比
+	MaxBYYSRatio float64 `json:"max_byys_ratio"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -60,6 +64,8 @@ var DefaultCheckerOptions = CheckerOptions{
 	IsCheckMLLStability: true,
 	IsCheckPriceByCalc:  false,
 	MaxPEG:              1.5,
+	MinBYYSRatio:        0.9,
+	MaxBYYSRatio:        1.1,
 }
 
 // Checker 检测器实例
@@ -245,10 +251,19 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 	}
 
 	// PEG
-	if c.Stock.PEG > options.MaxPEG {
+	if options.MaxPEG != 0 && c.Stock.PEG > options.MaxPEG {
 		checkItemName := "PEG"
 		defect := fmt.Sprintf("PEG:%v 高于:%v", c.Stock.PEG, options.MaxPEG)
 		defects = append(defects, []string{checkItemName, defect})
+	}
+
+	// 本业营收比
+	if options.MinBYYSRatio != 0 && options.MaxBYYSRatio != 0 {
+		if c.Stock.BYYSRatio > options.MaxBYYSRatio || c.Stock.BYYSRatio < options.MinBYYSRatio {
+			checkItemName := "本业营收比"
+			defect := fmt.Sprintf("当前本业营收比:%v 超出范围:%v-%v", c.Stock.BYYSRatio, options.MinBYYSRatio, options.MaxBYYSRatio)
+			defects = append(defects, []string{checkItemName, defect})
+		}
 	}
 
 	return

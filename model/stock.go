@@ -40,6 +40,10 @@ type Stock struct {
 	JZPG eastmoney.JZPG `json:"jzpg"`
 	// PEG=PE/净利润复合增长率
 	PEG float64 `json:"peg"`
+	// 历史利润表
+	HistoricalGincomeList eastmoney.GincomeDataList `json:"historical_gincome_list"`
+	// 本业营收比=营业利润/(营业利润+营业外收入)
+	BYYSRatio float64 `json:"byys_ratio"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -203,6 +207,21 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 
 	// PEG
 	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
+
+	// 利润表数据
+	gincomeList, err := datacenter.EastMoney.QueryFinaGincomeData(ctx, s.BaseInfo.Secucode)
+	if err != nil {
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
+	}
+	s.HistoricalGincomeList = gincomeList
+	// 本业营收比
+	if len(s.HistoricalGincomeList) > 0 {
+		gincome := s.HistoricalGincomeList[0]
+		s.BYYSRatio = gincome.OperateProfit / (gincome.OperateProfit + gincome.NonbusinessIncome)
+	}
 
 	return s, nil
 }
