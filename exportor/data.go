@@ -29,6 +29,8 @@ type Data struct {
 	BYYSRatio float64 `json:"byys_ration"               csv:"本业营收比"`
 	// 财报年份-类型
 	ReportDateName string `json:"report_date_name"          csv:"数据源"`
+	// 财报审计意见
+	ReportOpinion interface{} `json:"report_opinion"            csv:"财报审计意见"`
 	// 价值评估
 	JZPG string `json:"jzpg"                      csv:"价值评估"`
 	// 最新一期 ROE
@@ -105,9 +107,13 @@ func (d Data) GetHeaders() []string {
 func NewData(ctx context.Context, stock model.Stock) Data {
 	var rightPrice interface{} = "--"
 	var priceSpace interface{} = "--"
+	var reportOpinion interface{} = "--"
 	if stock.RightPrice > 0 {
 		rightPrice = stock.RightPrice
 		priceSpace = stock.RightPrice - stock.GetPrice()
+	}
+	if stock.FinaReportOpinion != nil {
+		reportOpinion = stock.FinaReportOpinion
 	}
 
 	fina := stock.HistoricalFinaMainData[0]
@@ -120,6 +126,7 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		MainForms:              stock.CompanyProfile.MainFormsString(),
 		BYYSRatio:              stock.BYYSRatio,
 		ReportDateName:         fina.ReportDateName,
+		ReportOpinion:          reportOpinion,
 		JZPG:                   stock.JZPG.String(),
 		LatestROE:              fina.Roejq,
 		ROETBZZ:                fina.Roejqtz,

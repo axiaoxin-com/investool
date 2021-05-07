@@ -281,7 +281,13 @@ func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataTyp
 				break
 			}
 		case "PROFIT":
+			// 净利润
 			if data[i].Parentnetprofit <= data[i+1].Parentnetprofit {
+				increasing = false
+				break
+			}
+			// 毛利润
+			if data[i].Mlr <= data[i+1].Mlr {
 				increasing = false
 				break
 			}

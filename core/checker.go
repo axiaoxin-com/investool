@@ -266,6 +266,16 @@ func (c Checker) CheckFundamentalsWithOptions(ctx context.Context, options Check
 		}
 	}
 
+	// 审计意见
+	if c.Stock.FinaReportOpinion != nil {
+		opinion := c.Stock.FinaReportOpinion.(string)
+		if opinion != "标准无保留意见" {
+			checkItemName := "财报审计意见"
+			defect := opinion
+			defects = append(defects, []string{checkItemName, defect})
+		}
+	}
+
 	return
 }
 

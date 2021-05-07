@@ -44,6 +44,8 @@ type Stock struct {
 	HistoricalGincomeList eastmoney.GincomeDataList `json:"historical_gincome_list"`
 	// 本业营收比=营业利润/(营业利润+营业外收入)
 	BYYSRatio float64 `json:"byys_ratio"`
+	// 最新财报审计意见
+	FinaReportOpinion interface{} `json:"fina_report_opinion"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -217,10 +219,12 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		logging.Warn(ctx, err.Error())
 	}
 	s.HistoricalGincomeList = gincomeList
-	// 本业营收比
 	if len(s.HistoricalGincomeList) > 0 {
+		// 本业营收比
 		gincome := s.HistoricalGincomeList[0]
 		s.BYYSRatio = gincome.OperateProfit / (gincome.OperateProfit + gincome.NonbusinessIncome)
+		// 审计意见
+		s.FinaReportOpinion = gincome.OpinionType
 	}
 
 	return s, nil
