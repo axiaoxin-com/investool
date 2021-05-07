@@ -25,6 +25,8 @@ type Data struct {
 	CompanyProfile string `json:"company_profile"           csv:"公司信息"`
 	// 主营构成
 	MainForms string `json:"main_forms"                csv:"主营构成"`
+	// 本业营收比
+	BYYSRatio float64 `json:"byys_ration"               csv:"本业营收比"`
 	// 财报年份-类型
 	ReportDateName string `json:"report_date_name"          csv:"数据源"`
 	// 价值评估
@@ -71,6 +73,8 @@ type Data struct {
 	ListingVolatilityYear float64 `json:"listing_volatility_year"   csv:"年化波动率 (%)"`
 	// 市盈率
 	PE float64 `json:"pe"                        csv:"市盈率"`
+	// PEG
+	PEG float64 `json:"peg"                       csv:"PEG"`
 	// 机构评级
 	OrgRating string `json:"org_rating"                csv:"机构评级"`
 	// 盈利预测
@@ -114,6 +118,7 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		Keywords:               stock.CompanyProfile.KeywordsString(),
 		CompanyProfile:         stock.CompanyProfile.ProfileString(),
 		MainForms:              stock.CompanyProfile.MainFormsString(),
+		BYYSRatio:              stock.BYYSRatio,
 		ReportDateName:         fina.ReportDateName,
 		JZPG:                   stock.JZPG.String(),
 		LatestROE:              fina.Roejq,
@@ -137,6 +142,7 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		IncomeGrowthrate3Y:     stock.BaseInfo.IncomeGrowthrate3Y,
 		ListingYieldYear:       stock.BaseInfo.ListingYieldYear,
 		PE:                     stock.BaseInfo.PE,
+		PEG:                    stock.PEG,
 		OrgRating:              stock.OrgRatingList.String(),
 		ProfitPredict:          stock.ProfitPredictList.String(),
 		ValuationSYL:           stock.ValuationMap["市盈率"],
