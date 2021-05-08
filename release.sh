@@ -26,6 +26,10 @@ NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
 
 #only tag if no tag already
 if [ -z "$NEEDS_TAG" ]; then
+    # https://github.com/x-motemen/gobump
+    # 使用 git tag 更新 main.go 中的 VERSION ，去掉前缀 v
+    gobump set ${NEW_TAG/#v} -w
+    git commit -am "bump verision to $NEW_TAG"
     git tag $NEW_TAG
     echo "Tagged with $NEW_TAG"
     git push --tags

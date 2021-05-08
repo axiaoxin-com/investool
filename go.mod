@@ -29,6 +29,7 @@ require (
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/stretchr/testify v1.7.0
 	github.com/ugorji/go v1.2.5 // indirect
+	github.com/urfave/cli/v2 v2.3.0
 	go.opentelemetry.io/otel v0.20.0 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b // indirect
