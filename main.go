@@ -18,7 +18,7 @@ var (
 	// DefaultLoglevel 日志级别默认值
 	DefaultLoglevel = "info"
 	// ProcessorOptions 要启动运行的进程可选项
-	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor}
+	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor, cmds.ProcessorTview}
 )
 
 func main() {
@@ -66,6 +66,7 @@ func main() {
 
 	app.Commands = append(app.Commands, cmds.CommandExportor())
 	app.Commands = append(app.Commands, cmds.CommandChecker())
+	app.Commands = append(app.Commands, cmds.CommandTview())
 
 	if err := app.Run(os.Args); err != nil {
 		logging.Fatal(nil, err.Error())

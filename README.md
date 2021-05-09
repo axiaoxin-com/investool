@@ -270,7 +270,7 @@ OPTIONS:
 
 检测结果：
 
-![](./docs/checker.go)
+![](./docs/checker.png)
 
 ## 欢迎 Star
 

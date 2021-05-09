@@ -173,7 +173,7 @@ func CommandChecker() *cli.Command {
 	flags := FlagsChecker()
 	flags = append(flags, FlagsCheckerOptions()...)
 	cmd := &cli.Command{
-		Name:   "checker",
+		Name:   ProcessorChecker,
 		Usage:  "股票检测器",
 		Flags:  flags,
 		Action: ActionChecker(),
