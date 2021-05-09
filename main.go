@@ -88,15 +88,24 @@ func main() {
 					Aliases:     []string{"f"},
 					Value:       DefaultExportFilename,
 					Usage:       `导出筛选出的股票数据到指定文件，根据文件后缀名自动判断导出类型。支持的后缀名：[xlsx|csv|json|png|all]，all 表示导出全部支持的类型。`,
-					EnvVars:     []string{"XSTOCK_EXPORT_FILENAME"},
+					EnvVars:     []string{"XSTOCK_EXPORTOR_FILENAME"},
 					DefaultText: DefaultExportFilename,
+				},
+				&cli.BoolFlag{
+					Name:        "disable_check",
+					Aliases:     []string{"C"},
+					Value:       false,
+					Usage:       "关闭基本面检测，导出所有原始筛选结果",
+					EnvVars:     []string{"XSTOCK_EXPORTOR_DISABLE_CHECK"},
+					DefaultText: "false",
 				},
 			},
 			Action: func(c *cli.Context) error {
 				loglevel := c.String("loglevel")
 				logging.SetLevel(loglevel)
+				disableCheck := c.Bool("disable_check")
 				ctx := context.Background()
-				exportor.Export(ctx, c.String("filename"))
+				exportor.Export(ctx, c.String("filename"), disableCheck)
 				return nil
 			},
 			BashComplete: func(c *cli.Context) {

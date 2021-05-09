@@ -38,13 +38,17 @@ func NewSelector(ctx context.Context) Selector {
 }
 
 // AutoFilterStocks 按默认设置自动筛选股票
-func (s Selector) AutoFilterStocks(ctx context.Context) (model.StockList, error) {
+func (s Selector) AutoFilterStocks(ctx context.Context, disableCheck bool) (model.StockList, error) {
 	filter := eastmoney.DefaultFilter
-	return s.AutoFilterStocksWithFilter(ctx, filter)
+	return s.AutoFilterStocksWithFilter(ctx, filter, disableCheck)
 }
 
 // AutoFilterStocksWithFilter 按设置自动筛选股票
-func (s Selector) AutoFilterStocksWithFilter(ctx context.Context, filter eastmoney.Filter) (result model.StockList, err error) {
+func (s Selector) AutoFilterStocksWithFilter(
+	ctx context.Context,
+	filter eastmoney.Filter,
+	disableCheck bool,
+) (result model.StockList, err error) {
 	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, filter)
 	if err != nil {
 		return
@@ -74,12 +78,16 @@ func (s Selector) AutoFilterStocksWithFilter(ctx context.Context, filter eastmon
 				logging.Error(ctx, "NewStock error:"+err.Error())
 				return
 			}
-			// 检测是否为优质股票
-			checker := NewChecker(ctx, stock)
-			if defects := checker.CheckFundamentals(ctx); len(defects) == 0 {
+			if disableCheck {
 				result = append(result, stock)
 			} else {
-				logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("defects", defects))
+				// 检测是否为优质股票
+				checker := NewChecker(ctx, stock)
+				if defects := checker.CheckFundamentals(ctx); len(defects) == 0 {
+					result = append(result, stock)
+				} else {
+					logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("defects", defects))
+				}
 			}
 		}(ctx, baseInfo)
 	}

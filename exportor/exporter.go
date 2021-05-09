@@ -43,7 +43,7 @@ func New(ctx context.Context, stocks model.StockList, filter eastmoney.Filter, c
 }
 
 // Export 导出数据
-func Export(ctx context.Context, exportFilename string) {
+func Export(ctx context.Context, exportFilename string, disableCheck bool) {
 	beginTime := time.Now()
 	filedir := path.Dir(exportFilename)
 	fileext := strings.ToLower(path.Ext(exportFilename))
@@ -69,7 +69,7 @@ func Export(ctx context.Context, exportFilename string) {
 	// 自动筛选股票
 	selector := core.NewSelector(ctx)
 	filter := eastmoney.DefaultFilter
-	stocks, err := selector.AutoFilterStocksWithFilter(ctx, filter)
+	stocks, err := selector.AutoFilterStocksWithFilter(ctx, filter, disableCheck)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
