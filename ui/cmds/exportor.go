@@ -4,6 +4,7 @@ package cmds
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -163,9 +164,9 @@ func FlagsFilter() []cli.Flag {
 			Usage:       "排除科创板",
 			DefaultText: "true",
 		},
-		&cli.StringFlag{
+		&cli.StringSliceFlag{
 			Name:        "filter.special_security_name_abbr_list",
-			Value:       "",
+			Value:       cli.NewStringSlice(),
 			Usage:       "查询指定名称",
 			DefaultText: "",
 		},
@@ -227,6 +228,11 @@ func ActionExportor() func(c *cli.Context) error {
 		if c.Bool("disable_check") {
 			selector = core.NewSelector(ctx, filter, nil)
 		}
+		b, _ := json.MarshalIndent(map[string]interface{}{
+			"filter":  filter,
+			"checker": checker,
+		}, "", "  ")
+		logging.Debug(ctx, "exportor params:"+string(b))
 		exportor.Export(ctx, c.String("filename"), selector)
 		return nil
 	}
