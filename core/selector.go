@@ -77,10 +77,10 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result model.StockList,
 				result = append(result, stock)
 			} else {
 				// 检测是否为优质股票
-				if defects := s.Checker.CheckFundamentals(ctx, stock); len(defects) == 0 {
+				if details, ok := s.Checker.CheckFundamentals(ctx, stock); ok {
 					result = append(result, stock)
 				} else {
-					logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("defects", defects))
+					logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("details", details))
 				}
 			}
 		}(ctx, baseInfo)
