@@ -3,6 +3,8 @@ package exportor
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -10,40 +12,30 @@ import (
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/model"
 )
 
-// Descriptions 数据备注信息
-type Descriptions struct {
-	Filter         eastmoney.Filter    `json:"filter"`
-	CheckerOptions core.CheckerOptions `json:"checker_options"`
-}
-
 // Exportor exportor 实例
 type Exportor struct {
-	Stocks       DataList
-	Descriptions Descriptions
+	Stocks   DataList
+	Selector core.Selector
 }
 
 // New 创建要导出的数据列表
-func New(ctx context.Context, stocks model.StockList, filter eastmoney.Filter, checkerOptions core.CheckerOptions) Exportor {
+func New(ctx context.Context, stocks model.StockList, selector core.Selector) Exportor {
 	dlist := DataList{}
 	for _, s := range stocks {
 		dlist = append(dlist, NewData(ctx, s))
 	}
 
 	return Exportor{
-		Stocks: dlist,
-		Descriptions: Descriptions{
-			Filter:         filter,
-			CheckerOptions: checkerOptions,
-		},
+		Stocks:   dlist,
+		Selector: selector,
 	}
 }
 
 // Export 导出数据
-func Export(ctx context.Context, exportFilename string, disableCheck bool) {
+func Export(ctx context.Context, exportFilename string, selector core.Selector) {
 	beginTime := time.Now()
 	filedir := path.Dir(exportFilename)
 	fileext := strings.ToLower(path.Ext(exportFilename))
@@ -67,14 +59,11 @@ func Export(ctx context.Context, exportFilename string, disableCheck bool) {
 	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
 	var err error
 	// 自动筛选股票
-	selector := core.NewSelector(ctx)
-	filter := eastmoney.DefaultFilter
-	stocks, err := selector.AutoFilterStocksWithFilter(ctx, filter, disableCheck)
+	stocks, err := selector.AutoFilterStocks(ctx)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}
-	checkOpt := core.DefaultCheckerOptions
-	e := New(ctx, stocks, filter, checkOpt)
+	e := New(ctx, stocks, selector)
 
 	switch exportType {
 	case "json":
@@ -99,5 +88,11 @@ func Export(ctx context.Context, exportFilename string, disableCheck bool) {
 		logging.Fatal(ctx, err.Error())
 	}
 
-	logging.Infof(ctx, "x-stock exportor export %s succuss, latency:%#v", exportType, time.Now().Sub(beginTime))
+	selectorJSON, _ := json.MarshalIndent(selector, "", "    ")
+	fmt.Printf(
+		"x-stock exportor export %s succuss, latency:%#v with selector:%v",
+		exportType,
+		time.Now().Sub(beginTime),
+		string(selectorJSON),
+	)
 }

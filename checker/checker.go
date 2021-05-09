@@ -11,7 +11,7 @@ import (
 )
 
 // Check 对给定名称或代码进行检测，输出检测结果
-func Check(ctx context.Context, keywords []string) (map[string][][]string, error) {
+func Check(ctx context.Context, keywords []string, opts core.CheckerOptions) (map[string][][]string, error) {
 	searcher := core.NewSearcher(ctx)
 	stocks, err := searcher.Search(ctx, keywords)
 	if err != nil {
@@ -22,8 +22,8 @@ func Check(ctx context.Context, keywords []string) (map[string][][]string, error
 	}
 	results := map[string][][]string{}
 	for _, stock := range stocks {
-		checker := core.NewChecker(ctx, stock)
-		defects := checker.CheckFundamentals(ctx)
+		checker := core.NewChecker(ctx, opts)
+		defects := checker.CheckFundamentals(ctx, stock)
 		table := newTable()
 		k := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
 		if len(defects) > 0 {

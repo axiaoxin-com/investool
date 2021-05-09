@@ -135,8 +135,10 @@ func (e Exportor) ExportExcel(ctx context.Context, filename string) (result []by
 	}
 
 	// 开始写数据
-
-	desc, _ := json.Marshal(e.Descriptions)
+	desc, _ := json.Marshal(map[string]interface{}{
+		"筛选条件": e.Selector.Filter,
+		"检测条件": e.Selector.Checker,
+	})
 	descStartCell, err := excelize.CoordinatesToCellName(1, stocksCount+3)
 	if err != nil {
 		logging.Error(ctx, "CoordinatesToCellName error:"+err.Error())
