@@ -12,7 +12,7 @@ import (
 )
 
 // VERSION 版本号
-const VERSION = "0.0.6"
+const VERSION = "0.0.7"
 
 var (
 	// DefaultLoglevel 日志级别默认值
