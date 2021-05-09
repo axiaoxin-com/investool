@@ -21,7 +21,7 @@ type CheckerOptions struct {
 	// ROE 高于该值时不做连续增长检查
 	NoCheckYearsROE float64 `json:"no_check_years_roe"`
 	// 最大资产负债率百分比(%)
-	MaxDebtAssetRatio float64 `json:"max_debt_ratio"`
+	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"`
 	// 最大历史波动率
 	MaxHV float64 `json:"min_hv"`
 	// 最小市值（亿）

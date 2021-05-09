@@ -52,7 +52,7 @@ func FlagsCheckerOptions() []cli.Flag {
 			DefaultText: "20.0",
 		},
 		&cli.Float64Flag{
-			Name:        "checker.max_debt_ratio",
+			Name:        "checker.max_debt_asset_ratio",
 			Value:       60.0,
 			Usage:       "最大资产负债率百分比(%)",
 			DefaultText: "60.0",

@@ -3,7 +3,6 @@ package exportor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path"
@@ -88,11 +87,10 @@ func Export(ctx context.Context, exportFilename string, selector core.Selector) 
 		logging.Fatal(ctx, err.Error())
 	}
 
-	selectorJSON, _ := json.MarshalIndent(selector, "", "    ")
 	fmt.Printf(
-		"x-stock exportor export %s succuss, latency:%#v with selector:%v",
+		"\nx-stock exportor export %s succuss, total:%d latency:%#vs\n",
 		exportType,
-		time.Now().Sub(beginTime),
-		string(selectorJSON),
+		len(stocks),
+		time.Now().Sub(beginTime).Seconds(),
 	)
 }
