@@ -123,13 +123,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		"ok":   fmt.Sprint(itemOK),
 	}
 
-	// EPS 至少 n 年内逐年递增
+	// EPS 至少 n 年内逐年递增且 > 0
 	epsList := stock.HistoricalFinaMainData.ValueList(ctx, "EPS", c.Options.CheckYears)
-	checkItemName = "EPS 逐年递增"
+	checkItemName = "EPS 逐年递增且 > 0"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内 EPS:%+v", c.Options.CheckYears, epsList)
-	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", c.Options.CheckYears) {
-		desc = fmt.Sprintf("%d 年内未逐年递增:%+v", c.Options.CheckYears, epsList)
+	if epsList[len(epsList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", c.Options.CheckYears) {
 		ok = false
 		itemOK = false
 	}
@@ -138,13 +137,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		"ok":   fmt.Sprint(itemOK),
 	}
 
-	// 营业总收入至少 n 年内逐年递增
+	// 营业总收入至少 n 年内逐年递增且 > 0
 	revList := stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", c.Options.CheckYears)
-	checkItemName = "营收逐年递增"
+	checkItemName = "营收逐年递增且 > 0"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内营收:%+v", c.Options.CheckYears, revList)
-	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
-		desc = fmt.Sprintf("%d 年内未逐年递增:%+v", c.Options.CheckYears, revList)
+	if revList[len(revList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
 		ok = false
 		itemOK = false
 	}
@@ -155,11 +153,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 
 	// 净利润至少 n 年内逐年递增
 	netprofitList := stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", c.Options.CheckYears)
-	checkItemName = "净利润逐年递增"
+	checkItemName = "净利润逐年递增且 > 0"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内净利润:%+v", c.Options.CheckYears, netprofitList)
-	if !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
-		desc = fmt.Sprintf("%d 年内未逐年递增:%+v", c.Options.CheckYears, netprofitList)
+	if netprofitList[len(netprofitList)-1] <= 0 ||
+		!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
 		ok = false
 		itemOK = false
 	}
