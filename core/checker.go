@@ -51,7 +51,7 @@ type CheckerOptions struct {
 // DefaultCheckerOptions 默认检测值
 var DefaultCheckerOptions = CheckerOptions{
 	MinROE:              8.0,
-	CheckYears:          5,
+	CheckYears:          3,
 	NoCheckYearsROE:     20.0,
 	MaxDebtAssetRatio:   60.0,
 	MaxHV:               1.0,
@@ -60,8 +60,8 @@ var DefaultCheckerOptions = CheckerOptions{
 	BankMinZBCZL:        8.0,
 	BankMaxBLDKL:        3.0,
 	BankMinBLDKBBFGL:    100.0,
-	IsCheckJLLStability: true,
-	IsCheckMLLStability: true,
+	IsCheckJLLStability: false,
+	IsCheckMLLStability: false,
 	IsCheckPriceByCalc:  false,
 	MaxPEG:              1.5,
 	MinBYYSRatio:        0.9,
@@ -344,7 +344,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		checkItemName = "毛利率稳定性"
 		itemOK = true
 		desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
-		if stock.HistoricalFinaMainData.IsStability(ctx, "MLL", c.Options.CheckYears) {
+		if !stock.HistoricalFinaMainData.IsStability(ctx, "MLL", c.Options.CheckYears) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, mllList)
 			ok = false
 			itemOK = false
@@ -361,7 +361,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		checkItemName = "净利率稳定性"
 		itemOK = true
 		desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
-		if stock.HistoricalFinaMainData.IsStability(ctx, "JLL", c.Options.CheckYears) {
+		if !stock.HistoricalFinaMainData.IsStability(ctx, "JLL", c.Options.CheckYears) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, jllList)
 			ok = false
 			itemOK = false

@@ -95,15 +95,15 @@ func FlagsCheckerOptions() []cli.Flag {
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_mll_stability",
-			Value:       true,
+			Value:       false,
 			Usage:       "是否检测毛利率稳定性",
-			DefaultText: "true",
+			DefaultText: "false",
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_jll_stability",
-			Value:       true,
+			Value:       false,
 			Usage:       "是否检测净利率稳定性",
-			DefaultText: "true",
+			DefaultText: "false",
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_price_by_calc",

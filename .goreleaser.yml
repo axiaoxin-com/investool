@@ -31,4 +31,4 @@ changelog:
       - '^docs:'
       - '^test:'
 env_files:
-  github_token: ~/.github_goreleaser_token
+  github_token: ~/.config/goreleaser/github_token
