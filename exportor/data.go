@@ -49,10 +49,14 @@ type Data struct {
 	TotalIncome interface{} `json:"total_income"              csv:"营业总收入"`
 	// 营业总收入同比增长
 	TotalIncomeTBZZ float64 `json:"total_income_tbzz"         csv:"营业总收入同比增长 (%)"`
+	// 近五年营收
+	TotalIncome5Y []float64 `json:"total_income_5y"           csv:"近五年营收"`
 	// 归属净利润
 	NetProfit interface{} `json:"net_profit"                csv:"归属净利润（元）"`
 	// 归属净利润同比增长 (%)
 	NetProfitTBZZ float64 `json:"net_profit_tbzz"           csv:"归属净利润同比增长 (%)"`
+	// 近五年净利润
+	NetProfit5Y []float64 `json:"net_profit_5y"             csv:"近五年净利润"`
 	// 最新股息率 (%)
 	ZXGXL float64 `json:"zxgxl"                     csv:"最新股息率 (%)"`
 	// 预约财报披露日期
@@ -95,6 +99,14 @@ type Data struct {
 	ValuationSXOL string `json:"valuation_sxol"            csv:" 市销率估值"`
 	// 市现率估值
 	ValuationSXNL string `json:"valuation_sxnl"            csv:"市现率估值"`
+	// 行业均值水平
+	HYJZSP string `json:"hyjzsp"                    csv:"行业均值水平"`
+	// 整体质地
+	ZTZD string `json:"ztzd"                      csv:"整体质地"`
+	// 近五年毛利率
+	MLL5Y []float64 `json:"mll_5y"                    csv:"近五年毛利率"`
+	// 近五年净利率
+	JLL5Y []float64 `json:"jll_5y"                    csv:"近五年净利率"`
 	// 上市时间
 	ListingDate string `json:"listing_date"              csv:"上市时间"`
 }
@@ -124,26 +136,29 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 
 	fina := stock.HistoricalFinaMainData[0]
 	return Data{
-		Name:                   stock.BaseInfo.SecurityNameAbbr,
-		Code:                   stock.BaseInfo.Secucode,
-		Industry:               stock.BaseInfo.Industry,
-		Keywords:               stock.CompanyProfile.KeywordsString(),
-		CompanyProfile:         stock.CompanyProfile.ProfileString(),
-		MainForms:              stock.CompanyProfile.MainFormsString(),
-		BYYSRatio:              stock.BYYSRatio,
-		ReportDateName:         fina.ReportDateName,
-		ReportOpinion:          reportOpinion,
-		JZPG:                   stock.JZPG.String(),
-		LatestROE:              fina.Roejq,
-		ROETBZZ:                fina.Roejqtz,
-		ROE5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "ROE", 5),
-		LatestEPS:              fina.Epsjb,
-		EPSTBZZ:                fina.Epsjbtz,
-		EPS5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "EPS", 5),
-		TotalIncome:            goutils.YiWanString(fina.Totaloperatereve),
-		TotalIncomeTBZZ:        fina.Totaloperaterevetz,
+		Name:            stock.BaseInfo.SecurityNameAbbr,
+		Code:            stock.BaseInfo.Secucode,
+		Industry:        stock.BaseInfo.Industry,
+		Keywords:        stock.CompanyProfile.KeywordsString(),
+		CompanyProfile:  stock.CompanyProfile.ProfileString(),
+		MainForms:       stock.CompanyProfile.MainFormsString(),
+		BYYSRatio:       stock.BYYSRatio,
+		ReportDateName:  fina.ReportDateName,
+		ReportOpinion:   reportOpinion,
+		JZPG:            stock.JZPG.String(),
+		LatestROE:       fina.Roejq,
+		ROETBZZ:         fina.Roejqtz,
+		ROE5Y:           stock.HistoricalFinaMainData.ValueList(ctx, "ROE", 5),
+		LatestEPS:       fina.Epsjb,
+		EPSTBZZ:         fina.Epsjbtz,
+		EPS5Y:           stock.HistoricalFinaMainData.ValueList(ctx, "EPS", 5),
+		TotalIncome:     goutils.YiWanString(fina.Totaloperatereve),
+		TotalIncomeTBZZ: fina.Totaloperaterevetz,
+		TotalIncome5Y:   stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", 5),
+
 		NetProfit:              goutils.YiWanString(fina.Parentnetprofit),
 		NetProfitTBZZ:          fina.Parentnetprofittz,
+		NetProfit5Y:            stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", 5),
 		ZXGXL:                  stock.BaseInfo.Zxgxl,
 		FZLDB:                  fina.Ld,
 		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
@@ -165,7 +180,12 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		ValuationSJL:           stock.ValuationMap["市净率"],
 		ValuationSXOL:          stock.ValuationMap["市销率"],
 		ValuationSXNL:          stock.ValuationMap["市现率"],
-		ListingDate:            stock.BaseInfo.ListingDate,
+		HYJZSP:                 stock.JZPG.GetValuationScore(),
+		ZTZD:                   stock.JZPG.GetValueTotalScore(),
+		MLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "MLL", 5),
+		JLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "JLL", 5),
+
+		ListingDate: stock.BaseInfo.ListingDate,
 	}
 }
 
