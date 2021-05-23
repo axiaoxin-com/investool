@@ -131,9 +131,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	checkItemName = "EPS 逐年递增且 > 0"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内 EPS:%+v", c.Options.CheckYears, epsList)
-	if epsList[len(epsList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", c.Options.CheckYears) {
-		ok = false
-		itemOK = false
+	if len(epsList) > 0 {
+		if epsList[len(epsList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", c.Options.CheckYears) {
+			ok = false
+			itemOK = false
+		}
 	}
 	result[checkItemName] = map[string]string{
 		"desc": desc,
@@ -149,9 +151,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		revs = append(revs, goutils.YiWanString(rev))
 	}
 	desc = fmt.Sprintf("%d 年内营收: %s", c.Options.CheckYears, strings.Join(revs, ", "))
-	if revList[len(revList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
-		ok = false
-		itemOK = false
+	if len(revList) > 0 {
+		if revList[len(revList)-1] <= 0 ||
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
+			ok = false
+			itemOK = false
+		}
 	}
 	result[checkItemName] = map[string]string{
 		"desc": desc,
@@ -167,10 +172,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		nps = append(nps, goutils.YiWanString(np))
 	}
 	desc = fmt.Sprintf("%d 年内净利润: %s", c.Options.CheckYears, strings.Join(nps, ", "))
-	if netprofitList[len(netprofitList)-1] <= 0 ||
-		!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
-		ok = false
-		itemOK = false
+	if len(netprofitList) > 0 {
+		if netprofitList[len(netprofitList)-1] <= 0 ||
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
+			ok = false
+			itemOK = false
+		}
 	}
 	result[checkItemName] = map[string]string{
 		"desc": desc,
@@ -244,20 +251,22 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	// 负债率低于 MaxDebtRatio （可选条件），金融股不检测该项
 	checkItemName = "负债率"
 	itemOK = true
-	fzl := stock.HistoricalFinaMainData[0].Zcfzl
-	desc = fmt.Sprintf("负债率:%f", fzl)
-	if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
-		if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
-			if fzl > c.Options.MaxDebtAssetRatio {
-				desc = fmt.Sprintf("负债率:%f 高于:%f", fzl, c.Options.MaxDebtAssetRatio)
-				ok = false
-				itemOK = false
+	if len(stock.HistoricalFinaMainData) > 0 {
+		fzl := stock.HistoricalFinaMainData[0].Zcfzl
+		desc = fmt.Sprintf("负债率:%f", fzl)
+		if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
+			if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
+				if fzl > c.Options.MaxDebtAssetRatio {
+					desc = fmt.Sprintf("负债率:%f 高于:%f", fzl, c.Options.MaxDebtAssetRatio)
+					ok = false
+					itemOK = false
+				}
 			}
 		}
-	}
-	result[checkItemName] = map[string]string{
-		"desc": desc,
-		"ok":   fmt.Sprint(itemOK),
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
+		}
 	}
 
 	// 历史波动率 （可选条件）
@@ -446,15 +455,17 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	// 负债流动比检测
 	checkItemName = "负债流动比"
 	itemOK = true
-	fzldb := stock.HistoricalFinaMainData[0].Ld
-	desc = fmt.Sprintf("最新负债流动比: %f", fzldb)
-	if fzldb < c.Options.MinFZLDB {
-		ok = false
-		itemOK = false
-	}
-	result[checkItemName] = map[string]string{
-		"desc": desc,
-		"ok":   fmt.Sprint(itemOK),
+	if len(stock.HistoricalFinaMainData) > 0 {
+		fzldb := stock.HistoricalFinaMainData[0].Ld
+		desc = fmt.Sprintf("最新负债流动比: %f", fzldb)
+		if fzldb < c.Options.MinFZLDB {
+			ok = false
+			itemOK = false
+		}
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
+		}
 	}
 
 	return
