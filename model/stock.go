@@ -45,7 +45,7 @@ type Stock struct {
 	// 本业营收比=营业利润/(营业利润+营业外收入)
 	BYYSRatio float64 `json:"byys_ratio"`
 	// 最新财报审计意见
-	FinaReportOpinion interface{} `json:"fina_report_opinion"`
+	FinaReportOpinion string `json:"fina_report_opinion"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1

@@ -41,9 +41,9 @@ func FlagsCheckerOptions() []cli.Flag {
 		},
 		&cli.IntFlag{
 			Name:        "checker.check_years",
-			Value:       3,
+			Value:       5,
 			Usage:       "连续增长年数",
-			DefaultText: "3",
+			DefaultText: "5",
 		},
 		&cli.Float64Flag{
 			Name:        "checker.no_check_years_roe",
@@ -107,9 +107,9 @@ func FlagsCheckerOptions() []cli.Flag {
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_price_by_calc",
-			Value:       false,
+			Value:       true,
 			Usage:       "是否使用估算合理价进行检测，高于估算价将被过滤",
-			DefaultText: "false",
+			DefaultText: "true",
 		},
 		&cli.Float64Flag{
 			Name:        "checker.max_peg",

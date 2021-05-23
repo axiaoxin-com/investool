@@ -21,7 +21,7 @@ import (
 )
 
 // PicChuckSize 每张图片最多展示股票数
-var PicChuckSize = 50
+var PicChuckSize = 40
 
 // ExportPic 导出股票名称+代码图片，一张图片最多 50 个，超过则导出多张图片
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {

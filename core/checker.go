@@ -51,7 +51,7 @@ type CheckerOptions struct {
 // DefaultCheckerOptions 默认检测值
 var DefaultCheckerOptions = CheckerOptions{
 	MinROE:              8.0,
-	CheckYears:          3,
+	CheckYears:          5,
 	NoCheckYearsROE:     20.0,
 	MaxDebtAssetRatio:   60.0,
 	MaxHV:               1.0,
@@ -62,7 +62,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	BankMinBLDKBBFGL:    100.0,
 	IsCheckJLLStability: false,
 	IsCheckMLLStability: false,
-	IsCheckPriceByCalc:  false,
+	IsCheckPriceByCalc:  true,
 	MaxPEG:              1.5,
 	MinBYYSRatio:        0.9,
 	MaxBYYSRatio:        1.1,
@@ -141,7 +141,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	revList := stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", c.Options.CheckYears)
 	checkItemName = "营收逐年递增且 > 0"
 	itemOK = true
-	desc = fmt.Sprintf("%d 年内营收:%+v", c.Options.CheckYears, revList)
+	revs := []string{}
+	for _, rev := range revList {
+		revs = append(revs, goutils.YiWanString(rev))
+	}
+	desc = fmt.Sprintf("%d 年内营收: %s", c.Options.CheckYears, strings.Join(revs, ", "))
 	if revList[len(revList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
 		ok = false
 		itemOK = false
@@ -155,7 +159,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	netprofitList := stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", c.Options.CheckYears)
 	checkItemName = "净利润逐年递增且 > 0"
 	itemOK = true
-	desc = fmt.Sprintf("%d 年内净利润:%+v", c.Options.CheckYears, netprofitList)
+	nps := []string{}
+	for _, np := range netprofitList {
+		nps = append(nps, goutils.YiWanString(np))
+	}
+	desc = fmt.Sprintf("%d 年内净利润: %s", c.Options.CheckYears, strings.Join(nps, ", "))
 	if netprofitList[len(netprofitList)-1] <= 0 ||
 		!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
 		ok = false
@@ -216,53 +224,53 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	}
 
 	// 股价低于合理价格
+	checkItemName = "合理股价"
+	itemOK = true
+	desc = fmt.Sprintf("最新股价:%f 合理价:%f", stock.GetPrice(), stock.RightPrice)
 	if c.Options.IsCheckPriceByCalc {
-		checkItemName = "合理股价"
-		itemOK = true
-		desc = fmt.Sprintf("最新股价:%f 合理价:%f", stock.GetPrice(), stock.RightPrice)
 		if stock.RightPrice != -1 && stock.GetPrice() > stock.RightPrice {
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 负债率低于 MaxDebtRatio （可选条件），金融股不检测该项
+	checkItemName = "负债率"
+	itemOK = true
+	fzl := stock.HistoricalFinaMainData[0].Zcfzl
+	desc = fmt.Sprintf("负债率:%f", fzl)
 	if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
 		if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
-			checkItemName = "负债率"
-			itemOK = true
-			fzl := stock.HistoricalFinaMainData[0].Zcfzl
-			desc = fmt.Sprintf("负债率:%f", fzl)
 			if fzl > c.Options.MaxDebtAssetRatio {
 				desc = fmt.Sprintf("负债率:%f 高于:%f", fzl, c.Options.MaxDebtAssetRatio)
 				ok = false
 				itemOK = false
 			}
-			result[checkItemName] = map[string]string{
-				"desc": desc,
-				"ok":   fmt.Sprint(itemOK),
-			}
 		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 历史波动率 （可选条件）
+	checkItemName = "历史波动率"
+	itemOK = true
+	desc = fmt.Sprintf("历史波动率:%f", stock.HistoricalVolatility)
 	if c.Options.MaxHV != 0 {
-		checkItemName = "历史波动率"
-		itemOK = true
-		desc = fmt.Sprintf("历史波动率:%f", stock.HistoricalVolatility)
 		if stock.HistoricalVolatility > c.Options.MaxHV {
 			desc = fmt.Sprintf("历史波动率:%f 高于:%f", stock.HistoricalVolatility, c.Options.MaxHV)
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 市值
@@ -309,19 +317,19 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 			"ok":   fmt.Sprint(itemOK),
 		}
 
+		checkItemName = "不良贷款率"
+		itemOK = true
+		desc = fmt.Sprintf("不良贷款率:%f", fmd.Newcapitalader)
 		if c.Options.BankMaxBLDKL != 0 {
-			checkItemName = "不良贷款率"
-			itemOK = true
-			desc = fmt.Sprintf("不良贷款率:%f", fmd.Newcapitalader)
 			if fmd.NonPerLoan > c.Options.BankMaxBLDKL {
 				desc = fmt.Sprintf("不良贷款率:%f 高于:%f", fmd.Newcapitalader, c.Options.BankMinZBCZL)
 				ok = false
 				itemOK = false
 			}
-			result[checkItemName] = map[string]string{
-				"desc": desc,
-				"ok":   fmt.Sprint(itemOK),
-			}
+		}
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
 		}
 
 		checkItemName = "不良贷款拨备覆盖率"
@@ -339,85 +347,97 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	}
 
 	// 毛利率稳定性 （只检测非金融股）
+	mllList := stock.HistoricalFinaMainData.ValueList(ctx, "MLL", c.Options.CheckYears)
+	checkItemName = "毛利率"
+	itemOK = true
+	desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
 	if c.Options.IsCheckMLLStability && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
-		mllList := stock.HistoricalFinaMainData.ValueList(ctx, "MLL", c.Options.CheckYears)
-		checkItemName = "毛利率稳定性"
-		itemOK = true
-		desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
 		if !stock.HistoricalFinaMainData.IsStability(ctx, "MLL", c.Options.CheckYears) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, mllList)
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 净利率稳定性
+	jllList := stock.HistoricalFinaMainData.ValueList(ctx, "JLL", c.Options.CheckYears)
+	checkItemName = "净利率"
+	itemOK = true
+	desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
 	if c.Options.IsCheckMLLStability {
-		jllList := stock.HistoricalFinaMainData.ValueList(ctx, "JLL", c.Options.CheckYears)
-		checkItemName = "净利率稳定性"
-		itemOK = true
-		desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
 		if !stock.HistoricalFinaMainData.IsStability(ctx, "JLL", c.Options.CheckYears) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, jllList)
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// PEG
+	checkItemName = "PEG"
+	itemOK = true
+	desc = fmt.Sprintf("PEG:%v", stock.PEG)
 	if c.Options.MaxPEG != 0 {
-		checkItemName = "PEG"
-		itemOK = true
-		desc = fmt.Sprintf("PEG:%v", stock.PEG)
 		if stock.PEG > c.Options.MaxPEG {
 			desc = fmt.Sprintf("PEG:%v 高于:%v", stock.PEG, c.Options.MaxPEG)
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 本业营收比
+	checkItemName = "本业营收比"
+	itemOK = true
+	desc = fmt.Sprintf("当前本业营收比:%v", stock.BYYSRatio)
 	if c.Options.MinBYYSRatio != 0 && c.Options.MaxBYYSRatio != 0 {
-		checkItemName = "本业营收比"
-		itemOK = true
-		desc = fmt.Sprintf("当前本业营收比:%v", stock.BYYSRatio)
 		if stock.BYYSRatio > c.Options.MaxBYYSRatio || stock.BYYSRatio < c.Options.MinBYYSRatio {
 			desc = fmt.Sprintf("当前本业营收比:%v 超出范围:%v-%v", stock.BYYSRatio, c.Options.MinBYYSRatio, c.Options.MaxBYYSRatio)
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 审计意见
-	if stock.FinaReportOpinion != nil {
-		checkItemName = "财报审计意见"
-		itemOK = true
-		opinion := stock.FinaReportOpinion.(string)
-		desc = opinion
-		if opinion != "标准无保留意见" {
+	checkItemName = "财报审计意见"
+	itemOK = true
+	desc = stock.FinaReportOpinion
+	if stock.FinaReportOpinion != "" {
+		if stock.FinaReportOpinion != "标准无保留意见" {
 			ok = false
 			itemOK = false
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
+	}
+
+	// 配发股利股息
+	checkItemName = "配发股利股息"
+	itemOK = true
+	desc = fmt.Sprintf("最新股息率: %f", stock.BaseInfo.Zxgxl)
+	if stock.BaseInfo.Zxgxl == 0 {
+		ok = false
+		itemOK = false
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	return

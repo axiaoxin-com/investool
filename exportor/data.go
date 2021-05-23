@@ -112,7 +112,7 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		rightPrice = stock.RightPrice
 		priceSpace = stock.RightPrice - stock.GetPrice()
 	}
-	if stock.FinaReportOpinion != nil {
+	if stock.FinaReportOpinion != "" {
 		reportOpinion = stock.FinaReportOpinion
 	}
 

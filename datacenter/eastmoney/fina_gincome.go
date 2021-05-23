@@ -217,7 +217,7 @@ type GincomeData struct {
 	TciBalanceYoy                interface{} `json:"TCI_BALANCE_YOY"`
 	AcfEndIncome                 interface{} `json:"ACF_END_INCOME"`
 	AcfEndIncomeYoy              interface{} `json:"ACF_END_INCOME_YOY"`
-	OpinionType                  interface{} `json:"OPINION_TYPE"`
+	OpinionType                  string      `json:"OPINION_TYPE"`
 }
 
 // GincomeDataList 利润表历史数据
