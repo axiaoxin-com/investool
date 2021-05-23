@@ -129,6 +129,12 @@ func FlagsCheckerOptions() []cli.Flag {
 			Usage:       "最大本业营收比",
 			DefaultText: "1.1",
 		},
+		&cli.Float64Flag{
+			Name:        "checker.min_fzldb",
+			Value:       1.0,
+			Usage:       "最小负债流动比",
+			DefaultText: "1.0",
+		},
 	}
 }
 
@@ -151,6 +157,7 @@ func NewCheckerOptions(c *cli.Context) core.CheckerOptions {
 	checkerOpts.MaxPEG = c.Float64("checker.max_peg")
 	checkerOpts.MinBYYSRatio = c.Float64("checker.min_byys_ratio")
 	checkerOpts.MaxBYYSRatio = c.Float64("checker.max_byys_ratio")
+	checkerOpts.MinFZLDB = c.Float64("checker.min_fzldb")
 	return checkerOpts
 }
 

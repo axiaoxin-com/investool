@@ -46,6 +46,8 @@ type CheckerOptions struct {
 	MinBYYSRatio float64 `json:"min_byys_ratio"`
 	// 最大本业营收比
 	MaxBYYSRatio float64 `json:"max_byys_ratio"`
+	// 最小负债流动比
+	MinFZLDB float64 `json:"min_fzldb"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -66,6 +68,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	MaxPEG:              1.5,
 	MinBYYSRatio:        0.9,
 	MaxBYYSRatio:        1.1,
+	MinFZLDB:            1,
 }
 
 // Checker 检测器实例
@@ -432,6 +435,20 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 	itemOK = true
 	desc = fmt.Sprintf("最新股息率: %f", stock.BaseInfo.Zxgxl)
 	if stock.BaseInfo.Zxgxl == 0 {
+		ok = false
+		itemOK = false
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
+	}
+
+	// 负债流动比检测
+	checkItemName = "负债流动比"
+	itemOK = true
+	fzldb := stock.HistoricalFinaMainData[0].Ld
+	desc = fmt.Sprintf("最新负债流动比: %f", fzldb)
+	if fzldb < c.Options.MinFZLDB {
 		ok = false
 		itemOK = false
 	}
