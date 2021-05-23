@@ -37,10 +37,14 @@ type Data struct {
 	LatestROE float64 `json:"latest_roe"                csv:"最新一期 ROE"`
 	// ROE 同比增长
 	ROETBZZ float64 `json:"roe_tbzz"                  csv:"ROE 同比增长 (%)"`
+	// 近五年 ROE
+	ROE5Y []float64 `json:"roe_5y"                    csv:"近五年 ROE"`
 	// 最新一期 EPS
 	LatestEPS float64 `json:"latest_eps"                csv:"最新一期 EPS"`
 	// EPS 同比增长
 	EPSTBZZ float64 `json:"eps_tbzz"                  csv:"EPS 同比增长 (%)"`
+	// 近五年 EPS
+	EPS5Y []float64 `json:"eps_5y"                    csv:"近五年 EPS"`
 	// 营业总收入
 	TotalIncome interface{} `json:"total_income"              csv:"营业总收入"`
 	// 营业总收入同比增长
@@ -65,6 +69,8 @@ type Data struct {
 	HV float64 `json:"hv"                        csv:"历史波动率 (%)"`
 	// 最新负债率 (%)
 	ZXFZL float64 `json:"zxfzl"                     csv:"最新负债率 (%)"`
+	// 负债流动比
+	FZLDB float64 `json:"fzldb"                     csv:"负债流动比"`
 	// 净利润 3 年复合增长率 (%)
 	NetprofitGrowthrate3Y float64 `json:"netprofit_growthrate_3_y"  csv:"净利润 3 年复合增长率 (%)"`
 	// 营收 3 年复合增长率 (%)
@@ -130,13 +136,16 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		JZPG:                   stock.JZPG.String(),
 		LatestROE:              fina.Roejq,
 		ROETBZZ:                fina.Roejqtz,
+		ROE5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "ROE", 5),
 		LatestEPS:              fina.Epsjb,
 		EPSTBZZ:                fina.Epsjbtz,
+		EPS5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "EPS", 5),
 		TotalIncome:            goutils.YiWanString(fina.Totaloperatereve),
 		TotalIncomeTBZZ:        fina.Totaloperaterevetz,
 		NetProfit:              goutils.YiWanString(fina.Parentnetprofit),
 		NetProfitTBZZ:          fina.Parentnetprofittz,
 		ZXGXL:                  stock.BaseInfo.Zxgxl,
+		FZLDB:                  fina.Ld,
 		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
 		TotalMarketCap:         goutils.YiWanString(stock.BaseInfo.TotalMarketCap),
 		Price:                  stock.GetPrice(),
