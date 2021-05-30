@@ -9,7 +9,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/model"
+	"github.com/axiaoxin-com/x-stock/models"
 )
 
 // CheckerOptions 检测条件选项
@@ -92,7 +92,7 @@ type CheckResult map[string]map[string]string
 
 // CheckFundamentals 检测股票基本面
 // [[检测失败项, 原因], ...]
-func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (result CheckResult, ok bool) {
+func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (result CheckResult, ok bool) {
 	ok = true
 	result = make(CheckResult)
 	// ROE 高于 n%

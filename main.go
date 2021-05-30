@@ -1,3 +1,5 @@
+//go:generate swag init --dir ./ --generalInfo apis/apis.go --propertyStrategy snakecase --output ./apis/docs
+
 // Package main x-stock is my stock bot
 package main
 
@@ -7,7 +9,7 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/ui/cmds"
+	"github.com/axiaoxin-com/x-stock/cmds"
 	"github.com/urfave/cli/v2"
 )
 
@@ -18,7 +20,7 @@ var (
 	// DefaultLoglevel 日志级别默认值
 	DefaultLoglevel = "info"
 	// ProcessorOptions 要启动运行的进程可选项
-	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor}
+	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor, cmds.ProcessorWebserver}
 )
 
 func main() {
@@ -50,8 +52,8 @@ func main() {
 			Name:        "loglevel",
 			Aliases:     []string{"l"},
 			Value:       DefaultLoglevel,
-			Usage:       "日志级别 [debug|info|warn|error]",
-			EnvVars:     []string{"XSTOCK_LOGLEVEL"},
+			Usage:       "cmd 日志级别 [debug|info|warn|error]",
+			EnvVars:     []string{"XSTOCK_CMD_LOGLEVEL"},
 			DefaultText: DefaultLoglevel,
 		},
 	}
@@ -66,8 +68,10 @@ func main() {
 
 	app.Commands = append(app.Commands, cmds.CommandExportor())
 	app.Commands = append(app.Commands, cmds.CommandChecker())
+	app.Commands = append(app.Commands, cmds.CommandWebserver())
 
 	if err := app.Run(os.Args); err != nil {
 		logging.Fatal(nil, err.Error())
 	}
+
 }

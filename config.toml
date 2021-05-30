@@ -1,0 +1,271 @@
+#############################
+#                           #
+# viper web server 配置文件 #
+#                           #
+#############################
+
+
+
+########## 部署环境标志
+# 该值关联影响其他配置，如数据库， redis 等涉及不同环境的配置
+# 如 配置为 localhost ， 使用 goutils 获取 mysql 相关实例时将使用 [mysql.localhost] 的配置
+env = "localhost"
+
+
+
+########## server 相关配置
+[server]
+    # server 运行地址，支持 HTTP 端口 ":port" 或 UNIX Socket "unix:/file"
+    addr = ":4869"
+    # gin mode ，可选值： debug 、 test 、 release
+    mode = "debug"
+    # 开启 pprof
+    pprof = true
+    # 开启 prometheus metrics
+    metrics = true
+
+
+
+########## 静态文件相关配置
+[statics]
+    # 网页模板路径
+    tmplpath = "files/html/*"
+    # 静态文件 URL 路径，网页中通过 /statics/js/xx.js 访问资源，
+    url = "/statics"
+
+
+
+########## token bucket 请求频率限制配置
+[ratelimiter]
+    # 是否开启 ratelimiter 请求频率限制
+    enable = false
+    # 限频方式： mem->进程内存； redis.<WHICH>->使用用配置文件中对应的 redis 配置，如 redis.localhost
+    type = "mem"
+
+
+
+########## 日志相关配置
+[logging]
+    # 日志级别，可选值： debug info warn error dpanic panic fatal
+    level = "debug"
+    # 日志格式，可选值： json console
+    format = "json"
+    # 日志输出路径： stdout, stderr, logrotate:///path/to/logfile
+    output_paths = ["stdout"]
+    # 是否关闭打印 caller 字段
+    disable_caller = false
+    # 是否关闭打印 stacktrace 字段
+    disable_stacktrace = true
+
+    ## 动态修改日志级别 http 服务配置
+    [logging.atomic_level_server]
+        # http 服务端口
+        addr = ":4870"
+        # 接口 url path
+        path = "/"
+
+    ## 访问日志相关配置
+    [logging.access_logger]
+        # 打印更多访问信息字段
+        enable_details = false
+        # 打印 context 中的 keys 信息，慎用，推荐仅开发调试使用
+        enable_context_keys = false
+        # 打印请求 Header ，慎用，推荐仅开发调试使用
+        enable_request_header = false
+        # 打印请求的表单信息，慎用，推荐仅开发调试使用
+        enable_request_form = false
+        # 打印请求 body ，慎用，严重影响性能
+        enable_request_body = false
+        # 打印响应 body ，慎用，严重影响性能
+        enable_response_body = false
+        # 精确指定不打印日志的 path
+        skip_paths = []
+        # 正则表达式指定不打印日志的 path
+        skip_path_regexps = [
+            "/x/apidocs/.+\\.json",
+            "/x/apidocs/.+\\.js",
+            "/x/apidocs/.+\\.css",
+        ]
+        # 慢请求阈值（毫秒）请求处理时间大于该值使用 WARN 级别打印请求日志
+        slow_threshold = 200
+
+    ## 日志输出到文件时的 rotate 配置
+    # 示例： 若 logging.output_paths 配置为： logrotate:///tmp/x.log
+    # 日志会输出到文件 /tmp/x.log 并按以下策略进行 rotate
+    [logging.logrotate]
+        # 备份文件最大保存天数
+        max_age = 30
+        # 最大保存的备份文件数
+        max_backups = 10
+        # 最大日志文件大小 单位： M
+        max_size = 100
+        # 是否压缩备份文件
+        compress = true
+        # 压缩文件名是否使用 localtime
+        localtime = true
+
+
+
+########## sentry 相关配置
+[sentry]
+    # sentry dsn
+    dsn = ""
+    debug = true
+
+
+
+########## apidocs 相关配置
+[apidocs]
+    # 文档标题
+    title = "x-stock swagger apidocs"
+    # 文档描述
+    desc = "Using x-stock to develop gin app on fly."
+    # 请求地址，端口要和 server.addr 一致，浏览器访问时需要区分 127.0.0.1 和 localhost
+    host = "localhost:4869"
+    # 请求地址的 basepath
+    basepath = "/"
+    # 支持的请求 schemes
+    schemes = ["http"]
+
+
+
+########## basic auth 相关配置
+[basic_auth]
+    # 登录用户名
+    username = "admin"
+    # 登录密码
+    password = "admin"
+
+
+
+########## MySQL 相关配置
+# mysql 按不同环境可以添加多个配置
+[mysql]
+
+    # mysql localhost 环境
+    [mysql.localhost]
+        host = "localhost"
+        port = 3306
+        username = "root"
+        password = "roooooot"
+        dbname = "tests"
+        log_mode = false
+        max_idle_conns = 20
+        max_open_conns = 20
+        conn_max_life_minutes = 10
+        conn_timeout = 3
+        read_timeout = 5
+        write_timeout = 5
+
+    # mysql other 环境
+    [mysql.other]
+
+
+
+########## SQLite3 相关配置
+[sqlite3]
+
+    # sqlite3 dev 环境
+    [sqlite3.dev]
+        dbname = "sqlite3.dev.db"
+        log_mode = false
+
+
+
+########## Postgres 相关配置
+[postgres]
+
+    # postgres localhost 环境
+    [postgres.localhost]
+        host = "localhost"
+        port = 5432
+        username = "root"
+        password = "roooooot"
+        dbname = "test"
+        log_mode = false
+        max_idle_conns = 20
+        max_open_conns = 20
+        conn_max_life_minutes = 10
+        disable_ssl = true
+
+
+
+########## Sqlserver 相关配置
+[sqlserver]
+
+    # sqlserver localhost 环境
+    [sqlserver.localhost]
+        host = "localhost"
+        port = 1433
+        username = "root"
+        password = "roooooot"
+        dbname = "test"
+        log_mode = false
+        max_idle_conns = 20
+        max_open_conns = 20
+        conn_max_life_minutes = 10
+
+
+
+########## Redis 相关配置
+# redis 按不同连接类型和不同环境添加多个配置
+[redis]
+
+    ## Redis Client 相关配置
+    # Redis Client localhost 环境
+    [redis.localhost]
+        # redis 地址
+        addr = "localhost:6379"
+        # 密码
+        password = ""
+        # 使用的 db 索引
+        db = 0
+        # 连接超时时间（秒）
+        dial_timeout = 5
+        # 读超时（秒）
+        read_timeout = 3
+        # 写超时（秒）
+        write_timeout = 3
+        # 连接池大小: 0 表示 10 * runtime.NumCPU()
+        pool_size = 0
+
+    # Redis Client other 环境
+    [redis.other]
+
+
+    ## Redis Sentinel 相关配置
+    [redis.sentinel]
+
+        # Redis Sentinel prod 环境
+        [redis.sentinel.prod]
+            # master 节点名
+            master_name = ""
+            # sentinel 地址列表
+            sentinel_addrs = [""]
+            # 密码
+            password = ""
+            # db 索引
+            db = 0
+            # 连接超时时间（秒）
+            dial_timeout = 5
+            # 读超时（秒）
+            read_timeout = 3
+            # 写超时（秒）
+            write_timeout = 3
+            # 连接池大小: 0 表示 10 * runtime.NumCPU()
+            pool_size = 0
+
+
+    ## Redis Cluster 相关配置
+    [redis.cluster]
+
+        # Redis Cluster prod 环境
+        [redis.cluster.prod]
+            # 集群节点地址列表
+            addrs = [""]
+            # 密码
+            password = ""
+            # 读超时（秒）
+            read_timeout = 3
+            # 写超时（秒）
+            write_timeout = 3

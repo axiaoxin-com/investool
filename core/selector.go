@@ -21,7 +21,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/model"
+	"github.com/axiaoxin-com/x-stock/models"
 	"go.uber.org/zap"
 )
 
@@ -43,7 +43,7 @@ func NewSelector(ctx context.Context, filter eastmoney.Filter, checker *Checker)
 }
 
 // AutoFilterStocks 按默认设置自动筛选股票
-func (s Selector) AutoFilterStocks(ctx context.Context) (result model.StockList, err error) {
+func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList, err error) {
 	stocks, err := datacenter.EastMoney.QuerySelectedStocksWithFilter(ctx, s.Filter)
 	if err != nil {
 		return
@@ -68,7 +68,7 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result model.StockList,
 				}
 			}()
 
-			stock, err := model.NewStock(ctx, baseInfo, false)
+			stock, err := models.NewStock(ctx, baseInfo, false)
 			if err != nil {
 				logging.Error(ctx, "NewStock error:"+err.Error())
 				return

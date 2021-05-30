@@ -9,7 +9,7 @@ import (
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/datacenter/qq"
-	"github.com/axiaoxin-com/x-stock/model"
+	"github.com/axiaoxin-com/x-stock/models"
 )
 
 // Searcher 搜索器实例
@@ -21,7 +21,7 @@ func NewSearcher(ctx context.Context) Searcher {
 }
 
 // Search 按股票名或代码搜索股票
-func (c Searcher) Search(ctx context.Context, keywords []string) (model.StockList, error) {
+func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockList, error) {
 	// 根据关键词匹配股票代码
 	matchedResults := []qq.SearchResult{}
 	for _, kw := range keywords {
@@ -46,11 +46,11 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (model.StockLis
 	if err != nil {
 		return nil, err
 	}
-	results := model.StockList{}
+	results := models.StockList{}
 	for _, stock := range stocks {
-		mstock, err := model.NewStock(ctx, stock, false)
+		mstock, err := models.NewStock(ctx, stock, false)
 		if err != nil {
-			logging.Errorf(ctx, "%s new model stock error:%v", stock.SecurityCode, err.Error())
+			logging.Errorf(ctx, "%s new models stock error:%v", stock.SecurityCode, err.Error())
 			continue
 		}
 		results = append(results, mstock)
