@@ -265,6 +265,7 @@ OPTIONS:
 检测结果：
 
 ![](./docs/checker.png)
+![](./docs/checker2.png)
 
 ## 欢迎 Star
 
