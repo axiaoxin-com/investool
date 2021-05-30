@@ -135,6 +135,12 @@ func FlagsCheckerOptions() []cli.Flag {
 			Usage:       "最小负债流动比",
 			DefaultText: "1.0",
 		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_cashflow",
+			Value:       false,
+			Usage:       "是否检测现金流量",
+			DefaultText: "false",
+		},
 	}
 }
 
@@ -158,6 +164,7 @@ func NewCheckerOptions(c *cli.Context) core.CheckerOptions {
 	checkerOpts.MinBYYSRatio = c.Float64("checker.min_byys_ratio")
 	checkerOpts.MaxBYYSRatio = c.Float64("checker.max_byys_ratio")
 	checkerOpts.MinFZLDB = c.Float64("checker.min_fzldb")
+	checkerOpts.IsCheckCashflow = c.Bool("checker.is_check_cashflow")
 	return checkerOpts
 }
 
