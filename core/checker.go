@@ -71,7 +71,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	MinBYYSRatio:        0.9,
 	MaxBYYSRatio:        1.1,
 	MinFZLDB:            1,
-	IsCheckCashflow:     true,
+	IsCheckCashflow:     false,
 }
 
 // Checker 检测器实例
