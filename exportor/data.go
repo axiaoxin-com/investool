@@ -59,8 +59,12 @@ type Data struct {
 	NetProfit5Y []float64 `json:"net_profit_5y"             csv:"近五年净利润"`
 	// 最新股息率 (%)
 	ZXGXL float64 `json:"zxgxl"                     csv:"最新股息率 (%)"`
+	// 财报披露日期
+	FinaReportDate string `json:"fina_report_date"          csv:"财报披露日期"`
 	// 预约财报披露日期
 	FinaAppointPublishDate string `json:"fina_appoint_publish_date" csv:"预约财报披露日期"`
+	// 实际财报披露日期
+	FinaActualPublishDate string `json:"fina_actual_publish_date"  csv:"实际财报披露日期"`
 	// 总市值（字符串）
 	TotalMarketCap interface{} `json:"total_market_cap"          csv:"总市值"`
 	// 当时价格
@@ -109,6 +113,14 @@ type Data struct {
 	JLL5Y []float64 `json:"jll_5y"                    csv:"近五年净利率"`
 	// 上市时间
 	ListingDate string `json:"listing_date"              csv:"上市时间"`
+	// 最新经营活动产生的现金流量净额
+	NetcashOperate string `json:"netcash_operate"           csv:"经营现金流净额"`
+	// 最新投资活动产生的现金流量净额
+	NetcashInvest string `json:"netcash_invest"            csv:"投资现金流净额"`
+	// 最新筹资活动产生的现金流量净额
+	NetcashFinance string `json:"netcash_finance"           csv:"筹资现金流净额"`
+	// 自由现金流
+	NetcashFree string `json:"netcash_free"              csv:"自由现金流"`
 }
 
 // GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
@@ -161,7 +173,9 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		NetProfit5Y:            stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", 5),
 		ZXGXL:                  stock.BaseInfo.Zxgxl,
 		FZLDB:                  fina.Ld,
+		FinaReportDate:         strings.Fields(stock.FinaReportDate)[0],
 		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
+		FinaActualPublishDate:  strings.Fields(stock.FinaActualPublishDate)[0],
 		TotalMarketCap:         goutils.YiWanString(stock.BaseInfo.TotalMarketCap),
 		Price:                  stock.GetPrice(),
 		RightPrice:             rightPrice,
@@ -185,7 +199,11 @@ func NewData(ctx context.Context, stock model.Stock) Data {
 		MLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "MLL", 5),
 		JLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "JLL", 5),
 
-		ListingDate: stock.BaseInfo.ListingDate,
+		ListingDate:    stock.BaseInfo.ListingDate,
+		NetcashOperate: goutils.YiWanString(stock.NetcashOperate),
+		NetcashInvest:  goutils.YiWanString(stock.NetcashInvest),
+		NetcashFinance: goutils.YiWanString(stock.NetcashFinance),
+		NetcashFree:    goutils.YiWanString(stock.NetcashFree),
 	}
 }
 

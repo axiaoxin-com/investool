@@ -23,8 +23,8 @@ func TestQueryHistoricalFinaMainData(t *testing.T) {
 	t.Log("eps mid:", em, " roe mid:", rm)
 }
 
-func TestQueryAppointFinaPublishDate(t *testing.T) {
-	date, err := _em.QueryAppointFinaPublishDate(_ctx, "000026")
+func TestQueryFinaPublishDateList(t *testing.T) {
+	date, err := _em.QueryFinaPublishDateList(_ctx, "000026")
 	require.Nil(t, err)
 	t.Log("pubdate:", date)
 }

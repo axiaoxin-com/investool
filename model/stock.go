@@ -32,6 +32,10 @@ type Stock struct {
 	CompanyProfile eastmoney.CompanyProfile `json:"company_profile"`
 	// 预约财报披露日期
 	FinaAppointPublishDate string `json:"fina_appoint_publish_date"`
+	// 实际财报披露日期
+	FinaActualPublishDate string `json:"fina_actual_publish_date"`
+	// 财报披露日期
+	FinaReportDate string `json:"fina_report_date"`
 	// 机构评级
 	OrgRatingList eastmoney.OrgRatingList `json:"org_rating_list"`
 	// 盈利预测
@@ -46,6 +50,16 @@ type Stock struct {
 	BYYSRatio float64 `json:"byys_ratio"`
 	// 最新财报审计意见
 	FinaReportOpinion string `json:"fina_report_opinion"`
+	// 历史现金流量表
+	HistoricalCashflowList eastmoney.CashflowDataList `json:"historical_cashdlow_list"`
+	// 最新经营活动产生的现金流量净额
+	NetcashOperate float64 `json:"netcash_operate"`
+	// 最新投资活动产生的现金流量净额
+	NetcashInvest float64 `json:"netcash_invest"`
+	// 最新筹资活动产生的现金流量净额
+	NetcashFinance float64 `json:"netcash_finance"`
+	// 自由现金流
+	NetcashFree float64 `json:"netcash_free"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -168,14 +182,18 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 	s.CompanyProfile = cp
 
 	// 最新财报预约披露时间
-	finaPubDate, err := datacenter.EastMoney.QueryAppointFinaPublishDate(ctx, s.BaseInfo.SecurityCode)
+	finaPubDateList, err := datacenter.EastMoney.QueryFinaPublishDateList(ctx, s.BaseInfo.SecurityCode)
 	if err != nil {
 		if strict {
 			return s, err
 		}
 		logging.Warn(ctx, err.Error())
 	}
-	s.FinaAppointPublishDate = finaPubDate
+	if len(finaPubDateList) > 0 {
+		s.FinaAppointPublishDate = finaPubDateList[0].AppointPublishDate
+		s.FinaActualPublishDate = finaPubDateList[0].ActualPublishDate
+		s.FinaReportDate = finaPubDateList[0].ReportDate
+	}
 
 	// 机构评级统计
 	orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
@@ -225,6 +243,27 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		s.BYYSRatio = gincome.OperateProfit / (gincome.OperateProfit + gincome.NonbusinessIncome)
 		// 审计意见
 		s.FinaReportOpinion = gincome.OpinionType
+	}
+
+	// 现金流量表数据
+	cashflow, err := datacenter.EastMoney.QueryFinaCashflowData(ctx, s.BaseInfo.Secucode)
+	if err != nil {
+		if strict {
+			return s, err
+		}
+		logging.Warn(ctx, err.Error())
+	}
+	s.HistoricalCashflowList = cashflow
+	if len(s.HistoricalCashflowList) > 0 {
+		cf := s.HistoricalCashflowList[0]
+		s.NetcashOperate = cf.NetcashOperate
+		s.NetcashInvest = cf.NetcashInvest
+		s.NetcashFinance = cf.NetcashFinance
+		if cf.NetcashInvest < 0 {
+			s.NetcashFree = s.NetcashOperate + s.NetcashInvest
+		} else {
+			s.NetcashFree = s.NetcashOperate - s.NetcashInvest
+		}
 	}
 
 	return s, nil

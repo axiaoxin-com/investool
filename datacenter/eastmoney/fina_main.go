@@ -402,29 +402,35 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 	return resp.Result.Data, nil
 }
 
+// FinaPublishDate 财报发布时间
+type FinaPublishDate struct {
+	SecurityCode       string `json:"SECURITY_CODE"`
+	SecurityNameAbbr   string `json:"SECURITY_NAME_ABBR"`
+	AppointPublishDate string `json:"APPOINT_PUBLISH_DATE"`
+	ReportDate         string `json:"REPORT_DATE"`
+	ActualPublishDate  string `json:"ACTUAL_PUBLISH_DATE"`
+	ReportTypeName     string `json:"REPORT_TYPE_NAME"`
+	IsPublish          string `json:"IS_PUBLISH"`
+}
+
+// FinaPublishDateList 历史发布时间
+type FinaPublishDateList []FinaPublishDate
+
 // RespFinaPublishDate 财报披露日期接口返回结构
 type RespFinaPublishDate struct {
 	Version string `json:"version"`
 	Result  struct {
-		Pages int `json:"pages"`
-		Data  []struct {
-			SecurityCode       string      `json:"SECURITY_CODE"`
-			SecurityNameAbbr   string      `json:"SECURITY_NAME_ABBR"`
-			AppointPublishDate string      `json:"APPOINT_PUBLISH_DATE"`
-			ReportDate         string      `json:"REPORT_DATE"`
-			ActualPublishDate  interface{} `json:"ACTUAL_PUBLISH_DATE"`
-			ReportTypeName     string      `json:"REPORT_TYPE_NAME"`
-			IsPublish          string      `json:"IS_PUBLISH"`
-		} `json:"data"`
-		Count int `json:"count"`
+		Pages int                 `json:"pages"`
+		Data  FinaPublishDateList `json:"data"`
+		Count int                 `json:"count"`
 	} `json:"result"`
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Code    int    `json:"code"`
 }
 
-// QueryAppointFinaPublishDate 查询最新财报预约披露日期
-func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode string) (string, error) {
+// QueryFinaPublishDateList 查询最新财报披露日期
+func (e EastMoney) QueryFinaPublishDateList(ctx context.Context, securityCode string) (FinaPublishDateList, error) {
 	apiurl := "https://datacenter.eastmoney.com/api/data/get"
 	params := map[string]string{
 		"filter": fmt.Sprintf(`(SECURITY_CODE="%s")`, strings.ToUpper(securityCode)),
@@ -437,29 +443,26 @@ func (e EastMoney) QueryAppointFinaPublishDate(ctx context.Context, securityCode
 		"p":      "1",
 		"sr":     "-1,-1",
 	}
-	logging.Debug(ctx, "EastMoney QueryAppointFinaPublishDate "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryFinaPublishDate "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	resp := RespFinaPublishDate{}
 	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
-		"EastMoney QueryAppointFinaPublishDate "+apiurl+" end",
+		"EastMoney QueryFinaPublishDate "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	if resp.Code != 0 {
-		return "", fmt.Errorf("%s %#v", securityCode, resp)
+		return nil, fmt.Errorf("%s %#v", securityCode, resp)
 	}
-	if len(resp.Result.Data) > 0 {
-		return resp.Result.Data[0].AppointPublishDate, nil
-	}
-	return "", nil
+	return resp.Result.Data, nil
 }

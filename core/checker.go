@@ -48,6 +48,8 @@ type CheckerOptions struct {
 	MaxBYYSRatio float64 `json:"max_byys_ratio"`
 	// 最小负债流动比
 	MinFZLDB float64 `json:"min_fzldb"`
+	// 是否检测现金流量
+	IsCheckCashflow bool `json:"is_check_cashflow"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -69,6 +71,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	MinBYYSRatio:        0.9,
 	MaxBYYSRatio:        1.1,
 	MinFZLDB:            1,
+	IsCheckCashflow:     true,
 }
 
 // Checker 检测器实例
@@ -461,6 +464,37 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock model.Stock) (resu
 		if fzldb < c.Options.MinFZLDB {
 			ok = false
 			itemOK = false
+		}
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
+		}
+	}
+
+	// 现金流检测
+	checkItemName = "现金流量"
+	itemOK = true
+	if len(stock.HistoricalCashflowList) > 0 {
+		desc = fmt.Sprintf(
+			`经营活动产生的现金流量净额(>0): %s; 投资活动产生的现金流量净额(<0)：%s; 筹资活动产生的现金流量净额: %s; 自由现金流量(>0)：%s`,
+			goutils.YiWanString(stock.NetcashOperate),
+			goutils.YiWanString(stock.NetcashInvest),
+			goutils.YiWanString(stock.NetcashFinance),
+			goutils.YiWanString(stock.NetcashFree),
+		)
+		if c.Options.IsCheckCashflow {
+			if stock.NetcashOperate < 0 {
+				ok = false
+				itemOK = false
+			}
+			if stock.NetcashInvest > 0 {
+				ok = false
+				itemOK = false
+			}
+			if stock.NetcashFree < 0 {
+				ok = false
+				itemOK = false
+			}
 		}
 		result[checkItemName] = map[string]string{
 			"desc": desc,
