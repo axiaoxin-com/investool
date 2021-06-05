@@ -14,7 +14,7 @@
 
 # custom
 .DS_Store
-./dist/*
+dist/
 *.log
 
 x-stock
