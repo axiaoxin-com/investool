@@ -17,5 +17,6 @@
 dist/
 *.log
 config.prod.toml
+tmp/
 
 x-stock

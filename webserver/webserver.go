@@ -22,6 +22,9 @@ import (
 func InitWithConfigFile(configFile string) {
 	// 加载配置文件内容到 viper 中以便使用
 	configPath, file := path.Split(configFile)
+	if configPath == "" {
+		configPath = "."
+	}
 	ext := path.Ext(file)
 	configType := strings.Trim(ext, ".")
 	configName := strings.TrimSuffix(file, ext)

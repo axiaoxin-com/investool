@@ -1,15 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {
-            "name": "API Support",
-            "url": "http://github.com/axiaoxin-com/x-stock",
-            "email": "254606826@qq.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        }
+        "contact": {}
     },
     "paths": {
         "/x/ping": {
@@ -66,16 +58,6 @@
                     "type": "string"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "apikey",
-            "in": "header"
-        },
-        "BasicAuth": {
-            "type": "basic"
         }
     }
 }

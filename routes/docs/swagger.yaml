@@ -9,13 +9,7 @@ definitions:
         type: string
     type: object
 info:
-  contact:
-    email: 254606826@qq.com
-    name: API Support
-    url: http://github.com/axiaoxin-com/x-stock
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  contact: {}
 paths:
   /x/ping:
     get:
@@ -40,11 +34,4 @@ paths:
       summary: 默认的 Ping 接口
       tags:
       - x
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: apikey
-    type: apiKey
-  BasicAuth:
-    type: basic
 swagger: "2.0"
