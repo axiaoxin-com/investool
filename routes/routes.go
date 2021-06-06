@@ -1,6 +1,6 @@
 // 在这个文件中注册 URL handler
 
-package apis
+package routes
 
 import "github.com/gin-gonic/gin"
 

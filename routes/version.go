@@ -1,4 +1,4 @@
-package apis
+package routes
 
 const (
 	// Version api 版本号

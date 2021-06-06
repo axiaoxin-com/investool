@@ -1,4 +1,4 @@
-//go:generate swag init --dir ./ --generalInfo apis/apis.go --propertyStrategy snakecase --output ./apis/docs
+//go:generate swag init --dir ./ --generalInfo routes/routes.go --propertyStrategy snakecase --output ./routes/docs
 
 // Package main x-stock is my stock bot
 package main

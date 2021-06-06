@@ -4,8 +4,8 @@ package cmds
 
 import (
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/apis"
-	"github.com/axiaoxin-com/x-stock/apis/response"
+	"github.com/axiaoxin-com/x-stock/routes"
+	"github.com/axiaoxin-com/x-stock/routes/response"
 	"github.com/axiaoxin-com/x-stock/services"
 	"github.com/axiaoxin-com/x-stock/statics"
 	"github.com/axiaoxin-com/x-stock/webserver"
@@ -63,7 +63,7 @@ func ActionWebserver() func(c *cli.Context) error {
 		middlewares := DefaultGinMiddlewares()
 		server := webserver.NewGinEngine(&statics.Files, middlewares...)
 		// 注册路由
-		apis.Register(server)
+		routes.Register(server)
 		// 运行服务
 		webserver.Run(server)
 		return nil

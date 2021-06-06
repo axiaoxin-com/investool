@@ -1,9 +1,9 @@
 // 默认实现的 ping api
 
-package apis
+package routes
 
 import (
-	"github.com/axiaoxin-com/x-stock/apis/response"
+	"github.com/axiaoxin-com/x-stock/routes/response"
 	"github.com/axiaoxin-com/x-stock/services"
 
 	"github.com/gin-gonic/gin"
