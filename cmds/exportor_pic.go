@@ -27,7 +27,7 @@ var PicChuckSize = 15
 func (e Exportor) ExportPic(ctx context.Context, filename string) (result []byte, err error) {
 	bgColor, fgColor := image.White, image.Black
 	// set font
-	fontBytes, err := statics.Files.ReadFile("files/font/exportor.ttf")
+	fontBytes, err := statics.Files.ReadFile("font/exportor.ttf")
 	if err != nil {
 		err = errors.Wrap(err, "read embed file error")
 		return

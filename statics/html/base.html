@@ -1,0 +1,99 @@
+{{ define "header" }}
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="keywords" content="股票, 基本面, 技术面, 东方财富, 选股" />
+    <meta name="description" content="axiaoxin的股票工具" />
+    <meta name="author" content="axiaoxin" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no"
+    />
+
+    <link rel="icon" type="image/x-icon" href="https://example.com/favicon.ico" />
+    <title>x-stock | {{ .PageTitle }}</title>
+    <link rel="stylesheet" href="/statics/css/materialize.icon.css" />
+    <link type="text/css" rel="stylesheet" href="/statics/css/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="/statics/css/app.css" />
+</head>
+
+
+<body>
+<header>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>X-STOCK</a>
+            <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li class="active"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
+                <li><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <ul class="sidenav" id="mobile-sidenav">
+        <li>
+            <div class="user-view">
+                <div class="background">
+                    <img src="/statics/img/sidenav_bg.png">
+                </div>
+                <a href="/"><img class="circle" src="/statics/img/sidenav_icon.jpeg"></a>
+            </div>
+        </li>
+        <li class="">
+            <ul class="collapsible">
+                <li class="active">
+                    <a class="collapsible-header"><i class="material-icons left">trending_up</i>股票</a>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li><a href="#!">检测</a></li>
+                            <li><a href="#!">筛选</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><div class="divider"></div></li>
+                <li>
+                    <a class="collapsible-header"><i class="material-icons left">trending_up</i>基金</a>
+                    <div class="collapsible-body">
+                        <ul>
+                            <li><a href="#!">检测</a></li>
+                            <li><a href="#!">筛选</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</header>
+
+<main class="container">
+{{ end }}
+
+{{ define "footer" }}
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l3 s12">
+                <h5 class="white-text">友情链接</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="http://axiaoxin.com">阿小信的博客</a></li>
+                    <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com">MBTI在线测试</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=x-stock&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
+        <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> X-STOCK, All rights reserved.</p>
+    </div>
+</footer>
+<script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
+<script type="text/javascript" src="/statics/js/app.js" ></script>
+<script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</body>
+</html>
+{{ end }}

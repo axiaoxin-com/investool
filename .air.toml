@@ -2,7 +2,7 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  bin = "./tmp/main -c config.default.toml"
+  bin = "./tmp/main webserver -c config.prod.toml"
   cmd = "swag init --dir ./ --generalInfo routes/routes.go --propertyStrategy snakecase --output ./routes/docs && go build -o ./tmp/main ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "routes/docs"]

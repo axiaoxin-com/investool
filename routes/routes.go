@@ -8,4 +8,6 @@ import "github.com/gin-gonic/gin"
 func Routes(app *gin.Engine) {
 	// TODO: 在这里注册你的 gin API，如： app.GET("/", HandlerFunc)
 	app.GET("/", Index)
+	app.GET("/stock", Index)
+	app.GET("/fund", Fund)
 }
