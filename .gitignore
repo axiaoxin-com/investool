@@ -16,5 +16,6 @@
 .DS_Store
 dist/
 *.log
+config.prod.toml
 
 x-stock
