@@ -1,4 +1,12 @@
 {{ template "header" . }}
+<script>
+// 设置导航栏激活状态
+$(function () {
+    $("nav li").removeClass("active");
+    $("#nav_stock").addClass("active");
+});
+</script>
+
  <div class="row">
     <div class="col s12">
       <ul class="tabs">

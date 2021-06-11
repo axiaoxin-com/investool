@@ -14,6 +14,10 @@
 
     <link rel="icon" type="image/x-icon" href="https://example.com/favicon.ico" />
     <title>x-stock | {{ .PageTitle }}</title>
+    <script type="text/javascript" src="/statics/js/jquery-3.6.0.min.js" ></script>
+    <script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
+    <script type="text/javascript" src="/statics/js/app.js" ></script>
+
     <link rel="stylesheet" href="/statics/css/materialize.icon.css" />
     <link type="text/css" rel="stylesheet" href="/statics/css/materialize.min.css" media="screen,projection" />
     <link rel="stylesheet" href="/statics/css/app.css" />
@@ -27,8 +31,8 @@
             <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>X-STOCK</a>
             <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li class="active"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
-                <li><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                <li id="nav_stock" class="active"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
+                <li id="nav_fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
             </ul>
         </div>
     </nav>
@@ -39,13 +43,14 @@
                 <div class="background">
                     <img src="/statics/img/sidenav_bg.png">
                 </div>
-                <a href="/"><img class="circle" src="/statics/img/sidenav_icon.jpeg"></a>
+                <a href="#!"><img class="circle" src="/statics/img/sidenav_icon.png"></a>
+                <a href="#!"><span class="white-text">X-STOCK</span></a>
             </div>
         </li>
         <li class="">
             <ul class="collapsible">
-                <li class="active">
-                    <a class="collapsible-header"><i class="material-icons left">trending_up</i>股票</a>
+                <li>
+                    <a class="collapsible-header waves-effect waves-red"><i class="material-icons left">trending_up</i>股票</a>
                     <div class="collapsible-body">
                         <ul>
                             <li><a href="#!">检测</a></li>
@@ -55,7 +60,7 @@
                 </li>
                 <li><div class="divider"></div></li>
                 <li>
-                    <a class="collapsible-header"><i class="material-icons left">trending_up</i>基金</a>
+                    <a class="collapsible-header waves-effect waves-red"><i class="material-icons left">timeline</i>基金</a>
                     <div class="collapsible-body">
                         <ul>
                             <li><a href="#!">检测</a></li>
@@ -80,8 +85,8 @@
             <div class="col l3 s12">
                 <h5 class="white-text">友情链接</h5>
                 <ul>
-                    <li><a class="grey-text text-lighten-3" href="http://axiaoxin.com">阿小信的博客</a></li>
-                    <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com">MBTI在线测试</a></li>
+                    <li><a class="grey-text text-lighten-3" href="http://axiaoxin.com" target="_blank">阿小信的博客</a></li>
+                    <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com" target="_blank">MBTI在线测试</a></li>
                 </ul>
             </div>
         </div>
@@ -91,8 +96,7 @@
         <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> X-STOCK, All rights reserved.</p>
     </div>
 </footer>
-<script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
-<script type="text/javascript" src="/statics/js/app.js" ></script>
+
 <script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </body>
 </html>
