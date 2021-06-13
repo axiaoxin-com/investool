@@ -58,6 +58,14 @@
 </header>
 
 <main class="container">
+    {{ if .Error }}
+    <div class="section row">
+        <div class="chip orange lighten-1 col s12 center-align">
+            {{ .Error }}
+            <i class="close material-icons">close</i>
+        </div>
+    </div>
+    {{ end }}
 {{ end }}
 
 {{ define "footer" }}

@@ -15,41 +15,41 @@ import (
 // CheckerOptions 检测条件选项
 type CheckerOptions struct {
 	// 最新一期 ROE 不低于该值
-	MinROE float64 `json:"min_roe"                form:"min_roe"`
+	MinROE float64 `json:"min_roe"                form:"checker_min_roe"`
 	// 连续增长年数
-	CheckYears int `json:"check_years"            form:"check_years"`
+	CheckYears int `json:"check_years"            form:"checker_check_years"`
 	// ROE 高于该值时不做连续增长检查
-	NoCheckYearsROE float64 `json:"no_check_years_roe"     form:"no_check_years_roe"`
+	NoCheckYearsROE float64 `json:"no_check_years_roe"     form:"checker_no_check_years_roe"`
 	// 最大资产负债率百分比(%)
-	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"   form:"max_debt_asset_ratio"`
+	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"   form:"checker_max_debt_asset_ratio"`
 	// 最大历史波动率
-	MaxHV float64 `json:"min_hv"                 form:"max_hv"`
+	MaxHV float64 `json:"min_hv"                 form:"checker_max_hv"`
 	// 最小市值（亿）
-	MinTotalMarketCap float64 `json:"min_total_market_cap"   form:"min_total_market_cap"`
+	MinTotalMarketCap float64 `json:"min_total_market_cap"   form:"checker_min_total_market_cap"`
 	// 银行股最小 ROA
-	BankMinROA float64 `json:"bank_min_roa"           form:"bank_min_roa"`
+	BankMinROA float64 `json:"bank_min_roa"           form:"checker_bank_min_roa"`
 	// 银行股最小资本充足率
-	BankMinZBCZL float64 `json:"bank_min_zbczl"         form:"bank_min_zbczl"`
+	BankMinZBCZL float64 `json:"bank_min_zbczl"         form:"checker_bank_min_zbczl"`
 	// 银行股最大不良贷款率
-	BankMaxBLDKL float64 `json:"bank_max_bldkl"         form:"bank_max_bldkl"`
+	BankMaxBLDKL float64 `json:"bank_max_bldkl"         form:"checker_bank_max_bldkl"`
 	// 银行股最低不良贷款拨备覆盖率
-	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"     form:"bank_min_bldkbbfgl"`
+	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"     form:"checker_bank_min_bldkbbfgl"`
 	// 是否检测毛利率稳定性
-	IsCheckMLLStability bool `json:"is_check_mll_stability" form:"is_check_mll_stability"`
+	IsCheckMLLStability bool `json:"is_check_mll_stability" form:"checker_is_check_mll_stability"`
 	// 是否检测净利率稳定性
-	IsCheckJLLStability bool `json:"is_check_jll_stability" form:"is_check_jll_stability"`
+	IsCheckJLLStability bool `json:"is_check_jll_stability" form:"checker_is_check_jll_stability"`
 	// 是否使用估算合理价进行检测，高于估算价将被过滤
-	IsCheckPriceByCalc bool `json:"is_check_price_by_calc" form:"is_check_price_by_calc"`
+	IsCheckPriceByCalc bool `json:"is_check_price_by_calc" form:"checker_is_check_price_by_calc"`
 	// 最大 PEG
-	MaxPEG float64 `json:"max_peg"                form:"max_peg"`
+	MaxPEG float64 `json:"max_peg"                form:"checker_max_peg"`
 	// 最小本业营收比
-	MinBYYSRatio float64 `json:"min_byys_ratio"         form:"min_byys_ratio"`
+	MinBYYSRatio float64 `json:"min_byys_ratio"         form:"checker_min_byys_ratio"`
 	// 最大本业营收比
-	MaxBYYSRatio float64 `json:"max_byys_ratio"         form:"max_byys_ratio"`
+	MaxBYYSRatio float64 `json:"max_byys_ratio"         form:"checker_max_byys_ratio"`
 	// 最小负债流动比
-	MinFZLDB float64 `json:"min_fzldb"              form:"min_fzldb"`
+	MinFZLDB float64 `json:"min_fzldb"              form:"checker_min_fzldb"`
 	// 是否检测现金流量
-	IsCheckCashflow bool `json:"is_check_cashflow"      form:"is_check_cashflow"`
+	IsCheckCashflow bool `json:"is_check_cashflow"      form:"checker_is_check_cashflow"`
 }
 
 // DefaultCheckerOptions 默认检测值

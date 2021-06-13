@@ -1,12 +1,8 @@
 {{ template "header" . }}
-<script>
-// 设置导航栏激活状态
-$(function () {
-    $("nav li").removeClass("active");
-    $("#nav_stock").addClass("active");
-});
-</script>
 
-{{ .Param.FilterWithChecker  }}
+<div class="progress">
+    <div class="indeterminate"></div>
+</div>
+data: {{ . }}
 
 {{ template "footer" . }}

@@ -21,92 +21,92 @@ $(function () {
             <form class="col s12" method="POST" action="/checker">
                 <div class="row">
                     <div class="input-field col s12">
-                        <input name="keyword" type="text" class="validate" required>
-                        <label for="keyword">输入股票代码或简称</label>
+                        <input name="checker_keyword" type="text" class="validate" required>
+                        <label for="checker_keyword">输入股票代码或简称</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col l6 s12">
-                        <input name="min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
-                        <label for="min_roe">最新一期ROE最低值</label>
+                        <input name="checker_min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
+                        <label for="checker_min_roe">最新一期ROE最低值</label>
                     </div>
                     <div class="input-field col l6 s12">
-                        <input name="max_peg" type="number" class="validate" value="1.5" min="0" step="0.1">
-                        <label for="max_peg">最大PEG</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-field col l6 s12">
-                        <input name="check_years" type="number" class="validate" value="5" min="0" step="1">
-                        <label for="check_years">ROE,EPS,营收,利润连续增长年数</label>
-                    </div>
-                    <div class="input-field col l6 s12">
-                        <input name="no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
-                        <label for="no_check_years_roe">ROE高于该值跳过连续增长检测</label>
+                        <input name="checker_max_peg" type="number" class="validate" value="1.5" min="0" step="0.1">
+                        <label for="checker_max_peg">最大PEG</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col l6 s12">
-                        <input name="min_byys_ratio" type="number" class="validate" value="0.9" min="0" step="0.1">
-                        <label for="min_byys_ratio">最小本业营收比</label>
+                        <input name="checker_check_years" type="number" class="validate" value="5" min="0" step="1">
+                        <label for="checker_check_years">ROE,EPS,营收,利润连续增长年数</label>
                     </div>
                     <div class="input-field col l6 s12">
-                        <input name="max_byys_ratio" value="1.1" type="number" min="0" step="0.1" class="validate">
-                        <label for="max_byys_ratio">最大本业营收比</label>
+                        <input name="checker_no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
+                        <label for="checker_no_check_years_roe">ROE高于该值跳过连续增长检测</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col l6 s12">
+                        <input name="checker_min_byys_ratio" type="number" class="validate" value="0.9" min="0" step="0.1">
+                        <label for="checker_min_byys_ratio">最小本业营收比</label>
+                    </div>
+                    <div class="input-field col l6 s12">
+                        <input name="checker_max_byys_ratio" value="1.1" type="number" min="0" step="0.1" class="validate">
+                        <label for="checker_max_byys_ratio">最大本业营收比</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col l4 s12">
-                        <input name="min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
-                        <label for="min_total_market_cap">最小市值（亿）</label>
+                        <input name="checker_min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
+                        <label for="checker_min_total_market_cap">最小市值（亿）</label>
                     </div>
                     <div class="input-field col l4 s12">
-                        <input name="max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
-                        <label for="max_debt_asset_ratio">最大资产负债率(%)</label>
+                        <input name="checker_max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
+                        <label for="checker_max_debt_asset_ratio">最大资产负债率(%)</label>
                     </div>
                     <div class="input-field col l4 s12">
-                        <input name="min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
-                        <label for="min_hv">最大历史波动率</label>
+                        <input name="checker_min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
+                        <label for="checker_min_hv">最大历史波动率</label>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="input-field inline col l3 s12">
-                        <input name="bank_min_roa" type="number" class="validate" value="0.5" min="0" step="0.1">
-                        <label for="bank_min_roa">最小ROA</label>
+                        <input name="checker_bank_min_roa" type="number" class="validate" value="0.5" min="0" step="0.1">
+                        <label for="checker_bank_min_roa">最小ROA</label>
                         <span class="helper-text">仅针对银行股检测生效</span>
                     </div>
                     <div class="input-field inline col l3 s12">
-                        <input name="bank_min_zbczl" type="number" class="validate" value="8.0" min="0" step="0.5">
-                        <label for="bank_min_zbczl">最小资本充足率</label>
+                        <input name="checker_bank_min_zbczl" type="number" class="validate" value="8.0" min="0" step="0.5">
+                        <label for="checker_bank_min_zbczl">最小资本充足率</label>
                         <span class="helper-text">仅针对银行股检测生效</span>
                     </div>
                     <div class="input-field inline col l3 s12">
-                        <input name="bank_max_bldkl" type="number" class="validate" value="3.0" min="0" step="0.5">
-                        <label for="bank_max_bldkl">最大不良贷款率</label>
+                        <input name="checker_bank_max_bldkl" type="number" class="validate" value="3.0" min="0" step="0.5">
+                        <label for="checker_bank_max_bldkl">最大不良贷款率</label>
                         <span class="helper-text">仅针对银行股检测生效</span>
                     </div>
                     <div class="input-field inline col l3 s12">
-                        <input name="bank_min_bldkbbfgl" type="number" class="validate" value="100.0" min="0" step="1">
-                        <label for="bank_min_bldkbbfgl">最低不良贷款拨备覆盖率</label>
+                        <input name="checker_bank_min_bldkbbfgl" type="number" class="validate" value="100.0" min="0" step="1">
+                        <label for="checker_bank_min_bldkbbfgl">最低不良贷款拨备覆盖率</label>
                         <span class="helper-text">仅针对银行股检测生效</span>
                     </div>
                 </div>
                 <div class="row">
                     <label class="col l3 s12">
-                        <input name="is_check_cashflow" type="checkbox" class="filled-in" checked="checked" />
+                        <input name="checker_is_check_cashflow" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测现金流量</span>
                     </label>
                     <label class="col l3 s12">
-                        <input name="is_check_price_by_calc" type="checkbox" class="filled-in" checked="checked" />
+                        <input name="checker_is_check_price_by_calc" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测估算合理价</span>
                     </label>
                     <label class="col l3 s12">
-                        <input name="is_check_mll_stability" type="checkbox" class="filled-in" checked="checked" />
+                        <input name="checker_is_check_mll_stability" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测毛利率稳定性</span>
                     </label>
                     <label class="col l3 s12">
-                        <input name="is_check_jll_stability" type="checkbox" class="filled-in" checked="checked" />
+                        <input name="checker_is_check_jll_stability" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测净利率稳定性</span>
                     </label>
                 </div>
@@ -127,104 +127,195 @@ $(function () {
                     <div class="collection-item">
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
-                                <label for="min_roe">最新一期ROE最低值</label>
+                                <input name="selector_min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
+                                <label for="selector_min_roe">最新一期ROE最低值</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <input name="min_pb_new_mrq" type="number" class="validate" value="1.0" step="1">
-                                <label for="min_pb_new_mrq">最低市净率</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l6 s12">
-                                <input name="min_toi_yoy_ratio" value="0.0" type="number" step="1" class="validate">
-                                <label for="min_toi_yoy_ratio">最低营收增长率(%)</label>
-                            </div>
-                            <div class="input-field col l6 s12">
-                                <input name="min_netprofit_yoy_ratio" type="number" class="validate" value="0.0" step="1">
-                                <label for="min_netprofit_yoy_ratio">最低净利润增长率(%)</label>
+                                <input name="selector_min_pb_new_mrq" type="number" class="validate" value="1.0" step="1">
+                                <label for="selector_min_pb_new_mrq">最低市净率</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="min_netprofit_growthrate_3_y" value="0.0" type="number" step="1" class="validate">
-                                <label for="min_netprofit_growthrate_3_y">最低净利润3年复合增长率(%)</label>
+                                <input name="selector_min_toi_yoy_ratio" value="0.0" type="number" step="1" class="validate">
+                                <label for="selector_min_toi_yoy_ratio">最低营收增长率(%)</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <input name="min_income_growthrate_3_y" type="number" class="validate" value="0.0" step="1">
-                                <label for="min_income_growthrate_3_y">最低营收3年复合增长率(%)</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l6 s12">
-                                <input name="min_netprofit_yoy_ratio" type="number" class="validate" value="0.0" min="0" step="0.5">
-                                <label for="min_netprofit_yoy_ratio">最低最新股息率(%)</label>
-                            </div>
-                            <div class="input-field col l6 s12">
-                                <input name="min_listing_yield_year" value="0.0" type="number" min="0" step="0.5" class="validate">
-                                <label for="min_listing_yield_year">最低上市以来年化收益率(%)</label>
+                                <input name="selector_min_netprofit_yoy_ratio" type="number" class="validate" value="0.0" step="1">
+                                <label for="selector_min_netprofit_yoy_ratio">最低净利润增长率(%)</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="max_debt_asset_ratio" value="" placeholder="可选参数" type="number" class="validate" step="10">
-                                <label for="max_debt_asset_ratio">最大资产负债率(%)</label>
+                                <input name="selector_min_netprofit_growthrate_3_y" value="0.0" type="number" step="1" class="validate">
+                                <label for="selector_min_netprofit_growthrate_3_y">最低净利润3年复合增长率(%)</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <input name="min_total_market_cap" type="number" placeholder="可选参数" class="validate" value="" min="0" step="100">
-                                <label for="min_total_market_cap">最低总市值（亿）</label>
+                                <input name="selector_min_income_growthrate_3_y" type="number" class="validate" value="0.0" step="1">
+                                <label for="selector_min_income_growthrate_3_y">最低营收3年复合增长率(%)</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="min_roa" type="number" placeholder="可选参数" class="validate" value="" step="1">
-                                <label for="min_roa">最小ROA</label>
+                                <input name="selector_min_netprofit_yoy_ratio" type="number" class="validate" value="0.0" min="0" step="0.5">
+                                <label for="selector_min_netprofit_yoy_ratio">最低最新股息率(%)</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <select multiple name="industry_list">
+                                <input name="selector_min_listing_yield_year" value="0.0" type="number" min="0" step="0.5" class="validate">
+                                <label for="selector_min_listing_yield_year">最低上市以来年化收益率(%)</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6 s12">
+                                <input name="selector_max_debt_asset_ratio" value="" placeholder="可选参数" type="number" class="validate" step="10">
+                                <label for="selector_max_debt_asset_ratio">最大资产负债率(%)</label>
+                            </div>
+                            <div class="input-field col l6 s12">
+                                <input name="selector_min_total_market_cap" type="number" placeholder="可选参数" class="validate" value="" min="0" step="100">
+                                <label for="selector_min_total_market_cap">最低总市值（亿）</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6 s12">
+                                <input name="selector_min_roa" type="number" placeholder="可选参数" class="validate" value="" step="1">
+                                <label for="selector_min_roa">最小ROA</label>
+                            </div>
+                            <div class="input-field col l6 s12">
+                                <select multiple name="selector_industry_list">
                                     {{ range $industy_name := .IndustryList }}
                                     <option value="{{ $industy_name }}">{{ $industy_name }}</option>
                                     {{ end }}
                                 </select>
-                                <label for="industry_list">指定行业</label>
+                                <label for="selector_industry_list">指定行业</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="min_price" value="" placeholder="可选参数" type="number" min="0" step="5" class="validate">
-                                <label for="min_price">股价范围最小值（元）</label>
+                                <input name="selector_min_price" value="" placeholder="可选参数" type="number" min="0" step="5" class="validate">
+                                <label for="selector_min_price">股价范围最小值（元）</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <input name="max_price" type="number" placeholder="可选参数" class="validate" value="" step="5">
-                                <label for="max_price">股价范围最大值（元）</label>
+                                <input name="selector_max_price" type="number" placeholder="可选参数" class="validate" value="" step="5">
+                                <label for="selector_max_price">股价范围最大值（元）</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 s12">
-                                <input name="min_predict_netprofit_ratio" placeholder="可选参数" type="number" class="validate" value="" step="5">
-                                <label for="min_predict_netprofit_ratio">最低预测净利润同比增长(%)</label>
+                                <input name="selector_min_predict_netprofit_ratio" placeholder="可选参数" type="number" class="validate" value="" step="5">
+                                <label for="selector_min_predict_netprofit_ratio">最低预测净利润同比增长(%)</label>
                             </div>
                             <div class="input-field col l6 s12">
-                                <input name="min_predict_income_ratio" value="" placeholder="可选参数" type="number" step="5" class="validate">
-                                <label for="min_predict_income_ratio">最低预测营收同比增长(%)</label>
+                                <input name="selector_min_predict_income_ratio" value="" placeholder="可选参数" type="number" step="5" class="validate">
+                                <label for="selector_min_predict_income_ratio">最低预测营收同比增长(%)</label>
                             </div>
                         </div>
                         <div class="row">
                             <label class="col l3 s12">
-                                <input name="listing_over_5_y" type="checkbox" class="filled-in" />
+                                <input name="selector_listing_over_5_y" type="checkbox" class="filled-in" />
                                 <span>上市时间是否超过 5 年</span>
                             </label>
                             <label class="col l3 s12">
-                                <input name="exclude_kcb" type="checkbox" checked="checked" class="filled-in" />
+                                <input name="selector_exclude_kcb" type="checkbox" checked="checked" value="true" class="filled-in" />
                                 <span>是否排除科创板</span>
                             </label>
                             <label class="col l3 s12">
-                                <input name="exclude_cyb" type="checkbox" checked="checked" class="filled-in" />
+                                <input name="selector_exclude_cyb" type="checkbox" checked="checked" value="true" class="filled-in" />
                                 <span>是否排除创业板</span>
                             </label>
                             <label class="col l3 s12">
-                                <input name="selector_with_checker" type="checkbox" checked="checked" class="filled-in" />
+                                <input id="selector_with_checker" name="selector_with_checker" type="checkbox" checked="checked" value="true" class="filled-in" />
                                 <span>对筛选结果进行检测过滤</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="checker_options" class="collection with-header collapsible">
+                    <div class="collection-header">检测指标</div>
+                    <div class="collection-item">
+                        <div class="row">
+                            <div class="input-field col l6 s12">
+                                <input name="checker_min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
+                                <label for="checker_min_roe">最新一期ROE最低值</label>
+                            </div>
+                            <div class="input-field col l6 s12">
+                                <input name="checker_max_peg" type="number" class="validate" value="1.5" min="0" step="0.1">
+                                <label for="checker_max_peg">最大PEG</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6 s12">
+                                <input name="checker_check_years" type="number" class="validate" value="3" min="0" step="1">
+                                <label for="checker_check_years">ROE,EPS,营收,利润连续增长年数</label>
+                            </div>
+                            <div class="input-field col l6 s12">
+                                <input name="checker_no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
+                                <label for="checker_no_check_years_roe">ROE高于该值跳过连续增长检测</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6 s12">
+                                <input name="checker_min_byys_ratio" type="number" class="validate" value="0.9" min="0" step="0.1">
+                                <label for="checker_min_byys_ratio">最小本业营收比</label>
+                            </div>
+                            <div class="input-field col l6 s12">
+                                <input name="checker_max_byys_ratio" value="1.1" type="number" min="0" step="0.1" class="validate">
+                                <label for="checker_max_byys_ratio">最大本业营收比</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l4 s12">
+                                <input name="checker_min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
+                                <label for="checker_min_total_market_cap">最小市值（亿）</label>
+                            </div>
+                            <div class="input-field col l4 s12">
+                                <input name="checker_max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
+                                <label for="checker_max_debt_asset_ratio">最大资产负债率(%)</label>
+                            </div>
+                            <div class="input-field col l4 s12">
+                                <input name="checker_min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
+                                <label for="checker_min_hv">最大历史波动率</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field inline col l3 s12">
+                                <input name="checker_bank_min_roa" type="number" class="validate" value="0.5" min="0" step="0.1">
+                                <label for="checker_bank_min_roa">最小ROA</label>
+                                <span class="helper-text">仅针对银行股检测生效</span>
+                            </div>
+                            <div class="input-field inline col l3 s12">
+                                <input name="checker_bank_min_zbczl" type="number" class="validate" value="8.0" min="0" step="0.5">
+                                <label for="checker_bank_min_zbczl">最小资本充足率</label>
+                                <span class="helper-text">仅针对银行股检测生效</span>
+                            </div>
+                            <div class="input-field inline col l3 s12">
+                                <input name="checker_bank_max_bldkl" type="number" class="validate" value="3.0" min="0" step="0.5">
+                                <label for="checker_bank_max_bldkl">最大不良贷款率</label>
+                                <span class="helper-text">仅针对银行股检测生效</span>
+                            </div>
+                            <div class="input-field inline col l3 s12">
+                                <input name="checker_bank_min_bldkbbfgl" type="number" class="validate" value="100.0" min="0" step="1">
+                                <label for="checker_bank_min_bldkbbfgl">最低不良贷款拨备覆盖率</label>
+                                <span class="helper-text">仅针对银行股检测生效</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col l3 s12">
+                                <input name="checker_is_check_cashflow" type="checkbox" class="filled-in" />
+                                <span>检测现金流量</span>
+                            </label>
+                            <label class="col l3 s12">
+                                <input name="checker_is_check_price_by_calc" type="checkbox" class="filled-in" />
+                                <span>检测估算合理价</span>
+                            </label>
+                            <label class="col l3 s12">
+                                <input name="checker_is_check_mll_stability" type="checkbox" class="filled-in" />
+                                <span>检测毛利率稳定性</span>
+                            </label>
+                            <label class="col l3 s12">
+                                <input name="checker_is_check_jll_stability" type="checkbox" class="filled-in" />
+                                <span>检测净利率稳定性</span>
                             </label>
                         </div>
                     </div>
@@ -238,96 +329,6 @@ $(function () {
                     });
                 </script>
 
-                <div id="checker_options" class="collection with-header collapsible">
-                    <div class="collection-header">检测指标</div>
-                    <div class="collection-item">
-                        <div class="row">
-                            <div class="input-field col l6 s12">
-                                <input name="min_roe" value="8.0" type="number" min="0" step="0.5" class="validate">
-                                <label for="min_roe">最新一期ROE最低值</label>
-                            </div>
-                            <div class="input-field col l6 s12">
-                                <input name="max_peg" type="number" class="validate" value="1.5" min="0" step="0.1">
-                                <label for="max_peg">最大PEG</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l6 s12">
-                                <input name="check_years" type="number" class="validate" value="3" min="0" step="1">
-                                <label for="check_years">ROE,EPS,营收,利润连续增长年数</label>
-                            </div>
-                            <div class="input-field col l6 s12">
-                                <input name="no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
-                                <label for="no_check_years_roe">ROE高于该值跳过连续增长检测</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l6 s12">
-                                <input name="min_byys_ratio" type="number" class="validate" value="0.9" min="0" step="0.1">
-                                <label for="min_byys_ratio">最小本业营收比</label>
-                            </div>
-                            <div class="input-field col l6 s12">
-                                <input name="max_byys_ratio" value="1.1" type="number" min="0" step="0.1" class="validate">
-                                <label for="max_byys_ratio">最大本业营收比</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-field col l4 s12">
-                                <input name="min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
-                                <label for="min_total_market_cap">最小市值（亿）</label>
-                            </div>
-                            <div class="input-field col l4 s12">
-                                <input name="max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
-                                <label for="max_debt_asset_ratio">最大资产负债率(%)</label>
-                            </div>
-                            <div class="input-field col l4 s12">
-                                <input name="min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
-                                <label for="min_hv">最大历史波动率</label>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="input-field inline col l3 s12">
-                                <input name="bank_min_roa" type="number" class="validate" value="0.5" min="0" step="0.1">
-                                <label for="bank_min_roa">最小ROA</label>
-                                <span class="helper-text">仅针对银行股检测生效</span>
-                            </div>
-                            <div class="input-field inline col l3 s12">
-                                <input name="bank_min_zbczl" type="number" class="validate" value="8.0" min="0" step="0.5">
-                                <label for="bank_min_zbczl">最小资本充足率</label>
-                                <span class="helper-text">仅针对银行股检测生效</span>
-                            </div>
-                            <div class="input-field inline col l3 s12">
-                                <input name="bank_max_bldkl" type="number" class="validate" value="3.0" min="0" step="0.5">
-                                <label for="bank_max_bldkl">最大不良贷款率</label>
-                                <span class="helper-text">仅针对银行股检测生效</span>
-                            </div>
-                            <div class="input-field inline col l3 s12">
-                                <input name="bank_min_bldkbbfgl" type="number" class="validate" value="100.0" min="0" step="1">
-                                <label for="bank_min_bldkbbfgl">最低不良贷款拨备覆盖率</label>
-                                <span class="helper-text">仅针对银行股检测生效</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col l3 s12">
-                                <input name="is_check_cashflow" type="checkbox" class="filled-in" />
-                                <span>检测现金流量</span>
-                            </label>
-                            <label class="col l3 s12">
-                                <input name="is_check_price_by_calc" type="checkbox" class="filled-in" />
-                                <span>检测估算合理价</span>
-                            </label>
-                            <label class="col l3 s12">
-                                <input name="is_check_mll_stability" type="checkbox" class="filled-in" />
-                                <span>检测毛利率稳定性</span>
-                            </label>
-                            <label class="col l3 s12">
-                                <input name="is_check_jll_stability" type="checkbox" class="filled-in" />
-                                <span>检测净利率稳定性</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
                 <div class="row">
                     <button class="btn waves-effect waves-light red lighten-2 col s12" type="submit">筛选</button>
                 </div>

@@ -34,7 +34,7 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 			logging.Warnf(ctx, "search %s no data", kw)
 			continue
 		}
-		logging.Infof(ctx, "search results:%+v, %s matched", searchResults, searchResults[0])
+		logging.Debugf(ctx, "search results:%+v, %s matched", searchResults, searchResults[0])
 		matchedResults = append(matchedResults, searchResults[0])
 	}
 	// 查询匹配到的股票代码的股票信息

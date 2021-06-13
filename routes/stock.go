@@ -16,6 +16,7 @@ func StockIndex(c *gin.Context) {
 	data := gin.H{
 		"PageTitle":    "股票",
 		"IndustryList": services.StockIndustryList,
+		"Error":        "asdadada",
 	}
 	c.HTML(http.StatusOK, "stock_index.html", data)
 	return
@@ -37,9 +38,22 @@ func StockSelector(c *gin.Context) {
 	if err := c.ShouldBind(&param); err != nil {
 		data["Error"] = err.Error()
 		c.HTML(http.StatusOK, "stock_selector.html", data)
+		return
 	}
-	data["Param"] = param
 
+	var checker core.Checker
+	if param.FilterWithChecker {
+		checker = core.NewChecker(c, param.CheckerOptions)
+	}
+
+	selector := core.NewSelector(c, param.Filter, &checker)
+	stocks, err := selector.AutoFilterStocks(c)
+	if err != nil {
+		data["Error"] = err.Error()
+		c.HTML(http.StatusOK, "stock_selector.html", data)
+		return
+	}
+	data["Stocks"] = stocks
 	c.HTML(http.StatusOK, "stock_selector.html", data)
 	return
 }
