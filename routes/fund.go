@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Fund godoc
-func Fund(c *gin.Context) {
+// FundIndex godoc
+func FundIndex(c *gin.Context) {
 	data := gin.H{
 		"PageTitle": "首页",
 	}

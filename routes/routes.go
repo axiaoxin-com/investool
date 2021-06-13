@@ -6,8 +6,8 @@ import "github.com/gin-gonic/gin"
 
 // Routes 注册 API URL 路由
 func Routes(app *gin.Engine) {
-	// TODO: 在这里注册你的 gin API，如： app.GET("/", HandlerFunc)
-	app.GET("/", Index)
-	app.GET("/stock", Index)
-	app.GET("/fund", Fund)
+	app.GET("/", StockIndex)
+	app.POST("/selector", StockSelector)
+	app.POST("/checker", StockChecker)
+	app.GET("/fund", FundIndex)
 }

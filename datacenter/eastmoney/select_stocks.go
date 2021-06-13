@@ -19,53 +19,53 @@ import (
 type Filter struct {
 	// ------ 最重要的指标！！！------
 	// 最低净资产收益率（%）， ROE_WEIGHT
-	MinROE float64 `json:"min_roe"`
+	MinROE float64 `json:"min_roe" form:"min_roe"`
 
 	// ------ 必要参数 ------
 	// 最低净利润增长率（%） ， NETPROFIT_YOY_RATIO
-	MinNetprofitYoyRatio float64 `json:"min_netprofit_yoy_ratio"`
+	MinNetprofitYoyRatio float64 `json:"min_netprofit_yoy_ratio"      form:"min_netprofit_yoy_ratio"`
 	// 最低营收增长率（%） ， TOI_YOY_RATIO
-	MinToiYoyRatio float64 `json:"min_toi_yoy_ratio"`
+	MinToiYoyRatio float64 `json:"min_toi_yoy_ratio"            form:"min_toi_yoy_ratio"`
 	// 最低最新股息率（%）， ZXGXL
-	MinZXGXL float64 `json:"min_zxgxl"`
+	MinZXGXL float64 `json:"min_zxgxl"                    form:"min_zxgxl"`
 	// 最低净利润 3 年复合增长率（%）， NETPROFIT_GROWTHRATE_3Y
-	MinNetprofitGrowthrate3Y float64 `json:"min_netprofit_growthrate_3_y"`
+	MinNetprofitGrowthrate3Y float64 `json:"min_netprofit_growthrate_3_y" form:"min_netprofit_growthrate_3_y"`
 	// 最低营收 3 年复合增长率（%）， INCOME_GROWTHRATE_3Y
-	MinIncomeGrowthrate3Y float64 `json:"min_income_growthrate_3_y"`
+	MinIncomeGrowthrate3Y float64 `json:"min_income_growthrate_3_y"    form:"min_income_growthrate_3_y"`
 	// 最低上市以来年化收益率（%） ， LISTING_YIELD_YEAR
-	MinListingYieldYear float64 `json:"min_listing_yield_year"`
+	MinListingYieldYear float64 `json:"min_listing_yield_year"       form:"min_listing_yield_year"`
 	// 最低市净率， PBNEWMRQ
-	MinPBNewMRQ float64 `json:"min_pb_new_mrq"`
+	MinPBNewMRQ float64 `json:"min_pb_new_mrq"               form:"min_pb_new_mrq"`
 	// 最大资产负债率 (%)
-	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"`
+	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"         form:"max_debt_asset_ratio"`
 
 	// ------ 可选参数 ------
 	// 最低预测净利润同比增长（%）， PREDICT_NETPROFIT_RATIO
-	MinPredictNetprofitRatio float64 `json:"min_predict_netprofit_ratio"`
+	MinPredictNetprofitRatio float64 `json:"min_predict_netprofit_ratio"     form:"min_predict_netprofit_ratio"`
 	// 最低预测营收同比增长（%）， PREDICT_INCOME_RATIO
-	MinPredictIncomeRatio float64 `json:"min_predict_income_ratio"`
+	MinPredictIncomeRatio float64 `json:"min_predict_income_ratio"        form:"min_predict_income_ratio"`
 	// 最低总市值（亿）， TOTAL_MARKET_CAP
-	MinTotalMarketCap float64 `json:"min_total_market_cap"`
+	MinTotalMarketCap float64 `json:"min_total_market_cap"            form:"min_total_market_cap"`
 	// 行业名（可选参数，不设置搜全行业）， INDUSTRY
-	IndustryList []string `json:"industry_list"`
+	IndustryList []string `json:"industry_list"                   form:"industry_list"`
 	// 股价范围最小值（元）， NEW_PRICE
-	MinPrice float64 `json:"min_price"`
+	MinPrice float64 `json:"min_price"                       form:"min_price"`
 	// 股价范围最大值（元）， NEW_PRICE
-	MaxPrice float64 `json:"max_price"`
+	MaxPrice float64 `json:"max_price"                       form:"max_price"`
 	// 上市时间是否超过 5 年，@LISTING_DATE="OVER5Y"
-	ListingOver5Y bool `json:"listing_over_5_y"`
+	ListingOver5Y bool `json:"listing_over_5_y"                form:"listing_over_5_y"`
 	// 最低上市以来年化波动率， LISTING_VOLATILITY_YEAR
-	MinListingVolatilityYear float64 `json:"min_listing_volatility_year"`
+	MinListingVolatilityYear float64 `json:"min_listing_volatility_year"     form:"min_listing_volatility_year"`
 	// 是否排除创业板 300XXX
-	ExcludeCYB bool `json:"exclude_cyb"`
+	ExcludeCYB bool `json:"exclude_cyb"                     form:"exclude_cyb"`
 	// 是否排除科创板 688XXX
-	ExcludeKCB bool `json:"exclude_kcb"`
+	ExcludeKCB bool `json:"exclude_kcb"                     form:"exclude_kcb"`
 	// 查询指定名称
-	SpecialSecurityNameAbbrList []string `json:"special_security_name_abbr_list"`
+	SpecialSecurityNameAbbrList []string `json:"special_security_name_abbr_list" form:"special_security_name_abbr_list"`
 	// 查询指定代码
-	SpecialSecurityCodeList []string `json:"special_security_code_list"`
+	SpecialSecurityCodeList []string `json:"special_security_code_list"      form:"special_security_code_list"`
 	// 最小总资产收益率 ROA
-	MinROA float64 `json:"min_roa"`
+	MinROA float64 `json:"min_roa"                         form:"min_roa"`
 }
 
 // String 转为字符串的请求参数
