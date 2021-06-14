@@ -341,22 +341,32 @@ $(function () {
 <div id="load_modal" class="modal">
     <div class="modal-content">
         <h6 id="model_header"></h6>
-        <div class="progress red light-5">
+        <div class="progress red lighten-3">
             <div class="indeterminate red darken-2"></div>
         </div>
     </div>
 </div>
 
-<table id="selector_result" class="section hide striped centered">
-    <thead>
-        <tr>
-            <th>股票代码</th>
-            <th>股票名</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
+<div id="selector_result" class="section hide">
+    <h4 class="center">筛选结果</h4>
+    <div class="divider"></div>
+    <div class="row">
+        <table class="striped centered">
+            <thead>
+                <tr>
+                    <th>股票代码</th>
+                    <th>股票名</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="row center-align">
+        <a onclick="M.toast({html: 'TODO'})" class="waves-effect waves-light btn-large red lighten-2"><i class="material-icons left">import_export</i>导出EXCEL</a>
+    </div>
+
+</div>
 
 <script>
 $(function () {
