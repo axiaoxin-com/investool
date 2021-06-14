@@ -72,8 +72,8 @@ type ExportorData struct {
 	RightPrice interface{} `json:"right_price"               csv:"估算合理价格"`
 	// 合理价格与当时价的价格差
 	PriceSpace interface{} `json:"price_space"               csv:"合理价差"`
-	// 历史波动率 (%)
-	HV float64 `json:"hv"                        csv:"历史波动率 (%)"`
+	// 历史波动率
+	HV float64 `json:"hv"                        csv:"历史波动率"`
 	// 最新负债率 (%)
 	ZXFZL float64 `json:"zxfzl"                     csv:"最新负债率 (%)"`
 	// 负债流动比
@@ -99,7 +99,7 @@ type ExportorData struct {
 	// 市净率估值
 	ValuationSJL string `json:"valuation_sjl"             csv:"市净率估值"`
 	// 市销率估值
-	ValuationSXOL string `json:"valuation_sxol"            csv:" 市销率估值"`
+	ValuationSXOL string `json:"valuation_sxol"            csv:"市销率估值"`
 	// 市现率估值
 	ValuationSXNL string `json:"valuation_sxnl"            csv:"市现率估值"`
 	// 行业均值水平

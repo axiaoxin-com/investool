@@ -350,9 +350,60 @@ $(function () {
 <table id="selector_result" class="highlight striped responsive-table">
     <thead>
         <tr>
-            <th>
-                head1
-            </th>
+            <th>股票名</th>
+            <th>股票代码</th>
+            <th>所属行业</th>
+            <th>题材关键词</th>
+            <th>公司信息</th>
+            <th>主营构成</th>
+            <th>本业营收比</th>
+            <th>数据源</th>
+            <th>财报审计意见</th>
+            <th>价值评估</th>
+            <th>最新一期 ROE</th>
+            <th>ROE 同比增长 (%)</th>
+            <th>近五年 ROE</th>
+            <th>最新一期 EPS</th>
+            <th>EPS 同比增长 (%)</th>
+            <th>近五年 EPS</th>
+            <th>营业总收入</th>
+            <th>营业总收入同比增长 (%)</th>
+            <th>近五年营收</th>
+            <th>归属净利润（元）</th>
+            <th>归属净利润同比增长 (%)</th>
+            <th>近五年净利润</th>
+            <th>最新股息率 (%)</th>
+            <th>财报披露日期</th>
+            <th>预约财报披露日期</th>
+            <th>实际财报披露日期"</th>
+            <th>总市值</th>
+            <th>价格</th>
+            <th>估算合理价格</th>
+            <th>合理价差</th>
+            <th>历史波动率</th>
+            <th>最新负债率 (%)</th>
+            <th>负债流动比</th>
+            <th>净利润 3 年复合增长率 (%)</th>
+            <th>营收 3 年复合增长率 (%)</th>
+            <th>上市以来年化收益率 (%)</th>
+            <th>年化波动率 (%)"</th>
+            <th>市盈率</th>
+            <th>PEG</th>
+            <th>机构评级</th>
+            <th>盈利预测</th>
+            <th>市盈率估值</th>
+            <th>市净率估值</th>
+            <th>市销率估值</th>
+            <th>市现率估值</th>
+            <th>行业均值水平</th>
+            <th>整体质地</th>
+            <th>近五年毛利率</th>
+            <th>近五年净利率</th>
+            <th>上市时间</th>
+            <th>经营现金流净额</th>
+            <th>投资现金流净额</th>
+            <th>筹资现金流净额</th>
+            <th>自由现金流</th>
         </tr>
     </thead>
     <tbody>
@@ -378,7 +429,61 @@ $(function () {
                 }
                 $.each(data.Stocks, function(i, stock) {
                     $("#selector_result tbody").append(
-                        "<tr><td>" + stock.right_price + "</td></tr>"
+                        "<tr>" +
+                            "<td>" + stock.code + "</td>" +
+                            "<td>" + stock.name + "</td>" +
+                            "<td>" + stock.industry + "</td>" +
+                            "<td>" + stock.keywords + "</td>" +
+                            "<td>" + stock.company_profile + "</td>" +
+                            "<td>" + stock.main_forms + "</td>" +
+                            "<td>" + stock.byys_ration + "</td>" +
+                            "<td>" + stock.report_date_name + "</td>" +
+                            "<td>" + stock.report_opinion + "</td>" +
+                            "<td>" + stock.jzpg + "</td>" +
+                            "<td>" + stock.latest_roe + "</td>" +
+                            "<td>" + stock.roe_tbzz + "</td>" +
+                            "<td>" + stock.roe_5y + "</td>" +
+                            "<td>" + stock.latest_eps+ "</td>" +
+                            "<td>" + stock.eps_tbzz + "</td>" +
+                            "<td>" + stock.eps_5y + "</td>" +
+                            "<td>" + stock.total_income + "</td>" +
+                            "<td>" + stock.total_income_tbzz + "</td>" +
+                            "<td>" + stock.total_income_5y + "</td>" +
+                            "<td>" + stock.net_profit + "</td>" +
+                            "<td>" + stock.net_profit_tbzz + "</td>" +
+                            "<td>" + stock.net_profit_5y + "</td>" +
+                            "<td>" + stock.zxgxl + "</td>" +
+                            "<td>" + stock.fina_report_date + "</td>" +
+                            "<td>" + stock.fina_appoint_publish_date + "</td>" +
+                            "<td>" + stock.fina_actual_publish_date + "</td>" +
+                            "<td>" + stock.total_market_cap + "</td>" +
+                            "<td>" + stock.price + "</td>" +
+                            "<td>" + stock.right_price + "</td>" +
+                            "<td>" + stock.price_space + "</td>" +
+                            "<td>" + stock.hv + "</td>" +
+                            "<td>" + stock.zxfzl + "</td>" +
+                            "<td>" + stock.fzldb + "</td>" +
+                            "<td>" + stock.netprofit_growthrate_3_y + "</td>" +
+                            "<td>" + stock.income_growthrate_3_y + "</td>" +
+                            "<td>" + stock.listing_yield_year + "</td>" +
+                            "<td>" + stock.pe + "</td>" +
+                            "<td>" + stock.peg + "</td>" +
+                            "<td>" + stock.org_rating + "</td>" +
+                            "<td>" + stock.profit_predict + "</td>" +
+                            "<td>" + stock.valuation_syl + "</td>" +
+                            "<td>" + stock.valuation_sjl + "</td>" +
+                            "<td>" + stock.valuation_sxol + "</td>" +
+                            "<td>" + stock.valuation_sxnl + "</td>" +
+                            "<td>" + stock.hyjzsp + "</td>" +
+                            "<td>" + stock.ztzd + "</td>" +
+                            "<td>" + stock.mll_5y + "</td>" +
+                            "<td>" + stock.jll_5y + "</td>" +
+                            "<td>" + stock.listing_date + "</td>" +
+                            "<td>" + stock.netcash_operate + "</td>" +
+                            "<td>" + stock.netcash_invest + "</td>" +
+                            "<td>" + stock.netcash_finance + "</td>" +
+                            "<td>" + stock.netcash_free + "</td>" +
+                        "</tr>"
                     );
                 });
             }
