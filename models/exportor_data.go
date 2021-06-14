@@ -1,6 +1,6 @@
 // 封装需要导出数据结果
 
-package cmds
+package models
 
 import (
 	"context"
@@ -8,11 +8,10 @@ import (
 	"strings"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/x-stock/models"
 )
 
-// Data 数据模板
-type Data struct {
+// ExportorData 数据模板
+type ExportorData struct {
 	// 股票名
 	Name string `json:"name"                      csv:"股票名"`
 	// 股票代码
@@ -124,17 +123,17 @@ type Data struct {
 }
 
 // GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
-func (d Data) GetHeaderValueMap() map[string]interface{} {
+func (d ExportorData) GetHeaderValueMap() map[string]interface{} {
 	return goutils.StructToMap(&d, "csv")
 }
 
 // GetHeaders 获取 csv tag 列表
-func (d Data) GetHeaders() []string {
+func (d ExportorData) GetHeaders() []string {
 	return goutils.StructTagList(&d, "csv")
 }
 
-// NewData 创建 Data 对象
-func NewData(ctx context.Context, stock models.Stock) Data {
+// NewExportorData 创建 ExportotData 对象
+func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 	var rightPrice interface{} = "--"
 	var priceSpace interface{} = "--"
 	var reportOpinion interface{} = "--"
@@ -147,7 +146,7 @@ func NewData(ctx context.Context, stock models.Stock) Data {
 	}
 
 	fina := stock.HistoricalFinaMainData[0]
-	return Data{
+	return ExportorData{
 		Name:            stock.BaseInfo.SecurityNameAbbr,
 		Code:            stock.BaseInfo.Secucode,
 		Industry:        stock.BaseInfo.Industry,
@@ -207,39 +206,39 @@ func NewData(ctx context.Context, stock models.Stock) Data {
 	}
 }
 
-// DataList 要导出的数据列表
-type DataList []Data
+// ExportorDataList 要导出的数据列表
+type ExportorDataList []ExportorData
 
 // SortByROE 股票列表按 ROE 排序
-func (d DataList) SortByROE() {
+func (d ExportorDataList) SortByROE() {
 	sort.Slice(d, func(i, j int) bool {
 		return d[i].LatestROE > d[j].LatestROE
 	})
 }
 
 // SortByPrice 股票列表按股价排序
-func (d DataList) SortByPrice() {
+func (d ExportorDataList) SortByPrice() {
 	sort.Slice(d, func(i, j int) bool {
 		return d[i].Price < d[j].Price
 	})
 }
 
 // SortByZXGXL 股票列表按最新股息率排序
-func (d DataList) SortByZXGXL() {
+func (d ExportorDataList) SortByZXGXL() {
 	sort.Slice(d, func(i, j int) bool {
 		return d[i].ZXGXL > d[j].ZXGXL
 	})
 }
 
 // SortByHV 股票列表按历史波动率排序
-func (d DataList) SortByHV() {
+func (d ExportorDataList) SortByHV() {
 	sort.Slice(d, func(i, j int) bool {
 		return d[i].HV > d[j].HV
 	})
 }
 
 // GetIndustryList 获取行业分类列表
-func (d DataList) GetIndustryList() []string {
+func (d ExportorDataList) GetIndustryList() []string {
 	result := []string{}
 	for _, stock := range d {
 		if !goutils.IsStrInSlice(stock.Industry, result) {
@@ -250,8 +249,8 @@ func (d DataList) GetIndustryList() []string {
 }
 
 // ChunkedBySize 将 stock 列表按大小切割分组
-func (d DataList) ChunkedBySize(chunkSize int) []DataList {
-	result := []DataList{}
+func (d ExportorDataList) ChunkedBySize(chunkSize int) []ExportorDataList {
+	result := []ExportorDataList{}
 	dataLen := len(d)
 	for i := 0; i < dataLen; i += chunkSize {
 		end := i + chunkSize
@@ -263,10 +262,10 @@ func (d DataList) ChunkedBySize(chunkSize int) []DataList {
 	return result
 }
 
-// NewDataList 创建要导出的数据列表
-func NewDataList(ctx context.Context, stocks models.StockList) (result DataList) {
+// NewExportorDataList 创建要导出的数据列表
+func NewExportorDataList(ctx context.Context, stocks StockList) (result ExportorDataList) {
 	for _, s := range stocks {
-		result = append(result, NewData(ctx, s))
+		result = append(result, NewExportorData(ctx, s))
 	}
 	return
 }

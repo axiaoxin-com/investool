@@ -17,15 +17,15 @@ import (
 
 // Exportor exportor 实例
 type Exportor struct {
-	Stocks   DataList
+	Stocks   models.ExportorDataList
 	Selector core.Selector
 }
 
 // New 创建要导出的数据列表
 func New(ctx context.Context, stocks models.StockList, selector core.Selector) Exportor {
-	dlist := DataList{}
+	dlist := models.ExportorDataList{}
 	for _, s := range stocks {
-		dlist = append(dlist, NewData(ctx, s))
+		dlist = append(dlist, models.NewExportorData(ctx, s))
 	}
 
 	return Exportor{

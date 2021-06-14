@@ -7,7 +7,7 @@ $(function () {
 });
 </script>
 
-<div class="row">
+<div class="row" id="stock_forms">
     <div class="col s12">
         <ul class="tabs">
             <li class="tab col s6"><a class="active" href="#selector">基本面选股</a></li>
@@ -121,7 +121,7 @@ $(function () {
     <!--selector start-->
     <div id="selector" class="col s12">
         <div class="row">
-            <form class="col s12" method="POST" action="/selector">
+            <form class="col s12" id="selector_form">
                 <div class="collection with-header">
                     <div class="collection-header">筛选指标</div>
                     <div class="collection-item">
@@ -330,11 +330,60 @@ $(function () {
                 </script>
 
                 <div class="row">
-                    <button class="btn waves-effect waves-light red lighten-2 col s12" type="submit">筛选</button>
+                    <a class="btn waves-effect waves-light red lighten-2 col s12" id="selector_submit_btn" >筛选</a>
                 </div>
             </form>
         </div>
     </div>
     <!--selector end-->
 </div>
+
+<div id="load_modal" class="modal">
+    <div class="modal-content">
+        <h6 id="model_header"></h6>
+        <div class="progress red light-5">
+            <div class="indeterminate red darken-2"></div>
+        </div>
+    </div>
+</div>
+
+<table id="selector_result" class="highlight striped responsive-table">
+    <thead>
+        <tr>
+            <th>
+                head1
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+$(function () {
+    $("#selector_submit_btn").click(function(){
+        $(this).addClass("disabled");
+        $("#model_header").text($(this).text()+"中，请稍候...");
+        $("#load_modal").modal('open');
+        $.ajax({
+            url: "/selector",
+            type: 'post',
+            data: $("#selector_form").serialize(),
+            success: function(data) {
+                $("title").text(data.PageTitle);
+                $("#stock_forms").remove();
+                $("#load_modal").modal('close');
+                if (data.Error != "") {
+                    console.log("selector resp error:" + data.Error);
+                }
+                $.each(data.Stocks, function(i, stock) {
+                    $("#selector_result tbody").append(
+                        "<tr><td>" + stock.right_price + "</td></tr>"
+                    );
+                });
+            }
+        });
+    });
+});
+</script>
 {{ template "footer" . }}

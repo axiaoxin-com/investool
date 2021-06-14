@@ -3,12 +3,13 @@ package cmds
 import (
 	"testing"
 
+	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/stretchr/testify/require"
 )
 
 func TestExportExcel(t *testing.T) {
 	e := Exportor{
-		Stocks: []Data{
+		Stocks: []models.ExportorData{
 			{
 				Name: "中文名称",
 				Code: "1234code",

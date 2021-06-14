@@ -13,7 +13,7 @@
     />
 
     <link rel="icon" type="image/x-icon" href="https://example.com/favicon.ico" />
-    <title>x-stock | {{ .PageTitle }}</title>
+    <title>{{ .PageTitle }}</title>
     <script type="text/javascript" src="/statics/js/jquery-3.6.0.min.js" ></script>
     <script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
     <script type="text/javascript" src="/statics/js/app.js" ></script>
@@ -59,8 +59,8 @@
 
 <main class="container">
     {{ if .Error }}
-    <div class="section row">
-        <div class="chip orange lighten-1 col s12 center-align">
+    <div class="row">
+        <div class="chip flow-text orange lighten-1 col s12 center-align">
             {{ .Error }}
             <i class="close material-icons">close</i>
         </div>

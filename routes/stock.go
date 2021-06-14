@@ -7,6 +7,7 @@ import (
 
 	"github.com/axiaoxin-com/x-stock/core"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
+	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/axiaoxin-com/x-stock/services"
 	"github.com/gin-gonic/gin"
 )
@@ -14,9 +15,9 @@ import (
 // StockIndex 股票页面
 func StockIndex(c *gin.Context) {
 	data := gin.H{
-		"PageTitle":    "股票",
+		"PageTitle":    "X-STOCK | 股票",
+		"Error":        "",
 		"IndustryList": services.StockIndustryList,
-		"Error":        "asdadada",
 	}
 	c.HTML(http.StatusOK, "stock_index.html", data)
 	return
@@ -29,18 +30,20 @@ type ParamStockSelector struct {
 	FilterWithChecker bool `form:"selector_with_checker"`
 }
 
-// StockSelector 处理基本面筛选
+// StockSelector 返回基本面筛选结果json
 func StockSelector(c *gin.Context) {
 	data := gin.H{
-		"PageTitle": "股票 | 基本面筛选",
+		"PageTitle": "X-STOCK | 股票 | 基本面筛选",
+		"Error":     "",
+		"Stocks":    models.StockList{},
 	}
+
 	param := ParamStockSelector{}
 	if err := c.ShouldBind(&param); err != nil {
 		data["Error"] = err.Error()
-		c.HTML(http.StatusOK, "stock_selector.html", data)
+		c.HTML(http.StatusOK, "stock_index.html", data)
 		return
 	}
-
 	var checker core.Checker
 	if param.FilterWithChecker {
 		checker = core.NewChecker(c, param.CheckerOptions)
@@ -50,20 +53,24 @@ func StockSelector(c *gin.Context) {
 	stocks, err := selector.AutoFilterStocks(c)
 	if err != nil {
 		data["Error"] = err.Error()
-		c.HTML(http.StatusOK, "stock_selector.html", data)
+		c.HTML(http.StatusOK, "stock_index.html", data)
 		return
 	}
-	data["Stocks"] = stocks
-	c.HTML(http.StatusOK, "stock_selector.html", data)
+	dlist := models.ExportorDataList{}
+	for _, s := range stocks {
+		dlist = append(dlist, models.NewExportorData(c, s))
+	}
+	data["Stocks"] = dlist
+	c.JSON(http.StatusOK, data)
 	return
 }
 
 // StockChecker 处理个股检测
 func StockChecker(c *gin.Context) {
 	data := gin.H{
-		"PageTitle":    "股票 | 个股检测",
-		"IndustryList": services.StockIndustryList,
+		"PageTitle": "X-STOCK | 股票 | 个股检测",
+		"Error":     "",
 	}
-	c.HTML(http.StatusOK, "stock_checker.html", data)
+	c.HTML(http.StatusOK, "stock_index.html", data)
 	return
 }
