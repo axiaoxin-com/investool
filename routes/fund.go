@@ -13,6 +13,6 @@ func FundIndex(c *gin.Context) {
 	data := gin.H{
 		"PageTitle": "首页",
 	}
-	c.HTML(http.StatusOK, "fund.html", data)
+	c.HTML(http.StatusOK, "fund_index.html", data)
 	return
 }
