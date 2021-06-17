@@ -1,11 +1,11 @@
 package webserver
 
 import (
-	"embed"
 	"html/template"
 	"net/http"
 
 	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/x-stock/statics"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/json-iterator/go/extra"
@@ -26,7 +26,7 @@ func init() {
 
 // NewGinEngine 根据参数创建 gin 的 router engine
 // middlewares 需要使用到的中间件列表，默认不为 engine 添加任何中间件
-func NewGinEngine(staticsFiles *embed.FS, middlewares ...gin.HandlerFunc) *gin.Engine {
+func NewGinEngine(middlewares ...gin.HandlerFunc) *gin.Engine {
 	// set gin mode
 	gin.SetMode(viper.GetString("server.mode"))
 
@@ -43,20 +43,18 @@ func NewGinEngine(staticsFiles *embed.FS, middlewares ...gin.HandlerFunc) *gin.E
 	engine.SetFuncMap(TemplFuncs)
 
 	// load html template
-	if staticsFiles != nil {
-		tmplPath := viper.GetString("statics.tmplpath")
-		if tmplPath != "" {
-			t, err := template.ParseFS(*staticsFiles, tmplPath)
-			if err != nil {
-				panic(err)
-			}
-			engine.SetHTMLTemplate(t)
+	tmplPath := viper.GetString("statics.tmpl_path")
+	if tmplPath != "" {
+		t, err := template.ParseFS(&statics.Files, tmplPath)
+		if err != nil {
+			panic(err)
 		}
-		// register statics
-		staticsURL := viper.GetString("statics.url")
-		if staticsURL != "" {
-			engine.StaticFS(staticsURL, http.FS(*staticsFiles))
-		}
+		engine.SetHTMLTemplate(t)
+	}
+	// register statics
+	staticsURL := viper.GetString("statics.url")
+	if staticsURL != "" {
+		engine.StaticFS(staticsURL, http.FS(&statics.Files))
 	}
 
 	return engine

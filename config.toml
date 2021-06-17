@@ -29,7 +29,7 @@ env = "localhost"
 ########## 静态文件相关配置
 [statics]
     # 网页模板路径
-    tmplpath = "files/html/*"
+    tmpl_path = "html/*"
     # 静态文件 URL 路径，网页中通过 /statics/js/xx.js 访问资源，
     url = "/statics"
 

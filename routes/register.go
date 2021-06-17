@@ -16,7 +16,9 @@ package routes
 import (
 	"net/http"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/routes/docs"
+	"github.com/axiaoxin-com/x-stock/statics"
 	"github.com/axiaoxin-com/x-stock/webserver"
 	"github.com/gin-contrib/pprof"
 
@@ -63,6 +65,25 @@ func Register(httpHandler http.Handler) {
 		// 默认的 ping 方法，返回 server 相关信息
 		x.Any("/ping", Ping)
 	}
+
+	// 注册 favicon.ico 和 robots.txt
+	app.GET("/favicon.ico", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("favicon.ico")
+		if err != nil {
+			logging.Error(c, "read favicon file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "image/x-icon", file)
+		return
+	})
+
+	app.GET("/robots.txt", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("robots.txt")
+		if err != nil {
+			logging.Error(c, "read robots file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "text/plain", file)
+		return
+	})
 
 	// 注册其他 gin HandlerFunc
 	Routes(app)

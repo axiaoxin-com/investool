@@ -1,4 +1,4 @@
-// 基金
+// 关于
 
 package routes
 
@@ -9,12 +9,12 @@ import (
 	"github.com/spf13/viper"
 )
 
-// FundIndex godoc
-func FundIndex(c *gin.Context) {
+// About godoc
+func About(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
-		"PageTitle": "X-STOCK | 基金",
+		"PageTitle": "X-STOCK | 关于",
 	}
-	c.HTML(http.StatusOK, "fund_index.html", data)
+	c.HTML(http.StatusOK, "about.html", data)
 	return
 }

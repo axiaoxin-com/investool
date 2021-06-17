@@ -38,7 +38,7 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 		matchedResults = append(matchedResults, searchResults[0])
 	}
 	// 查询匹配到的股票代码的股票信息
-	filter := eastmoney.DefaultFilter
+	filter := eastmoney.Filter{}
 	for _, result := range matchedResults {
 		filter.SpecialSecurityCodeList = append(filter.SpecialSecurityCodeList, result.SecurityCode)
 	}

@@ -7,7 +7,7 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/axiaoxin-com/goutils v1.0.17
 	github.com/axiaoxin-com/logging v1.2.10
-	github.com/axiaoxin-com/ratelimiter v1.0.1-0.20201123043109-7057d78a09dc
+	github.com/axiaoxin-com/ratelimiter v1.0.2
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/getsentry/sentry-go v0.11.0 // indirect

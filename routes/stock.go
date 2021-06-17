@@ -12,11 +12,13 @@ import (
 	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/axiaoxin-com/x-stock/services"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 )
 
 // StockIndex 股票页面
 func StockIndex(c *gin.Context) {
 	data := gin.H{
+		"Env":          viper.GetString("env"),
 		"PageTitle":    "X-STOCK | 股票",
 		"Error":        "",
 		"IndustryList": services.StockIndustryList,
@@ -35,6 +37,7 @@ type ParamStockSelector struct {
 // StockSelector 返回基本面筛选结果json
 func StockSelector(c *gin.Context) {
 	data := gin.H{
+		"Env":       viper.GetString("env"),
 		"PageTitle": "X-STOCK | 股票 | 基本面筛选",
 		"Error":     "",
 		"Stocks":    models.StockList{},
@@ -76,6 +79,7 @@ type ParamStockChecker struct {
 // StockChecker 处理个股检测
 func StockChecker(c *gin.Context) {
 	data := gin.H{
+		"Env":       viper.GetString("env"),
 		"PageTitle": "X-STOCK | 股票 | 个股检测",
 		"Error":     "",
 	}

@@ -242,7 +242,7 @@
                             </div>
                             <div class="input-field col l6 s12">
                                 <input name="checker_no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
-                                <label for="checker_no_check_years_roe">ROE高于该值跳过连续增长检测</label>
+                                <label for="checker_no_check_years_roe">ROE均值高于该值跳过连续增长检测</label>
                             </div>
                         </div>
                         <div class="row">
@@ -344,7 +344,7 @@
 <div id="selector_result" class="row hide">
     <h4 class="center">筛选结果</h4>
     <div class="divider"></div>
-    <div class="row">
+    <div id="result_table" class="row">
         <table class="striped centered">
             <thead>
                 <tr>
@@ -355,9 +355,9 @@
             <tbody>
             </tbody>
         </table>
-    </div>
-    <div class="row center-align">
-        <a onclick="M.toast({html: 'TODO'})" class="waves-effect waves-light btn-large red lighten-2"><i class="material-icons left">import_export</i>导出EXCEL</a>
+        <div class="row center-align">
+            <a onclick="M.toast({html: 'TODO'})" class="waves-effect waves-light btn-large red lighten-2"><i class="material-icons left">import_export</i>导出EXCEL</a>
+        </div>
     </div>
 </div>
 

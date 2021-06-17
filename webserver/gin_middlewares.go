@@ -35,7 +35,9 @@ func GinBasicAuth(args ...string) gin.HandlerFunc {
 
 // GinRecovery gin recovery 中间件
 // save err in context and abort with recoveryHandler
-func GinRecovery(recoveryHandler ...func(c *gin.Context, status int, data interface{}, err error, extraMsgs ...interface{})) gin.HandlerFunc {
+func GinRecovery(
+	recoveryHandler ...func(c *gin.Context, status int, data interface{}, err error, extraMsgs ...interface{}),
+) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			status := c.Writer.Status()
@@ -46,7 +48,8 @@ func GinRecovery(recoveryHandler ...func(c *gin.Context, status int, data interf
 				var brokenPipe bool
 				if ne, ok := err.(*net.OpError); ok {
 					if se, ok := ne.Err.(*os.SyscallError); ok {
-						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") || strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
+						if strings.Contains(strings.ToLower(se.Error()), "broken pipe") ||
+							strings.Contains(strings.ToLower(se.Error()), "connection reset by peer") {
 							brokenPipe = true
 						}
 					}
@@ -111,13 +114,15 @@ func GinLogMiddleware() gin.HandlerFunc {
 // 需先实现对应的 TODO ，可根据实际需求自行修改定制
 func GinRatelimitMiddleware() gin.HandlerFunc {
 	limiterConf := ratelimiter.GinRatelimiterConfig{
-		// TODO: 需自行实现限频 key 的生成函数
-		LimitKey: nil,
-		// TODO: 需自行实现限频的具体令牌桶配置信息
-		TokenBucketConfig: nil,
-	}
-	if limiterConf.LimitKey == nil || limiterConf.TokenBucketConfig == nil {
-		panic("Must implement the LimitKey and TokenBucketConfig functions")
+		// TODO: you should implement this function by yourself
+		LimitKey: ratelimiter.DefaultGinLimitKey,
+		// TODO: you should implement this function by yourself
+		LimitedHandler: ratelimiter.DefaultGinLimitedHandler,
+		// TODO: you should implement this function by yourself
+		TokenBucketConfig: func(*gin.Context) (time.Duration, int) {
+			// 每1秒填充1个token，桶容量为5（1秒最多5次请求）
+			return time.Second * 1, 50
+		},
 	}
 
 	// 根据 viper 中的配置信息选择限流类型

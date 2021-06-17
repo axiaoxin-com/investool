@@ -9,9 +9,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
 
+    <link rel="shortcut icon" href="http://cdn.axiaoxin.com/x-stock/favicon.ico">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="http://cdn.axiaoxin.com/x-stock/css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href="http://cdn.axiaoxin.com/x-stock/css/app.css" />
+    <link rel="stylesheet" href={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/css/app.css"{{ else }}"/statics/css/app.css"{{ end }} />
     <title>{{ .PageTitle }}</title>
 </head>
 
@@ -23,8 +24,9 @@
             <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>X-STOCK</a>
             <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
-                <li id="nav_stock" class="active"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
-                <li id="nav_fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
+                <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
             </ul>
         </div>
     </nav>
@@ -33,9 +35,9 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img src="http://cdn.axiaoxin.com/x-stock/img/sidenav_bg.png">
+                    <img src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_bg.png"{{ else }}"/statics/img/sidenav_bg.png"{{ end }}>
                 </div>
-                <a href="#!"><img class="circle" src="http://cdn.axiaoxin.com/x-stock/img/sidenav_icon.png"></a>
+                <a href="#!"><img class="circle" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_icon.png"{{ else }}"/statics/img/sidenav_icon.png"{{ end }}></a>
                 <a href="#!"><span class="white-text">X-STOCK</span></a>
             </div>
         </li>
@@ -45,6 +47,10 @@
         <li><div class="divider"></div></li>
         <li>
             <a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a>
+        </li>
+        <li><div class="divider"></div></li>
+        <li>
+            <a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a>
         </li>
     </ul>
 </header>
@@ -58,6 +64,18 @@
         </div>
     </div>
     {{ end }}
+
+    <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
+        <a id="tap-target-btn" class="btn btn-floating btn-large red lighten-2">
+            <i class="large material-icons">bookmark_border</i>
+        </a>
+        <ul>
+            <li><a class="btn-floating red tooltipped" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
+            <li><a class="btn-floating yellow tooltipped" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
+            <li><a class="btn-floating blue tooltipped" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
+            <li><a id="to-top" class="btn-floating green tooltipped" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
+        </ul>
+    </div>
 {{ end }}
 
 {{ define "footer" }}
@@ -82,7 +100,7 @@
 </footer>
 <script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/jquery-3.6.0.min.js" ></script>
 <script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/materialize.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/app.js" ></script>
+<script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/js/app.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
 <script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </body>
 </html>
