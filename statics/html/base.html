@@ -70,10 +70,10 @@
             <i class="large material-icons">bookmark_border</i>
         </a>
         <ul>
-            <li><a class="btn-floating red tooltipped" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
-            <li><a class="btn-floating yellow tooltipped" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
-            <li><a class="btn-floating blue tooltipped" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
-            <li><a id="to-top" class="btn-floating green tooltipped" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
+            <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
+            <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
+            <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
+            <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
         </ul>
     </div>
 {{ end }}
@@ -102,6 +102,15 @@
 <script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/materialize.min.js" ></script>
 <script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/js/app.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
 <script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EHXJT6J0DM');
+</script>
 </body>
 </html>
 {{ end }}

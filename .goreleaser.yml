@@ -13,6 +13,8 @@ builds:
       - linux
       - windows
       - darwin
+    tags:
+      - jsoniter
 archives:
   - replacements:
       darwin: Darwin

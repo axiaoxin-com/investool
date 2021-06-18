@@ -134,9 +134,6 @@ $(document).ready(function () {
   $("#tap-target-btn").hover(function () {
     $(this).toggleClass("green darken-1 pulse");
   });
-  $("#tap-target-btn").click(function () {
-    $(this).toggleClass("green darken-1 pulse");
-  });
   // 返回顶部按钮
   $("#to-top").click(function () {
     $("html, body").animate({ scrollTop: 0 }, 500);
