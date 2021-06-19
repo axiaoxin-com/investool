@@ -1,0 +1,39 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+
+    - name: Build
+      run: go build -tags=jsoniter -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+    - name: ssh deploy
+      uses: easingthemes/ssh-deploy@v2.2.11
+      with:
+        # Private Key
+        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        # Remote host
+        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+        # Remote user
+        REMOTE_USER: ${{ secrets.REMOTE_USER }}
+        # Remote port
+        REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
+        # Target directory
+        TARGET: ${{ secrets.REMOTE_TARGET }}
