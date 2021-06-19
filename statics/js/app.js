@@ -58,6 +58,7 @@ $(document).ready(function () {
         }
         $("title").text(data.PageTitle);
         $("#stock_forms").remove();
+        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#selector_result").removeClass("hide");
         $("#load_modal").modal("close");
       },
@@ -124,16 +125,13 @@ $(document).ready(function () {
         }
         $("title").text(data.PageTitle);
         $("#stock_forms").remove();
+        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#checker_results").removeClass("hide");
         $("#load_modal").modal("close");
       },
     });
   });
 
-  // feature按钮后闪动
-  $("#tap-target-btn").hover(function () {
-    $(this).toggleClass("green darken-1 pulse");
-  });
   // 返回顶部按钮
   $("#to-top").click(function () {
     $("html, body").animate({ scrollTop: 0 }, 500);
