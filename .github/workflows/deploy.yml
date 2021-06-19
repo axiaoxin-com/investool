@@ -18,22 +18,27 @@ jobs:
       with:
         go-version: 1.16
 
-    - name: Build
-      run: go build -tags=jsoniter -v ./...
-
     - name: Test
       run: go test -v ./...
 
-    - name: ssh deploy
-      uses: easingthemes/ssh-deploy@v2.2.11
+    - name: Build
+      run: CGO_ENABLED=0 go build -o app -tags=jsoniter
+
+    - name: SCP Files
+      uses: appleboy/scp-action@master
       with:
-        # Private Key
-        SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-        # Remote host
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        # Remote user
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        # Remote port
-        REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
-        # Target directory
-        TARGET: ${{ secrets.REMOTE_TARGET }}
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        port: ${{ secrets.REMOTE_PORT }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: 'app'
+        target: ${{ secrets.REMOTE_TARGET }}
+
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        port: ${{ secrets.REMOTE_PORT }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: ${{ secrets.AFTER_COMMAND }}
