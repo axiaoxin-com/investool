@@ -91,6 +91,38 @@ func Register(httpHandler http.Handler) {
 		c.Data(http.StatusOK, "text/plain", file)
 		return
 	})
+	app.GET("/apple-touch-icon-120x120-precomposed.png", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("img/sidenav_icon.png")
+		if err != nil {
+			logging.Error(c, "read favicon file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "image/x-icon", file)
+		return
+	})
+	app.GET("/apple-touch-icon-120x120.png", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("img/sidenav_icon.png")
+		if err != nil {
+			logging.Error(c, "read favicon file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "image/x-icon", file)
+		return
+	})
+	app.GET("/apple-touch-icon-precomposed.png", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("img/sidenav_icon.png")
+		if err != nil {
+			logging.Error(c, "read favicon file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "image/x-icon", file)
+		return
+	})
+	app.GET("/apple-touch-icon.png", func(c *gin.Context) {
+		file, err := statics.Files.ReadFile("img/sidenav_icon.png")
+		if err != nil {
+			logging.Error(c, "read favicon file error:"+err.Error())
+		}
+		c.Data(http.StatusOK, "image/x-icon", file)
+		return
+	})
 
 	// 注册其他 gin HandlerFunc
 	Routes(app)
