@@ -10,6 +10,9 @@ $(document).ready(function () {
   } else if (currentNav == "/about") {
     $("#nav-about").addClass("active");
     $("#nav-about").siblings().removeClass("active");
+  } else if (currentNav == "/comment") {
+    $("#nav-comment").addClass("active");
+    $("#nav-comment").siblings().removeClass("active");
   } else {
     $("#nav-stock").addClass("active");
     $("#nav-stock").siblings().removeClass("active");

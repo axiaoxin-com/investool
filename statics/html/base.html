@@ -27,6 +27,7 @@
                 <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
                 <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
                 <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
+                <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
             </ul>
         </div>
     </nav>
@@ -41,18 +42,27 @@
                 <a href="#!"><span class="white-text">X-STOCK</span></a>
             </div>
         </li>
-        <li>
-            <a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a>
-        </li>
+        <li><a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a></li>
         <li><div class="divider"></div></li>
-        <li>
-            <a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a>
-        </li>
+        <li><a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
         <li><div class="divider"></div></li>
-        <li>
-            <a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a>
-        </li>
+        <li><a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
+        <li><div class="divider"></div></li>
+        <li><a class="collapsible-header waves-effect waves-red" href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
     </ul>
+
+    <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
+        <a id="tap-target-btn" class="btn btn-floating btn-large red lighten-2">
+            <i class="large material-icons">bookmark_border</i>
+        </a>
+        <ul>
+            <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
+            <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
+            <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
+            <li><a class="btn-floating purple tooltipped pulse" data-position="left" data-tooltip="留言" href="/comment"><i class="material-icons">chat_bubble_outline</i></a></li>
+            <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
+        </ul>
+    </div>
 </header>
 
 <main class="container">
@@ -64,18 +74,6 @@
         </div>
     </div>
     {{ end }}
-
-    <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
-        <a id="tap-target-btn" class="btn btn-floating btn-large red lighten-2">
-            <i class="large material-icons">bookmark_border</i>
-        </a>
-        <ul>
-            <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
-            <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
-            <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
-            <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
-        </ul>
-    </div>
 {{ end }}
 
 {{ define "footer" }}
