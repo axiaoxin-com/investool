@@ -36,7 +36,7 @@ func NewGinEngine(middlewares ...gin.HandlerFunc) *gin.Engine {
 	// get client ip
 	engine.ForwardedByClientIP = true
 	engine.RemoteIPHeaders = []string{"X-Forwarded-For", "X-Real-IP"}
-	engine.SetTrustedProxies([]string{"127.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8"})
+	engine.SetTrustedProxies([]string{"127.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8", "::1/128"})
 
 	// use middlewares
 	for _, middleware := range middlewares {
