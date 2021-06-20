@@ -2,13 +2,93 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
-        <li class="tab col s4"><a class="active" href="#4433">4433选基</a></li>
-        <li class="tab col s4"><a href="#fundcheck">基金检测</a></li>
-        <li class="tab col s4"><a href="#fundstock">持仓个股分析</a></li>
+        <li class="tab col s6"><a class="active" href="#4433">4433选基</a></li>
+        <li class="tab col s6"><a href="#fundcheck">基金检测</a></li>
         </ul>
     </div>
-    <div id="4433" class="col s12">123</div>
-    <div id="fundcheck" class="col s12">456</div>
-    <div id="fundstock" class="col s12">789</div>
+
+    <!--4433 start-->
+    <div id="4433" class="col s12">
+        <div class="row">
+            <form class="col s12" id="4433_form">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="fund_4433_1_y" value="4" type="number" min="0" step="1" class="validate">
+                        <label for="fund_4433_1_y">一年绩效排名前 1/X</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="fund_4433_1235_y" type="number" class="validate" value="4" min="0" step="1">
+                        <label for="fund_4433_1235_y">今年、两年、三年、五年绩效排名前 1/X</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="fund_4433_6_m" type="number" class="validate" value="3" min="0" step="1">
+                        <label for="fund_4433_6_m">六个月绩效排名前 1/X</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="fund_4433_3_m" type="number" class="validate" value="3" min="0" step="1">
+                        <label for="fund_4433_3_m">三个月绩效排名前 1/X</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <a onclick="M.toast({html: '开发中，敬请期待'})" class="btn waves-effect waves-light red lighten-2 col s12" id="fund_4433_submit_btn" >筛选</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--4433 end-->
+
+    <!--基金检测 start-->
+    <div id="fundcheck" class="col s12">
+        <div class="row">
+            <form class="col s12" id="fundcheck_form">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="fundcheck_keyword" name="fundcheck_keyword" type="text" class="validate" required>
+                        <label for="fundcheck_keyword">输入基金代码或简称</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col l6 s12">
+                        <input name="fundcheck_min_scale" value="2.0" type="number" min="0" step="1" class="validate">
+                        <label for="fundcheck_min_scale">基金规模最小值（亿）</label>
+                    </div>
+                    <div class="input-field col l6 s12">
+                        <input name="fundcheck_max_scale" type="number" class="validate" value="50" min="0" step="1">
+                        <label for="fundcheck_max_scale">基金规模最大值（亿）</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input name="fundcheck_manager_year" type="number" class="validate" value="5" min="0" step="1">
+                        <label for="fundcheck_manager_year">基金经理管理该基金最短时间（年）</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <label class="col l4 s12">
+                        <input name="fundcheck_is_check_jzbdl" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测净值波动是否稳定</span>
+                    </label>
+                    <label class="col l4 s12">
+                        <input name="fundcheck_is_check_4433" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测是否满足4433选基法则</span>
+                    </label>
+                    <label class="col l4 s12">
+                        <input name="fundcheck_is_check_stocks" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测持仓个股</span>
+                    </label>
+                </div>
+                <div class="row">
+                    <a onclick="M.toast({html: '开发中，敬请期待'})" class="btn waves-effect waves-light red lighten-2 col s12" id="fundcheck_submit_btn" >检测</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--基金检测 end-->
 </div>
 {{ template "footer" . }}
