@@ -1,4 +1,4 @@
-// 天天基金 API 封装
+// 天天基金净值列表
 
 package eastmoney
 
@@ -161,7 +161,7 @@ func (e EastMoney) QueryFundNetListByPage(ctx context.Context, fundType FundType
 		return resp, err
 	}
 	if resp.ErrCode != 0 {
-		return resp, fmt.Errorf("QueryFundNetList error %v", resp.ErrMsg)
+		return resp, fmt.Errorf("QueryFundNetListByPage error %v", resp.ErrMsg)
 	}
 	return resp, nil
 }
