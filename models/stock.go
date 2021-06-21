@@ -104,7 +104,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryHistoricalFinaMainData err:"+err.Error())
 	}
 	s.HistoricalFinaMainData = hf
 
@@ -114,7 +114,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryValuationStatus err:"+err.Error())
 	}
 	s.ValuationMap = valMap
 
@@ -124,7 +124,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryHistoricalPEList err:"+err.Error())
 	}
 	s.HistoricalPEList = peList
 
@@ -136,7 +136,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock Q1RevenueIncreasingRatio err:"+err.Error())
 	}
 	// pe 中位数
 	peMidVal, err := peList.GetMidValue(ctx)
@@ -144,7 +144,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock GetMidValue err:"+err.Error())
 	}
 	reports := s.HistoricalFinaMainData.FilterByReportType(ctx, "年报")
 	if len(reports) > 0 {
@@ -157,7 +157,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryHistoricalStockPrice err:"+err.Error())
 	}
 	s.HistoricalPrice = hisPrice
 
@@ -167,7 +167,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, "HistoricalVolatility error:"+err.Error())
+		logging.Warn(ctx, "NewStock HistoricalVolatility err:"+err.Error())
 	}
 	s.HistoricalVolatility = hv
 
@@ -177,7 +177,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryCompanyProfile err:"+err.Error())
 	}
 	s.CompanyProfile = cp
 
@@ -187,7 +187,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryFinaPublishDateList err:"+err.Error())
 	}
 	if len(finaPubDateList) > 0 {
 		s.FinaAppointPublishDate = finaPubDateList[0].AppointPublishDate
@@ -201,7 +201,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryOrgRating err:"+err.Error())
 	}
 	s.OrgRatingList = orgRatings
 
@@ -211,7 +211,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryProfitPredict err:"+err.Error())
 	}
 	s.ProfitPredictList = pps
 
@@ -221,7 +221,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
 	}
 	s.JZPG = jzpg
 
@@ -234,7 +234,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryFinaGincomeData err:"+err.Error())
 	}
 	s.HistoricalGincomeList = gincomeList
 	if len(s.HistoricalGincomeList) > 0 {
@@ -251,7 +251,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		if strict {
 			return s, err
 		}
-		logging.Warn(ctx, err.Error())
+		logging.Warn(ctx, "NewStock QueryFinaCashflowData err:"+err.Error())
 	}
 	s.HistoricalCashflowList = cashflow
 	if len(s.HistoricalCashflowList) > 0 {

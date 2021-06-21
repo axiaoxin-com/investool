@@ -61,8 +61,8 @@ $(document).ready(function () {
         }
         $("title").text(data.PageTitle);
         $("#stock_forms").remove();
-        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#selector_result").removeClass("hide");
+        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#load_modal").modal("close");
       },
     });
@@ -128,8 +128,8 @@ $(document).ready(function () {
         }
         $("title").text(data.PageTitle);
         $("#stock_forms").remove();
-        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#checker_results").removeClass("hide");
+        $("html, body").animate({ scrollTop: 0 }, 0);
         $("#load_modal").modal("close");
       },
     });
