@@ -177,7 +177,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("%d 年内净利润: %s", c.Options.CheckYears, strings.Join(nps, ", "))
 	if len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
-			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "PROFIT", c.Options.CheckYears) {
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "NETPROFIT", c.Options.CheckYears) {
 			ok = false
 			itemOK = false
 		}

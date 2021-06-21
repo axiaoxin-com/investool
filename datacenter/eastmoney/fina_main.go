@@ -212,7 +212,8 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 }
 
 // ValueList 获取历史数据值，最新的在最前面
-// NETVALUE 净利润
+// NETPROFIT 净利润
+// GROSSPROFIT 毛利润
 // REVENUE 营收
 // ROE/EPS/ROA
 // MLL 毛利率
@@ -232,6 +233,8 @@ func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, 
 		switch dataType {
 		case "NETPROFIT":
 			value = i.Parentnetprofit
+		case "GROSSPROFIT":
+			value = i.Mlr
 		case "REVENUE":
 			value = i.Totaloperatereve
 		case "EPS":
@@ -280,12 +283,13 @@ func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataTyp
 				increasing = false
 				break
 			}
-		case "PROFIT":
+		case "NETPROFIT":
 			// 净利润
 			if data[i].Parentnetprofit <= data[i+1].Parentnetprofit {
 				increasing = false
 				break
 			}
+		case "GROSSPROFIT":
 			// 毛利润
 			if data[i].Mlr <= data[i+1].Mlr {
 				increasing = false
