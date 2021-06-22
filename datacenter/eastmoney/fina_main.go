@@ -221,10 +221,14 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, count int) []float64 {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, "年报")
-	if len(data) == 0 {
+	dataLen := len(data)
+	if dataLen == 0 {
 		return r
 	}
 	if count > 0 {
+		if count > dataLen {
+			count = dataLen
+		}
 		data = data[:count]
 	}
 	dataType = strings.ToUpper(dataType)
@@ -255,46 +259,12 @@ func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, 
 
 // IsIncreasingByYears roe/eps/revenue/profit 是否逐年递增
 func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, yearsCount int) bool {
-	data := h.FilterByReportType(ctx, "年报")
-	dataLen := len(data)
-	if dataLen == 0 {
-		return false
-	}
-	if yearsCount > dataLen {
-		yearsCount = dataLen
-	}
-
-	dataType = strings.ToUpper(dataType)
+	data := h.ValueList(ctx, dataType, yearsCount)
 	increasing := true
-	for i := 0; i < yearsCount-1; i++ {
-		switch dataType {
-		case "ROE":
-			if data[i].Roejq <= data[i+1].Roejq {
-				increasing = false
-				break
-			}
-		case "EPS":
-			if data[i].Epsjb <= data[i+1].Epsjb {
-				increasing = false
-				break
-			}
-		case "REVENUE":
-			if data[i].Totaloperatereve <= data[i+1].Totaloperatereve {
-				increasing = false
-				break
-			}
-		case "NETPROFIT":
-			// 净利润
-			if data[i].Parentnetprofit <= data[i+1].Parentnetprofit {
-				increasing = false
-				break
-			}
-		case "GROSSPROFIT":
-			// 毛利润
-			if data[i].Mlr <= data[i+1].Mlr {
-				increasing = false
-				break
-			}
+	for i := 0; i < len(data)-1; i++ {
+		if data[i] <= data[i+1] {
+			increasing = false
+			break
 		}
 	}
 	return increasing
@@ -305,45 +275,19 @@ func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataTyp
 // MML 毛利率
 // JLL 净利率
 func (h HistoricalFinaMainData) IsStability(ctx context.Context, dataType string, yearsCount int) bool {
-	switch strings.ToUpper(dataType) {
-	case "MLL":
-		values := h.ValueList(ctx, dataType, yearsCount)
-		sd, err := goutils.StdDeviationFloat64(values)
-		if err != nil {
-			logging.Error(ctx, "MLL StdDeviationFloat64 error:"+err.Error())
-			return false
-		}
-		return sd <= 1
-	case "JLL":
-		values := h.ValueList(ctx, dataType, yearsCount)
-		sd, err := goutils.StdDeviationFloat64(values)
-		if err != nil {
-			logging.Error(ctx, "JLL StdDeviationFloat64 error:"+err.Error())
-			return false
-		}
-		return sd <= 1
-	default:
+	values := h.ValueList(ctx, dataType, yearsCount)
+	sd, err := goutils.StdDeviationFloat64(values)
+	if err != nil {
+		logging.Error(ctx, "IsStability StdDeviationFloat64 error:"+err.Error())
 		return false
 	}
+	return sd <= 1
 }
 
 // MidValue 历史年报 roe/eps 中位数
 func (h HistoricalFinaMainData) MidValue(ctx context.Context, dataType string, yearsCount int) (float64, error) {
-	dataType = strings.ToUpper(dataType)
-	data := h.FilterByReportType(ctx, "年报")
-	if yearsCount > 0 {
-		data = data[:yearsCount]
-	}
-	values := []float64{}
-	for _, i := range data {
-		switch dataType {
-		case "ROE":
-			values = append(values, i.Roejq)
-		case "EPS":
-			values = append(values, i.Epsjb)
-		}
-	}
-	return goutils.MidValueFloat64(values)
+	data := h.ValueList(ctx, dataType, yearsCount)
+	return goutils.MidValueFloat64(data)
 }
 
 // Q1RevenueIncreasingRatio 获取今年一季报的营收增长比 (%)
