@@ -9,6 +9,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
+	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/models"
 )
 
@@ -112,14 +113,24 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// ROE 均值小于 NoCheckYearsROE 时，至少 n 年内逐年递增
 	checkItemName = fmt.Sprintf("ROE 逐年递增（均值>=%f除外）", c.Options.NoCheckYearsROE)
 	itemOK = true
-	roeList := stock.HistoricalFinaMainData.ValueList(ctx, "ROE", c.Options.CheckYears)
+	roeList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeROE,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	desc = fmt.Sprintf("%d 年内 ROE:%+v", c.Options.CheckYears, roeList)
 	roeavg, err := goutils.AvgFloat64(roeList)
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
 	}
 	if roeavg < c.Options.NoCheckYearsROE &&
-		!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "ROE", c.Options.CheckYears) {
+		!stock.HistoricalFinaMainData.IsIncreasingByYears(
+			ctx,
+			eastmoney.ValueListTypeROE,
+			c.Options.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		) {
 		desc = fmt.Sprintf("%d 年内未逐年递增:%+v", c.Options.CheckYears, roeList)
 		ok = false
 		itemOK = false
@@ -130,12 +141,23 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// EPS 至少 n 年内逐年递增且 > 0
-	epsList := stock.HistoricalFinaMainData.ValueList(ctx, "EPS", c.Options.CheckYears)
+	epsList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeEPS,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	checkItemName = "EPS 逐年递增且 > 0"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内 EPS:%+v", c.Options.CheckYears, epsList)
 	if len(epsList) > 0 {
-		if epsList[len(epsList)-1] <= 0 || !stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "EPS", c.Options.CheckYears) {
+		if epsList[len(epsList)-1] <= 0 ||
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(
+				ctx,
+				eastmoney.ValueListTypeEPS,
+				c.Options.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			) {
 			ok = false
 			itemOK = false
 		}
@@ -146,7 +168,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// 营业总收入至少 n 年内逐年递增且 > 0
-	revList := stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", c.Options.CheckYears)
+	revList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeRevenue,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	checkItemName = "营收逐年递增且 > 0"
 	itemOK = true
 	revs := []string{}
@@ -156,7 +183,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("%d 年内营收: %s", c.Options.CheckYears, strings.Join(revs, ", "))
 	if len(revList) > 0 {
 		if revList[len(revList)-1] <= 0 ||
-			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "REVENUE", c.Options.CheckYears) {
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(
+				ctx,
+				eastmoney.ValueListTypeRevenue,
+				c.Options.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			) {
 			ok = false
 			itemOK = false
 		}
@@ -167,7 +199,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// 净利润至少 n 年内逐年递增
-	netprofitList := stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", c.Options.CheckYears)
+	netprofitList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeNetProfit,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	checkItemName = "净利润逐年递增且 > 0"
 	itemOK = true
 	nps := []string{}
@@ -177,7 +214,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("%d 年内净利润: %s", c.Options.CheckYears, strings.Join(nps, ", "))
 	if len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
-			!stock.HistoricalFinaMainData.IsIncreasingByYears(ctx, "NETPROFIT", c.Options.CheckYears) {
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(
+				ctx,
+				eastmoney.ValueListTypeNetProfit,
+				c.Options.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			) {
 			ok = false
 			itemOK = false
 		}
@@ -362,12 +404,22 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// 毛利率稳定性 （只检测非金融股）
-	mllList := stock.HistoricalFinaMainData.ValueList(ctx, "MLL", c.Options.CheckYears)
+	mllList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeMLL,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	checkItemName = "毛利率"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
 	if c.Options.IsCheckMLLStability && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
-		if !stock.HistoricalFinaMainData.IsStability(ctx, "MLL", c.Options.CheckYears) {
+		if !stock.HistoricalFinaMainData.IsStability(
+			ctx,
+			eastmoney.ValueListTypeMLL,
+			c.Options.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, mllList)
 			ok = false
 			itemOK = false
@@ -379,12 +431,22 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// 净利率稳定性
-	jllList := stock.HistoricalFinaMainData.ValueList(ctx, "JLL", c.Options.CheckYears)
+	jllList := stock.HistoricalFinaMainData.ValueList(
+		ctx,
+		eastmoney.ValueListTypeJLL,
+		c.Options.CheckYears,
+		eastmoney.FinaReportTypeYear,
+	)
 	checkItemName = "净利率"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
 	if c.Options.IsCheckMLLStability {
-		if !stock.HistoricalFinaMainData.IsStability(ctx, "JLL", c.Options.CheckYears) {
+		if !stock.HistoricalFinaMainData.IsStability(
+			ctx,
+			eastmoney.ValueListTypeJLL,
+			c.Options.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, jllList)
 			ok = false
 			itemOK = false

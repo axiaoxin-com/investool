@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 )
 
 // ExportorData 数据模板
@@ -159,17 +160,27 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		JZPG:            stock.JZPG.String(),
 		LatestROE:       fina.Roejq,
 		ROETBZZ:         fina.Roejqtz,
-		ROE5Y:           stock.HistoricalFinaMainData.ValueList(ctx, "ROE", 5),
+		ROE5Y:           stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeROE, 5, eastmoney.FinaReportTypeYear),
 		LatestEPS:       fina.Epsjb,
 		EPSTBZZ:         fina.Epsjbtz,
-		EPS5Y:           stock.HistoricalFinaMainData.ValueList(ctx, "EPS", 5),
+		EPS5Y:           stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeEPS, 5, eastmoney.FinaReportTypeYear),
 		TotalIncome:     goutils.YiWanString(fina.Totaloperatereve),
 		TotalIncomeTBZZ: fina.Totaloperaterevetz,
-		TotalIncome5Y:   stock.HistoricalFinaMainData.ValueList(ctx, "REVENUE", 5),
+		TotalIncome5Y: stock.HistoricalFinaMainData.ValueList(
+			ctx,
+			eastmoney.ValueListTypeRevenue,
+			5,
+			eastmoney.FinaReportTypeYear,
+		),
 
-		NetProfit:              goutils.YiWanString(fina.Parentnetprofit),
-		NetProfitTBZZ:          fina.Parentnetprofittz,
-		NetProfit5Y:            stock.HistoricalFinaMainData.ValueList(ctx, "NETPROFIT", 5),
+		NetProfit:     goutils.YiWanString(fina.Parentnetprofit),
+		NetProfitTBZZ: fina.Parentnetprofittz,
+		NetProfit5Y: stock.HistoricalFinaMainData.ValueList(
+			ctx,
+			eastmoney.ValueListTypeNetProfit,
+			5,
+			eastmoney.FinaReportTypeYear,
+		),
 		ZXGXL:                  stock.BaseInfo.Zxgxl,
 		FZLDB:                  fina.Ld,
 		FinaReportDate:         strings.Fields(stock.FinaReportDate)[0],
@@ -195,8 +206,13 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		ValuationSXNL:          stock.ValuationMap["市现率"],
 		HYJZSP:                 stock.JZPG.GetValuationScore(),
 		ZTZD:                   stock.JZPG.GetValueTotalScore(),
-		MLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "MLL", 5),
-		JLL5Y:                  stock.HistoricalFinaMainData.ValueList(ctx, "JLL", 5),
+		MLL5Y: stock.HistoricalFinaMainData.ValueList(
+			ctx,
+			eastmoney.ValueListTypeMLL,
+			5,
+			eastmoney.FinaReportTypeYear,
+		),
+		JLL5Y: stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeJLL, 5, eastmoney.FinaReportTypeYear),
 
 		ListingDate:    stock.BaseInfo.ListingDate,
 		NetcashOperate: goutils.YiWanString(stock.NetcashOperate),

@@ -188,11 +188,25 @@ type FinaMainData struct {
 // HistoricalFinaMainData 主要指标历史数据列表
 type HistoricalFinaMainData []FinaMainData
 
+// FinaReportType 财报类型
+type FinaReportType string
+
+const (
+	// FinaReportTypeQ1 一季报
+	FinaReportTypeQ1 = "一季报"
+	// FinaReportTypeMid 中报
+	FinaReportTypeMid = "中报"
+	// FinaReportTypeQ3 三季报
+	FinaReportTypeQ3 = "三季报"
+	// FinaReportTypeYear 年报
+	FinaReportTypeYear = "年报"
+)
+
 // FilterByReportType 按财报类型过滤：一季报，中报，三季报，年报
-func (h HistoricalFinaMainData) FilterByReportType(ctx context.Context, reportType string) HistoricalFinaMainData {
+func (h HistoricalFinaMainData) FilterByReportType(ctx context.Context, reportType FinaReportType) HistoricalFinaMainData {
 	result := HistoricalFinaMainData{}
 	for _, i := range h {
-		if i.ReportType == reportType {
+		if i.ReportType == string(reportType) {
 			result = append(result, i)
 		}
 	}
@@ -211,16 +225,37 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 	return result
 }
 
+// ValueListType 列表数据的数据类型
+type ValueListType string
+
+const (
+	// ValueListTypeNetProfit 净利润
+	ValueListTypeNetProfit ValueListType = "NETPROFIT"
+	// ValueListTypeGrossProfit 毛利润
+	ValueListTypeGrossProfit ValueListType = "GROSSPROFIT"
+	// ValueListTypeRevenue 营收
+	ValueListTypeRevenue ValueListType = "REVENUE"
+	// ValueListTypeROE roe
+	ValueListTypeROE ValueListType = "ROE"
+	// ValueListTypeEPS eps
+	ValueListTypeEPS ValueListType = "EPS"
+	// ValueListTypeROA roa
+	ValueListTypeROA ValueListType = "ROA"
+	// ValueListTypeMLL 毛利率
+	ValueListTypeMLL ValueListType = "MLL"
+	// ValueListTypeJLL 净利率
+	ValueListTypeJLL ValueListType = "JLL"
+)
+
 // ValueList 获取历史数据值，最新的在最前面
-// NETPROFIT 净利润
-// GROSSPROFIT 毛利润
-// REVENUE 营收
-// ROE/EPS/ROA
-// MLL 毛利率
-// JLL 净利率
-func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, count int) []float64 {
+func (h HistoricalFinaMainData) ValueList(
+	ctx context.Context,
+	valueType ValueListType,
+	count int,
+	reportType FinaReportType,
+) []float64 {
 	r := []float64{}
-	data := h.FilterByReportType(ctx, "年报")
+	data := h.FilterByReportType(ctx, reportType)
 	dataLen := len(data)
 	if dataLen == 0 {
 		return r
@@ -231,25 +266,24 @@ func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, 
 		}
 		data = data[:count]
 	}
-	dataType = strings.ToUpper(dataType)
 	for _, i := range data {
 		value := float64(-1)
-		switch dataType {
-		case "NETPROFIT":
+		switch valueType {
+		case ValueListTypeNetProfit:
 			value = i.Parentnetprofit
-		case "GROSSPROFIT":
+		case ValueListTypeGrossProfit:
 			value = i.Mlr
-		case "REVENUE":
+		case ValueListTypeRevenue:
 			value = i.Totaloperatereve
-		case "EPS":
+		case ValueListTypeEPS:
 			value = i.Epsjb
-		case "ROA":
+		case ValueListTypeROA:
 			value = i.Zzcjll
-		case "ROE":
+		case ValueListTypeROE:
 			value = i.Roejq
-		case "MLL":
+		case ValueListTypeMLL:
 			value = i.Xsmll
-		case "JLL":
+		case ValueListTypeJLL:
 			value = i.Xsjll
 		}
 		r = append(r, value)
@@ -258,8 +292,13 @@ func (h HistoricalFinaMainData) ValueList(ctx context.Context, dataType string, 
 }
 
 // IsIncreasingByYears roe/eps/revenue/profit 是否逐年递增
-func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataType string, yearsCount int) bool {
-	data := h.ValueList(ctx, dataType, yearsCount)
+func (h HistoricalFinaMainData) IsIncreasingByYears(
+	ctx context.Context,
+	valueType ValueListType,
+	yearsCount int,
+	reportType FinaReportType,
+) bool {
+	data := h.ValueList(ctx, valueType, yearsCount, reportType)
 	increasing := true
 	for i := 0; i < len(data)-1; i++ {
 		if data[i] <= data[i+1] {
@@ -271,11 +310,13 @@ func (h HistoricalFinaMainData) IsIncreasingByYears(ctx context.Context, dataTyp
 }
 
 // IsStability 数据是否稳定（标准差在 1 以内）
-// dataType:
-// MML 毛利率
-// JLL 净利率
-func (h HistoricalFinaMainData) IsStability(ctx context.Context, dataType string, yearsCount int) bool {
-	values := h.ValueList(ctx, dataType, yearsCount)
+func (h HistoricalFinaMainData) IsStability(
+	ctx context.Context,
+	valueType ValueListType,
+	yearsCount int,
+	reportType FinaReportType,
+) bool {
+	values := h.ValueList(ctx, valueType, yearsCount, reportType)
 	sd, err := goutils.StdDeviationFloat64(values)
 	if err != nil {
 		logging.Error(ctx, "IsStability StdDeviationFloat64 error:"+err.Error())
@@ -285,8 +326,13 @@ func (h HistoricalFinaMainData) IsStability(ctx context.Context, dataType string
 }
 
 // MidValue 历史年报 roe/eps 中位数
-func (h HistoricalFinaMainData) MidValue(ctx context.Context, dataType string, yearsCount int) (float64, error) {
-	data := h.ValueList(ctx, dataType, yearsCount)
+func (h HistoricalFinaMainData) MidValue(
+	ctx context.Context,
+	valueType ValueListType,
+	yearsCount int,
+	reportType FinaReportType,
+) (float64, error) {
+	data := h.ValueList(ctx, valueType, yearsCount, reportType)
 	return goutils.MidValueFloat64(data)
 }
 

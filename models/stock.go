@@ -146,7 +146,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (S
 		}
 		logging.Warn(ctx, "NewStock GetMidValue err:"+err.Error())
 	}
-	reports := s.HistoricalFinaMainData.FilterByReportType(ctx, "年报")
+	reports := s.HistoricalFinaMainData.FilterByReportType(ctx, eastmoney.FinaReportTypeYear)
 	if len(reports) > 0 {
 		s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
 	}
