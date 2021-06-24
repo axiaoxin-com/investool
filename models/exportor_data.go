@@ -145,7 +145,25 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 	if stock.FinaReportOpinion != "" {
 		reportOpinion = stock.FinaReportOpinion
 	}
+	frd := strings.Fields(stock.FinaReportDate)
+	reportDate := "--"
+	if len(frd) > 0 {
+		reportDate = frd[0]
+	}
+	fapd := strings.Fields(stock.FinaAppointPublishDate)
+	appointPubDate := "--"
+	if len(fapd) > 0 {
+		appointPubDate = fapd[0]
+	}
+	frpd := strings.Fields(stock.FinaActualPublishDate)
+	actualPubDate := "--"
+	if len(frpd) > 0 {
+		actualPubDate = frpd[0]
+	}
 
+	if len(stock.HistoricalFinaMainData) == 0 {
+		return ExportorData{}
+	}
 	fina := stock.HistoricalFinaMainData[0]
 	return ExportorData{
 		Name:            stock.BaseInfo.SecurityNameAbbr,
@@ -183,9 +201,9 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		),
 		ZXGXL:                  stock.BaseInfo.Zxgxl,
 		FZLDB:                  fina.Ld,
-		FinaReportDate:         strings.Fields(stock.FinaReportDate)[0],
-		FinaAppointPublishDate: strings.Fields(stock.FinaAppointPublishDate)[0],
-		FinaActualPublishDate:  strings.Fields(stock.FinaActualPublishDate)[0],
+		FinaReportDate:         reportDate,
+		FinaAppointPublishDate: appointPubDate,
+		FinaActualPublishDate:  actualPubDate,
 		TotalMarketCap:         goutils.YiWanString(stock.BaseInfo.TotalMarketCap),
 		Price:                  stock.GetPrice(),
 		RightPrice:             rightPrice,

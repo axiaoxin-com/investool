@@ -55,6 +55,159 @@ $(document).ready(function () {
                 '<td><a href="#!">' +
                 stock.name +
                 "</a></td>" +
+                '<td class="hide">' +
+                stock.industry +
+                "</td>" +
+                '<td class="hide">' +
+                stock.keywords +
+                "</td>" +
+                '<td class="hide">' +
+                stock.company_profile +
+                "</td>" +
+                '<td class="hide">' +
+                stock.main_forms +
+                "</td>" +
+                '<td class="hide">' +
+                stock.byys_ration +
+                "</td>" +
+                '<td class="hide">' +
+                stock.report_date_name +
+                "</td>" +
+                '<td class="hide">' +
+                stock.report_opinion +
+                "</td>" +
+                '<td class="hide">' +
+                stock.jzpg +
+                "</td>" +
+                '<td class="hide">' +
+                stock.latest_roe +
+                "</td>" +
+                '<td class="hide">' +
+                stock.roe_tbzz +
+                "</td>" +
+                '<td class="hide">' +
+                stock.roe_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.latest_eps +
+                "</td>" +
+                '<td class="hide">' +
+                stock.eps_tbzz +
+                "</td>" +
+                '<td class="hide">' +
+                stock.eps_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.total_income +
+                "</td>" +
+                '<td class="hide">' +
+                stock.total_income_tbzz +
+                "</td>" +
+                '<td class="hide">' +
+                stock.total_income_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.net_profit +
+                "</td>" +
+                '<td class="hide">' +
+                stock.net_profit_tbzz +
+                "</td>" +
+                '<td class="hide">' +
+                stock.net_profit_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.zxgxl +
+                "</td>" +
+                '<td class="hide">' +
+                stock.fina_report_date +
+                "</td>" +
+                '<td class="hide">' +
+                stock.fina_appoint_publish_date +
+                "</td>" +
+                '<td class="hide">' +
+                stock.fina_actual_publish_date +
+                "</td>" +
+                '<td class="hide">' +
+                stock.total_market_cap +
+                "</td>" +
+                '<td class="hide">' +
+                stock.price +
+                "</td>" +
+                '<td class="hide">' +
+                stock.right_price +
+                "</td>" +
+                '<td class="hide">' +
+                stock.price_space +
+                "</td>" +
+                '<td class="hide">' +
+                stock.hv +
+                "</td>" +
+                '<td class="hide">' +
+                stock.zxfzl +
+                "</td>" +
+                '<td class="hide">' +
+                stock.fzldb +
+                "</td>" +
+                '<td class="hide">' +
+                stock.netprofit_growthrate_3_y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.income_growthrate_3_y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.listing_yield_year +
+                "</td>" +
+                '<td class="hide">' +
+                stock.pe +
+                "</td>" +
+                '<td class="hide">' +
+                stock.peg +
+                "</td>" +
+                '<td class="hide">' +
+                stock.org_rating +
+                "</td>" +
+                '<td class="hide">' +
+                stock.profit_predict +
+                "</td>" +
+                '<td class="hide">' +
+                stock.valuation_syl +
+                "</td>" +
+                '<td class="hide">' +
+                stock.valuation_sjl +
+                "</td>" +
+                '<td class="hide">' +
+                stock.valuation_sxol +
+                "</td>" +
+                '<td class="hide">' +
+                stock.valuation_sxnl +
+                "</td>" +
+                '<td class="hide">' +
+                stock.hyjzsp +
+                "</td>" +
+                '<td class="hide">' +
+                stock.ztzd +
+                "</td>" +
+                '<td class="hide">' +
+                stock.mll_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.jll_5y +
+                "</td>" +
+                '<td class="hide">' +
+                stock.listing_date +
+                "</td>" +
+                '<td class="hide">' +
+                stock.netcash_operate +
+                "</td>" +
+                '<td class="hide">' +
+                stock.netcash_invest +
+                "</td>" +
+                '<td class="hide">' +
+                stock.netcash_finance +
+                "</td>" +
+                '<td class="hide">' +
+                stock.netcash_free +
+                "</td>" +
                 "</tr>"
             );
           });
@@ -142,5 +295,10 @@ $(document).ready(function () {
   // 按钮通过点击展示
   $(".fixed-action-btn").floatingActionButton({
     hoverEnabled: false,
+  });
+
+  // 下载 excel
+  $("#export-excel-btn").click(function (e) {
+    M.toast({ html: "开发中，敬请期待" });
   });
 });
