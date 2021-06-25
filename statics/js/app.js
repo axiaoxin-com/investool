@@ -158,6 +158,9 @@ $(document).ready(function () {
                 stock.listing_yield_year +
                 "</td>" +
                 '<td class="hide">' +
+                stock.listing_volatility_year +
+                "</td>" +
+                '<td class="hide">' +
                 stock.pe +
                 "</td>" +
                 '<td class="hide">' +
@@ -297,8 +300,8 @@ $(document).ready(function () {
     hoverEnabled: false,
   });
 
-  // 下载 excel
-  $("#export-excel-btn").click(function (e) {
-    M.toast({ html: "开发中，敬请期待" });
+  // 导出结果csv文件
+  $("#export-result-btn").click(function (e) {
+    tableExport("selector_result_table", "x-stock-selected", "csv");
   });
 });
