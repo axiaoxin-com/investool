@@ -47,12 +47,16 @@ $(document).ready(function () {
           );
         } else {
           $.each(data.Stocks, function (i, stock) {
+            var cm = stock.code.split(".");
             $("#selector_result tbody").append(
               "<tr>" +
                 "<td>" +
-                stock.code.split(".")[0] +
+                cm[0] +
                 "</td>" +
-                '<td><a href="#!">' +
+                '<td><a target="_blank" href="http://quote.eastmoney.com/' +
+                cm[1] +
+                cm[0] +
+                '.html">' +
                 stock.name +
                 "</a></td>" +
                 '<td class="hide t_industry">' +
@@ -250,14 +254,18 @@ $(document).ready(function () {
           $("#checker_results h4").text("暂不支持对该股进行检测");
         } else {
           $.each(data.Results, function (i, result) {
+            var cm = data.Names[i].split("-")[1].split(".");
             $("#checker_results").append(
               '<div class="divider"></div>' +
                 '<div id="checker_result_' +
                 i +
                 '" class="row">' +
-                '<div class="row"><h6>' +
+                '<div class="row"><h6><a target="_blank" href="http://quote.eastmoney.com/' +
+                cm[1] +
+                cm[0] +
+                '.html">' +
                 data.Names[i] +
-                "</h6>" +
+                "</a></h6>" +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
