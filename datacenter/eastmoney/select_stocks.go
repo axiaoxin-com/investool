@@ -156,7 +156,7 @@ type StockInfo struct {
 	NetprofitYoyRatio float64 `json:"NETPROFIT_YOY_RATIO"`
 	// 营收增长率（%）
 	ToiYoyRatio float64 `json:"TOI_YOY_RATIO"`
-	// 最新股息率
+	// 最新股息率 (%)
 	Zxgxl float64 `json:"ZXGXL"`
 	// 净利润 3 年复合增长率
 	NetprofitGrowthrate3Y float64 `json:"NETPROFIT_GROWTHRATE_3Y"`

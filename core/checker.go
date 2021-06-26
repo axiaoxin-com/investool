@@ -61,6 +61,8 @@ type CheckerOptions struct {
 	IsCheckRevGrow bool `json:"is_check_rev_grow"       form:"checker_is_check_rev_grow"`
 	// 是否检测净利润逐年递增
 	IsCheckNetprofitGrow bool `json:"is_check_netprofit_grow" form:"checker_is_check_netprofit_grow"`
+	// 最低股息率
+	MinGxl float64 `json:"min_gxl"                 form:"checker_min_gxl"`
 }
 
 // DefaultCheckerOptions 默认检测值
@@ -88,6 +90,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	IsCheckEPSGrow:       true,
 	IsCheckRevGrow:       true,
 	IsCheckNetprofitGrow: true,
+	MinGxl:               0.0,
 }
 
 // Checker 检测器实例
@@ -565,7 +568,8 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	checkItemName = "配发股利股息"
 	itemOK = true
 	desc = fmt.Sprintf("最新股息率: %f", stock.BaseInfo.Zxgxl)
-	if stock.BaseInfo.Zxgxl == 0 {
+	if stock.BaseInfo.Zxgxl < c.Options.MinGxl {
+		desc = fmt.Sprintf("最新股息率: %f < %f", stock.BaseInfo.Zxgxl, c.Options.MinGxl)
 		ok = false
 		itemOK = false
 	}

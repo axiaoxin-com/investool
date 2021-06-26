@@ -48,15 +48,19 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col l4 s12">
+                    <div class="input-field col l3 s12">
+                        <input name="checker_min_gxl" type="number" class="validate" value="0.0" step="0.5">
+                        <label for="checker_min_gxl">最低股息率(%)</label>
+                    </div>
+                    <div class="input-field col l3 s12">
                         <input name="checker_min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
                         <label for="checker_min_total_market_cap">最小市值（亿）</label>
                     </div>
-                    <div class="input-field col l4 s12">
+                    <div class="input-field col l3 s12">
                         <input name="checker_max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
                         <label for="checker_max_debt_asset_ratio">最大资产负债率(%)</label>
                     </div>
-                    <div class="input-field col l4 s12">
+                    <div class="input-field col l3 s12">
                         <input name="checker_min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
                         <label for="checker_min_hv">最大历史波动率</label>
                     </div>
@@ -276,15 +280,19 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="input-field col l4 s12">
+                            <div class="input-field col l3 s12">
+                                <input name="checker_min_gxl" type="number" class="validate" value="0.0" step="0.5">
+                                <label for="checker_min_gxl">最低股息率(%)</label>
+                            </div>
+                            <div class="input-field col l3 s12">
                                 <input name="checker_min_total_market_cap" type="number" class="validate" value="100.0" min="0" step="1">
                                 <label for="checker_min_total_market_cap">最小市值（亿）</label>
                             </div>
-                            <div class="input-field col l4 s12">
+                            <div class="input-field col l3 s12">
                                 <input name="checker_max_debt_asset_ratio" type="number" class="validate" value="60.0" min="0" step="0.5">
                                 <label for="checker_max_debt_asset_ratio">最大资产负债率(%)</label>
                             </div>
-                            <div class="input-field col l4 s12">
+                            <div class="input-field col l3 s12">
                                 <input name="checker_min_hv" type="number" class="validate" value="1.0" min="0" step="0.1">
                                 <label for="checker_min_hv">最大历史波动率</label>
                             </div>
@@ -313,20 +321,40 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col l3 s12">
-                                <input name="checker_is_check_cashflow" type="checkbox" value="true" class="filled-in" />
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_eps_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                                <span>检测EPS逐年递增</span>
+                            </label>
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_rev_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                                <span>检测营收逐年递增</span>
+                            </label>
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_netprofit_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                                <span>检测净利润逐年递增</span>
+                            </label>
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_cashflow" type="checkbox" class="filled-in" value="true" />
                                 <span>检测现金流量</span>
                             </label>
-                            <label class="col l3 s12">
-                                <input name="checker_is_check_price_by_calc" type="checkbox" value="true" class="filled-in" />
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_price_by_calc" type="checkbox" class="filled-in" value="true" />
                                 <span>检测估算合理价</span>
                             </label>
-                            <label class="col l3 s12">
-                                <input name="checker_is_check_mll_stability" type="checkbox" value="true" class="filled-in" />
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_mll_grow" type="checkbox" class="filled-in" value="true" />
+                                <span>检测毛利率逐年递增</span>
+                            </label>
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_jll_grow" type="checkbox" class="filled-in" value="true" />
+                                <span>检测净利率逐年递增</span>
+                            </label>
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_mll_stability" type="checkbox" class="filled-in" value="true" />
                                 <span>检测毛利率稳定性</span>
                             </label>
-                            <label class="col l3 s12">
-                                <input name="checker_is_check_jll_stability" type="checkbox" value="true" class="filled-in" />
+                            <label class="col l4 s12">
+                                <input name="checker_is_check_jll_stability" type="checkbox" class="filled-in" value="true" />
                                 <span>检测净利率稳定性</span>
                             </label>
                         </div>
@@ -374,7 +402,7 @@
 <div id="selector_result" class="row hide">
     <h4 class="center">筛选结果</h4>
     <!-- Dropdown Structure -->
-    <div class="right">
+    <div id="dropdown-structure" class="right">
         <a id="fields-dropdown-btn" class='dropdown-trigger btn-small red lighten-2 left' href='#' data-target='fields-dropdown'><i class="material-icons left">more_vert</i>更多信息</a>
         <ul id='fields-dropdown' class='dropdown-content'>
             <li><label><input id="field_industry" type="checkbox" /><span>所属行业</span></label></li>

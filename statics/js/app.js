@@ -42,6 +42,7 @@ $(document).ready(function () {
           return;
         }
         if (data.Stocks.length == 0) {
+          $("#dropdown-structure").addClass("hide");
           $("#selector_result #result_table").html(
             '<div class="row"><p class="center flow-text">无法找到符合条件的股票</p></div>'
           );
