@@ -106,6 +106,7 @@ func StockChecker(c *gin.Context) {
 	results := []core.CheckResult{}
 	stockNames := []string{}
 	finaReportNames := []string{}
+	finaAppointPublishDates := []string{}
 	for _, stock := range stocks {
 		result, _ := checker.CheckFundamentals(c, stock)
 		results = append(results, result)
@@ -117,10 +118,13 @@ func StockChecker(c *gin.Context) {
 			finaReportName = stock.HistoricalFinaMainData[0].ReportDateName
 		}
 		finaReportNames = append(finaReportNames, finaReportName)
+
+		finaAppointPublishDates = append(finaAppointPublishDates, strings.Split(stock.FinaAppointPublishDate, " ")[0])
 	}
 	data["Results"] = results
 	data["StockNames"] = stockNames
 	data["FinaReportNames"] = finaReportNames
+	data["FinaAppointPublishDates"] = finaAppointPublishDates
 	c.JSON(http.StatusOK, data)
 	return
 }

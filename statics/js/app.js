@@ -260,14 +260,16 @@ $(document).ready(function () {
                 '<div id="checker_result_' +
                 i +
                 '" class="row">' +
-                '<div class="row"><h6>检测数据源:' +
-                data.FinaReportNames[i] +
-                '<a class="right" target="_blank" href="http://quote.eastmoney.com/' +
+                '<div class="section"><h6><a class="right" target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
                 '.html">' +
                 data.StockNames[i] +
-                "</a></h6>" +
+                "</a><span>当前检测财报数据来源:" +
+                data.FinaReportNames[i] +
+                "</br></br>最新财报预约发布日期:" +
+                data.FinaAppointPublishDates[i] +
+                '</span></h6><div class="divider"></div>' +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
