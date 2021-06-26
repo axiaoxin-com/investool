@@ -16,63 +16,78 @@ import (
 // CheckerOptions 检测条件选项
 type CheckerOptions struct {
 	// 最新一期 ROE 不低于该值
-	MinROE float64 `json:"min_roe"                form:"checker_min_roe"`
+	MinROE float64 `json:"min_roe"                 form:"checker_min_roe"`
 	// 连续增长年数
-	CheckYears int `json:"check_years"            form:"checker_check_years"`
+	CheckYears int `json:"check_years"             form:"checker_check_years"`
 	// ROE 高于该值时不做连续增长检查
-	NoCheckYearsROE float64 `json:"no_check_years_roe"     form:"checker_no_check_years_roe"`
+	NoCheckYearsROE float64 `json:"no_check_years_roe"      form:"checker_no_check_years_roe"`
 	// 最大资产负债率百分比(%)
-	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"   form:"checker_max_debt_asset_ratio"`
+	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"    form:"checker_max_debt_asset_ratio"`
 	// 最大历史波动率
-	MaxHV float64 `json:"min_hv"                 form:"checker_max_hv"`
+	MaxHV float64 `json:"min_hv"                  form:"checker_max_hv"`
 	// 最小市值（亿）
-	MinTotalMarketCap float64 `json:"min_total_market_cap"   form:"checker_min_total_market_cap"`
+	MinTotalMarketCap float64 `json:"min_total_market_cap"    form:"checker_min_total_market_cap"`
 	// 银行股最小 ROA
-	BankMinROA float64 `json:"bank_min_roa"           form:"checker_bank_min_roa"`
+	BankMinROA float64 `json:"bank_min_roa"            form:"checker_bank_min_roa"`
 	// 银行股最小资本充足率
-	BankMinZBCZL float64 `json:"bank_min_zbczl"         form:"checker_bank_min_zbczl"`
+	BankMinZBCZL float64 `json:"bank_min_zbczl"          form:"checker_bank_min_zbczl"`
 	// 银行股最大不良贷款率
-	BankMaxBLDKL float64 `json:"bank_max_bldkl"         form:"checker_bank_max_bldkl"`
+	BankMaxBLDKL float64 `json:"bank_max_bldkl"          form:"checker_bank_max_bldkl"`
 	// 银行股最低不良贷款拨备覆盖率
-	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"     form:"checker_bank_min_bldkbbfgl"`
+	BankMinBLDKBBFGL float64 `json:"bank_min_bldkbbfgl"      form:"checker_bank_min_bldkbbfgl"`
 	// 是否检测毛利率稳定性
-	IsCheckMLLStability bool `json:"is_check_mll_stability" form:"checker_is_check_mll_stability"`
+	IsCheckMLLStability bool `json:"is_check_mll_stability"  form:"checker_is_check_mll_stability"`
 	// 是否检测净利率稳定性
-	IsCheckJLLStability bool `json:"is_check_jll_stability" form:"checker_is_check_jll_stability"`
+	IsCheckJLLStability bool `json:"is_check_jll_stability"  form:"checker_is_check_jll_stability"`
 	// 是否使用估算合理价进行检测，高于估算价将被过滤
-	IsCheckPriceByCalc bool `json:"is_check_price_by_calc" form:"checker_is_check_price_by_calc"`
+	IsCheckPriceByCalc bool `json:"is_check_price_by_calc"  form:"checker_is_check_price_by_calc"`
 	// 最大 PEG
-	MaxPEG float64 `json:"max_peg"                form:"checker_max_peg"`
+	MaxPEG float64 `json:"max_peg"                 form:"checker_max_peg"`
 	// 最小本业营收比
-	MinBYYSRatio float64 `json:"min_byys_ratio"         form:"checker_min_byys_ratio"`
+	MinBYYSRatio float64 `json:"min_byys_ratio"          form:"checker_min_byys_ratio"`
 	// 最大本业营收比
-	MaxBYYSRatio float64 `json:"max_byys_ratio"         form:"checker_max_byys_ratio"`
+	MaxBYYSRatio float64 `json:"max_byys_ratio"          form:"checker_max_byys_ratio"`
 	// 最小负债流动比
-	MinFZLDB float64 `json:"min_fzldb"              form:"checker_min_fzldb"`
+	MinFZLDB float64 `json:"min_fzldb"               form:"checker_min_fzldb"`
 	// 是否检测现金流量
-	IsCheckCashflow bool `json:"is_check_cashflow"      form:"checker_is_check_cashflow"`
+	IsCheckCashflow bool `json:"is_check_cashflow"       form:"checker_is_check_cashflow"`
+	// 是否检测毛利率逐年递增
+	IsCheckMLLGrow bool `json:"is_check_mll_grow"       form:"checker_is_check_mll_grow"`
+	// 是否检测净利率逐年递增
+	IsCheckJLLGrow bool `json:"is_check_jll_grow"       form:"checker_is_check_jll_grow"`
+	// 是否检测EPS逐年递增
+	IsCheckEPSGrow bool `json:"is_check_eps_grow"       form:"checker_is_check_eps_grow"`
+	// 是否检测营收逐年递增
+	IsCheckRevGrow bool `json:"is_check_rev_grow"       form:"checker_is_check_rev_grow"`
+	// 是否检测净利润逐年递增
+	IsCheckNetprofitGrow bool `json:"is_check_netprofit_grow" form:"checker_is_check_netprofit_grow"`
 }
 
 // DefaultCheckerOptions 默认检测值
 var DefaultCheckerOptions = CheckerOptions{
-	MinROE:              8.0,
-	CheckYears:          5,
-	NoCheckYearsROE:     20.0,
-	MaxDebtAssetRatio:   60.0,
-	MaxHV:               1.0,
-	MinTotalMarketCap:   100.0,
-	BankMinROA:          0.5,
-	BankMinZBCZL:        8.0,
-	BankMaxBLDKL:        3.0,
-	BankMinBLDKBBFGL:    100.0,
-	IsCheckJLLStability: false,
-	IsCheckMLLStability: false,
-	IsCheckPriceByCalc:  true,
-	MaxPEG:              1.5,
-	MinBYYSRatio:        0.9,
-	MaxBYYSRatio:        1.1,
-	MinFZLDB:            1,
-	IsCheckCashflow:     false,
+	MinROE:               8.0,
+	CheckYears:           5,
+	NoCheckYearsROE:      20.0,
+	MaxDebtAssetRatio:    60.0,
+	MaxHV:                1.0,
+	MinTotalMarketCap:    100.0,
+	BankMinROA:           0.5,
+	BankMinZBCZL:         8.0,
+	BankMaxBLDKL:         3.0,
+	BankMinBLDKBBFGL:     100.0,
+	IsCheckJLLStability:  false,
+	IsCheckMLLStability:  false,
+	IsCheckPriceByCalc:   true,
+	MaxPEG:               1.5,
+	MinBYYSRatio:         0.9,
+	MaxBYYSRatio:         1.1,
+	MinFZLDB:             1,
+	IsCheckCashflow:      false,
+	IsCheckMLLGrow:       false,
+	IsCheckJLLGrow:       false,
+	IsCheckEPSGrow:       true,
+	IsCheckRevGrow:       true,
+	IsCheckNetprofitGrow: true,
 }
 
 // Checker 检测器实例
@@ -141,16 +156,16 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// EPS 至少 n 年内逐年递增且 > 0
+	checkItemName = "EPS 逐年递增且 > 0"
+	itemOK = true
 	epsList := stock.HistoricalFinaMainData.ValueList(
 		ctx,
 		eastmoney.ValueListTypeEPS,
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	checkItemName = "EPS 逐年递增且 > 0"
-	itemOK = true
 	desc = fmt.Sprintf("%d 年内 EPS:%+v", c.Options.CheckYears, epsList)
-	if len(epsList) > 0 {
+	if c.Options.IsCheckEPSGrow && len(epsList) > 0 {
 		if epsList[len(epsList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
 				ctx,
@@ -181,7 +196,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		revs = append(revs, goutils.YiWanString(rev))
 	}
 	desc = fmt.Sprintf("%d 年内营收: %s", c.Options.CheckYears, strings.Join(revs, ", "))
-	if len(revList) > 0 {
+	if c.Options.IsCheckRevGrow && len(revList) > 0 {
 		if revList[len(revList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
 				ctx,
@@ -212,7 +227,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		nps = append(nps, goutils.YiWanString(np))
 	}
 	desc = fmt.Sprintf("%d 年内净利润: %s", c.Options.CheckYears, strings.Join(nps, ", "))
-	if len(netprofitList) > 0 {
+	if c.Options.IsCheckNetprofitGrow && len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
 				ctx,
@@ -410,7 +425,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	checkItemName = "毛利率"
+	checkItemName = "毛利率稳定性"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
 	if c.Options.IsCheckMLLStability && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
@@ -430,6 +445,27 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		"ok":   fmt.Sprint(itemOK),
 	}
 
+	// 毛利率逐年递增
+	checkItemName = "毛利率逐年递增且 > 0"
+	itemOK = true
+	desc = fmt.Sprintf("%d 年内毛利率:%v", c.Options.CheckYears, mllList)
+	if c.Options.IsCheckMLLGrow && len(mllList) > 0 {
+		if revList[len(mllList)-1] <= 0 ||
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(
+				ctx,
+				eastmoney.ValueListTypeMLL,
+				c.Options.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			) {
+			ok = false
+			itemOK = false
+		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
+	}
+
 	// 净利率稳定性
 	jllList := stock.HistoricalFinaMainData.ValueList(
 		ctx,
@@ -437,7 +473,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	checkItemName = "净利率"
+	checkItemName = "净利率稳定性"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
 	if c.Options.IsCheckJLLStability {
@@ -448,6 +484,27 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			eastmoney.FinaReportTypeYear,
 		) {
 			desc = fmt.Sprintf("%d 年内稳定性较差:%v", c.Options.CheckYears, jllList)
+			ok = false
+			itemOK = false
+		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
+	}
+
+	// 净利率逐年递增
+	checkItemName = "净利率逐年递增且 > 0"
+	itemOK = true
+	desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
+	if c.Options.IsCheckJLLGrow && len(jllList) > 0 {
+		if revList[len(jllList)-1] <= 0 ||
+			!stock.HistoricalFinaMainData.IsIncreasingByYears(
+				ctx,
+				eastmoney.ValueListTypeJLL,
+				c.Options.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			) {
 			ok = false
 			itemOK = false
 		}

@@ -30,7 +30,7 @@
                 <div class="row">
                     <div class="input-field col l6 s12">
                         <input name="checker_check_years" type="number" class="validate" value="5" min="0" step="1">
-                        <label for="checker_check_years">ROE,EPS,营收,利润连续增长年数</label>
+                        <label for="checker_check_years">ROE,EPS,营收,净利润连续增长年数</label>
                     </div>
                     <div class="input-field col l6 s12">
                         <input name="checker_no_check_years_roe" value="20.0" type="number" min="0" step="0.5" class="validate">
@@ -85,19 +85,39 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col l3 s12">
+                    <label class="col l4 s12">
+                        <input name="checker_is_check_eps_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测EPS逐年递增</span>
+                    </label>
+                    <label class="col l4 s12">
+                        <input name="checker_is_check_rev_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测营收逐年递增</span>
+                    </label>
+                    <label class="col l4 s12">
+                        <input name="checker_is_check_netprofit_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测净利润逐年递增</span>
+                    </label>
+                    <label class="col l4 s12">
                         <input name="checker_is_check_cashflow" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测现金流量</span>
                     </label>
-                    <label class="col l3 s12">
+                    <label class="col l4 s12">
                         <input name="checker_is_check_price_by_calc" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测估算合理价</span>
                     </label>
-                    <label class="col l3 s12">
+                    <label class="col l4 s12">
+                        <input name="checker_is_check_mll_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测毛利率逐年递增</span>
+                    </label>
+                    <label class="col l4 s12">
+                        <input name="checker_is_check_jll_grow" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <span>检测净利率逐年递增</span>
+                    </label>
+                    <label class="col l4 s12">
                         <input name="checker_is_check_mll_stability" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测毛利率稳定性</span>
                     </label>
-                    <label class="col l3 s12">
+                    <label class="col l4 s12">
                         <input name="checker_is_check_jll_stability" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测净利率稳定性</span>
                     </label>
