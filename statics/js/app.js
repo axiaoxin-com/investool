@@ -301,169 +301,231 @@ $(document).ready(function () {
   });
 
   // 导出结果csv文件
-  $("#export-result-btn").click(function (e) {
+  $(".export-result-btn").click(function (e) {
     tableExport("selector_result_table", "x-stock-selected", "csv");
   });
 
   // 展示字段设置
+  var checkboxLimit = 10;
+  var checkboxCountCheck = function () {
+    var checkedCount = $("#fields-dropdown input[type=checkbox]:checked")
+      .length;
+    if (checkedCount > checkboxLimit && checkedCount % 5 == 1) {
+      M.toast({
+        html: "展示信息过多，导出CSV详情文件即可在本地查看完整信息哦~",
+        classes: "rounded",
+      });
+    }
+  };
   $("#fields-dropdown-btn").dropdown({
     constrainWidth: true,
     closeOnClick: false,
   });
   $("#field_industry").change(function () {
+    checkboxCountCheck();
     $(".t_industry").toggleClass("hide");
   });
   $("#field_keywords").change(function () {
+    checkboxCountCheck();
     $(".t_keywords").toggleClass("hide");
   });
   $("#field_company_profile").change(function () {
+    checkboxCountCheck();
     $(".t_company_profile").toggleClass("hide");
   });
   $("#field_main_forms").change(function () {
+    checkboxCountCheck();
     $(".t_main_forms").toggleClass("hide");
   });
   $("#field_byys_ration").change(function () {
+    checkboxCountCheck();
     $(".t_byys_ration").toggleClass("hide");
   });
   $("#field_report_date_name").change(function () {
+    checkboxCountCheck();
     $(".t_report_date_name").toggleClass("hide");
   });
   $("#field_report_opinion").change(function () {
+    checkboxCountCheck();
     $(".t_report_opinion").toggleClass("hide");
   });
   $("#field_jzpg").change(function () {
+    checkboxCountCheck();
     $(".t_jzpg").toggleClass("hide");
   });
   $("#field_latest_roe").change(function () {
+    checkboxCountCheck();
     $(".t_latest_roe").toggleClass("hide");
   });
   $("#field_roe_tbzz").change(function () {
+    checkboxCountCheck();
     $(".t_roe_tbzz").toggleClass("hide");
   });
   $("#field_roe_5y").change(function () {
+    checkboxCountCheck();
     $(".t_roe_5y").toggleClass("hide");
   });
   $("#field_latest_eps").change(function () {
+    checkboxCountCheck();
     $(".t_latest_eps").toggleClass("hide");
   });
   $("#field_eps_tbzz").change(function () {
+    checkboxCountCheck();
     $(".t_eps_tbzz").toggleClass("hide");
   });
   $("#field_eps_5y").change(function () {
+    checkboxCountCheck();
     $(".t_eps_5y").toggleClass("hide");
   });
   $("#field_total_income").change(function () {
+    checkboxCountCheck();
     $(".t_total_income").toggleClass("hide");
   });
   $("#field_total_income_tbzz").change(function () {
+    checkboxCountCheck();
     $(".t_total_income_tbzz").toggleClass("hide");
   });
   $("#field_total_income_5y").change(function () {
+    checkboxCountCheck();
     $(".t_total_income_5y").toggleClass("hide");
   });
   $("#field_net_profit").change(function () {
+    checkboxCountCheck();
     $(".t_net_profit").toggleClass("hide");
   });
   $("#field_net_profit_tbzz").change(function () {
+    checkboxCountCheck();
     $(".t_net_profit_tbzz").toggleClass("hide");
   });
   $("#field_net_profit_5y").change(function () {
+    checkboxCountCheck();
     $(".t_net_profit_5y").toggleClass("hide");
   });
   $("#field_zxgxl").change(function () {
+    checkboxCountCheck();
     $(".t_zxgxl").toggleClass("hide");
   });
   $("#field_fina_report_date").change(function () {
+    checkboxCountCheck();
     $(".t_fina_report_date").toggleClass("hide");
   });
   $("#field_fina_appoint_publish_date").change(function () {
+    checkboxCountCheck();
     $(".t_fina_appoint_publish_date").toggleClass("hide");
   });
   $("#field_fina_actual_publish_date").change(function () {
+    checkboxCountCheck();
     $(".t_fina_actual_publish_date").toggleClass("hide");
   });
   $("#field_total_market_cap").change(function () {
+    checkboxCountCheck();
     $(".t_total_market_cap").toggleClass("hide");
   });
   $("#field_price").change(function () {
+    checkboxCountCheck();
     $(".t_price").toggleClass("hide");
   });
   $("#field_right_price").change(function () {
+    checkboxCountCheck();
     $(".t_right_price").toggleClass("hide");
   });
   $("#field_price_space").change(function () {
+    checkboxCountCheck();
     $(".t_price_space").toggleClass("hide");
   });
   $("#field_hv").change(function () {
+    checkboxCountCheck();
     $(".t_hv").toggleClass("hide");
   });
   $("#field_zxfzl").change(function () {
+    checkboxCountCheck();
     $(".t_zxfzl").toggleClass("hide");
   });
   $("#field_fzldb").change(function () {
+    checkboxCountCheck();
     $(".t_fzldb").toggleClass("hide");
   });
   $("#field_netprofit_growthrate_3_y").change(function () {
+    checkboxCountCheck();
     $(".t_netprofit_growthrate_3_y").toggleClass("hide");
   });
   $("#field_income_growthrate_3_y").change(function () {
+    checkboxCountCheck();
     $(".t_income_growthrate_3_y").toggleClass("hide");
   });
   $("#field_listing_yield_year").change(function () {
+    checkboxCountCheck();
     $(".t_listing_yield_year").toggleClass("hide");
   });
   $("#field_listing_volatility_year").change(function () {
+    checkboxCountCheck();
     $(".t_listing_volatility_year").toggleClass("hide");
   });
   $("#field_pe").change(function () {
+    checkboxCountCheck();
     $(".t_pe").toggleClass("hide");
   });
   $("#field_peg").change(function () {
+    checkboxCountCheck();
     $(".t_peg").toggleClass("hide");
   });
   $("#field_org_rating").change(function () {
+    checkboxCountCheck();
     $(".t_org_rating").toggleClass("hide");
   });
   $("#field_profit_predict").change(function () {
     $(".t_profit_predict").toggleClass("hide");
   });
   $("#field_valuation_syl").change(function () {
+    checkboxCountCheck();
     $(".t_valuation_syl").toggleClass("hide");
   });
   $("#field_valuation_sjl").change(function () {
+    checkboxCountCheck();
     $(".t_valuation_sjl").toggleClass("hide");
   });
   $("#field_valuation_sxol").change(function () {
+    checkboxCountCheck();
     $(".t_valuation_sxol").toggleClass("hide");
   });
   $("#field_valuation_sxnl").change(function () {
+    checkboxCountCheck();
     $(".t_valuation_sxnl").toggleClass("hide");
   });
   $("#field_hyjzsp").change(function () {
+    checkboxCountCheck();
     $(".t_hyjzsp").toggleClass("hide");
   });
   $("#field_ztzd").change(function () {
+    checkboxCountCheck();
     $(".t_ztzd").toggleClass("hide");
   });
   $("#field_mll_5y").change(function () {
+    checkboxCountCheck();
     $(".t_mll_5y").toggleClass("hide");
   });
   $("#field_jll_5y").change(function () {
+    checkboxCountCheck();
     $(".t_jll_5y").toggleClass("hide");
   });
   $("#field_listing_date").change(function () {
+    checkboxCountCheck();
     $(".t_listing_date").toggleClass("hide");
   });
   $("#field_netcash_operate").change(function () {
+    checkboxCountCheck();
     $(".t_netcash_operate").toggleClass("hide");
   });
   $("#field_netcash_invest").change(function () {
+    checkboxCountCheck();
     $(".t_netcash_invest").toggleClass("hide");
   });
   $("#field_netcash_finance").change(function () {
+    checkboxCountCheck();
     $(".t_netcash_finance").toggleClass("hide");
   });
   $("#field_netcash_free").change(function () {
+    checkboxCountCheck();
     $(".t_netcash_free").toggleClass("hide");
   });
 });
