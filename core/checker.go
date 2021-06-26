@@ -81,8 +81,8 @@ type Checker struct {
 }
 
 // NewChecker 创建检查器实例
-func NewChecker(ctx context.Context, opts CheckerOptions) Checker {
-	return Checker{
+func NewChecker(ctx context.Context, opts CheckerOptions) *Checker {
+	return &Checker{
 		Options: opts,
 	}
 }

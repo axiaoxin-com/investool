@@ -223,7 +223,7 @@ func ActionExportor() func(c *cli.Context) error {
 		checker := core.NewChecker(ctx, checkerOpts)
 
 		filter := NewFilter(c)
-		selector := core.NewSelector(ctx, filter, &checker)
+		selector := core.NewSelector(ctx, filter, checker)
 		if c.Bool("disable_check") {
 			selector = core.NewSelector(ctx, filter, nil)
 		}

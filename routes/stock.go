@@ -49,13 +49,12 @@ func StockSelector(c *gin.Context) {
 		c.JSON(http.StatusOK, data)
 		return
 	}
-	var checkerPtr *core.Checker
+	var checker *core.Checker
 	if param.FilterWithChecker {
-		checker := core.NewChecker(c, param.CheckerOptions)
-		checkerPtr = &checker
+		checker = core.NewChecker(c, param.CheckerOptions)
 	}
 
-	selector := core.NewSelector(c, param.Filter, checkerPtr)
+	selector := core.NewSelector(c, param.Filter, checker)
 	stocks, err := selector.AutoFilterStocks(c)
 	if err != nil {
 		data["Error"] = err.Error()

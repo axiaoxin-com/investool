@@ -9,7 +9,7 @@ import (
 
 func TestAutoFilterStocks(t *testing.T) {
 	checker := NewChecker(_ctx, DefaultCheckerOptions)
-	s := NewSelector(_ctx, eastmoney.DefaultFilter, &checker)
+	s := NewSelector(_ctx, eastmoney.DefaultFilter, checker)
 	result, err := s.AutoFilterStocks(_ctx)
 	require.Nil(t, err)
 	t.Log(result)
