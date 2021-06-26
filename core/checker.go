@@ -440,7 +440,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	checkItemName = "净利率"
 	itemOK = true
 	desc = fmt.Sprintf("%d 年内净利率:%v", c.Options.CheckYears, jllList)
-	if c.Options.IsCheckMLLStability {
+	if c.Options.IsCheckJLLStability {
 		if !stock.HistoricalFinaMainData.IsStability(
 			ctx,
 			eastmoney.ValueListTypeJLL,
