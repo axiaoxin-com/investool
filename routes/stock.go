@@ -104,15 +104,23 @@ func StockChecker(c *gin.Context) {
 	}
 	checker := core.NewChecker(c, param.CheckerOptions)
 	results := []core.CheckResult{}
-	names := []string{}
+	stockNames := []string{}
+	finaReportNames := []string{}
 	for _, stock := range stocks {
 		result, _ := checker.CheckFundamentals(c, stock)
 		results = append(results, result)
-		name := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
-		names = append(names, name)
+		stockName := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
+		stockNames = append(stockNames, stockName)
+
+		finaReportName := ""
+		if len(stock.HistoricalFinaMainData) > 0 {
+			finaReportName = stock.HistoricalFinaMainData[0].ReportDateName
+		}
+		finaReportNames = append(finaReportNames, finaReportName)
 	}
 	data["Results"] = results
-	data["Names"] = names
+	data["StockNames"] = stockNames
+	data["FinaReportNames"] = finaReportNames
 	c.JSON(http.StatusOK, data)
 	return
 }

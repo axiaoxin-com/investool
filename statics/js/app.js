@@ -254,17 +254,19 @@ $(document).ready(function () {
           $("#checker_results h4").text("暂不支持对该股进行检测");
         } else {
           $.each(data.Results, function (i, result) {
-            var cm = data.Names[i].split("-")[1].split(".");
+            var cm = data.StockNames[i].split("-")[1].split(".");
             $("#checker_results").append(
               '<div class="divider"></div>' +
                 '<div id="checker_result_' +
                 i +
                 '" class="row">' +
-                '<div class="row"><h6><a target="_blank" href="http://quote.eastmoney.com/' +
+                '<div class="row"><h6>检测数据源:' +
+                data.FinaReportNames[i] +
+                '<a class="right" target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
                 '.html">' +
-                data.Names[i] +
+                data.StockNames[i] +
                 "</a></h6>" +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
