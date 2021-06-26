@@ -55,160 +55,160 @@ $(document).ready(function () {
                 '<td><a href="#!">' +
                 stock.name +
                 "</a></td>" +
-                '<td class="hide">' +
+                '<td class="hide t_industry">' +
                 stock.industry +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_keywords">' +
                 stock.keywords +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_company_profile">' +
                 stock.company_profile +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_main_forms">' +
                 stock.main_forms +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_byys_ration">' +
                 stock.byys_ration +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_report_date_name">' +
                 stock.report_date_name +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_report_opinion">' +
                 stock.report_opinion +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_jzpg">' +
                 stock.jzpg +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_latest_roe">' +
                 stock.latest_roe +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_roe_tbzz">' +
                 stock.roe_tbzz +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_roe_5y">' +
                 stock.roe_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_latest_eps">' +
                 stock.latest_eps +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_eps_tbzz">' +
                 stock.eps_tbzz +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_eps_5y">' +
                 stock.eps_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_total_income">' +
                 stock.total_income +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_total_income_tbzz">' +
                 stock.total_income_tbzz +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_total_income_5y">' +
                 stock.total_income_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_net_profit">' +
                 stock.net_profit +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_net_profit_tbzz">' +
                 stock.net_profit_tbzz +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_net_profit_5y">' +
                 stock.net_profit_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_zxgxl">' +
                 stock.zxgxl +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_fina_report_date">' +
                 stock.fina_report_date +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_fina_appoint_publish_date">' +
                 stock.fina_appoint_publish_date +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_fina_actual_publish_date">' +
                 stock.fina_actual_publish_date +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_total_market_cap">' +
                 stock.total_market_cap +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_price">' +
                 stock.price +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_right_price">' +
                 stock.right_price +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_price_space">' +
                 stock.price_space +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_hv">' +
                 stock.hv +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_zxfzl">' +
                 stock.zxfzl +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_fzldb">' +
                 stock.fzldb +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_netprofit_growthrate_3_y">' +
                 stock.netprofit_growthrate_3_y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_income_growthrate_3_y">' +
                 stock.income_growthrate_3_y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_listing_yield_year">' +
                 stock.listing_yield_year +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_listing_volatility_year">' +
                 stock.listing_volatility_year +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_pe">' +
                 stock.pe +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_peg">' +
                 stock.peg +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_org_rating">' +
                 stock.org_rating +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_profit_predict">' +
                 stock.profit_predict +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_valuation_syl">' +
                 stock.valuation_syl +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_valuation_sjl">' +
                 stock.valuation_sjl +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_valuation_sxol">' +
                 stock.valuation_sxol +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_valuation_sxnl">' +
                 stock.valuation_sxnl +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_hyjzsp">' +
                 stock.hyjzsp +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_ztzd">' +
                 stock.ztzd +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_mll_5y">' +
                 stock.mll_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_jll_5y">' +
                 stock.jll_5y +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_listing_date">' +
                 stock.listing_date +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_netcash_operate">' +
                 stock.netcash_operate +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_netcash_invest">' +
                 stock.netcash_invest +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_netcash_finance">' +
                 stock.netcash_finance +
                 "</td>" +
-                '<td class="hide">' +
+                '<td class="hide t_netcash_free">' +
                 stock.netcash_free +
                 "</td>" +
                 "</tr>"
@@ -303,5 +303,167 @@ $(document).ready(function () {
   // 导出结果csv文件
   $("#export-result-btn").click(function (e) {
     tableExport("selector_result_table", "x-stock-selected", "csv");
+  });
+
+  // 展示字段设置
+  $("#fields-dropdown-btn").dropdown({
+    constrainWidth: true,
+    closeOnClick: false,
+  });
+  $("#field_industry").change(function () {
+    $(".t_industry").toggleClass("hide");
+  });
+  $("#field_keywords").change(function () {
+    $(".t_keywords").toggleClass("hide");
+  });
+  $("#field_company_profile").change(function () {
+    $(".t_company_profile").toggleClass("hide");
+  });
+  $("#field_main_forms").change(function () {
+    $(".t_main_forms").toggleClass("hide");
+  });
+  $("#field_byys_ration").change(function () {
+    $(".t_byys_ration").toggleClass("hide");
+  });
+  $("#field_report_date_name").change(function () {
+    $(".t_report_date_name").toggleClass("hide");
+  });
+  $("#field_report_opinion").change(function () {
+    $(".t_report_opinion").toggleClass("hide");
+  });
+  $("#field_jzpg").change(function () {
+    $(".t_jzpg").toggleClass("hide");
+  });
+  $("#field_latest_roe").change(function () {
+    $(".t_latest_roe").toggleClass("hide");
+  });
+  $("#field_roe_tbzz").change(function () {
+    $(".t_roe_tbzz").toggleClass("hide");
+  });
+  $("#field_roe_5y").change(function () {
+    $(".t_roe_5y").toggleClass("hide");
+  });
+  $("#field_latest_eps").change(function () {
+    $(".t_latest_eps").toggleClass("hide");
+  });
+  $("#field_eps_tbzz").change(function () {
+    $(".t_eps_tbzz").toggleClass("hide");
+  });
+  $("#field_eps_5y").change(function () {
+    $(".t_eps_5y").toggleClass("hide");
+  });
+  $("#field_total_income").change(function () {
+    $(".t_total_income").toggleClass("hide");
+  });
+  $("#field_total_income_tbzz").change(function () {
+    $(".t_total_income_tbzz").toggleClass("hide");
+  });
+  $("#field_total_income_5y").change(function () {
+    $(".t_total_income_5y").toggleClass("hide");
+  });
+  $("#field_net_profit").change(function () {
+    $(".t_net_profit").toggleClass("hide");
+  });
+  $("#field_net_profit_tbzz").change(function () {
+    $(".t_net_profit_tbzz").toggleClass("hide");
+  });
+  $("#field_net_profit_5y").change(function () {
+    $(".t_net_profit_5y").toggleClass("hide");
+  });
+  $("#field_zxgxl").change(function () {
+    $(".t_zxgxl").toggleClass("hide");
+  });
+  $("#field_fina_report_date").change(function () {
+    $(".t_fina_report_date").toggleClass("hide");
+  });
+  $("#field_fina_appoint_publish_date").change(function () {
+    $(".t_fina_appoint_publish_date").toggleClass("hide");
+  });
+  $("#field_fina_actual_publish_date").change(function () {
+    $(".t_fina_actual_publish_date").toggleClass("hide");
+  });
+  $("#field_total_market_cap").change(function () {
+    $(".t_total_market_cap").toggleClass("hide");
+  });
+  $("#field_price").change(function () {
+    $(".t_price").toggleClass("hide");
+  });
+  $("#field_right_price").change(function () {
+    $(".t_right_price").toggleClass("hide");
+  });
+  $("#field_price_space").change(function () {
+    $(".t_price_space").toggleClass("hide");
+  });
+  $("#field_hv").change(function () {
+    $(".t_hv").toggleClass("hide");
+  });
+  $("#field_zxfzl").change(function () {
+    $(".t_zxfzl").toggleClass("hide");
+  });
+  $("#field_fzldb").change(function () {
+    $(".t_fzldb").toggleClass("hide");
+  });
+  $("#field_netprofit_growthrate_3_y").change(function () {
+    $(".t_netprofit_growthrate_3_y").toggleClass("hide");
+  });
+  $("#field_income_growthrate_3_y").change(function () {
+    $(".t_income_growthrate_3_y").toggleClass("hide");
+  });
+  $("#field_listing_yield_year").change(function () {
+    $(".t_listing_yield_year").toggleClass("hide");
+  });
+  $("#field_listing_volatility_year").change(function () {
+    $(".t_listing_volatility_year").toggleClass("hide");
+  });
+  $("#field_pe").change(function () {
+    $(".t_pe").toggleClass("hide");
+  });
+  $("#field_peg").change(function () {
+    $(".t_peg").toggleClass("hide");
+  });
+  $("#field_org_rating").change(function () {
+    $(".t_org_rating").toggleClass("hide");
+  });
+  $("#field_profit_predict").change(function () {
+    $(".t_profit_predict").toggleClass("hide");
+  });
+  $("#field_valuation_syl").change(function () {
+    $(".t_valuation_syl").toggleClass("hide");
+  });
+  $("#field_valuation_sjl").change(function () {
+    $(".t_valuation_sjl").toggleClass("hide");
+  });
+  $("#field_valuation_sxol").change(function () {
+    $(".t_valuation_sxol").toggleClass("hide");
+  });
+  $("#field_valuation_sxnl").change(function () {
+    $(".t_valuation_sxnl").toggleClass("hide");
+  });
+  $("#field_hyjzsp").change(function () {
+    $(".t_hyjzsp").toggleClass("hide");
+  });
+  $("#field_ztzd").change(function () {
+    $(".t_ztzd").toggleClass("hide");
+  });
+  $("#field_mll_5y").change(function () {
+    $(".t_mll_5y").toggleClass("hide");
+  });
+  $("#field_jll_5y").change(function () {
+    $(".t_jll_5y").toggleClass("hide");
+  });
+  $("#field_listing_date").change(function () {
+    $(".t_listing_date").toggleClass("hide");
+  });
+  $("#field_netcash_operate").change(function () {
+    $(".t_netcash_operate").toggleClass("hide");
+  });
+  $("#field_netcash_invest").change(function () {
+    $(".t_netcash_invest").toggleClass("hide");
+  });
+  $("#field_netcash_finance").change(function () {
+    $(".t_netcash_finance").toggleClass("hide");
+  });
+  $("#field_netcash_free").change(function () {
+    $(".t_netcash_free").toggleClass("hide");
   });
 });
