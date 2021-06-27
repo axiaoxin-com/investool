@@ -3,250 +3,289 @@
 package models
 
 import (
+	"context"
 	"errors"
+	"math"
+	"strconv"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 )
 
 // Fund 基金
 type Fund struct {
 	// 基金代码
-	Code string
+	Code string `json:"code"`
 	// 基金名称
-	Name string
+	Name string `json:"name"`
 	// 基金类型
-	Type string
+	Type string `json:"type"`
 	// 成立时间
-	EstablishedDate string
+	EstablishedDate string `json:"established_date"`
 	// 最新基金净资产规模（元）
-	NetAssetsScale float64
+	NetAssetsScale float64 `json:"net_assets_scale"`
 	// 跟踪标的代码
-	IndexCode string
+	IndexCode string `json:"index_code"`
 	// 跟踪标的名称
-	IndexName string
+	IndexName string `json:"index_name"`
 	// 购买费率
-	Rate float64
+	Rate string `json:"rate"`
 	// 定投状态
-	FixedInvestmentStatus string
+	FixedInvestmentStatus string `json:"fixed_investment_status"`
 	// 波动率
-	Stddev FundStddev
+	Stddev FundStddev `json:"stddev"`
 	// 最大回撤率
-	MaxRetracement FundMaxRetracement
-	Sharp          FundSharp
+	MaxRetracement FundMaxRetracement `json:"max_retracement"`
+	// 夏普比率
+	Sharp FundSharp `json:"sharp"`
 	// 绩效
-	Performance FundPerformance
+	Performance FundPerformance `json:"performance"`
 	// 持仓股票
-	Stocks []FundStock
+	Stocks []FundStock `json:"stocks"`
 	// 基金经理
-	Manager FundManager
+	Manager FundManager `json:"manager"`
 	// 历史分红送配
-	HistoricalDividends []FundDividend
+	HistoricalDividends []FundDividend `json:"historical_dividends"`
 	// 资产占比
-	AssetsProportion FundAssetsProportion
+	AssetsProportion FundAssetsProportion `json:"assets_proportion"`
 	// 行业占比
-	IndustryProportion FundIndustryProportion
+	IndustryProportion FundIndustryProportion `json:"industry_proportion"`
 }
 
 // FundIndustryProportion 行业占比
 type FundIndustryProportion struct {
 	// 公布日期
-	PubDate string
+	PubDate string `json:"pub_date"`
 	// 行业名称列表
-	Industry []string
+	Industry []string `json:"industry"`
 	// 对应占比列表（%）
-	Props []string
+	Props []string `json:"props"`
 }
 
 // FundAssetsProportion 资产占比
 type FundAssetsProportion struct {
 	// 公布日期
-	PubDate string
+	PubDate string `json:"pub_date"`
 	// 股票占比（%）
-	Stock string
+	Stock string `json:"stock"`
 	// 债券占比（%）
-	Bond string
+	Bond string `json:"bond"`
 	// 现金占比（%）
-	Cash string
+	Cash string `json:"cash"`
 	// 其他占比（%）
-	Other string
+	Other string `json:"other"`
 	// 净资产（亿元）
-	NetAssets string
+	NetAssets string `json:"net_assets"`
 }
 
 // FundPerformance 基金绩效
 type FundPerformance struct {
 	// 今年来收益率
-	ThisYearProfitRatio float64
+	ThisYearProfitRatio float64 `json:"this_year_profit_ratio"`
 	// 今年来涨跌幅
-	ThisYearAmplitude float64
+	ThisYearAmplitude float64 `json:"this_year_amplitude"`
 	// 今年来同类均值
-	ThisYearKindAvg float64
+	ThisYearKindAvg float64 `json:"this_year_kind_avg"`
 	// 今年来同类排名
-	ThisYearRankNum int
+	ThisYearRankNum float64 `json:"this_year_rank_num"`
 	// 今年来同类排名百分比
-	ThisYearRankRatio float64
+	ThisYearRankRatio float64 `json:"this_year_rank_ratio"`
 	// 成立以来收益率
-	HistoricalProfitRatio float64
+	HistoricalProfitRatio float64 `json:"historical_profit_ratio"`
 	// 成立以来涨跌幅
-	HistoricalAmplitude float64
+	HistoricalAmplitude float64 `json:"historical_amplitude"`
 	// 成立以来同类均值
-	HistoricalKindAvg float64
+	HistoricalKindAvg float64 `json:"historical_kind_avg"`
 	// 成立以来同类排名
-	HistoricalRankNum int
+	HistoricalRankNum float64 `json:"historical_rank_num"`
 	// 成立以来同类排名百分比
-	HistoricalRankRatio float64
+	HistoricalRankRatio float64 `json:"historical_rank_ratio"`
 	// 近一周收益率
-	WeekProfitRatio float64
+	WeekProfitRatio float64 `json:"week_profit_ratio"`
 	// 近一周涨跌幅
-	WeekAmplitude float64
+	WeekAmplitude float64 `json:"week_amplitude"`
 	// 近一周同类均值
-	WeekKindAvg float64
+	WeekKindAvg float64 `json:"week_kind_avg"`
 	// 近一周同类排名
-	WeekRankNum int
+	WeekRankNum float64 `json:"week_rank_num"`
 	// 近一周同类排名百分比
-	WeekRankRatio float64
+	WeekRankRatio float64 `json:"week_rank_ratio"`
 	// 近一月收益率
-	Month1ProfitRatio float64
+	Month1ProfitRatio float64 `json:"month_1_profit_ratio"`
 	// 近一月涨跌幅
-	Month1Amplitude float64
+	Month1Amplitude float64 `json:"month_1_amplitude"`
 	// 近一月同类均值
-	Month1KindAvg float64
+	Month1KindAvg float64 `json:"month_1_kind_avg"`
 	// 近一月同类排名
-	Month1RankNum int
+	Month1RankNum float64 `json:"month_1_rank_num"`
 	// 近一月同类排名百分比
-	Month1RankRatio float64
+	Month1RankRatio float64 `json:"month_1_rank_ratio"`
 	// 近三月收益率
-	Month3ProfitRatio float64
+	Month3ProfitRatio float64 `json:"month_3_profit_ratio"`
 	// 近三月涨跌幅
-	Month3Amplitude float64
+	Month3Amplitude float64 `json:"month_3_amplitude"`
 	// 近三月同类均值
-	Month3KindAvg float64
+	Month3KindAvg float64 `json:"month_3_kind_avg"`
 	// 近三月同类排名
-	Month3RankNum int
+	Month3RankNum float64 `json:"month_3_rank_num"`
 	// 近三月同类排名百分比
-	Month3RankRatio float64
+	Month3RankRatio float64 `json:"month_3_rank_ratio"`
 	// 近六月收益率
-	Month6ProfitRatio float64
+	Month6ProfitRatio float64 `json:"month_6_profit_ratio"`
 	// 近六月涨跌幅
-	Month6Amplitude float64
+	Month6Amplitude float64 `json:"month_6_amplitude"`
 	// 近六月同类均值
-	Month6KindAvg float64
+	Month6KindAvg float64 `json:"month_6_kind_avg"`
 	// 近六月同类排名
-	Month6RankNum int
+	Month6RankNum float64 `json:"month_6_rank_num"`
 	// 近六月同类排名百分比
-	Month6RankRatio float64
+	Month6RankRatio float64 `json:"month_6_rank_ratio"`
 	// 近一年收益率
-	Year1ProfitRatio float64
+	Year1ProfitRatio float64 `json:"year_1_profit_ratio"`
 	// 近一年涨跌幅
-	Year1Amplitude float64
+	Year1Amplitude float64 `json:"year_1_amplitude"`
 	// 近一年同类均值
-	Year1KindAvg float64
+	Year1KindAvg float64 `json:"year_1_kind_avg"`
 	// 近一年同类排名
-	Year1RankNum int
+	Year1RankNum float64 `json:"year_1_rank_num"`
 	// 近一年同类排名百分比
-	Year1RankRatio float64
+	Year1RankRatio float64 `json:"year_1_rank_ratio"`
 	// 近两年收益率
-	Year2ProfitRatio float64
+	Year2ProfitRatio float64 `json:"year_2_profit_ratio"`
 	// 近两年涨跌幅
-	Year2Amplitude float64
+	Year2Amplitude float64 `json:"year_2_amplitude"`
 	// 近两年同类均值
-	Year2KindAvg float64
+	Year2KindAvg float64 `json:"year_2_kind_avg"`
 	// 近两年同类排名
-	Year2RankNum int
+	Year2RankNum float64 `json:"year_2_rank_num"`
 	// 近两年同类排名百分比
-	Year2RankRatio float64
+	Year2RankRatio float64 `json:"year_2_rank_ratio"`
 	// 近三年收益率
-	Year3ProfitRatio float64
+	Year3ProfitRatio float64 `json:"year_3_profit_ratio"`
 	// 近三年涨跌幅
-	Year3Amplitude float64
+	Year3Amplitude float64 `json:"year_3_amplitude"`
 	// 近三年同类均值
-	Year3KindAvg float64
+	Year3KindAvg float64 `json:"year_3_kind_avg"`
 	// 近三年同类排名
-	Year3RankNum int
+	Year3RankNum float64 `json:"year_3_rank_num"`
 	// 近三年同类排名百分比
-	Year3RankRatio float64
+	Year3RankRatio float64 `json:"year_3_rank_ratio"`
 	// 近五年收益率
-	Year5ProfitRatio float64
+	Year5ProfitRatio float64 `json:"year_5_profit_ratio"`
 	// 近五年涨跌幅
-	Year5Amplitude float64
+	Year5Amplitude float64 `json:"year_5_amplitude"`
 	// 近五年同类均值
-	Year5KindAvg float64
+	Year5KindAvg float64 `json:"year_5_kind_avg"`
 	// 近五年同类排名
-	Year5RankNum int
+	Year5RankNum float64 `json:"year_5_rank_num"`
 	// 近五年同类排名百分比
-	Year5RankRatio float64
+	Year5RankRatio float64 `json:"year_5_rank_ratio"`
 }
 
 // FundDividend 分红送配
 type FundDividend struct {
 	// 权益登记日
-	RegDate string
+	RegDate string `json:"reg_date"`
 	// 每份分红（元）
-	Value float64
+	Value float64 `json:"value"`
 	// 分红发放日
-	RationDate string
+	RationDate string `json:"ration_date"`
 }
 
 // FundStddev 波动率
 type FundStddev struct {
 	// 近1年波动率（%）
-	Year1 float64
+	Year1 float64 `json:"year_1"`
 	// 近3年波动率（%）
-	Year3 float64
+	Year3 float64 `json:"year_3"`
 	// 近5年波动率（%）
-	Year5 float64
+	Year5 float64 `json:"year_5"`
 }
 
 // FundMaxRetracement 最大回撤
 type FundMaxRetracement struct {
 	// 近1年最大回撤（%）
-	Year1 float64
+	Year1 float64 `json:"year_1"`
 	// 近3年最大回撤（%）
-	Year3 float64
+	Year3 float64 `json:"year_3"`
 	// 近5年最大回撤（%）
-	Year5 float64
+	Year5 float64 `json:"year_5"`
 }
 
 // FundSharp 夏普比率
 type FundSharp struct {
 	// 近1年夏普比率
-	Year1 float64
+	Year1 float64 `json:"year_1"`
 	// 近3年夏普比率
-	Year3 float64
+	Year3 float64 `json:"year_3"`
 	// 近5年夏普比率
-	Year5 float64
+	Year5 float64 `json:"year_5"`
 }
 
 // FundStock 基金持仓股票
 type FundStock struct {
 	// 股票代码
-	Code string
+	Code string `json:"code"`
 	// 股票名称
-	Name string
+	Name string `json:"name"`
 	// 股票行业
-	Industry string
+	Industry string `json:"industry"`
 	// 持仓占比(%)
-	HoldRatio float64
+	HoldRatio float64 `json:"hold_ratio"`
 	// 较上期调仓比例
-	AdjustRatio float64
+	AdjustRatio float64 `json:"adjust_ratio"`
 }
 
 // FundManager 基金经理
 type FundManager struct {
 	// 基金经理名字
-	Name string
+	Name string `json:"name"`
 	// 从业时间（天）
-	WorkingDays int
+	WorkingDays float64 `json:"working_days"`
 	// 管理该基金时间（天）
-	ManageDays int
+	ManageDays float64 `json:"manage_days"`
 	// 任职回报（%）
-	ManageRepay float64
+	ManageRepay float64 `json:"manage_repay"`
 	// 年均回报（%）
-	YearsAvgRepay float64
+	YearsAvgRepay float64 `json:"years_avg_repay"`
+}
+
+func interfaceToFloat64(ctx context.Context, unk interface{}) (result float64) {
+	var err error
+	switch i := unk.(type) {
+	case float64:
+		result = float64(i)
+	case float32:
+		result = float64(i)
+	case int64:
+		result = float64(i)
+	case int32:
+		result = float64(i)
+	case int:
+		result = float64(i)
+	case uint32:
+		result = float64(i)
+	case uint64:
+		result = float64(i)
+	case uint:
+		result = float64(i)
+	case string:
+		if i == "" {
+			result = 0.0
+		} else {
+			result, err = strconv.ParseFloat(i, 64)
+			if err != nil {
+				logging.Errorf(ctx, "interfaceToFloat64 ParseFloat error:%v i:%v unk:%v", err, i, unk)
+			}
+		}
+	default:
+		result = 0.0
+	}
+	return
 }
 
 // NewFund 创建 Fund 实例
-func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
+func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 	fund := Fund{
 		Code:            efund.Jjxq.Datas.Fcode,
 		Name:            efund.Jjxq.Datas.Shortname,
@@ -256,20 +295,20 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 		IndexName:       efund.Jjxq.Datas.Indexname,
 		Rate:            efund.Jjxq.Datas.Rate,
 		Stddev: FundStddev{
-			Year1: efund.Tssj.Datas.Stddev1,
-			Year3: efund.Tssj.Datas.Stddev3,
-			Year5: efund.Tssj.Datas.Stddev5,
+			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev1),
+			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev3),
+			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev5),
 		},
 
 		MaxRetracement: FundMaxRetracement{
-			Year1: efund.Tssj.Datas.Maxretra1,
-			Year3: efund.Tssj.Datas.Maxretra3,
-			Year5: efund.Tssj.Datas.Maxretra5,
+			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra1),
+			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra3),
+			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra5),
 		},
 		Sharp: FundSharp{
-			Year1: efund.Tssj.Datas.Sharp1,
-			Year3: efund.Tssj.Datas.Sharp3,
-			Year5: efund.Tssj.Datas.Sharp5,
+			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp1),
+			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp3),
+			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp5),
 		},
 	}
 
@@ -284,73 +323,76 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 		return fund, errors.New("jjgm no data")
 	}
 	jjgm := efund.Jjgm.Datas[0]
-	fund.NetAssetsScale = jjgm.Netnav
+	fund.NetAssetsScale = interfaceToFloat64(ctx, jjgm.Netnav)
 
 	// 绩效
 	pfm := FundPerformance{}
 	for _, d := range efund.Jdzf.Datas {
-		rankRatio := float64(d.Rank) / float64(d.Sc)
+		rankRatio := interfaceToFloat64(ctx, interfaceToFloat64(ctx, d.Rank)) / interfaceToFloat64(ctx, d.Sc)
+		if math.IsNaN(rankRatio) {
+			rankRatio = 0.0
+		}
 		switch d.Title {
 		case "Z":
-			pfm.WeekAmplitude = d.Avg
-			pfm.WeekKindAvg = d.Hs300
-			pfm.WeekRankNum = d.Rank
+			pfm.WeekAmplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.WeekKindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.WeekRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.WeekRankRatio = rankRatio
-			pfm.WeekProfitRatio = d.Syl
+			pfm.WeekProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "Y":
-			pfm.Month1Amplitude = d.Avg
-			pfm.Month1KindAvg = d.Hs300
-			pfm.Month1RankNum = d.Rank
+			pfm.Month1Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Month1KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Month1RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month1RankRatio = rankRatio
-			pfm.Month1ProfitRatio = d.Syl
+			pfm.Month1ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "3Y":
-			pfm.Month3Amplitude = d.Avg
-			pfm.Month3KindAvg = d.Hs300
-			pfm.Month3RankNum = d.Rank
+			pfm.Month3Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Month3KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Month3RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month3RankRatio = rankRatio
-			pfm.Month3ProfitRatio = d.Syl
+			pfm.Month3ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "6Y":
-			pfm.Month6Amplitude = d.Avg
-			pfm.Month6KindAvg = d.Hs300
-			pfm.Month6RankNum = d.Rank
+			pfm.Month6Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Month6KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Month6RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month6RankRatio = rankRatio
-			pfm.Month6ProfitRatio = d.Syl
+			pfm.Month6ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "1N":
-			pfm.Year1Amplitude = d.Avg
-			pfm.Year1KindAvg = d.Hs300
-			pfm.Year1RankNum = d.Rank
+			pfm.Year1Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Year1KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Year1RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year1RankRatio = rankRatio
-			pfm.Year1ProfitRatio = d.Syl
+			pfm.Year1ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "2N":
-			pfm.Year2Amplitude = d.Avg
-			pfm.Year2KindAvg = d.Hs300
-			pfm.Year2RankNum = d.Rank
+			pfm.Year2Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Year2KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Year2RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year2RankRatio = rankRatio
-			pfm.Year2ProfitRatio = d.Syl
+			pfm.Year2ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "3N":
-			pfm.Year3Amplitude = d.Avg
-			pfm.Year3KindAvg = d.Hs300
-			pfm.Year3RankNum = d.Rank
+			pfm.Year3Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Year3KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Year3RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year3RankRatio = rankRatio
-			pfm.Year3ProfitRatio = d.Syl
+			pfm.Year3ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "5N":
-			pfm.Year5Amplitude = d.Avg
-			pfm.Year5KindAvg = d.Hs300
-			pfm.Year5RankNum = d.Rank
+			pfm.Year5Amplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.Year5KindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.Year5RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year5RankRatio = rankRatio
-			pfm.Year5ProfitRatio = d.Syl
+			pfm.Year5ProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "JN":
-			pfm.ThisYearAmplitude = d.Avg
-			pfm.ThisYearKindAvg = d.Hs300
-			pfm.ThisYearRankNum = d.Rank
+			pfm.ThisYearAmplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.ThisYearKindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.ThisYearRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.ThisYearRankRatio = rankRatio
-			pfm.ThisYearProfitRatio = d.Syl
+			pfm.ThisYearProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		case "LN":
-			pfm.HistoricalAmplitude = d.Avg
-			pfm.HistoricalKindAvg = d.Hs300
-			pfm.HistoricalRankNum = d.Rank
+			pfm.HistoricalAmplitude = interfaceToFloat64(ctx, d.Avg)
+			pfm.HistoricalKindAvg = interfaceToFloat64(ctx, d.Hs300)
+			pfm.HistoricalRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.HistoricalRankRatio = rankRatio
-			pfm.HistoricalProfitRatio = d.Syl
+			pfm.HistoricalProfitRatio = interfaceToFloat64(ctx, d.Syl)
 		}
 	}
 	fund.Performance = pfm
@@ -358,16 +400,12 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 	// 持仓股票
 	stocks := []FundStock{}
 	for _, s := range efund.Jjcc.Datas.InverstPosition.FundStocks {
-		adj := s.Pctnvchg
-		if s.Pctnvchgtype == "减持" {
-			adj *= -1
-		}
 		stock := FundStock{
 			Code:        s.Gpdm,
 			Name:        s.Gpjc,
 			Industry:    s.Indexname,
-			HoldRatio:   s.Jzbl,
-			AdjustRatio: adj,
+			HoldRatio:   interfaceToFloat64(ctx, s.Jzbl),
+			AdjustRatio: interfaceToFloat64(ctx, s.Pctnvchg),
 		}
 		stocks = append(stocks, stock)
 	}
@@ -384,10 +422,10 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 	}
 	m := jjjl.Manger[0]
 	manager.Name = m.Mgrname
-	manager.WorkingDays = m.Totaldays
-	manager.ManageDays = jjjl.Days
-	manager.ManageRepay = jjjl.Penavgrowth
-	manager.YearsAvgRepay = m.Yieldse
+	manager.WorkingDays = interfaceToFloat64(ctx, m.Totaldays)
+	manager.ManageDays = interfaceToFloat64(ctx, jjjl.Days)
+	manager.ManageRepay = interfaceToFloat64(ctx, jjjl.Penavgrowth)
+	manager.YearsAvgRepay = interfaceToFloat64(ctx, m.Yieldse)
 	fund.Manager = manager
 
 	// 分红送配
@@ -395,7 +433,7 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 	for _, d := range efund.Fhsp.Datas.Fhinfo {
 		fd := FundDividend{
 			RegDate:    d.Djr,
-			Value:      d.Fhfcz,
+			Value:      interfaceToFloat64(ctx, d.Fhfcz),
 			RationDate: d.Ffr,
 		}
 		dividends = append(dividends, fd)
@@ -426,6 +464,9 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 			Props:    []string{},
 		}
 		for _, i := range vlist {
+			if i["ZJZBL"] == "0" || i["ZJZBL"] == "--" {
+				continue
+			}
 			ip.Industry = append(ip.Industry, i["HYMC"])
 			ip.Props = append(ip.Props, i["ZJZBL"])
 		}
@@ -433,4 +474,12 @@ func NewFund(efund eastmoney.RespFundInfo) (Fund, error) {
 	}
 
 	return fund, nil
+}
+
+// FundList list
+type FundList []Fund
+
+// Is4433 判断是否满足4433法则
+func (f Fund) Is4433() bool {
+	return false
 }
