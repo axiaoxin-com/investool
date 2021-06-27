@@ -44,8 +44,8 @@ const (
 	FundTypeDealMoney FundType = 2949
 )
 
-// FundNetListItem RespFundNetList Datas 列表元素
-type FundNetListItem struct {
+// FundListItem RespFundNetList Datas 列表元素
+type FundListItem struct {
 	// 基金代码
 	Fcode string `json:"FCODE"`
 	// 基金名
@@ -79,31 +79,31 @@ type FundNetListItem struct {
 	Islisttrade string `json:"ISLISTTRADE"`
 }
 
-// FundNetList 基金列表
-type FundNetList []FundNetListItem
+// FundList 基金列表
+type FundList []FundListItem
 
-// RespFundNetList 净值列表接口原始返回结构
-type RespFundNetList struct {
-	Datas        []FundNetList `json:"Datas"`
-	ErrCode      int           `json:"ErrCode"`
-	Success      bool          `json:"Success"`
-	ErrMsg       interface{}   `json:"ErrMsg"`
-	Message      interface{}   `json:"Message"`
-	ErrorCode    string        `json:"ErrorCode"`
-	ErrorMessage interface{}   `json:"ErrorMessage"`
-	ErrorMsgLst  interface{}   `json:"ErrorMsgLst"`
-	TotalCount   int           `json:"TotalCount"`
-	Expansion    []string      `json:"Expansion"`
+// RespFundList 净值列表接口原始返回结构
+type RespFundList struct {
+	Datas        []FundList  `json:"Datas"`
+	ErrCode      int         `json:"ErrCode"`
+	Success      bool        `json:"Success"`
+	ErrMsg       interface{} `json:"ErrMsg"`
+	Message      interface{} `json:"Message"`
+	ErrorCode    string      `json:"ErrorCode"`
+	ErrorMessage interface{} `json:"ErrorMessage"`
+	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
+	TotalCount   int         `json:"TotalCount"`
+	Expansion    []string    `json:"Expansion"`
 }
 
-// QueryAllFundNetList 获取天天基金净值列表全量数据，耗时很长
-func (e EastMoney) QueryAllFundNetList(ctx context.Context, fundType FundType) (FundNetList, error) {
-	resp, err := e.QueryFundNetListByPage(ctx, fundType, 1)
+// QueryAllFundList 获取天天基金净值列表全量数据，耗时很长
+func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (FundList, error) {
+	resp, err := e.QueryFundListByPage(ctx, fundType, 1)
 	if err != nil {
 		return nil, err
 	}
 
-	result := FundNetList{}
+	result := FundList{}
 	if len(resp.Datas) == 0 {
 		return result, nil
 	}
@@ -114,7 +114,7 @@ func (e EastMoney) QueryAllFundNetList(ctx context.Context, fundType FundType) (
 	// 算出总页数循环获取全量数据
 	pageCount := (totalCount + 30 - 1) / 30
 	for pageIndex := 2; pageIndex <= pageCount; pageIndex++ {
-		resp, err := e.QueryFundNetListByPage(ctx, fundType, pageIndex)
+		resp, err := e.QueryFundListByPage(ctx, fundType, pageIndex)
 		if err != nil {
 			return result, err
 		}
@@ -123,13 +123,13 @@ func (e EastMoney) QueryAllFundNetList(ctx context.Context, fundType FundType) (
 		}
 	}
 	if len(result) != totalCount {
-		logging.Errorf(ctx, "QueryAllFundNetList result count:%d != resp.TotalCount:%d", len(result), totalCount)
+		logging.Errorf(ctx, "QueryAllFundList result count:%d != resp.TotalCount:%d", len(result), totalCount)
 	}
 	return result, nil
 }
 
-// QueryFundNetListByPage 按页获取天天基金净值列表，接口限制最大30个
-func (e EastMoney) QueryFundNetListByPage(ctx context.Context, fundType FundType, pageIndex int) (RespFundNetList, error) {
+// QueryFundListByPage 按页获取天天基金净值列表，接口限制最大30个
+func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, pageIndex int) (RespFundList, error) {
 	apiurl := "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNNetNewList"
 	params := map[string]string{
 		"FundType":   fmt.Sprint(fundType), // 基金类型
@@ -142,18 +142,18 @@ func (e EastMoney) QueryFundNetListByPage(ctx context.Context, fundType FundType
 		"product":    "EFund",
 		"version":    "-",
 	}
-	logging.Debug(ctx, "EastMoney QueryFundNetListByPage "+apiurl+" begin", zap.Any("params", params))
+	logging.Debug(ctx, "EastMoney QueryFundListByPage "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
-		return RespFundNetList{}, err
+		return RespFundList{}, err
 	}
-	resp := RespFundNetList{}
+	resp := RespFundList{}
 	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
-		"EastMoney QueryFundNetListByPage "+apiurl+" end",
+		"EastMoney QueryFundListByPage "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
@@ -161,7 +161,7 @@ func (e EastMoney) QueryFundNetListByPage(ctx context.Context, fundType FundType
 		return resp, err
 	}
 	if resp.ErrCode != 0 {
-		return resp, fmt.Errorf("QueryFundNetListByPage error %v", resp.ErrMsg)
+		return resp, fmt.Errorf("QueryFundListByPage error %v", resp.ErrMsg)
 	}
 	return resp, nil
 }
