@@ -39,7 +39,7 @@
                     <img src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_bg.png"{{ else }}"/statics/img/sidenav_bg.png"{{ end }}>
                 </div>
                 <a href="#!"><img class="circle" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_icon.png"{{ else }}"/statics/img/sidenav_icon.png"{{ end }}></a>
-                <a href="#!"><span class="white-text">X-STOCK</span></a>
+                <a href="#!"><span class="white-text">X-STOCK v{{ .Version }}</span></a>
             </div>
         </li>
         <li><a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a></li>

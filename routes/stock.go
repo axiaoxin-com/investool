@@ -11,6 +11,7 @@ import (
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/axiaoxin-com/x-stock/services"
+	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -19,6 +20,7 @@ import (
 func StockIndex(c *gin.Context) {
 	data := gin.H{
 		"Env":          viper.GetString("env"),
+		"Version":      version.Version,
 		"PageTitle":    "X-STOCK | 股票",
 		"Error":        "",
 		"IndustryList": services.StockIndustryList,
@@ -38,6 +40,7 @@ type ParamStockSelector struct {
 func StockSelector(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
+		"Version":   version.Version,
 		"PageTitle": "X-STOCK | 股票 | 基本面筛选",
 		"Error":     "",
 		"Stocks":    models.StockList{},
@@ -80,6 +83,7 @@ type ParamStockChecker struct {
 func StockChecker(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
+		"Version":   version.Version,
 		"PageTitle": "X-STOCK | 股票 | 个股检测",
 		"Error":     "",
 	}
