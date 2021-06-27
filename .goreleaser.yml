@@ -2,6 +2,9 @@
 # Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
+    - go mod tidy
+    - bash ./misc/scripts/bumpversion.sh
+    - go test -v -race ./...
 builds:
   - env:
       - CGO_ENABLED=0
@@ -9,6 +12,10 @@ builds:
       - linux
       - windows
       - darwin
+    flags:
+      - -tags=jsoniter
+      - -v
+
 archives:
   - replacements:
       darwin: Darwin
@@ -16,6 +23,8 @@ archives:
       windows: Windows
       386: i386
       amd64: x86_64
+    files:
+      - config.toml
 checksum:
   name_template: 'checksums.txt'
 snapshot:

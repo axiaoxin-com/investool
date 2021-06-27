@@ -20,3 +20,4 @@ config.prod.toml
 tmp/
 
 x-stock
+statics/js/app.min.*.js
