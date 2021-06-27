@@ -2,13 +2,37 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
-        <li class="tab col s6"><a class="active" href="#4433">4433选基</a></li>
-        <li class="tab col s6"><a href="#fundcheck">基金检测</a></li>
+            <li class="tab col s4 l4"><a class="active" href="#4433">4433基金榜</a></li>
+            <li class="tab col s4 l4"><a href="#fundfilter">收益率选基</a></li>
+            <li class="tab col s4 l4"><a href="#fundcheck">基金检测</a></li>
         </ul>
     </div>
 
-    <!--4433 start-->
     <div id="4433" class="col s12">
+        <table id="fund4433table" class="striped centered">
+            <thead>
+                <tr>
+                    <th>基金代码</th>
+                    <th>基金名称</th>
+                    <th>近1年收益率排名</th>
+                    <th>近1年收益率排名比</th>
+                </tr>
+            </thead>
+            <tbody>
+            {{ range .Fund4433List }}
+                <tr>
+                    <td>{{ .Code }}</td>
+                    <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
+                    <td>{{ .Performance.Year1RankNum }}</td>
+                    <td>{{ .Performance.Year1RankRatio }}</td>
+                </tr>
+            {{ end }}
+            </tbody>
+        </table>
+    </div>
+
+    <!--filter start-->
+    <div id="fundfilter" class="col s12">
         <div class="row">
             <form class="col s12" id="4433_form">
                 <div class="row">
@@ -41,7 +65,7 @@
             </form>
         </div>
     </div>
-    <!--4433 end-->
+    <!--filter end-->
 
     <!--基金检测 start-->
     <div id="fundcheck" class="col s12">

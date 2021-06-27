@@ -6,6 +6,7 @@ import (
 	"context"
 	"errors"
 	"math"
+	"sort"
 	"strconv"
 
 	"github.com/axiaoxin-com/logging"
@@ -270,7 +271,7 @@ func interfaceToFloat64(ctx context.Context, unk interface{}) (result float64) {
 	case uint:
 		result = float64(i)
 	case string:
-		if i == "" {
+		if i == "" || i == "--" {
 			result = 0.0
 		} else {
 			result, err = strconv.ParseFloat(i, 64)
@@ -479,7 +480,33 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 // FundList list
 type FundList []Fund
 
+// SortByYear1RankRatio 按最近一年收益率排名排序
+func (f FundList) SortByYear1RankRatio() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].Performance.Year1RankRatio > f[j].Performance.Year1RankRatio
+	})
+}
+
 // Is4433 判断是否满足4433法则
-func (f Fund) Is4433() bool {
-	return false
+func (f Fund) Is4433(ctx context.Context) bool {
+	quarter := float64(1) / float64(4)
+	oneThird := float64(1) / float64(3)
+	// 最近1年收益率排名在同类型基金的前四分之一；
+	if f.Performance.Year1RankRatio > quarter {
+		return false
+	}
+	// 最近2年、3年、5年及今年以来收益率排名均在同类型基金的前四分之一；
+	if f.Performance.Year2RankRatio > quarter || f.Performance.Year3RankRatio > quarter || f.Performance.Year5RankRatio > quarter ||
+		f.Performance.ThisYearRankRatio > quarter {
+		return false
+	}
+	// 最近6个月收益率排名在同类型基金的前三分之一；
+	if f.Performance.Month6RankRatio > oneThird {
+		return false
+	}
+	// 最近3个月收益率排名在同类型基金的前三分之一；
+	if f.Performance.Month3RankRatio > oneThird {
+		return false
+	}
+	return true
 }

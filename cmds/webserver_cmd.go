@@ -4,6 +4,7 @@ package cmds
 
 import (
 	"github.com/axiaoxin-com/logging"
+	"github.com/axiaoxin-com/x-stock/cron"
 	"github.com/axiaoxin-com/x-stock/routes"
 	"github.com/axiaoxin-com/x-stock/routes/response"
 	"github.com/axiaoxin-com/x-stock/services"
@@ -63,6 +64,8 @@ func ActionWebserver() func(c *cli.Context) error {
 		server := webserver.NewGinEngine(middlewares...)
 		// 注册路由
 		routes.Register(server)
+		// 启动定时任务
+		go cron.RunCronJobs()
 		// 运行服务
 		webserver.Run(server)
 		return nil
