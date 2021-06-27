@@ -5,6 +5,7 @@ package routes
 import (
 	"github.com/axiaoxin-com/x-stock/routes/response"
 	"github.com/axiaoxin-com/x-stock/services"
+	"github.com/axiaoxin-com/x-stock/version"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +23,7 @@ import (
 // @Router /x/ping [get]
 func Ping(c *gin.Context) {
 	data := gin.H{
-		"version":             Version,
+		"version":             version.Version,
 		"mysql":               services.CheckMySQL(c),
 		"redis":               services.CheckRedis(c),
 		"atomic_level_server": services.CheckAtomicLevelServer(c),

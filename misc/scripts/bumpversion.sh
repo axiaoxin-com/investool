@@ -32,10 +32,10 @@ NEEDS_TAG=`git describe --contains $GIT_COMMIT 2>/dev/null`
 if [ -z "$NEEDS_TAG" ]; then
     # https://github.com/x-motemen/gobump
     # 使用 git tag 更新 main.go 中的 VERSION ，去掉前缀 v
-    gobump set ${NEW_TAG/#v} -w ${SRC_PATH}
-    bash ${PROJECT_PATH}/misc/scripts/gen_apidocs.sh
-    git commit -am "bump verision to $NEW_TAG"
-    git tag $NEW_TAG
+    gobump set ${NEW_TAG/#v} -w ${SRC_PATH} && \
+    bash ${PROJECT_PATH}/misc/scripts/gen_apidocs.sh && \
+    git commit -am "bump verision to $NEW_TAG" && \
+    git tag $NEW_TAG && \
     echo "Tagged with $NEW_TAG"
 else
     echo "Already a tag on this commit"

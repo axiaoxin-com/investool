@@ -10,11 +10,9 @@ import (
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/cmds"
+	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/urfave/cli/v2"
 )
-
-// VERSION 版本号
-const VERSION = "1.1.3"
 
 var (
 	// DefaultLoglevel 日志级别默认值
@@ -31,7 +29,7 @@ func main() {
 	app.UsageText = `该程序不构成任何投资建议，程序只是个人辅助工具，具体分析仍然需要自己判断。
 
 官网地址: http://x-stock.axiaoxin.com`
-	app.Version = VERSION
+	app.Version = version.Version
 	app.Compiled = time.Now()
 	app.Authors = []*cli.Author{
 		{

@@ -19,6 +19,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/routes/docs"
 	"github.com/axiaoxin-com/x-stock/statics"
+	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/axiaoxin-com/x-stock/webserver"
 	"github.com/gin-contrib/pprof"
 
@@ -46,7 +47,7 @@ func Register(httpHandler http.Handler) {
 	// api 文档变量设置，注意这里依赖 viper 读配置，需要保证在 main 中已预先加载这些配置项
 	docs.SwaggerInfo.Title = viper.GetString("apidocs.title")
 	docs.SwaggerInfo.Description = viper.GetString("apidocs.desc")
-	docs.SwaggerInfo.Version = Version
+	docs.SwaggerInfo.Version = version.Version
 	docs.SwaggerInfo.Host = viper.GetString("apidocs.host")
 	docs.SwaggerInfo.BasePath = viper.GetString("apidocs.basepath")
 	docs.SwaggerInfo.Schemes = viper.GetStringSlice("apidocs.schemes")
