@@ -3,8 +3,9 @@
 before:
   hooks:
     - go mod tidy
-    - bash ./misc/scripts/bumpversion.sh
+    - bash ./misc/scripts/app.min.js.sh
     - go test -v -race ./...
+    - bash ./misc/scripts/bumpversion.sh
 builds:
   - env:
       - CGO_ENABLED=0
