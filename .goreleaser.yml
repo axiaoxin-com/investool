@@ -3,8 +3,8 @@
 before:
   hooks:
     - go mod tidy
-    - bash ./misc/scripts/app.min.js.sh
     - go test -v -race ./...
+    - bash ./misc/scripts/app.min.js.sh
     - bash ./misc/scripts/bumpversion.sh
 builds:
   - env:
