@@ -54,6 +54,7 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 	workerCount := int(math.Min(float64(len(stocks)), float64(MaxWorkerCount)))
 	jobChan := make(chan struct{}, workerCount)
 	wg := sync.WaitGroup{}
+	var mu sync.Mutex
 
 	for _, baseInfo := range stocks {
 		wg.Add(1)
@@ -74,11 +75,15 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 				return
 			}
 			if s.Checker == nil {
+				mu.Lock()
 				result = append(result, stock)
+				mu.Unlock()
 			} else {
 				// 检测是否为优质股票
 				if details, ok := s.Checker.CheckFundamentals(ctx, stock); ok {
+					mu.Lock()
 					result = append(result, stock)
+					mu.Unlock()
 				} else {
 					logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("details", details))
 				}
