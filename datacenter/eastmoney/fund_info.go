@@ -56,34 +56,24 @@ type JJXQ struct {
 		Sgzt string `json:"SGZT"`
 		// 卖出状态
 		Shzt string `json:"SHZT"`
-		// 定投状态
+		// 定投状态 1:可定投
 		Dtzt string `json:"DTZT"`
 		// 原始购买费率
 		Sourcerate string `json:"SOURCERATE"`
 		// 实际购买费率
-		Rate          string `json:"RATE"`
-		Subscribetime string `json:"SUBSCRIBETIME"`
-		// 风险等级：4=中高风险
-		Risklevel  string `json:"RISKLEVEL"`
-		Isbuy      string `json:"ISBUY"`
-		Bagtype    string `json:"BAGTYPE"`
-		Cashbuy    string `json:"CASHBUY"`
-		Saletocash string `json:"SALETOCASH"`
-		Stktocash  string `json:"STKTOCASH"`
-		Stkexchg   string `json:"STKEXCHG"`
-		Fundexchg  string `json:"FUNDEXCHG"`
-		Buy        bool   `json:"BUY"`
-		Issales    string `json:"ISSALES"`
-		Salemark   string `json:"SALEMARK"`
-		Realsgcode string `json:"REALSGCODE"`
-		Qdtcode    string `json:"QDTCODE"`
-		Backcode   string `json:"BACKCODE"`
+		Rate string `json:"RATE"`
+		// 风险等级：4=中高风险 5=高风险
+		Risklevel string `json:"RISKLEVEL"`
 		// 跟踪标的代码
 		Indexcode string `json:"INDEXCODE"`
 		// 跟踪标的名称
-		Indexname     string `json:"INDEXNAME"`
-		Indextexch    string `json:"INDEXTEXCH"`
-		Newindextexch string `json:"NEWINDEXTEXCH"`
+		Indexname string `json:"INDEXNAME"`
+		// 近1年波动率
+		Stddev1 string `json:"STDDEV1"`
+		// 近2年波动率
+		Stddev2 string `json:"STDDEV2"`
+		// 近3年波动率
+		Stddev3 string `json:"STDDEV3"`
 		// 近1年夏普比率
 		Sharp1 string `json:"SHARP1"`
 		// 近2年夏普比率
@@ -91,15 +81,25 @@ type JJXQ struct {
 		// 近3年夏普比率
 		Sharp3 string `json:"SHARP3"`
 		// 近1年最大回撤
-		Maxretra1 string `json:"MAXRETRA1"`
-		// 近1年波动率
-		Stddev1 string `json:"STDDEV1"`
-		// 近2年波动率
-		Stddev2 string `json:"STDDEV2"`
-		// 近3年波动率
-		Stddev3 string `json:"STDDEV3"`
+		Maxretra1     string `json:"MAXRETRA1"`
+		Subscribetime string `json:"SUBSCRIBETIME"`
+		Isbuy         string `json:"ISBUY"`
+		Bagtype       string `json:"BAGTYPE"`
+		Cashbuy       string `json:"CASHBUY"`
+		Saletocash    string `json:"SALETOCASH"`
+		Stktocash     string `json:"STKTOCASH"`
+		Stkexchg      string `json:"STKEXCHG"`
+		Fundexchg     string `json:"FUNDEXCHG"`
+		Buy           bool   `json:"BUY"`
+		Issales       string `json:"ISSALES"`
+		Salemark      string `json:"SALEMARK"`
+		Realsgcode    string `json:"REALSGCODE"`
+		Qdtcode       string `json:"QDTCODE"`
+		Backcode      string `json:"BACKCODE"`
+		Indextexch    string `json:"INDEXTEXCH"`
+		Newindextexch string `json:"NEWINDEXTEXCH"`
+		Ssbcfmdata    string `json:"SSBCFMDATA"`
 		// 买入确认日
-		Ssbcfmdata         string `json:"SSBCFMDATA"`
 		Ssbcfday           string `json:"SSBCFDAY"`
 		Buymark            string `json:"BUYMARK"`
 		Tsrq               string `json:"TSRQ"`
@@ -175,41 +175,41 @@ type JJXQ struct {
 	TotalCount   int         `json:"TotalCount"`
 	Expansion    struct {
 		Indexinfo struct {
-			Indexcode     string    `json:"INDEXCODE"`
-			Indexname     string    `json:"INDEXNAME"`
-			Fullindexname string    `json:"FULLINDEXNAME"`
-			Pdate         time.Time `json:"PDATE"`
-			Q             string    `json:"Q"`
-			W             string    `json:"W"`
-			M             string    `json:"M"`
-			Hy            string    `json:"HY"`
-			Y             string    `json:"Y"`
-			Twy           string    `json:"TWY"`
-			Sy            string    `json:"SY"`
-			StddevW       string    `json:"STDDEV_W"`
-			StddevM       string    `json:"STDDEV_M"`
-			StddevQ       string    `json:"STDDEV_Q"`
-			StddevHy      string    `json:"STDDEV_HY"`
-			StddevY       string    `json:"STDDEV_Y"`
-			StddevTwy     string    `json:"STDDEV_TWY"`
-			StddevSy      string    `json:"STDDEV_SY"`
-			Pettm         string    `json:"PETTM"`
-			Pep100        string    `json:"PEP100"`
-			Indexvalua    string    `json:"INDEXVALUA"`
-			Pb            string    `json:"PB"`
-			Pbp100        string    `json:"PBP100"`
-			Gxl           string    `json:"GXL"`
-			Roe           string    `json:"ROE"`
-			Percentprice  string    `json:"PERCENTPRICE"`
-			Bkname        string    `json:"BKNAME"`
-			Makername     string    `json:"MAKERNAME"`
-			Reaprofile    string    `json:"REAPROFILE"`
-			Isusepbp      string    `json:"ISUSEPBP"`
+			Indexcode     string `json:"INDEXCODE"`
+			Indexname     string `json:"INDEXNAME"`
+			Fullindexname string `json:"FULLINDEXNAME"`
+			Pdate         string `json:"PDATE"`
+			Q             string `json:"Q"`
+			W             string `json:"W"`
+			M             string `json:"M"`
+			Hy            string `json:"HY"`
+			Y             string `json:"Y"`
+			Twy           string `json:"TWY"`
+			Sy            string `json:"SY"`
+			StddevW       string `json:"STDDEV_W"`
+			StddevM       string `json:"STDDEV_M"`
+			StddevQ       string `json:"STDDEV_Q"`
+			StddevHy      string `json:"STDDEV_HY"`
+			StddevY       string `json:"STDDEV_Y"`
+			StddevTwy     string `json:"STDDEV_TWY"`
+			StddevSy      string `json:"STDDEV_SY"`
+			Pettm         string `json:"PETTM"`
+			Pep100        string `json:"PEP100"`
+			Indexvalua    string `json:"INDEXVALUA"`
+			Pb            string `json:"PB"`
+			Pbp100        string `json:"PBP100"`
+			Gxl           string `json:"GXL"`
+			Roe           string `json:"ROE"`
+			Percentprice  string `json:"PERCENTPRICE"`
+			Bkname        string `json:"BKNAME"`
+			Makername     string `json:"MAKERNAME"`
+			Reaprofile    string `json:"REAPROFILE"`
+			Isusepbp      string `json:"ISUSEPBP"`
 		} `json:"INDEXINFO"`
 	} `json:"Expansion"`
 }
 
-// JJBQ ???
+// JJBQ 基金标签
 type JJBQ struct {
 	Datas []struct {
 		Featype string `json:"FEATYPE"`
@@ -293,15 +293,24 @@ type JJTX struct {
 	Expansion    interface{} `json:"Expansion"`
 }
 
+// JDZF 阶段涨幅
 type JDZF struct {
 	Datas []struct {
+		// Z:近1周 Y:近1月 3Y:近3月 6Y:近6月
+		// 1N:近1年 2N:近2年 3N:近3年 5N:近五年
+		// JN:今年来 LN:成立来
 		Title string `json:"title"`
-		Syl   string `json:"syl"`
-		Avg   string `json:"avg"`
+		// 收益率
+		Syl string `json:"syl"`
+		// 涨跌幅
+		Avg string `json:"avg"`
+		// 同类平均
 		Hs300 string `json:"hs300"`
-		Rank  string `json:"rank"`
-		Sc    string `json:"sc"`
-		Diff  string `json:"diff"`
+		// 同类排名
+		Rank string `json:"rank"`
+		// 排名总数
+		Sc   string `json:"sc"`
+		Diff string `json:"diff"`
 	} `json:"Datas"`
 	ErrCode      int         `json:"ErrCode"`
 	Success      bool        `json:"Success"`
@@ -318,15 +327,20 @@ type JDZF struct {
 	} `json:"Expansion"`
 }
 
-// JJJL ???
+// JJJL 基金经理
 type JJJL struct {
 	Datas []struct {
-		Mgrid       string `json:"MGRID"`
-		Mgrname     string `json:"MGRNAME"`
-		Fcode       string `json:"FCODE"`
-		Days        string `json:"DAYS"`
-		Fempdate    string `json:"FEMPDATE"`
-		Lempdate    string `json:"LEMPDATE"`
+		Mgrid string `json:"MGRID"`
+		// 基金经理名字
+		Mgrname string `json:"MGRNAME"`
+		// 基金代码
+		Fcode string `json:"FCODE"`
+		// 本基金任期天数
+		Days string `json:"DAYS"`
+		// 任期开始日期
+		Fempdate string `json:"FEMPDATE"`
+		Lempdate string `json:"LEMPDATE"`
+		// 任职回报（%）
 		Penavgrowth string `json:"PENAVGROWTH"`
 		Newphotourl string `json:"NEWPHOTOURL"`
 		Isinoffice  string `json:"ISINOFFICE"`
@@ -342,11 +356,50 @@ type JJJL struct {
 	Expansion    interface{} `json:"Expansion"`
 }
 
-// JJGM ???
+// JJJLNEW 基金经理。。
+type JJJLNEW struct {
+	Datas []struct {
+		// 任职该基金天数
+		Days string `json:"DAYS"`
+		// 任职该基金开始时间
+		Fempdate string `json:"FEMPDATE"`
+		Lempdate string `json:"LEMPDATE"`
+		// 任职回报（%）
+		Penavgrowth string `json:"PENAVGROWTH"`
+		Manger      []struct {
+			Mgrid string `json:"MGRID"`
+			// 基金经理名字
+			Mgrname     string `json:"MGRNAME"`
+			Newphotourl string `json:"NEWPHOTOURL"`
+			Isinoffice  string `json:"ISINOFFICE"`
+			// 年均回报（%）
+			Yieldse string `json:"YIELDSE"`
+			// 从业天数
+			Totaldays       string `json:"TOTALDAYS"`
+			Investmentidear string `json:"INVESTMENTIDEAR"`
+			// 金牛奖获奖次数
+			HjJn int `json:"HJ_JN"`
+		} `json:"MANGER"`
+	} `json:"Datas"`
+	ErrCode      int         `json:"ErrCode"`
+	Success      bool        `json:"Success"`
+	ErrMsg       interface{} `json:"ErrMsg"`
+	Message      interface{} `json:"Message"`
+	ErrorCode    string      `json:"ErrorCode"`
+	ErrorMessage interface{} `json:"ErrorMessage"`
+	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
+	TotalCount   int         `json:"TotalCount"`
+	Expansion    interface{} `json:"Expansion"`
+}
+
+// JJGM 基金规模
 type JJGM struct {
 	Datas []struct {
-		Fsrq   string `json:"FSRQ"`
+		// 日期
+		Fsrq string `json:"FSRQ"`
+		// 净资产（元）
 		Netnav string `json:"NETNAV"`
+		// 净资产变动率（%）
 		Change string `json:"CHANGE"`
 		Issum  string `json:"ISSUM"`
 	} `json:"Datas"`
@@ -385,19 +438,22 @@ type HBCC struct {
 	Expansion    string      `json:"Expansion"`
 }
 
-// FHSP ???
+// FHSP 分红送配
 type FHSP struct {
 	Datas struct {
 		Fhinfo []struct {
-			Fsrq   string `json:"FSRQ"`
-			Djr    string `json:"DJR"`
+			Fsrq string `json:"FSRQ"`
+			// 权益登记日
+			Djr string `json:"DJR"`
+			// 每份分红（元）
 			Fhfcz  string `json:"FHFCZ"`
 			Cfbl   string `json:"CFBL"`
 			Fhfcbz string `json:"FHFCBZ"`
 			Cflx   string `json:"CFLX"`
-			Ffr    string `json:"FFR"`
-			Fh     string `json:"FH"`
-			Dtype  string `json:"DTYPE"`
+			// 分红发放日
+			Ffr   string `json:"FFR"`
+			Fh    string `json:"FH"`
+			Dtype string `json:"DTYPE"`
 		} `json:"FHINFO"`
 		Fcinfo []interface{} `json:"FCINFO"`
 	} `json:"Datas"`
@@ -448,25 +504,36 @@ type JJFX struct {
 	Expansion  interface{} `json:"Expansion"`
 }
 
-// JJCC ???
+// JJCC 基金持仓
 type JJCC struct {
 	Datas struct {
 		InverstPosition struct {
+			// 重仓股票
 			FundStocks []struct {
-				Gpdm         string `json:"GPDM"`
-				Gpjc         string `json:"GPJC"`
-				Jzbl         string `json:"JZBL"`
-				Texch        string `json:"TEXCH"`
-				Isinvisbl    string `json:"ISINVISBL"`
+				// 股票代码
+				Gpdm string `json:"GPDM"`
+				// 股票名称
+				Gpjc string `json:"GPJC"`
+				// 持仓占比
+				Jzbl      string `json:"JZBL"`
+				Texch     string `json:"TEXCH"`
+				Isinvisbl string `json:"ISINVISBL"`
+				// 增持｜减持｜新增
 				Pctnvchgtype string `json:"PCTNVCHGTYPE"`
-				Pctnvchg     string `json:"PCTNVCHG"`
-				Newtexch     string `json:"NEWTEXCH"`
-				Indexcode    string `json:"INDEXCODE"`
-				Indexname    string `json:"INDEXNAME"`
+				// 较上期增减比例（%）
+				Pctnvchg  string `json:"PCTNVCHG"`
+				Newtexch  string `json:"NEWTEXCH"`
+				Indexcode string `json:"INDEXCODE"`
+				// 股票行业
+				Indexname string `json:"INDEXNAME"`
 			} `json:"fundStocks"`
+			// 重仓债券
 			Fundboods []struct {
-				Zqdm     string `json:"ZQDM"`
-				Zqmc     string `json:"ZQMC"`
+				// 债券代码
+				Zqdm string `json:"ZQDM"`
+				// 债券名称
+				Zqmc string `json:"ZQMC"`
+				// 持仓占比（%）
 				Zjzbl    string `json:"ZJZBL"`
 				Isbroken string `json:"ISBROKEN"`
 			} `json:"fundboods"`
@@ -474,25 +541,32 @@ type JJCC struct {
 			Etfcode      interface{}   `json:"ETFCODE"`
 			Etfshortname interface{}   `json:"ETFSHORTNAME"`
 		} `json:"InverstPosition"`
-		AssetAllocation struct {
-			Two0210331 []struct {
-				Fsrq string `json:"FSRQ"`
-				Gp   string `json:"GP"`
-				Zq   string `json:"ZQ"`
-				Hb   string `json:"HB"`
-				Jzc  string `json:"JZC"`
-				Qt   string `json:"QT"`
-				Jj   string `json:"JJ"`
-			} `json:"2021-03-31"`
-		} `json:"AssetAllocation"`
-		SectorAllocation struct {
-			Two0210331 []struct {
-				Hymc  string `json:"HYMC"`
-				Sz    string `json:"SZ"`
-				Zjzbl string `json:"ZJZBL"`
-				Fsrq  string `json:"FSRQ"`
-			} `json:"2021-03-31"`
-		} `json:"SectorAllocation"`
+		// 持仓资产比例
+		// {
+		//   "2021-03-31": [
+		//     {
+		//       "FSRQ": "日期",
+		//       "GP":"股票占比（%）",
+		//       "ZQ":"债券占比（%）",
+		//       "HB": "现金占比（%）",
+		//       "QT": "其他",
+		//       "JZC": "净资产（亿）"
+		//     }
+		//   ]
+		// }
+		AssetAllocation map[string][]map[string]string `json:"AssetAllocation"`
+		// 行业占比
+		// {
+		//   "2021-03-31": [
+		//     {
+		//         "HYMC": "行业名称",
+		//         "SZ": "",
+		//         "ZJZBL": "占比（%）",
+		//         "FSRQ": "日期"
+		//     }
+		//   ]
+		// }
+		SectorAllocation map[string][]map[string]string `json:"SectorAllocation"`
 	} `json:"Datas"`
 	ErrCode      int         `json:"ErrCode"`
 	Success      bool        `json:"Success"`
@@ -519,79 +593,70 @@ type FHTX struct {
 	Expansion    interface{}   `json:"Expansion"`
 }
 
-// TSSJ ???
+// TSSJ 特色数据
 type TSSJ struct {
 	Datas struct {
-		Sharp1         string `json:"SHARP1"`
-		Sharp1Nrank    string `json:"SHARP_1NRANK"`
-		Sharp1Nfsc     string `json:"SHARP_1NFSC"`
-		Syl1N          string `json:"SYL_1N"`
+		// 近1年夏普比率
+		Sharp1      string `json:"SHARP1"`
+		Sharp1Nrank string `json:"SHARP_1NRANK"`
+		Sharp1Nfsc  string `json:"SHARP_1NFSC"`
+		// 近3年夏普比率
+		Sharp3      string `json:"SHARP3"`
+		Sharp3Nrank string `json:"SHARP_3NRANK"`
+		Sharp3Nfsc  string `json:"SHARP_3NFSC"`
+		// 近5年夏普比率
+		Sharp5      string `json:"SHARP5"`
+		Sharp5Nrank string `json:"SHARP_5NRANK"`
+		Sharp5Nfsc  string `json:"SHARP_5NFSC"`
+		// 近1年收益率
+		Syl1N string `json:"SYL_1N"`
+		// 成立来收益率
+		SylLn string `json:"SYL_LN"`
+		// 近1年最大回撤（%）
 		Maxretra1      string `json:"MAXRETRA1"`
 		Maxretra1Nrank string `json:"MAXRETRA_1NRANK"`
 		Maxretra1Nfsc  string `json:"MAXRETRA_1NFSC"`
-		Stddev1        string `json:"STDDEV1"`
-		Stddev1Nrank   string `json:"STDDEV_1NRANK"`
-		Stddev1Nfsc    string `json:"STDDEV_1NFSC"`
-		ProfitZ        string `json:"PROFIT_Z"`
-		ProfitY        string `json:"PROFIT_Y"`
-		Profit3Y       string `json:"PROFIT_3Y"`
-		Profit6Y       string `json:"PROFIT_6Y"`
-		Profit1N       string `json:"PROFIT_1N"`
-		PvY            string `json:"PV_Y"`
-		DtcountY       string `json:"DTCOUNT_Y"`
-		Ffavorcount    string `json:"FFAVORCOUNT"`
-		Earn1N         string `json:"EARN_1N"`
-		Avghold        string `json:"AVGHOLD"`
-		Brokentimes    string `json:"BROKENTIMES"`
-		Isexchg        string `json:"ISEXCHG"`
-		SylLn          string `json:"SYL_LN"`
-		Stddev3        string `json:"STDDEV3"`
-		Stddev3Nrank   string `json:"STDDEV_3NRANK"`
-		Stddev3Nfsc    string `json:"STDDEV_3NFSC"`
-		Stddev5        string `json:"STDDEV5"`
-		Stddev5Nrank   string `json:"STDDEV_5NRANK"`
-		Stddev5Nfsc    string `json:"STDDEV_5NFSC"`
-		Sharp3         string `json:"SHARP3"`
-		Sharp3Nrank    string `json:"SHARP_3NRANK"`
-		Sharp3Nfsc     string `json:"SHARP_3NFSC"`
-		Sharp5         string `json:"SHARP5"`
-		Sharp5Nrank    string `json:"SHARP_5NRANK"`
-		Sharp5Nfsc     string `json:"SHARP_5NFSC"`
+		// 近3年最大回撤（%）
 		Maxretra3      string `json:"MAXRETRA3"`
 		Maxretra3Nrank string `json:"MAXRETRA_3NRANK"`
 		Maxretra3Nfsc  string `json:"MAXRETRA_3NFSC"`
+		// 近5年最大回撤（%）
 		Maxretra5      string `json:"MAXRETRA5"`
 		Maxretra5Nrank string `json:"MAXRETRA_5NRANK"`
 		Maxretra5Nfsc  string `json:"MAXRETRA_5NFSC"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
-}
-
-// JJJLNEW ???
-type JJJLNEW struct {
-	Datas []struct {
-		Days        string `json:"DAYS"`
-		Fempdate    string `json:"FEMPDATE"`
-		Lempdate    string `json:"LEMPDATE"`
-		Penavgrowth string `json:"PENAVGROWTH"`
-		Manger      []struct {
-			Mgrid           string `json:"MGRID"`
-			Mgrname         string `json:"MGRNAME"`
-			Newphotourl     string `json:"NEWPHOTOURL"`
-			Isinoffice      string `json:"ISINOFFICE"`
-			Yieldse         string `json:"YIELDSE"`
-			Totaldays       string `json:"TOTALDAYS"`
-			Investmentidear string `json:"INVESTMENTIDEAR"`
-			HjJn            int    `json:"HJ_JN"`
-		} `json:"MANGER"`
+		// 近1年波动率（%）
+		Stddev1      string `json:"STDDEV1"`
+		Stddev1Nrank string `json:"STDDEV_1NRANK"`
+		Stddev1Nfsc  string `json:"STDDEV_1NFSC"`
+		// 近3年波动率（%）
+		Stddev3      string `json:"STDDEV3"`
+		Stddev3Nrank string `json:"STDDEV_3NRANK"`
+		Stddev3Nfsc  string `json:"STDDEV_3NFSC"`
+		// 近5年波动率（%）
+		Stddev5      string `json:"STDDEV5"`
+		Stddev5Nrank string `json:"STDDEV_5NRANK"`
+		Stddev5Nfsc  string `json:"STDDEV_5NFSC"`
+		// 持有1周盈利概率
+		ProfitZ string `json:"PROFIT_Z"`
+		// 持有1月盈利概率
+		ProfitY string `json:"PROFIT_Y"`
+		// 持有3月盈利概率
+		Profit3Y string `json:"PROFIT_3Y"`
+		// 持有6月盈利概率
+		Profit6Y string `json:"PROFIT_6Y"`
+		// 持有1年盈利概率
+		Profit1N string `json:"PROFIT_1N"`
+		// 近1月访问量
+		PvY string `json:"PV_Y"`
+		// 近1月定投人数
+		DtcountY string `json:"DTCOUNT_Y"`
+		// 加自选人数
+		Ffavorcount string `json:"FFAVORCOUNT"`
+		Earn1N      string `json:"EARN_1N"`
+		// 用户平均持有时长（天）
+		Avghold     string `json:"AVGHOLD"`
+		Brokentimes string `json:"BROKENTIMES"`
+		Isexchg     string `json:"ISEXCHG"`
 	} `json:"Datas"`
 	ErrCode      int         `json:"ErrCode"`
 	Success      bool        `json:"Success"`
