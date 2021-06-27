@@ -3,7 +3,7 @@
 before:
   hooks:
     - go mod tidy
-    - go test -v -race ./...
+    - go test -race ./...
     - bash ./misc/scripts/app.min.js.sh
     - bash ./misc/scripts/bumpversion.sh
 builds:
