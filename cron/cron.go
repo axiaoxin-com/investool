@@ -2,7 +2,6 @@
 package cron
 
 import (
-	"sync"
 	"time"
 
 	"github.com/go-co-op/gocron"
@@ -11,8 +10,6 @@ import (
 )
 
 var (
-	rwMutex = new(sync.RWMutex)
-
 	promSyncLabels = []string{
 		"jobname",
 	}

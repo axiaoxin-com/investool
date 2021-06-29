@@ -20,9 +20,7 @@ func SyncIndustryList() {
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()
 		return
 	}
-	rwMutex.RLock()
 	services.StockIndustryList = indlist
-	rwMutex.RUnlock()
 
 	// 更新文件
 	b, err := jsoniter.Marshal(indlist)

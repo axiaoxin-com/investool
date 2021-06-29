@@ -4,6 +4,7 @@ package cron
 import (
 	"context"
 	"io/ioutil"
+	"sync"
 	"time"
 
 	"github.com/axiaoxin-com/logging"
@@ -29,28 +30,41 @@ func SyncFundAllList() {
 	}
 
 	// 遍历获取基金详情
+	reqChan := make(chan string, 10)
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+
+	wg.Add(len(efundlist))
 	fundlist := models.FundList{}
 	for _, efund := range efundlist {
-		f, err := datacenter.EastMoney.QueryFundInfo(ctx, efund.Fcode)
-		if err != nil {
-			logging.Errorf(ctx, "SyncFundAllList QueryFundInfo error:%v", err)
-			promSyncError.WithLabelValues("SyncFundAllList").Inc()
-			continue
-		}
-		fund, err := models.NewFund(ctx, f)
-		if err != nil {
-			logging.Errorf(ctx, "SyncFundAllList NewFund error:%v", err)
-			promSyncError.WithLabelValues("SyncFundAllList").Inc()
-			continue
-		}
-		fundlist = append(fundlist, fund)
+		reqChan <- efund.Fcode
+		go func(ch chan string) {
+			defer func() {
+				wg.Done()
+			}()
+			code := <-ch
+			f, err := datacenter.EastMoney.QueryFundInfo(ctx, code)
+			if err != nil {
+				logging.Errorf(ctx, "SyncFundAllList QueryFundInfo error:%v", err)
+				promSyncError.WithLabelValues("SyncFundAllList").Inc()
+				return
+			}
+			fund, err := models.NewFund(ctx, f)
+			if err != nil {
+				logging.Errorf(ctx, "SyncFundAllList NewFund error:%v", err)
+				promSyncError.WithLabelValues("SyncFundAllList").Inc()
+				return
+			}
+			mu.Lock()
+			fundlist = append(fundlist, fund)
+			mu.Unlock()
+		}(reqChan)
 	}
+	wg.Wait()
 	logging.Infof(ctx, "SyncFundAllList request end. latency:%+v", time.Now().Sub(start))
 
 	// 更新 services 变量
-	rwMutex.RLock()
 	services.FundAllList = fundlist
-	rwMutex.RUnlock()
 
 	// 更新文件
 	b, err := jsoniter.Marshal(fundlist)
@@ -76,9 +90,7 @@ func Update4433() {
 		}
 	}
 	// 更新 services 变量
-	rwMutex.RLock()
 	services.Fund4433List = fundlist
-	rwMutex.RUnlock()
 
 	// 更新文件
 	b, err := jsoniter.Marshal(fundlist)

@@ -3,11 +3,13 @@ package cron
 import (
 	"testing"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/services"
 	"github.com/stretchr/testify/require"
 )
 
-func _TestSyncFundAllList(t *testing.T) {
+func TestS0yncFundAllList(t *testing.T) {
+	logging.SetLevel("error")
 	SyncFundAllList()
 }
 
