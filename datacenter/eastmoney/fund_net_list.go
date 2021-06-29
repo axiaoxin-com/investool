@@ -5,6 +5,7 @@ package eastmoney
 import (
 	"context"
 	"fmt"
+	"sync"
 	"time"
 
 	"github.com/axiaoxin-com/goutils"
@@ -113,15 +114,32 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 
 	// 算出总页数循环获取全量数据
 	pageCount := (totalCount + 30 - 1) / 30
+	reqChan := make(chan int, 100)
+	var mu sync.Mutex
+	var wg sync.WaitGroup
+
+	wg.Add(pageCount - 1)
 	for pageIndex := 2; pageIndex <= pageCount; pageIndex++ {
-		resp, err := e.QueryFundListByPage(ctx, fundType, pageIndex)
-		if err != nil {
-			return result, err
-		}
-		if len(resp.Datas) != 0 {
-			result = append(result, resp.Datas[0]...)
-		}
+		reqChan <- pageIndex
+		go func(ch chan int) {
+			defer func() {
+				wg.Done()
+			}()
+			index := <-ch
+			resp, err := e.QueryFundListByPage(ctx, fundType, index)
+			if err != nil {
+				logging.Errorf(ctx, "QueryAllFundList QueryFundListByPage:%d err:%v", index, err)
+				return
+			}
+			if len(resp.Datas) != 0 {
+				mu.Lock()
+				result = append(result, resp.Datas[0]...)
+				mu.Unlock()
+			}
+		}(reqChan)
 	}
+	wg.Wait()
+
 	if len(result) != totalCount {
 		logging.Errorf(ctx, "QueryAllFundList result count:%d != resp.TotalCount:%d", len(result), totalCount)
 	}
