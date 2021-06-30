@@ -4,7 +4,6 @@ package models
 
 import (
 	"context"
-	"errors"
 	"math"
 	"sort"
 	"strconv"
@@ -320,11 +319,11 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 	}
 
 	// 基金规模
-	if len(efund.Jjgm.Datas) == 0 {
-		return fund, errors.New("jjgm no data")
+	if len(efund.Jjgm.Datas) > 0 {
+		fund.NetAssetsScale = interfaceToFloat64(ctx, efund.Jjgm.Datas[0].Netnav)
+	} else {
+		logging.Errorf(ctx, "code:%v jjgm no data", fund.Code)
 	}
-	jjgm := efund.Jjgm.Datas[0]
-	fund.NetAssetsScale = interfaceToFloat64(ctx, jjgm.Netnav)
 
 	// 绩效
 	pfm := FundPerformance{}
@@ -415,20 +414,22 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 
 	// 基金经理
 	manager := FundManager{}
-	if len(efund.Jjjlnew.Datas) == 0 {
-		return fund, errors.New("jjjlnew no data")
+	if len(efund.Jjjlnew.Datas) > 0 {
+		jjjl := efund.Jjjlnew.Datas[0]
+		if len(jjjl.Manger) > 0 {
+			m := jjjl.Manger[0]
+			manager.Name = m.Mgrname
+			manager.WorkingDays = interfaceToFloat64(ctx, m.Totaldays)
+			manager.ManageDays = interfaceToFloat64(ctx, jjjl.Days)
+			manager.ManageRepay = interfaceToFloat64(ctx, jjjl.Penavgrowth)
+			manager.YearsAvgRepay = interfaceToFloat64(ctx, m.Yieldse)
+			fund.Manager = manager
+		} else {
+			logging.Errorf(ctx, "code:%v jjjlnew manager no data", fund.Code)
+		}
+	} else {
+		logging.Errorf(ctx, "code:%v jjjlnew no data", fund.Code)
 	}
-	jjjl := efund.Jjjlnew.Datas[0]
-	if len(jjjl.Manger) == 0 {
-		return fund, errors.New("manager no data")
-	}
-	m := jjjl.Manger[0]
-	manager.Name = m.Mgrname
-	manager.WorkingDays = interfaceToFloat64(ctx, m.Totaldays)
-	manager.ManageDays = interfaceToFloat64(ctx, jjjl.Days)
-	manager.ManageRepay = interfaceToFloat64(ctx, jjjl.Penavgrowth)
-	manager.YearsAvgRepay = interfaceToFloat64(ctx, m.Yieldse)
-	fund.Manager = manager
 
 	// 分红送配
 	dividends := []FundDividend{}
