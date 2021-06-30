@@ -148,7 +148,7 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 
 // QueryFundListByPage 按页获取天天基金净值列表，接口限制最大30个
 func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, pageIndex int) (RespFundList, error) {
-	apiurl := "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNNetNewList"
+	apiurl := "http://fundmobapi.eastmoney.com/FundMNewApi/FundMNNetNewList"
 	params := map[string]string{
 		"FundType":   fmt.Sprint(fundType), // 基金类型
 		"SortColumn": "DWJZ",               // 按净值排序

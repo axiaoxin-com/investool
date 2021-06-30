@@ -690,7 +690,7 @@ type RespFundInfo struct {
 
 // QueryFundInfo 查询基金详情
 func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (RespFundInfo, error) {
-	apiurl := fmt.Sprintf("https://j5.dfcfw.com/sc/tfs/qt/v2.0.1/%v.json", fundCode)
+	apiurl := fmt.Sprintf("http://j5.dfcfw.com/sc/tfs/qt/v2.0.1/%v.json", fundCode)
 	params := map[string]string{}
 	logging.Debug(ctx, "EastMoney QueryFundInfo "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
