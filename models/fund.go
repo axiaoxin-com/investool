@@ -322,7 +322,7 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 	if len(efund.Jjgm.Datas) > 0 {
 		fund.NetAssetsScale = interfaceToFloat64(ctx, efund.Jjgm.Datas[0].Netnav)
 	} else {
-		logging.Errorf(ctx, "code:%v jjgm no data", fund.Code)
+		logging.Warnf(ctx, "code:%v jjgm no data", fund.Code)
 	}
 
 	// 绩效
@@ -425,10 +425,10 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 			manager.YearsAvgRepay = interfaceToFloat64(ctx, m.Yieldse)
 			fund.Manager = manager
 		} else {
-			logging.Errorf(ctx, "code:%v jjjlnew manager no data", fund.Code)
+			logging.Warnf(ctx, "code:%v jjjlnew manager no data", fund.Code)
 		}
 	} else {
-		logging.Errorf(ctx, "code:%v jjjlnew no data", fund.Code)
+		logging.Warnf(ctx, "code:%v jjjlnew no data", fund.Code)
 	}
 
 	// 分红送配
@@ -482,17 +482,82 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 // FundList list
 type FundList []Fund
 
-// SortByYear1RankRatio 按最近一年收益率排名排序
-func (f FundList) SortByYear1RankRatio() {
-	sort.Slice(f, func(i, j int) bool {
-		return f[i].Performance.Year1RankRatio > f[j].Performance.Year1RankRatio
-	})
+// FundSortType 基金排序类型
+type FundSortType int
+
+const (
+	// FundSortTypeWeek 按最近一周收益率排序
+	FundSortTypeWeek = iota
+	// FundSortTypeMonth1 按最近一月收益率排序
+	FundSortTypeMonth1
+	// FundSortTypeMonth3 按最新三月收益率排序
+	FundSortTypeMonth3
+	// FundSortTypeMonth6 按最新六月收益率排序
+	FundSortTypeMonth6
+	// FundSortTypeYear1 按最近一年收益率排序
+	FundSortTypeYear1
+	// FundSortTypeYear2 按最近两年收益率排序
+	FundSortTypeYear2
+	// FundSortTypeYear3 按最近三年收益率排序
+	FundSortTypeYear3
+	// FundSortTypeYear5 按最近五年收益率排序
+	FundSortTypeYear5
+	// FundSortTypeThisYear 按今年来收益率排序
+	FundSortTypeThisYear
+	// FundSortTypeHistorical 按成立来收益率排序
+	FundSortTypeHistorical
+)
+
+// Sort 排序
+func (f FundList) Sort(st FundSortType) {
+	switch st {
+	case FundSortTypeWeek:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.WeekProfitRatio > f[j].Performance.WeekProfitRatio
+		})
+	case FundSortTypeMonth1:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Month1ProfitRatio > f[j].Performance.Month1ProfitRatio
+		})
+	case FundSortTypeMonth3:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Month3ProfitRatio > f[j].Performance.Month3ProfitRatio
+		})
+	case FundSortTypeMonth6:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Month6ProfitRatio > f[j].Performance.Month6ProfitRatio
+		})
+	case FundSortTypeYear1:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Year1ProfitRatio > f[j].Performance.Year1ProfitRatio
+		})
+	case FundSortTypeYear2:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Year2ProfitRatio > f[j].Performance.Year2ProfitRatio
+		})
+	case FundSortTypeYear3:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Year3ProfitRatio > f[j].Performance.Year3ProfitRatio
+		})
+	case FundSortTypeYear5:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.Year5ProfitRatio > f[j].Performance.Year5ProfitRatio
+		})
+	case FundSortTypeThisYear:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.ThisYearProfitRatio > f[j].Performance.ThisYearProfitRatio
+		})
+	case FundSortTypeHistorical:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Performance.HistoricalProfitRatio > f[j].Performance.HistoricalProfitRatio
+		})
+	}
 }
 
 // Is4433 判断是否满足4433法则
 func (f Fund) Is4433(ctx context.Context) bool {
 	// 没有5年数据则不满足
-	if f.Performance.Year5RankRatio != 0 {
+	if f.Performance.Year5ProfitRatio == 0 {
 		return false
 	}
 	quarterRatio := float64(1) / float64(4) * 100.0

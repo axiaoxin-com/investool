@@ -37,6 +37,8 @@ type ParamFilterByRankRatio struct {
 	Year3 float64
 	// 最近五年收益率排名比
 	Year5 float64
+	// 排序方式
+	SortType models.FundSortType
 }
 
 // FilterByRankRatio 按指定收益率排名前百分比过滤
@@ -54,6 +56,6 @@ func (f Funder) FilterByRankRatio(ctx context.Context, p ParamFilterByRankRatio)
 			results = append(results, fund)
 		}
 	}
-	results.SortByYear1RankRatio()
+	results.Sort(p.SortType)
 	return results
 }

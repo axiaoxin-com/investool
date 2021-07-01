@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/avast/retry-go"
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
@@ -30,7 +31,7 @@ func SyncFundAllList() {
 	}
 
 	// 遍历获取基金详情
-	reqChan := make(chan string, 0)
+	reqChan := make(chan string, 100)
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
@@ -43,21 +44,26 @@ func SyncFundAllList() {
 				wg.Done()
 			}()
 			code := <-reqChan
-			f, err := datacenter.EastMoney.QueryFundInfo(ctx, code)
+			err := retry.Do(
+				func() error {
+					f, err := datacenter.EastMoney.QueryFundInfo(ctx, code)
+					if err != nil {
+						return err
+					}
+					fund, err := models.NewFund(ctx, f)
+					if err != nil {
+						return err
+					}
+					mu.Lock()
+					fundlist = append(fundlist, fund)
+					mu.Unlock()
+					return nil
+				},
+			)
 			if err != nil {
-				logging.Errorf(ctx, "SyncFundAllList QueryFundInfo code:%v error:%v", code, err)
+				logging.Errorf(ctx, "QueryAllFundList QueryFundInfo err:%v", err)
 				promSyncError.WithLabelValues("SyncFundAllList").Inc()
-				return
 			}
-			fund, err := models.NewFund(ctx, f)
-			if err != nil {
-				logging.Errorf(ctx, "SyncFundAllList NewFund error:%v", err)
-				promSyncError.WithLabelValues("SyncFundAllList").Inc()
-				return
-			}
-			mu.Lock()
-			fundlist = append(fundlist, fund)
-			mu.Unlock()
 		}()
 	}
 	wg.Wait()
@@ -90,6 +96,7 @@ func Update4433() {
 		}
 	}
 	// 更新 services 变量
+	fundlist.Sort(models.FundSortTypeWeek)
 	services.Fund4433List = fundlist
 
 	// 更新文件

@@ -14,8 +14,11 @@
                 <tr>
                     <th>基金代码</th>
                     <th>基金名称</th>
-                    <th>近1年收益率排名</th>
-                    <th>近1年收益率排名比</th>
+                    <th>基金类型</th>
+                    <th>成立时间</th>
+                    <th>基金规模</th>
+                    <th>近1周收益率</th>
+                    <th>近1周收益率同类排行</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,8 +26,11 @@
                 <tr>
                     <td>{{ .Code }}</td>
                     <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
-                    <td>{{ .Performance.Year1RankNum }}</td>
-                    <td>{{ .Performance.Year1RankRatio }}</td>
+                    <td>{{ .Type }}</td>
+                    <td>{{ .EstablishedDate }}</td>
+                    <td>{{ .NetAssetsScale }}</td>
+                    <td>{{ .Performance.WeekProfitRatio }}</td>
+                    <td>第{{ .Performance.WeekRankNum }}名|前{{ .Performance.WeekRankRatio }}%</td>
                 </tr>
             {{ end }}
             </tbody>

@@ -5,6 +5,7 @@ go 1.16
 require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/axiaoxin-com/goutils v1.0.17
 	github.com/axiaoxin-com/logging v1.2.10
 	github.com/axiaoxin-com/ratelimiter v1.0.3
@@ -28,6 +29,7 @@ require (
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
+	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.29.0 // indirect
