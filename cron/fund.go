@@ -30,22 +30,22 @@ func SyncFundAllList() {
 	}
 
 	// 遍历获取基金详情
-	reqChan := make(chan string, 10)
+	reqChan := make(chan string, 0)
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
-	wg.Add(len(efundlist))
 	fundlist := models.FundList{}
 	for _, efund := range efundlist {
-		reqChan <- efund.Fcode
-		go func(ch chan string) {
+		wg.Add(1)
+		go func() { reqChan <- efund.Fcode }()
+		go func() {
 			defer func() {
 				wg.Done()
 			}()
-			code := <-ch
+			code := <-reqChan
 			f, err := datacenter.EastMoney.QueryFundInfo(ctx, code)
 			if err != nil {
-				logging.Errorf(ctx, "SyncFundAllList QueryFundInfo error:%v", err)
+				logging.Errorf(ctx, "SyncFundAllList QueryFundInfo code:%v error:%v", code, err)
 				promSyncError.WithLabelValues("SyncFundAllList").Inc()
 				return
 			}
@@ -58,7 +58,7 @@ func SyncFundAllList() {
 			mu.Lock()
 			fundlist = append(fundlist, fund)
 			mu.Unlock()
-		}(reqChan)
+		}()
 	}
 	wg.Wait()
 	logging.Infof(ctx, "SyncFundAllList request end. latency:%+v", time.Now().Sub(start))

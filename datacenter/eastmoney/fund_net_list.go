@@ -121,11 +121,11 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 	wg.Add(pageCount - 1)
 	for pageIndex := 2; pageIndex <= pageCount; pageIndex++ {
 		reqChan <- pageIndex
-		go func(ch chan int) {
+		go func() {
 			defer func() {
 				wg.Done()
 			}()
-			index := <-ch
+			index := <-reqChan
 			resp, err := e.QueryFundListByPage(ctx, fundType, index)
 			if err != nil {
 				logging.Errorf(ctx, "QueryAllFundList QueryFundListByPage:%d err:%v", index, err)
@@ -136,7 +136,7 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 				result = append(result, resp.Datas[0]...)
 				mu.Unlock()
 			}
-		}(reqChan)
+		}()
 	}
 	wg.Wait()
 
