@@ -587,7 +587,7 @@ func (f FundList) Sort(st FundSortType) {
 // Is4433 判断是否满足4433法则
 func (f Fund) Is4433(ctx context.Context) bool {
 	// 没有5年数据则不满足
-	if f.Performance.Year5ProfitRatio == 0 {
+	if f.Performance.Year5ProfitRatio == 0 || f.Performance.Year5RankNum == 0 {
 		return false
 	}
 	quarterRatio := float64(1) / float64(4) * 100.0
