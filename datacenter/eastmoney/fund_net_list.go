@@ -117,6 +117,7 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 	reqChan := make(chan int, 100)
 	var mu sync.Mutex
 	var wg sync.WaitGroup
+	var sm sync.Map
 
 	wg.Add(pageCount - 1)
 	for pageIndex := 2; pageIndex <= pageCount; pageIndex++ {
@@ -126,15 +127,23 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 				wg.Done()
 			}()
 			index := <-reqChan
+
 			resp, err := e.QueryFundListByPage(ctx, fundType, index)
 			if err != nil {
 				logging.Errorf(ctx, "QueryAllFundList QueryFundListByPage:%d err:%v", index, err)
 				return
 			}
 			if len(resp.Datas) != 0 {
-				mu.Lock()
-				result = append(result, resp.Datas[0]...)
-				mu.Unlock()
+				for _, d := range resp.Datas[0] {
+					if _, exist := sm.Load(d.Fcode); exist {
+						logging.Warnf(ctx, "code:%v is already exist", d.Fcode)
+						continue
+					}
+					sm.Store(d.Fcode, struct{}{})
+					mu.Lock()
+					result = append(result, d)
+					mu.Unlock()
+				}
 			}
 		}()
 	}

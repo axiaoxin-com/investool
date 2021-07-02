@@ -90,6 +90,8 @@ type FundPerformance struct {
 	ThisYearRankNum float64 `json:"this_year_rank_num"`
 	// 今年来同类排名百分比
 	ThisYearRankRatio float64 `json:"this_year_rank_ratio"`
+	// 今年来同类总数
+	ThisYearRankTotalCount float64 `json:"this_year_rank_total_count"`
 	// 成立以来收益率
 	HistoricalProfitRatio float64 `json:"historical_profit_ratio"`
 	// 成立以来涨跌幅
@@ -100,6 +102,8 @@ type FundPerformance struct {
 	HistoricalRankNum float64 `json:"historical_rank_num"`
 	// 成立以来同类排名百分比
 	HistoricalRankRatio float64 `json:"historical_rank_ratio"`
+	// 成立以来同类总数
+	HistoricalRankTotalCount float64 `json:"historical_rank_total_count"`
 	// 近一周收益率
 	WeekProfitRatio float64 `json:"week_profit_ratio"`
 	// 近一周涨跌幅
@@ -110,6 +114,8 @@ type FundPerformance struct {
 	WeekRankNum float64 `json:"week_rank_num"`
 	// 近一周同类排名百分比
 	WeekRankRatio float64 `json:"week_rank_ratio"`
+	// 近一周同类总数
+	WeekRankTotalCount float64 `json:"week_rank_total_count"`
 	// 近一月收益率
 	Month1ProfitRatio float64 `json:"month_1_profit_ratio"`
 	// 近一月涨跌幅
@@ -120,6 +126,8 @@ type FundPerformance struct {
 	Month1RankNum float64 `json:"month_1_rank_num"`
 	// 近一月同类排名百分比
 	Month1RankRatio float64 `json:"month_1_rank_ratio"`
+	// 近一月同类总数
+	Month1RankTotalCount float64 `json:"month_1_rank_total_count"`
 	// 近三月收益率
 	Month3ProfitRatio float64 `json:"month_3_profit_ratio"`
 	// 近三月涨跌幅
@@ -130,6 +138,8 @@ type FundPerformance struct {
 	Month3RankNum float64 `json:"month_3_rank_num"`
 	// 近三月同类排名百分比
 	Month3RankRatio float64 `json:"month_3_rank_ratio"`
+	// 近三月同类总数
+	Month3RankTotalCount float64 `json:"month_3_rank_total"`
 	// 近六月收益率
 	Month6ProfitRatio float64 `json:"month_6_profit_ratio"`
 	// 近六月涨跌幅
@@ -140,6 +150,8 @@ type FundPerformance struct {
 	Month6RankNum float64 `json:"month_6_rank_num"`
 	// 近六月同类排名百分比
 	Month6RankRatio float64 `json:"month_6_rank_ratio"`
+	// 近六月同类总数
+	Month6RankTotalCount float64 `json:"month_6_rank_total_count"`
 	// 近一年收益率
 	Year1ProfitRatio float64 `json:"year_1_profit_ratio"`
 	// 近一年涨跌幅
@@ -150,6 +162,8 @@ type FundPerformance struct {
 	Year1RankNum float64 `json:"year_1_rank_num"`
 	// 近一年同类排名百分比
 	Year1RankRatio float64 `json:"year_1_rank_ratio"`
+	// 近一年同类总数
+	Year1RankTotalCount float64 `json:"year_1_rank_total_count"`
 	// 近两年收益率
 	Year2ProfitRatio float64 `json:"year_2_profit_ratio"`
 	// 近两年涨跌幅
@@ -160,6 +174,8 @@ type FundPerformance struct {
 	Year2RankNum float64 `json:"year_2_rank_num"`
 	// 近两年同类排名百分比
 	Year2RankRatio float64 `json:"year_2_rank_ratio"`
+	// 近两年同类总数
+	Year2RankTotalCount float64 `json:"year_2_rank_total_count"`
 	// 近三年收益率
 	Year3ProfitRatio float64 `json:"year_3_profit_ratio"`
 	// 近三年涨跌幅
@@ -170,6 +186,8 @@ type FundPerformance struct {
 	Year3RankNum float64 `json:"year_3_rank_num"`
 	// 近三年同类排名百分比
 	Year3RankRatio float64 `json:"year_3_rank_ratio"`
+	// 近三年同类总数
+	Year3RankTotalCount float64 `json:"year_3_rank_total_count"`
 	// 近五年收益率
 	Year5ProfitRatio float64 `json:"year_5_profit_ratio"`
 	// 近五年涨跌幅
@@ -180,6 +198,8 @@ type FundPerformance struct {
 	Year5RankNum float64 `json:"year_5_rank_num"`
 	// 近五年同类排名百分比
 	Year5RankRatio float64 `json:"year_5_rank_ratio"`
+	// 近五年同类总数
+	Year5RankTotalCount float64 `json:"year_5_rank_total_count"`
 }
 
 // FundDividend 分红送配
@@ -285,7 +305,7 @@ func interfaceToFloat64(ctx context.Context, unk interface{}) (result float64) {
 }
 
 // NewFund 创建 Fund 实例
-func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
+func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 	fund := Fund{
 		Code:            efund.Jjxq.Datas.Fcode,
 		Name:            efund.Jjxq.Datas.Shortname,
@@ -340,60 +360,70 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 			pfm.WeekRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.WeekRankRatio = rankRatio
 			pfm.WeekProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.WeekRankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "Y":
 			pfm.Month1Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Month1KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Month1RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month1RankRatio = rankRatio
 			pfm.Month1ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Month1RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "3Y":
 			pfm.Month3Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Month3KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Month3RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month3RankRatio = rankRatio
 			pfm.Month3ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Month3RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "6Y":
 			pfm.Month6Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Month6KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Month6RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Month6RankRatio = rankRatio
 			pfm.Month6ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Month6RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "1N":
 			pfm.Year1Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Year1KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Year1RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year1RankRatio = rankRatio
 			pfm.Year1ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Year1RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "2N":
 			pfm.Year2Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Year2KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Year2RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year2RankRatio = rankRatio
 			pfm.Year2ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Year2RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "3N":
 			pfm.Year3Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Year3KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Year3RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year3RankRatio = rankRatio
 			pfm.Year3ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Year3RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "5N":
 			pfm.Year5Amplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.Year5KindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.Year5RankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.Year5RankRatio = rankRatio
 			pfm.Year5ProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.Year5RankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "JN":
 			pfm.ThisYearAmplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.ThisYearKindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.ThisYearRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.ThisYearRankRatio = rankRatio
 			pfm.ThisYearProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.ThisYearRankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		case "LN":
 			pfm.HistoricalAmplitude = interfaceToFloat64(ctx, d.Avg)
 			pfm.HistoricalKindAvg = interfaceToFloat64(ctx, d.Hs300)
 			pfm.HistoricalRankNum = interfaceToFloat64(ctx, d.Rank)
 			pfm.HistoricalRankRatio = rankRatio
 			pfm.HistoricalProfitRatio = interfaceToFloat64(ctx, d.Syl)
+			pfm.HistoricalRankTotalCount = interfaceToFloat64(ctx, d.Sc)
 		}
 	}
 	fund.Performance = pfm
@@ -476,7 +506,7 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) (Fund, error) {
 		fund.IndustryProportion = ip
 	}
 
-	return fund, nil
+	return fund
 }
 
 // FundList list

@@ -4,6 +4,7 @@ package services
 import (
 	"context"
 	"io/ioutil"
+	"time"
 
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/models"
@@ -13,6 +14,8 @@ import (
 var (
 	// StockIndustryList 东方财富股票行业列表
 	StockIndustryList []string
+	// SyncFundTime 基金数据同步时间
+	SyncFundTime time.Time
 	// FundAllList 全量基金列表
 	FundAllList models.FundList
 	// Fund4433List 满足4433法则的基金列表

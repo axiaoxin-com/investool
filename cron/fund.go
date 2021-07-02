@@ -16,8 +16,8 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-// SyncFundAllList 同步基金列表
-func SyncFundAllList() {
+// SyncFund 同步基金数据
+func SyncFund() {
 	ctx := context.Background()
 	start := time.Now()
 	logging.Infof(ctx, "SyncFundAllList request start...")
@@ -38,32 +38,33 @@ func SyncFundAllList() {
 	fundlist := models.FundList{}
 	for _, efund := range efundlist {
 		wg.Add(1)
-		go func() { reqChan <- efund.Fcode }()
+		reqChan <- efund.Fcode
 		go func() {
 			defer func() {
 				wg.Done()
 			}()
 			code := <-reqChan
+			fundresp := eastmoney.RespFundInfo{}
 			err := retry.Do(
 				func() error {
-					f, err := datacenter.EastMoney.QueryFundInfo(ctx, code)
-					if err != nil {
-						return err
-					}
-					fund, err := models.NewFund(ctx, f)
-					if err != nil {
-						return err
-					}
-					mu.Lock()
-					fundlist = append(fundlist, fund)
-					mu.Unlock()
-					return nil
+					var err error
+					fundresp, err = datacenter.EastMoney.QueryFundInfo(ctx, code)
+					return err
+
 				},
+				retry.OnRetry(func(n uint, err error) {
+					logging.Errorf(ctx, "retry#%d: code:%v %v\n", n, code, err)
+				}),
 			)
 			if err != nil {
-				logging.Errorf(ctx, "QueryAllFundList QueryFundInfo err:%v", err)
+				logging.Errorf(ctx, "QueryAllFundList QueryFundInfo code:%v err:%v", code, err)
 				promSyncError.WithLabelValues("SyncFundAllList").Inc()
+				return
 			}
+			fund := models.NewFund(ctx, fundresp)
+			mu.Lock()
+			fundlist = append(fundlist, fund)
+			mu.Unlock()
 		}()
 	}
 	wg.Wait()
@@ -84,6 +85,12 @@ func SyncFundAllList() {
 		promSyncError.WithLabelValues("SyncFundAllList").Inc()
 		return
 	}
+
+	// 更新4433列表
+	Update4433()
+
+	// 更新同步时间
+	services.SyncFundTime = time.Now()
 }
 
 // Update4433 更新4433检测结果

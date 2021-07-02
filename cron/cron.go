@@ -29,10 +29,8 @@ func RunCronJobs() {
 		panic(err)
 	}
 	sched := gocron.NewScheduler(timezone)
-	// 每周六凌晨3点同步基金净值列表
-	sched.Cron("0 3 * * 6").Do(SyncFundAllList)
-	// 每周六凌晨6点更新4433基金列表
-	sched.Cron("0 6 * * 6").Do(Update4433)
+	// 每周五18点同步基金净值列表和4433列表
+	sched.Cron("0 18 * * 5").Do(SyncFund)
 	// 每月1号凌晨4点同步东方财富行业列表
 	sched.Cron("0 4 1 * *").Do(SyncIndustryList)
 }

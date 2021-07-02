@@ -59,13 +59,13 @@ func ActionWebserver() func(c *cli.Context) error {
 			logging.Error(nil, "services init error:"+err.Error())
 		}
 
+		// 启动定时任务
+		go cron.RunCronJobs()
 		// 创建 gin app
 		middlewares := DefaultGinMiddlewares()
 		server := webserver.NewGinEngine(middlewares...)
 		// 注册路由
 		routes.Register(server)
-		// 启动定时任务
-		go cron.RunCronJobs()
 		// 运行服务
 		webserver.Run(server)
 		return nil
