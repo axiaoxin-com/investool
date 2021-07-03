@@ -24,7 +24,7 @@ type CheckerOptions struct {
 	// 最大资产负债率百分比(%)
 	MaxDebtAssetRatio float64 `json:"max_debt_asset_ratio"    form:"checker_max_debt_asset_ratio"`
 	// 最大历史波动率
-	MaxHV float64 `json:"min_hv"                  form:"checker_max_hv"`
+	MaxHV float64 `json:"max_hv"                  form:"checker_max_hv"`
 	// 最小市值（亿）
 	MinTotalMarketCap float64 `json:"min_total_market_cap"    form:"checker_min_total_market_cap"`
 	// 银行股最小 ROA

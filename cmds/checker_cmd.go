@@ -57,7 +57,7 @@ func FlagsCheckerOptions() []cli.Flag {
 			DefaultText: "60.0",
 		},
 		&cli.Float64Flag{
-			Name:        "checker.min_hv",
+			Name:        "checker.max_hv",
 			Value:       1.0,
 			Usage:       "最大历史波动率",
 			DefaultText: "1.0",
