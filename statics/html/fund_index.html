@@ -24,7 +24,10 @@
     <div id="4433" class="col s12">
         <h4 class="center"><span onclick="$('#desc_4433').tapTarget('open')">4433法则<i class="tiny material-icons">help_outline</i></span>筛选结果</h4>
         <div class="divider"></div>
-        更新时间: {{ .UpdatedAt }}
+        <div class="left">
+        更新时间:{{ .UpdatedAt }}</br>
+        4433总数:{{ .Fund4433Count }}/筛选总数:{{ .AllFundCount }}
+        </div>
         <!-- Dropdown Structure -->
         <div class="dropdown-structure right">
             <a class='dropdown-trigger btn-small red lighten-2 left' href='#' data-target='fund-fields-dropdown'><i class="material-icons left">more_vert</i>更多信息</a>

@@ -64,13 +64,15 @@ func FundIndex(c *gin.Context) {
 	}
 	pagi := goutils.PaginateByPageNumSize(totalCount, p.PageNum, p.PageSize)
 	data := gin.H{
-		"Env":          viper.GetString("env"),
-		"Version":      version.Version,
-		"PageTitle":    "X-STOCK | 基金 | 4433法则选基",
-		"Fund4433List": result,
-		"Pagination":   pagi,
-		"Param":        p,
-		"UpdatedAt":    services.SyncFundTime.Format("2006-01-02 15:04:05"),
+		"Env":           viper.GetString("env"),
+		"Version":       version.Version,
+		"PageTitle":     "X-STOCK | 基金 | 4433法则选基",
+		"Fund4433List":  result,
+		"Pagination":    pagi,
+		"Param":         p,
+		"UpdatedAt":     services.SyncFundTime.Format("2006-01-02 15:04:05"),
+		"AllFundCount":  len(services.FundAllList),
+		"Fund4433Count": totalCount,
 	}
 	c.HTML(http.StatusOK, "fund_index.html", data)
 	return
