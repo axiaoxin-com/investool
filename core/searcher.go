@@ -4,6 +4,7 @@ package core
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
@@ -36,6 +37,9 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 		}
 		logging.Debugf(ctx, "search results:%+v, %s matched", searchResults, searchResults[0])
 		matchedResults = append(matchedResults, searchResults[0])
+	}
+	if len(matchedResults) == 0 {
+		return nil, fmt.Errorf("can't find the %v", keywords)
 	}
 	// 查询匹配到的股票代码的股票信息
 	filter := eastmoney.Filter{}
