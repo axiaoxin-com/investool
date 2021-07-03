@@ -52,7 +52,7 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 	}
 	results := models.StockList{}
 	for _, stock := range stocks {
-		mstock, err := models.NewStock(ctx, stock, false)
+		mstock, err := models.NewStock(ctx, stock)
 		if err != nil {
 			logging.Errorf(ctx, "%s new models stock error:%v", stock.SecurityCode, err.Error())
 			continue

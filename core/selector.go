@@ -66,7 +66,7 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 				}
 			}()
 
-			stock, err := models.NewStock(ctx, baseInfo, false)
+			stock, err := models.NewStock(ctx, baseInfo)
 			if err != nil {
 				logging.Error(ctx, "NewStock error:"+err.Error())
 				return

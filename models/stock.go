@@ -5,6 +5,7 @@ package models
 import (
 	"context"
 	"sort"
+	"sync"
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
@@ -93,178 +94,219 @@ func (s StockList) SortByROE() {
 }
 
 // NewStock 创建 Stock 对象
-func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo, strict bool) (Stock, error) {
-	s := Stock{
+func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) {
+	s := &Stock{
 		BaseInfo: baseInfo,
 	}
+	var wg sync.WaitGroup
 
 	// 获取财报
-	hf, err := datacenter.EastMoney.QueryHistoricalFinaMainData(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		hf, err := datacenter.EastMoney.QueryHistoricalFinaMainData(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryHistoricalFinaMainData err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryHistoricalFinaMainData err:"+err.Error())
-	}
-	s.HistoricalFinaMainData = hf
+		s.HistoricalFinaMainData = hf
+	}(ctx, s)
 
 	// 获取综合估值
-	valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryValuationStatus err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryValuationStatus err:"+err.Error())
-	}
-	s.ValuationMap = valMap
+		s.ValuationMap = valMap
+	}(ctx, s)
 
-	// 历史市盈率
-	peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	// 历史市盈率 && 合理价格
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryHistoricalPEList err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryHistoricalPEList err:"+err.Error())
-	}
-	s.HistoricalPEList = peList
+		s.HistoricalPEList = peList
 
-	// 合理价格判断，一季报没有发布则设置合理价为 -1
-	s.RightPrice = -1
-	// 今年一季报营收增长比
-	ratio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
-	if err != nil {
-		if strict {
-			return s, err
+		// 合理价格判断，一季报没有发布则设置合理价为 -1
+		s.RightPrice = -1
+		// 今年一季报营收增长比
+		ratio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
+		if err != nil {
+			logging.Error(ctx, "NewStock Q1RevenueIncreasingRatio err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock Q1RevenueIncreasingRatio err:"+err.Error())
-	}
-	// pe 中位数
-	peMidVal, err := peList.GetMidValue(ctx)
-	if err != nil {
-		if strict {
-			return s, err
+		// pe 中位数
+		peMidVal, err := peList.GetMidValue(ctx)
+		if err != nil {
+			logging.Error(ctx, "NewStock GetMidValue err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock GetMidValue err:"+err.Error())
-	}
-	reports := s.HistoricalFinaMainData.FilterByReportType(ctx, eastmoney.FinaReportTypeYear)
-	if len(reports) > 0 {
-		s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
-	}
+		reports := s.HistoricalFinaMainData.FilterByReportType(ctx, eastmoney.FinaReportTypeYear)
+		if len(reports) > 0 {
+			s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
+		}
+	}(ctx, s)
 
-	// 历史股价
-	hisPrice, err := datacenter.Eniu.QueryHistoricalStockPrice(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	// 历史股价 && 波动率
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		hisPrice, err := datacenter.Eniu.QueryHistoricalStockPrice(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryHistoricalStockPrice err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryHistoricalStockPrice err:"+err.Error())
-	}
-	s.HistoricalPrice = hisPrice
+		s.HistoricalPrice = hisPrice
 
-	// 历史波动率
-	hv, err := hisPrice.HistoricalVolatility(ctx, "YEAR")
-	if err != nil {
-		if strict {
-			return s, err
+		// 历史波动率
+		hv, err := hisPrice.HistoricalVolatility(ctx, "YEAR")
+		if err != nil {
+			logging.Error(ctx, "NewStock HistoricalVolatility err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock HistoricalVolatility err:"+err.Error())
-	}
-	s.HistoricalVolatility = hv
+		s.HistoricalVolatility = hv
+	}(ctx, s)
 
 	// 公司资料
-	cp, err := datacenter.EastMoney.QueryCompanyProfile(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		cp, err := datacenter.EastMoney.QueryCompanyProfile(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryCompanyProfile err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryCompanyProfile err:"+err.Error())
-	}
-	s.CompanyProfile = cp
+		s.CompanyProfile = cp
+	}(ctx, s)
 
 	// 最新财报预约披露时间
-	finaPubDateList, err := datacenter.EastMoney.QueryFinaPublishDateList(ctx, s.BaseInfo.SecurityCode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		finaPubDateList, err := datacenter.EastMoney.QueryFinaPublishDateList(ctx, s.BaseInfo.SecurityCode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryFinaPublishDateList err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryFinaPublishDateList err:"+err.Error())
-	}
-	if len(finaPubDateList) > 0 {
-		s.FinaAppointPublishDate = finaPubDateList[0].AppointPublishDate
-		s.FinaActualPublishDate = finaPubDateList[0].ActualPublishDate
-		s.FinaReportDate = finaPubDateList[0].ReportDate
-	}
+		if len(finaPubDateList) > 0 {
+			s.FinaAppointPublishDate = finaPubDateList[0].AppointPublishDate
+			s.FinaActualPublishDate = finaPubDateList[0].ActualPublishDate
+			s.FinaReportDate = finaPubDateList[0].ReportDate
+		}
+	}(ctx, s)
 
 	// 机构评级统计
-	orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryOrgRating err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryOrgRating err:"+err.Error())
-	}
-	s.OrgRatingList = orgRatings
+		s.OrgRatingList = orgRatings
+	}(ctx, s)
 
 	// 盈利预测
-	pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryProfitPredict err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryProfitPredict err:"+err.Error())
-	}
-	s.ProfitPredictList = pps
+		s.ProfitPredictList = pps
+	}(ctx, s)
 
 	// 价值评估
-	jzpg, err := datacenter.EastMoney.QueryJiaZhiPingGu(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		jzpg, err := datacenter.EastMoney.QueryJiaZhiPingGu(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
-	}
-	s.JZPG = jzpg
+		s.JZPG = jzpg
+	}(ctx, s)
 
 	// PEG
 	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
 
 	// 利润表数据
-	gincomeList, err := datacenter.EastMoney.QueryFinaGincomeData(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		gincomeList, err := datacenter.EastMoney.QueryFinaGincomeData(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryFinaGincomeData err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryFinaGincomeData err:"+err.Error())
-	}
-	s.HistoricalGincomeList = gincomeList
-	if len(s.HistoricalGincomeList) > 0 {
-		// 本业营收比
-		gincome := s.HistoricalGincomeList[0]
-		s.BYYSRatio = gincome.OperateProfit / (gincome.OperateProfit + gincome.NonbusinessIncome)
-		// 审计意见
-		s.FinaReportOpinion = gincome.OpinionType
-	}
+		s.HistoricalGincomeList = gincomeList
+		if len(s.HistoricalGincomeList) > 0 {
+			// 本业营收比
+			gincome := s.HistoricalGincomeList[0]
+			s.BYYSRatio = gincome.OperateProfit / (gincome.OperateProfit + gincome.NonbusinessIncome)
+			// 审计意见
+			s.FinaReportOpinion = gincome.OpinionType
+		}
+	}(ctx, s)
 
 	// 现金流量表数据
-	cashflow, err := datacenter.EastMoney.QueryFinaCashflowData(ctx, s.BaseInfo.Secucode)
-	if err != nil {
-		if strict {
-			return s, err
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		cashflow, err := datacenter.EastMoney.QueryFinaCashflowData(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryFinaCashflowData err:"+err.Error())
+			return
 		}
-		logging.Warn(ctx, "NewStock QueryFinaCashflowData err:"+err.Error())
-	}
-	s.HistoricalCashflowList = cashflow
-	if len(s.HistoricalCashflowList) > 0 {
-		cf := s.HistoricalCashflowList[0]
-		s.NetcashOperate = cf.NetcashOperate
-		s.NetcashInvest = cf.NetcashInvest
-		s.NetcashFinance = cf.NetcashFinance
-		if cf.NetcashInvest < 0 {
-			s.NetcashFree = s.NetcashOperate + s.NetcashInvest
-		} else {
-			s.NetcashFree = s.NetcashOperate - s.NetcashInvest
+		s.HistoricalCashflowList = cashflow
+		if len(s.HistoricalCashflowList) > 0 {
+			cf := s.HistoricalCashflowList[0]
+			s.NetcashOperate = cf.NetcashOperate
+			s.NetcashInvest = cf.NetcashInvest
+			s.NetcashFinance = cf.NetcashFinance
+			if cf.NetcashInvest < 0 {
+				s.NetcashFree = s.NetcashOperate + s.NetcashInvest
+			} else {
+				s.NetcashFree = s.NetcashOperate - s.NetcashInvest
+			}
 		}
-	}
+	}(ctx, s)
 
-	return s, nil
+	wg.Wait()
+
+	return *s, nil
 }
