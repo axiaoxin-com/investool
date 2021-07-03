@@ -1,6 +1,7 @@
 #!/bin/bash
 go mod tidy && \
 go test -race ./... && \
+rm -rf ./statics/js/app.min.*.js && \
 bash ./misc/scripts/app.min.js.sh && \
 bash ./misc/scripts/bumpversion.sh && \
 goreleaser release --rm-dist  && \

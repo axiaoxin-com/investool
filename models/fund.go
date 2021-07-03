@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 )
@@ -610,4 +611,9 @@ func (f Fund) Is4433(ctx context.Context) bool {
 		return false
 	}
 	return true
+}
+
+// NetAssetsScaleHuman 净资产数字转换为亿、万单位
+func (f Fund) NetAssetsScaleHuman() string {
+	return goutils.YiWanString(f.NetAssetsScale)
 }

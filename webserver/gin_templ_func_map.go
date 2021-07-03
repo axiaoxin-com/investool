@@ -53,4 +53,5 @@ var TemplFuncs = map[string]interface{}{
 	"StrTrimSpace":      func(s string) string { return strings.TrimSpace(s) },
 	"StrTrimSuffix":     func(s, suffix string) string { return strings.TrimSuffix(s, suffix) },
 	"IsStrInSlice":      goutils.IsStrInSlice,
+	"YiWanString":       goutils.YiWanString,
 }
