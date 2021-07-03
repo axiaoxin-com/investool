@@ -51,9 +51,11 @@ $(document).ready(function () {
             var cm = stock.code.split(".");
             $("#selector_result tbody").append(
               "<tr>" +
-                "<td>" +
+                '<td class="copybtn" data-clipboard-text="' +
                 cm[0] +
-                "</td>" +
+                '"><span>' +
+                cm[0] +
+                '</span><i class="material-icons tiny">content_copy</i></td>' +
                 '<td><a target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
@@ -545,35 +547,6 @@ $(document).ready(function () {
   // 点击复制
   var clipboard = new ClipboardJS(".copybtn");
   clipboard.on("success", function (e) {
-    $(e.trigger)
-      .attr("title", "复制成功")
-      .popup("fixTitle")
-      .popup({
-        onCreate: function () {
-          $(e.trigger)
-            .popup({
-              position: "left center",
-            })
-            .popup("toggle");
-        },
-      })
-      .popup("show")
-      .popup("toggle");
-  });
-  clipboard.on("error", function (e) {
-    $(e.trigger)
-      .attr("title", "复制失败")
-      .popup("fixTitle")
-      .popup({
-        onCreate: function () {
-          $(e.trigger)
-            .popup({
-              position: "left center",
-            })
-            .popup("toggle");
-        },
-      })
-      .popup("show")
-      .popup("toggle");
+    M.toast({ html: "已复制代码至剪贴板" });
   });
 });

@@ -15,44 +15,44 @@
                     <th>基金代码</th>
                     <th>基金名称</th>
                     <th>基金类型</th>
-                    <th>成立时间</th>
-                    <th>基金规模</th>
-                    <th>跟踪标的代码</th>
-                    <th>跟踪标的名称</th>
-                    <th>购买费率</th>
-                    <th>定投状态</th>
-                    <th>波动率</th>
-                    <th>最大回撤率</th>
-                    <th>夏普比率</th>
-                    <th>绩效</th>
-                    <th>持仓股票</th>
-                    <th>基金经理</th>
-                    <th>历史分红送配</th>
-                    <th>资产占比</th>
-                    <th>行业占比</th>
+                    <th class="hide">成立时间</th>
+                    <th class="hide">基金规模</th>
+                    <th class="hide">跟踪标的代码</th>
+                    <th class="hide">跟踪标的名称</th>
+                    <th class="hide">购买费率</th>
+                    <th class="hide">定投状态</th>
+                    <th class="hide">波动率</th>
+                    <th class="hide">最大回撤率</th>
+                    <th class="hide">夏普比率</th>
+                    <th class="hide">绩效</th>
+                    <th class="hide">持仓股票</th>
+                    <th class="hide">基金经理</th>
+                    <th class="hide">历史分红送配</th>
+                    <th class="hide">资产占比</th>
+                    <th class="hide">行业占比</th>
                 </tr>
             </thead>
             <tbody>
             {{ range .Fund4433List }}
                 <tr>
-                    <td class="copybtn" id="{{ .Code }}" data-clipboard-target="#{{ .Code  }}">{{ .Code }}</td>
+                    <td class="copybtn" data-clipboard-text="{{ .Code  }}"><span>{{ .Code }}<i class="material-icons tiny">content_copy</i></span></td>
                     <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
                     <td>{{ .Type }}</td>
-                    <td>{{ .EstablishedDate }}</td>
-                    <td>{{ .NetAssetsScale }}</td>
-                    <td>{{ .IndexCode }}</td>
-                    <td>{{ .IndexName }}</td>
-                    <td>{{ .Rate }}</td>
-                    <td>{{ .FixedInvestmentStatus }}</td>
-                    <td>{{ .Stddev }}</td>
-                    <td>{{ .MaxRetracement }}</td>
-                    <td>{{ .Sharp }}</td>
-                    <td>{{ .Performance }}</td>
-                    <td>{{ .Stocks }}</td>
-                    <td>{{ .Manager }}</td>
-                    <td>{{ .HistoricalDividends }}</td>
-                    <td>{{ .AssetsProportion }}</td>
-                    <td>{{ .IndustryProportion }}</td>
+                    <td class="hide">{{ .EstablishedDate }}</td>
+                    <td class="hide">{{ .NetAssetsScale }}</td>
+                    <td class="hide">{{ .IndexCode }}</td>
+                    <td class="hide">{{ .IndexName }}</td>
+                    <td class="hide">{{ .Rate }}</td>
+                    <td class="hide">{{ .FixedInvestmentStatus }}</td>
+                    <td class="hide">{{ .Stddev }}</td>
+                    <td class="hide">{{ .MaxRetracement }}</td>
+                    <td class="hide">{{ .Sharp }}</td>
+                    <td class="hide">{{ .Performance }}</td>
+                    <td class="hide">{{ .Stocks }}</td>
+                    <td class="hide">{{ .Manager }}</td>
+                    <td class="hide">{{ .HistoricalDividends }}</td>
+                    <td class="hide">{{ .AssetsProportion }}</td>
+                    <td class="hide">{{ .IndustryProportion }}</td>
                 </tr>
             {{ end }}
             </tbody>
