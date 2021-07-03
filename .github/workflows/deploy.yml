@@ -2,7 +2,8 @@ name: deploy
 
 on:
   push:
-    tags: [ * ]
+    tags:
+      - v*
 
 jobs:
 
