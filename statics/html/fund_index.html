@@ -57,6 +57,21 @@
             {{ end }}
             </tbody>
         </table>
+        <ul class="pagination right">
+            <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
+                <a href="/fund?page_num=1&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">first_page</i></a>
+            </li>
+            <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
+                <a href="/fund?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">chevron_left</i></a>
+            </li>
+            <li><a class="tooltipped" data-position="top" data-tooltip="共{{ .Pagination.TotalCount }}只基金" href="#!">{{ .Pagination.PageNum }} / {{ .Pagination.PagesCount }}</a></li>
+            <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
+                <a href="/fund?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">chevron_right</i></a>
+            </li>
+            <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
+                <a href="/fund?page_num={{ .Pagination.PagesCount }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">last_page</i></a>
+            </li>
+        </ul>
     </div>
 
     <!--filter start-->
