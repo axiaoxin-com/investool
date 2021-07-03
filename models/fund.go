@@ -50,17 +50,17 @@ type Fund struct {
 	// 资产占比
 	AssetsProportion FundAssetsProportion `json:"assets_proportion"`
 	// 行业占比
-	IndustryProportion FundIndustryProportion `json:"industry_proportion"`
+	IndustryProportions []FundIndustryProportion `json:"industry_proportions"`
 }
 
 // FundIndustryProportion 行业占比
 type FundIndustryProportion struct {
 	// 公布日期
 	PubDate string `json:"pub_date"`
-	// 行业名称列表
-	Industry []string `json:"industry"`
+	// 行业名
+	Industry string `json:"industry"`
 	// 对应占比列表（%）
-	Props []string `json:"props"`
+	Prop string `json:"prop"`
 }
 
 // FundAssetsProportion 资产占比
@@ -81,30 +81,6 @@ type FundAssetsProportion struct {
 
 // FundPerformance 基金绩效
 type FundPerformance struct {
-	// 今年来收益率
-	ThisYearProfitRatio float64 `json:"this_year_profit_ratio"`
-	// 今年来涨跌幅
-	ThisYearAmplitude float64 `json:"this_year_amplitude"`
-	// 今年来同类均值
-	ThisYearKindAvg float64 `json:"this_year_kind_avg"`
-	// 今年来同类排名
-	ThisYearRankNum float64 `json:"this_year_rank_num"`
-	// 今年来同类排名百分比
-	ThisYearRankRatio float64 `json:"this_year_rank_ratio"`
-	// 今年来同类总数
-	ThisYearRankTotalCount float64 `json:"this_year_rank_total_count"`
-	// 成立以来收益率
-	HistoricalProfitRatio float64 `json:"historical_profit_ratio"`
-	// 成立以来涨跌幅
-	HistoricalAmplitude float64 `json:"historical_amplitude"`
-	// 成立以来同类均值
-	HistoricalKindAvg float64 `json:"historical_kind_avg"`
-	// 成立以来同类排名
-	HistoricalRankNum float64 `json:"historical_rank_num"`
-	// 成立以来同类排名百分比
-	HistoricalRankRatio float64 `json:"historical_rank_ratio"`
-	// 成立以来同类总数
-	HistoricalRankTotalCount float64 `json:"historical_rank_total_count"`
 	// 近一周收益率
 	WeekProfitRatio float64 `json:"week_profit_ratio"`
 	// 近一周涨跌幅
@@ -201,6 +177,30 @@ type FundPerformance struct {
 	Year5RankRatio float64 `json:"year_5_rank_ratio"`
 	// 近五年同类总数
 	Year5RankTotalCount float64 `json:"year_5_rank_total_count"`
+	// 今年来收益率
+	ThisYearProfitRatio float64 `json:"this_year_profit_ratio"`
+	// 今年来涨跌幅
+	ThisYearAmplitude float64 `json:"this_year_amplitude"`
+	// 今年来同类均值
+	ThisYearKindAvg float64 `json:"this_year_kind_avg"`
+	// 今年来同类排名
+	ThisYearRankNum float64 `json:"this_year_rank_num"`
+	// 今年来同类排名百分比
+	ThisYearRankRatio float64 `json:"this_year_rank_ratio"`
+	// 今年来同类总数
+	ThisYearRankTotalCount float64 `json:"this_year_rank_total_count"`
+	// 成立以来收益率
+	HistoricalProfitRatio float64 `json:"historical_profit_ratio"`
+	// 成立以来涨跌幅
+	HistoricalAmplitude float64 `json:"historical_amplitude"`
+	// 成立以来同类均值
+	HistoricalKindAvg float64 `json:"historical_kind_avg"`
+	// 成立以来同类排名
+	HistoricalRankNum float64 `json:"historical_rank_num"`
+	// 成立以来同类排名百分比
+	HistoricalRankRatio float64 `json:"historical_rank_ratio"`
+	// 成立以来同类总数
+	HistoricalRankTotalCount float64 `json:"historical_rank_total_count"`
 }
 
 // FundDividend 分红送配
@@ -249,6 +249,8 @@ type FundStock struct {
 	Code string `json:"code"`
 	// 股票名称
 	Name string `json:"name"`
+	// 交易所代号
+	ExCode string `json:"ex_code"`
 	// 股票行业
 	Industry string `json:"industry"`
 	// 持仓占比(%)
@@ -259,6 +261,8 @@ type FundStock struct {
 
 // FundManager 基金经理
 type FundManager struct {
+	// ID
+	ID string `json:"id"`
 	// 基金经理名字
 	Name string `json:"name"`
 	// 从业时间（天）
@@ -436,6 +440,7 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 			Code:        s.Gpdm,
 			Name:        s.Gpjc,
 			Industry:    s.Indexname,
+			ExCode:      s.Texch,
 			HoldRatio:   interfaceToFloat64(ctx, s.Jzbl),
 			AdjustRatio: interfaceToFloat64(ctx, s.Pctnvchg),
 		}
@@ -449,6 +454,7 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 		jjjl := efund.Jjjlnew.Datas[0]
 		if len(jjjl.Manger) > 0 {
 			m := jjjl.Manger[0]
+			manager.ID = m.Mgrid
 			manager.Name = m.Mgrname
 			manager.WorkingDays = interfaceToFloat64(ctx, m.Totaldays)
 			manager.ManageDays = interfaceToFloat64(ctx, jjjl.Days)
@@ -472,6 +478,9 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 		}
 		dividends = append(dividends, fd)
 	}
+	if len(dividends) > 5 {
+		dividends = dividends[:5]
+	}
 	fund.HistoricalDividends = dividends
 
 	// 资产占比
@@ -492,19 +501,17 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 
 	// 行业占比
 	for date, vlist := range efund.Jjcc.Datas.SectorAllocation {
-		ip := FundIndustryProportion{
-			PubDate:  date,
-			Industry: []string{},
-			Props:    []string{},
-		}
 		for _, i := range vlist {
 			if i["ZJZBL"] == "0" || i["ZJZBL"] == "--" {
 				continue
 			}
-			ip.Industry = append(ip.Industry, i["HYMC"])
-			ip.Props = append(ip.Props, i["ZJZBL"])
+			ip := FundIndustryProportion{
+				PubDate:  date,
+				Industry: i["HYMC"],
+				Prop:     i["ZJZBL"],
+			}
+			fund.IndustryProportions = append(fund.IndustryProportions, ip)
 		}
-		fund.IndustryProportion = ip
 	}
 
 	return fund

@@ -612,4 +612,36 @@ $(document).ready(function () {
     checkboxCountCheck();
     $(".t15").toggleClass("hide");
   });
+  $("#f16").change(function () {
+    checkboxCountCheck();
+    $(".t16").toggleClass("hide");
+  });
+  $("#f17").change(function () {
+    checkboxCountCheck();
+    $(".t17").toggleClass("hide");
+  });
+  $("#f18").change(function () {
+    checkboxCountCheck();
+    $(".t18").toggleClass("hide");
+  });
+  $("#f19").change(function () {
+    checkboxCountCheck();
+    $(".t19").toggleClass("hide");
+  });
+  $("#f20").change(function () {
+    checkboxCountCheck();
+    $(".t20").toggleClass("hide");
+  });
+  $("#f21").change(function () {
+    checkboxCountCheck();
+    $(".t21").toggleClass("hide");
+  });
+  $("#f22").change(function () {
+    checkboxCountCheck();
+    $(".t22").toggleClass("hide");
+  });
+  $("#f23").change(function () {
+    checkboxCountCheck();
+    $(".t23").toggleClass("hide");
+  });
 });
