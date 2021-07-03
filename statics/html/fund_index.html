@@ -35,7 +35,7 @@
             <tbody>
             {{ range .Fund4433List }}
                 <tr>
-                    <td class="copybtn" data-clipboard-text="{{ .Code  }}"><span>{{ .Code }}<i class="material-icons tiny">content_copy</i></span></td>
+                    <td class="copybtn waves-effect waves-red" data-clipboard-text="{{ .Code  }}"><span>{{ .Code }}<i class="material-icons tiny">content_copy</i></span></td>
                     <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
                     <td>{{ .Type }}</td>
                     <td class="hide">{{ .EstablishedDate }}</td>

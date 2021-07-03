@@ -51,7 +51,7 @@ $(document).ready(function () {
             var cm = stock.code.split(".");
             $("#selector_result tbody").append(
               "<tr>" +
-                '<td class="copybtn" data-clipboard-text="' +
+                '<td class="copybtn waves-effect waves-red" data-clipboard-text="' +
                 cm[0] +
                 '"><span>' +
                 cm[0] +
@@ -262,22 +262,23 @@ $(document).ready(function () {
               '<div class="divider"></div>' +
                 '<div id="checker_result_' +
                 i +
-                '" class="row">' +
-                '<div class="section"><h6><a class="right" target="_blank" href="http://quote.eastmoney.com/' +
+                '">' +
+                '<div class="row">' +
+                '<a class="col s12" target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
                 '.html">' +
                 data.StockNames[i] +
-                "</a><span>当前检测财报数据来源:" +
+                "</a></br>" +
+                '<span class="col s12 l6">当前检测财报数据来源:' +
                 data.FinaReportNames[i] +
-                "</br></br>最新财报预约发布日期:" +
+                '</span><span class="col l6 right-align">最新财报预约发布日期:' +
                 data.FinaAppointPublishDates[i] +
-                '</span></h6><div class="divider"></div>' +
+                "</span></div>" +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
                 "</table>" +
-                "</div>" +
                 "</div>"
             );
             $.each(result, function (k, v) {
