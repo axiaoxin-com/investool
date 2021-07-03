@@ -112,28 +112,8 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.HistoricalFinaMainData = hf
-	}(ctx, s)
 
-	// 获取综合估值
-	wg.Add(1)
-	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
-		valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
-		if err != nil {
-			logging.Error(ctx, "NewStock QueryValuationStatus err:"+err.Error())
-			return
-		}
-		s.ValuationMap = valMap
-	}(ctx, s)
-
-	// 历史市盈率 && 合理价格
-	wg.Add(1)
-	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		// 历史市盈率 && 合理价格
 		peList, err := datacenter.EastMoney.QueryHistoricalPEList(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryHistoricalPEList err:"+err.Error())
@@ -159,6 +139,20 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		if len(reports) > 0 {
 			s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
 		}
+	}(ctx, s)
+
+	// 获取综合估值
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryValuationStatus err:"+err.Error())
+			return
+		}
+		s.ValuationMap = valMap
 	}(ctx, s)
 
 	// 历史股价 && 波动率
