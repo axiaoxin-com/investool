@@ -39,14 +39,19 @@ func FundIndex(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_index.html", data)
 		return
 	}
-	pagedList := []models.FundList{}
 	totalCount := len(services.Fund4433List)
-	for i := 0; i < totalCount; i += p.PageSize {
-		end := i + p.PageSize
-		if end > totalCount {
-			end = totalCount
+	pagedList := []models.FundList{}
+	if p.PageSize < 0 {
+		pagedList = append(pagedList, services.Fund4433List)
+		totalCount = 1
+	} else {
+		for i := 0; i < totalCount; i += p.PageSize {
+			end := i + p.PageSize
+			if end > totalCount {
+				end = totalCount
+			}
+			pagedList = append(pagedList, services.Fund4433List[i:end])
 		}
-		pagedList = append(pagedList, services.Fund4433List[i:end])
 	}
 
 	result := models.FundList{}
@@ -63,7 +68,7 @@ func FundIndex(c *gin.Context) {
 	data := gin.H{
 		"Env":          viper.GetString("env"),
 		"Version":      version.Version,
-		"PageTitle":    "X-STOCK | 基金",
+		"PageTitle":    "X-STOCK | 基金 | 4433法则选基",
 		"Fund4433List": result,
 		"Pagination":   pagi,
 		"Param":        p,
