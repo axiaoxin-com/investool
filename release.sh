@@ -8,4 +8,4 @@ qshell cdnprefetch -i /tmp/qiniu-prefetch-refresh-list.txt && \
 qshell cdnrefresh -i /tmp/qiniu-prefetch-refresh-list.txt && \
 qshell batchdelete blogpostpics -y -i /tmp/qiniu-del-list.txt && \
 goreleaser release --rm-dist  && \
-git push --tags -f
+git push && git push --tags -f
