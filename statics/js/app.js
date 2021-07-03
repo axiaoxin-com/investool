@@ -42,7 +42,7 @@ $(document).ready(function () {
           return;
         }
         if (data.Stocks.length == 0) {
-          $("#dropdown-structure").addClass("hide");
+          $(".dropdown-structure").addClass("hide");
           $("#selector_result #result_table").html(
             '<div class="row"><p class="center flow-text">无法找到符合条件的股票</p></div>'
           );
@@ -318,13 +318,13 @@ $(document).ready(function () {
 
   // 导出结果csv文件
   $(".export-result-btn").click(function (e) {
-    tableExport("selector_result_table", "x-stock-selected", "csv");
+    tableExport("selector_result_table", "x-stock-exported", "csv");
   });
 
   // 展示字段设置
   var checkboxLimit = 10;
   var checkboxCountCheck = function () {
-    var checkedCount = $("#fields-dropdown input[type=checkbox]:checked")
+    var checkedCount = $(".dropdown-content input[type=checkbox]:checked")
       .length;
     if (checkedCount > checkboxLimit && checkedCount % 5 == 1) {
       M.toast({
@@ -333,7 +333,7 @@ $(document).ready(function () {
       });
     }
   };
-  $("#fields-dropdown-btn").dropdown({
+  $(".dropdown-trigger").dropdown({
     constrainWidth: true,
     closeOnClick: false,
   });
@@ -549,5 +549,67 @@ $(document).ready(function () {
   var clipboard = new ClipboardJS(".copybtn");
   clipboard.on("success", function (e) {
     M.toast({ html: "已复制代码至剪贴板" });
+  });
+
+  // 基金字段
+  $("#f1").change(function () {
+    checkboxCountCheck();
+    $(".t1").toggleClass("hide");
+  });
+  $("#f2").change(function () {
+    checkboxCountCheck();
+    $(".t2").toggleClass("hide");
+  });
+  $("#f3").change(function () {
+    checkboxCountCheck();
+    $(".t3").toggleClass("hide");
+  });
+  $("#f4").change(function () {
+    checkboxCountCheck();
+    $(".t4").toggleClass("hide");
+  });
+  $("#f5").change(function () {
+    checkboxCountCheck();
+    $(".t5").toggleClass("hide");
+  });
+  $("#f6").change(function () {
+    checkboxCountCheck();
+    $(".t6").toggleClass("hide");
+  });
+  $("#f7").change(function () {
+    checkboxCountCheck();
+    $(".t7").toggleClass("hide");
+  });
+  $("#f8").change(function () {
+    checkboxCountCheck();
+    $(".t8").toggleClass("hide");
+  });
+  $("#f9").change(function () {
+    checkboxCountCheck();
+    $(".t9").toggleClass("hide");
+  });
+  $("#f10").change(function () {
+    checkboxCountCheck();
+    $(".t10").toggleClass("hide");
+  });
+  $("#f11").change(function () {
+    checkboxCountCheck();
+    $(".t11").toggleClass("hide");
+  });
+  $("#f12").change(function () {
+    checkboxCountCheck();
+    $(".t12").toggleClass("hide");
+  });
+  $("#f13").change(function () {
+    checkboxCountCheck();
+    $(".t13").toggleClass("hide");
+  });
+  $("#f14").change(function () {
+    checkboxCountCheck();
+    $(".t14").toggleClass("hide");
+  });
+  $("#f15").change(function () {
+    checkboxCountCheck();
+    $(".t15").toggleClass("hide");
   });
 });

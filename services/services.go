@@ -14,12 +14,12 @@ import (
 var (
 	// StockIndustryList 东方财富股票行业列表
 	StockIndustryList []string
-	// SyncFundTime 基金数据同步时间
-	SyncFundTime time.Time
 	// FundAllList 全量基金列表
 	FundAllList models.FundList
 	// Fund4433List 满足4433法则的基金列表
 	Fund4433List models.FundList
+	// SyncFundTime 基金数据同步时间
+	SyncFundTime = time.Now()
 	// FundAllListFilename 基金列表数据文件
 	FundAllListFilename = "./fund_all_list.json"
 	// Fund4433ListFilename 4433基金列表数据文件

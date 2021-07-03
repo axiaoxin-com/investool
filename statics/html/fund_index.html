@@ -1,4 +1,17 @@
 {{ template "header" . }}
+<div class="tap-target-wrapper">
+    <div id="desc_4433" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
+        <div class="tap-target-content">
+            <h5>4433法则</h5>
+            <ul>
+                <li>4: 最近1年收益率排名在同类型基金的前1/4</li>
+                <li>4: 最近2年、3年、5年及今年以来收益率排名均在同类型基金的前1/4</li>
+                <li>3: 最近6个月收益率排名在同类型基金的前1/3</li>
+                <li>3: 最近3个月收益率排名在同类型基金的前1/3</li>
+            </ul>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
@@ -9,27 +22,51 @@
     </div>
 
     <div id="4433" class="col s12">
+        <h4 class="center"><span onclick="$('#desc_4433').tapTarget('open')">4433法则<i class="tiny material-icons">help_outline</i></span>筛选结果</h4>
+        <div class="divider"></div>
+        更新时间: {{ .UpdatedAt }}
+        <!-- Dropdown Structure -->
+        <div class="dropdown-structure right">
+            <a class='dropdown-trigger btn-small red lighten-2 left' href='#' data-target='fund-fields-dropdown'><i class="material-icons left">more_vert</i>更多信息</a>
+            <ul id="fund-fields-dropdown" class='dropdown-content'>
+                <li><label><input id="f1" type="checkbox" /><span>成立时间</span></label></li>
+                <li><label><input id="f2" type="checkbox" /><span>基金规模</span></label></li>
+                <li><label><input id="f3" type="checkbox" /><span>跟踪标的代码</span></label></li>
+                <li><label><input id="f4" type="checkbox" /><span>跟踪标的名称</span></label></li>
+                <li><label><input id="f5" type="checkbox" /><span>跟踪标的代码</span></label></li>
+                <li><label><input id="f6" type="checkbox" /><span>购买费率</span></label></li>
+                <li><label><input id="f7" type="checkbox" /><span>波动率</span></label></li>
+                <li><label><input id="f8" type="checkbox" /><span>最大回撤率</span></label></li>
+                <li><label><input id="f9" type="checkbox" /><span>夏普比率</span></label></li>
+                <li><label><input id="f10" type="checkbox" /><span>绩效</span></label></li>
+                <li><label><input id="f11" type="checkbox" /><span>持仓股票</span></label></li>
+                <li><label><input id="f12" type="checkbox" /><span>基金经理</span></label></li>
+                <li><label><input id="f13" type="checkbox" /><span>历史分红送配</span></label></li>
+                <li><label><input id="f14" type="checkbox" /><span>资产占比</span></label></li>
+                <li><label><input id="f15" type="checkbox" /><span>行业占比</span></label></li>
+            </ul>
+        </div>
         <table id="fund4433table" class="striped centered">
             <thead>
                 <tr>
                     <th>基金代码</th>
                     <th>基金名称</th>
                     <th>基金类型</th>
-                    <th class="hide">成立时间</th>
-                    <th class="hide">基金规模</th>
-                    <th class="hide">跟踪标的代码</th>
-                    <th class="hide">跟踪标的名称</th>
-                    <th class="hide">购买费率</th>
-                    <th class="hide">定投状态</th>
-                    <th class="hide">波动率</th>
-                    <th class="hide">最大回撤率</th>
-                    <th class="hide">夏普比率</th>
-                    <th class="hide">绩效</th>
-                    <th class="hide">持仓股票</th>
-                    <th class="hide">基金经理</th>
-                    <th class="hide">历史分红送配</th>
-                    <th class="hide">资产占比</th>
-                    <th class="hide">行业占比</th>
+                    <th class="hide t1">成立时间</th>
+                    <th class="hide t2">基金规模</th>
+                    <th class="hide t3">跟踪标的代码</th>
+                    <th class="hide t4">跟踪标的名称</th>
+                    <th class="hide t5">购买费率</th>
+                    <th class="hide t6">定投状态</th>
+                    <th class="hide t7">波动率</th>
+                    <th class="hide t8">最大回撤率</th>
+                    <th class="hide t9">夏普比率</th>
+                    <th class="hide t10">绩效</th>
+                    <th class="hide t11">持仓股票</th>
+                    <th class="hide t12">基金经理</th>
+                    <th class="hide t13">历史分红送配</th>
+                    <th class="hide t14">资产占比</th>
+                    <th class="hide t15">行业占比</th>
                 </tr>
             </thead>
             <tbody>
@@ -38,38 +75,38 @@
                     <td><span class="copybtn waves-effect waves-red" data-clipboard-text="{{ .Code  }}">{{ .Code }}<i class="material-icons tiny">content_copy</i></span></td>
                     <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
                     <td>{{ .Type }}</td>
-                    <td class="hide">{{ .EstablishedDate }}</td>
-                    <td class="hide">{{ .NetAssetsScale }}</td>
-                    <td class="hide">{{ .IndexCode }}</td>
-                    <td class="hide">{{ .IndexName }}</td>
-                    <td class="hide">{{ .Rate }}</td>
-                    <td class="hide">{{ .FixedInvestmentStatus }}</td>
-                    <td class="hide">{{ .Stddev }}</td>
-                    <td class="hide">{{ .MaxRetracement }}</td>
-                    <td class="hide">{{ .Sharp }}</td>
-                    <td class="hide">{{ .Performance }}</td>
-                    <td class="hide">{{ .Stocks }}</td>
-                    <td class="hide">{{ .Manager }}</td>
-                    <td class="hide">{{ .HistoricalDividends }}</td>
-                    <td class="hide">{{ .AssetsProportion }}</td>
-                    <td class="hide">{{ .IndustryProportion }}</td>
+                    <td class="hide t1">{{ .EstablishedDate }}</td>
+                    <td class="hide t2">{{ .NetAssetsScale }}</td>
+                    <td class="hide t3">{{ .IndexCode }}</td>
+                    <td class="hide t4">{{ .IndexName }}</td>
+                    <td class="hide t5">{{ .Rate }}</td>
+                    <td class="hide t6">{{ .FixedInvestmentStatus }}</td>
+                    <td class="hide t7">{{ .Stddev }}</td>
+                    <td class="hide t8">{{ .MaxRetracement }}</td>
+                    <td class="hide t9">{{ .Sharp }}</td>
+                    <td class="hide t10">{{ .Performance }}</td>
+                    <td class="hide t11">{{ .Stocks }}</td>
+                    <td class="hide t12">{{ .Manager }}</td>
+                    <td class="hide t13">{{ .HistoricalDividends }}</td>
+                    <td class="hide t14">{{ .AssetsProportion }}</td>
+                    <td class="hide t15">{{ .IndustryProportion }}</td>
                 </tr>
             {{ end }}
             </tbody>
         </table>
-        <ul class="pagination right">
+        <ul class="pagination center">
             <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num=1&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">first_page</i></a>
+                <a href="/fund?page_num=1&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">first_page</i></a>
             </li>
             <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">chevron_left</i></a>
+                <a href="/fund?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">chevron_left</i></a>
             </li>
             <li><a class="tooltipped" data-position="top" data-tooltip="共{{ .Pagination.TotalCount }}只基金" href="#!">{{ .Pagination.PageNum }} / {{ .Pagination.PagesCount }}</a></li>
             <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">chevron_right</i></a>
+                <a href="/fund?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">chevron_right</i></a>
             </li>
             <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.PagesCount }}&page_size={{ .Param.PageSize }}&sort_field={{ .Param.SortField }}&sort_type={{ .Param.SortType }}"><i class="material-icons">last_page</i></a>
+                <a href="/fund?page_num={{ .Pagination.PagesCount }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">last_page</i></a>
             </li>
         </ul>
     </div>

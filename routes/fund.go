@@ -15,19 +15,17 @@ import (
 
 // ParamFundIndex FundIndex 请求参数
 type ParamFundIndex struct {
-	PageNum   int    `json:"page_num"   form:"page_num"`
-	PageSize  int    `json:"page_size"  form:"page_size"`
-	SortField string `json:"sort_field" form:"sort_field"`
-	SortType  string `json:"sort_type"  form:"sort_type"`
+	PageNum  int `json:"page_num"  form:"page_num"`
+	PageSize int `json:"page_size" form:"page_size"`
+	Sort     int `json:"sort"      form:"sort"`
 }
 
 // FundIndex godoc
 func FundIndex(c *gin.Context) {
 	p := ParamFundIndex{
-		PageNum:   1,
-		PageSize:  10,
-		SortField: "week_profit",
-		SortType:  "asc",
+		PageNum:  1,
+		PageSize: 10,
+		Sort:     models.FundSortTypeWeek,
 	}
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
@@ -72,6 +70,7 @@ func FundIndex(c *gin.Context) {
 		"Fund4433List": result,
 		"Pagination":   pagi,
 		"Param":        p,
+		"UpdatedAt":    services.SyncFundTime.Format("2006-01-02 15:04:05"),
 	}
 	c.HTML(http.StatusOK, "fund_index.html", data)
 	return
