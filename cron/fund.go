@@ -4,6 +4,7 @@ package cron
 import (
 	"context"
 	"io/ioutil"
+	"math"
 	"sync"
 	"time"
 
@@ -31,7 +32,8 @@ func SyncFund() {
 	}
 
 	// 遍历获取基金详情
-	reqChan := make(chan string, 100)
+	workerCount := int(math.Min(float64(len(efundlist)), float64(500)))
+	reqChan := make(chan string, workerCount)
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 

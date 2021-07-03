@@ -25,9 +25,6 @@ import (
 	"go.uber.org/zap"
 )
 
-// MaxWorkerCount 最大并发请求 worker 数
-var MaxWorkerCount = 64
-
 // Selector 选股器
 type Selector struct {
 	Filter  eastmoney.Filter
@@ -50,8 +47,8 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 	}
 	logging.Infof(ctx, "AutoFilterStocks will filter from %d stocks by %s", len(stocks), s.Filter.String())
 
-	// 最多 MaxWorkerCount 个 groutine 并发执行筛选任务
-	workerCount := int(math.Min(float64(len(stocks)), float64(MaxWorkerCount)))
+	// 并发执行筛选任务
+	workerCount := int(math.Min(float64(len(stocks)), float64(500)))
 	jobChan := make(chan struct{}, workerCount)
 	wg := sync.WaitGroup{}
 	var mu sync.Mutex
