@@ -17,20 +17,42 @@
                     <th>基金类型</th>
                     <th>成立时间</th>
                     <th>基金规模</th>
-                    <th>近1周收益率</th>
-                    <th>近1周收益率同类排行</th>
+                    <th>跟踪标的代码</th>
+                    <th>跟踪标的名称</th>
+                    <th>购买费率</th>
+                    <th>定投状态</th>
+                    <th>波动率</th>
+                    <th>最大回撤率</th>
+                    <th>夏普比率</th>
+                    <th>绩效</th>
+                    <th>持仓股票</th>
+                    <th>基金经理</th>
+                    <th>历史分红送配</th>
+                    <th>资产占比</th>
+                    <th>行业占比</th>
                 </tr>
             </thead>
             <tbody>
             {{ range .Fund4433List }}
                 <tr>
-                    <td>{{ .Code }}</td>
+                    <td class="copybtn" id="{{ .Code }}" data-clipboard-target="#{{ .Code  }}">{{ .Code }}</td>
                     <td><a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a></td>
                     <td>{{ .Type }}</td>
                     <td>{{ .EstablishedDate }}</td>
                     <td>{{ .NetAssetsScale }}</td>
-                    <td>{{ .Performance.WeekProfitRatio }}</td>
-                    <td>第{{ .Performance.WeekRankNum }}名|前{{ .Performance.WeekRankRatio }}%</td>
+                    <td>{{ .IndexCode }}</td>
+                    <td>{{ .IndexName }}</td>
+                    <td>{{ .Rate }}</td>
+                    <td>{{ .FixedInvestmentStatus }}</td>
+                    <td>{{ .Stddev }}</td>
+                    <td>{{ .MaxRetracement }}</td>
+                    <td>{{ .Sharp }}</td>
+                    <td>{{ .Performance }}</td>
+                    <td>{{ .Stocks }}</td>
+                    <td>{{ .Manager }}</td>
+                    <td>{{ .HistoricalDividends }}</td>
+                    <td>{{ .AssetsProportion }}</td>
+                    <td>{{ .IndustryProportion }}</td>
                 </tr>
             {{ end }}
             </tbody>

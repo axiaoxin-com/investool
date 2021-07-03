@@ -541,4 +541,39 @@ $(document).ready(function () {
     checkboxCountCheck();
     $(".t_netcash_free").toggleClass("hide");
   });
+
+  // 点击复制
+  var clipboard = new ClipboardJS(".copybtn");
+  clipboard.on("success", function (e) {
+    $(e.trigger)
+      .attr("title", "复制成功")
+      .popup("fixTitle")
+      .popup({
+        onCreate: function () {
+          $(e.trigger)
+            .popup({
+              position: "left center",
+            })
+            .popup("toggle");
+        },
+      })
+      .popup("show")
+      .popup("toggle");
+  });
+  clipboard.on("error", function (e) {
+    $(e.trigger)
+      .attr("title", "复制失败")
+      .popup("fixTitle")
+      .popup({
+        onCreate: function () {
+          $(e.trigger)
+            .popup({
+              position: "left center",
+            })
+            .popup("toggle");
+        },
+      })
+      .popup("show")
+      .popup("toggle");
+  });
 });

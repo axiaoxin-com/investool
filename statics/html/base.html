@@ -11,7 +11,7 @@
 
     <link rel="shortcut icon" href="http://cdn.axiaoxin.com/x-stock/favicon.ico">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="http://cdn.axiaoxin.com/x-stock/css/materialize.min.css" media="screen,projection" />
+    <link type="text/css" rel="stylesheet" href="http://cdn.axiaoxin.com/css/materialize.min.css" media="screen,projection" />
     <link rel="stylesheet" href={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/css/app.css"{{ else }}"/statics/css/app.css"{{ end }} />
     <title>{{ .PageTitle }}</title>
 </head>
@@ -96,9 +96,10 @@
         <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> X-STOCK, All rights reserved.</p>
     </div>
 </footer>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/jquery-3.6.0.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/materialize.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/x-stock/js/tableExport.js" ></script>
+<script type="text/javascript" src="http://cdn.axiaoxin.com/js/jquery-3.6.0.min.js" ></script>
+<script type="text/javascript" src="http://cdn.axiaoxin.com/js/materialize.min.js" ></script>
+<script type="text/javascript" src="http://cdn.axiaoxin.com/js/tableExport.js" ></script>
+<script type="text/javascript" src="http://cdn.axiaoxin.com/js/clipboard.min.js" ></script>
 
 <script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/js/app.min.20210627-120249.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
 <script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
