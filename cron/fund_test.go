@@ -6,7 +6,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 )
 
-func TestSyncFundAllList(t *testing.T) {
+func _TestSyncFundAllList(t *testing.T) {
 	logging.SetLevel("warn")
 	SyncFund()
 }
