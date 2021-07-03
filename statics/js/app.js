@@ -51,11 +51,11 @@ $(document).ready(function () {
             var cm = stock.code.split(".");
             $("#selector_result tbody").append(
               "<tr>" +
-                '<td class="copybtn waves-effect waves-red" data-clipboard-text="' +
+                '<td><span class="copybtn waves-effect waves-red" data-clipboard-text="' +
                 cm[0] +
-                '"><span>' +
+                '">' +
                 cm[0] +
-                '</span><i class="material-icons tiny">content_copy</i></td>' +
+                '<i class="material-icons tiny">content_copy</i></span></td>' +
                 '<td><a target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
