@@ -52,7 +52,7 @@ func (q Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 		result := SearchResult{
 			SecurityCode: lineitems[2],
 			Secucode:     secucode,
-			Name:         lineitems[0],
+			Name:         lineitems[6],
 		}
 		results = append(results, result)
 	}

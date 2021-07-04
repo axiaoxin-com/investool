@@ -3,10 +3,12 @@ package core
 import (
 	"testing"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/stretchr/testify/require"
 )
 
 func TestSearch(t *testing.T) {
+	logging.SetLevel("warn")
 	s := NewSearcher(_ctx)
 	k := []string{"招商", "贵州茅台", "000001"}
 	results, err := s.Search(_ctx, k)

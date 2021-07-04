@@ -321,7 +321,7 @@ func (e EastMoney) QueryFinaCashflowData(ctx context.Context, secuCode string) (
 		return nil, err
 	}
 	if resp.Code != 0 {
-		return nil, fmt.Errorf("%s %#v", secuCode, resp.Message)
+		return nil, fmt.Errorf("%s %#v", secuCode, resp)
 	}
 	return resp.Result.Data, nil
 }
