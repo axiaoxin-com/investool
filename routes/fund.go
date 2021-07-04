@@ -22,6 +22,7 @@ type ParamFundIndex struct {
 
 // FundIndex godoc
 func FundIndex(c *gin.Context) {
+	fundList := services.Fund4433List
 	p := ParamFundIndex{
 		PageNum:  1,
 		PageSize: 10,
@@ -37,10 +38,13 @@ func FundIndex(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_index.html", data)
 		return
 	}
-	totalCount := len(services.Fund4433List)
+
+	fundList.Sort(models.FundSortType(p.Sort))
+
+	totalCount := len(fundList)
 	pagedList := []models.FundList{}
 	if p.PageSize < 0 {
-		pagedList = append(pagedList, services.Fund4433List)
+		pagedList = append(pagedList, fundList)
 		totalCount = 1
 	} else {
 		for i := 0; i < totalCount; i += p.PageSize {
@@ -48,7 +52,7 @@ func FundIndex(c *gin.Context) {
 			if end > totalCount {
 				end = totalCount
 			}
-			pagedList = append(pagedList, services.Fund4433List[i:end])
+			pagedList = append(pagedList, fundList[i:end])
 		}
 	}
 

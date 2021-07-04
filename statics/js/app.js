@@ -555,93 +555,311 @@ $(document).ready(function () {
   $("#f1").change(function () {
     checkboxCountCheck();
     $(".t1").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t1", 1);
+    } else {
+      localStorage.removeItem("t1");
+    }
   });
+  if (localStorage["t1"] == 1) {
+    $(".t1").removeClass("hide");
+    $("#f1").attr("checked", "true");
+  }
   $("#f2").change(function () {
     checkboxCountCheck();
     $(".t2").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t2", 1);
+    } else {
+      localStorage.removeItem("t2");
+    }
   });
+  if (localStorage["t2"] == 1) {
+    $(".t2").removeClass("hide");
+    $("#f2").attr("checked", "true");
+  }
   $("#f3").change(function () {
     checkboxCountCheck();
     $(".t3").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t3", 1);
+    } else {
+      localStorage.removeItem("t3");
+    }
   });
+  if (localStorage["t3"] == 1) {
+    $(".t3").removeClass("hide");
+    $("#f3").attr("checked", "true");
+  }
   $("#f4").change(function () {
     checkboxCountCheck();
     $(".t4").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t4", 1);
+    } else {
+      localStorage.removeItem("t4");
+    }
   });
+  if (localStorage["t4"] == 1) {
+    $(".t4").removeClass("hide");
+    $("#f4").attr("checked", "true");
+  }
   $("#f5").change(function () {
     checkboxCountCheck();
     $(".t5").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t5", 1);
+    } else {
+      localStorage.removeItem("t5");
+    }
   });
+  if (localStorage["t5"] == 1) {
+    $(".t5").removeClass("hide");
+    $("#f5").attr("checked", "true");
+  }
   $("#f6").change(function () {
     checkboxCountCheck();
     $(".t6").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t6", 1);
+    } else {
+      localStorage.removeItem("t6");
+    }
   });
+  if (localStorage["t6"] == 1) {
+    $(".t6").removeClass("hide");
+    $("#f6").attr("checked", "true");
+  }
   $("#f7").change(function () {
     checkboxCountCheck();
     $(".t7").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t7", 1);
+    } else {
+      localStorage.removeItem("t7");
+    }
   });
+  if (localStorage["t7"] == 1) {
+    $(".t7").removeClass("hide");
+    $("#f7").attr("checked", "true");
+  }
   $("#f8").change(function () {
     checkboxCountCheck();
     $(".t8").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t8", 1);
+    } else {
+      localStorage.removeItem("t8");
+    }
   });
+  if (localStorage["t8"] == 1) {
+    $(".t8").removeClass("hide");
+    $("#f8").attr("checked", "true");
+  }
   $("#f9").change(function () {
     checkboxCountCheck();
     $(".t9").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t9", 1);
+    } else {
+      localStorage.removeItem("t9");
+    }
   });
+  if (localStorage["t9"] == 1) {
+    $(".t9").removeClass("hide");
+    $("#f9").attr("checked", "true");
+  }
   $("#f10").change(function () {
     checkboxCountCheck();
     $(".t10").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t10", 1);
+    } else {
+      localStorage.removeItem("t10");
+    }
   });
+  if (localStorage["t10"] == 1) {
+    $(".t10").removeClass("hide");
+    $("#f10").attr("checked", "true");
+  }
   $("#f11").change(function () {
     checkboxCountCheck();
     $(".t11").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t11", 1);
+    } else {
+      localStorage.removeItem("t11");
+    }
   });
+  if (localStorage["t11"] == 1) {
+    $(".t11").removeClass("hide");
+    $("#f11").attr("checked", "true");
+  }
   $("#f12").change(function () {
     checkboxCountCheck();
     $(".t12").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t12", 1);
+    } else {
+      localStorage.removeItem("t12");
+    }
   });
+  if (localStorage["t12"] == 1) {
+    $(".t12").removeClass("hide");
+    $("#f12").attr("checked", "true");
+  }
   $("#f13").change(function () {
     checkboxCountCheck();
     $(".t13").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t13", 1);
+    } else {
+      localStorage.removeItem("t13");
+    }
   });
+  if (localStorage["t13"] == 1) {
+    $(".t13").removeClass("hide");
+    $("#f13").attr("checked", "true");
+  }
   $("#f14").change(function () {
     checkboxCountCheck();
     $(".t14").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t14", 1);
+    } else {
+      localStorage.removeItem("t14");
+    }
   });
+  if (localStorage["t14"] == 1) {
+    $(".t14").removeClass("hide");
+    $("#f14").attr("checked", "true");
+  }
   $("#f15").change(function () {
     checkboxCountCheck();
     $(".t15").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t15", 1);
+    } else {
+      localStorage.removeItem("t15");
+    }
   });
+  if (localStorage["t15"] == 1) {
+    $(".t15").removeClass("hide");
+    $("#f15").attr("checked", "true");
+  }
   $("#f16").change(function () {
     checkboxCountCheck();
     $(".t16").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t16", 1);
+    } else {
+      localStorage.removeItem("t16");
+    }
   });
+  if (localStorage["t16"] == 1) {
+    $(".t16").removeClass("hide");
+    $("#f16").attr("checked", "true");
+  }
   $("#f17").change(function () {
     checkboxCountCheck();
     $(".t17").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t17", 1);
+    } else {
+      localStorage.removeItem("t17");
+    }
   });
+  if (localStorage["t17"] == 1) {
+    $(".t17").removeClass("hide");
+    $("#f17").attr("checked", "true");
+  }
   $("#f18").change(function () {
     checkboxCountCheck();
     $(".t18").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t18", 1);
+    } else {
+      localStorage.removeItem("t18");
+    }
   });
+  if (localStorage["t18"] == 1) {
+    $(".t18").removeClass("hide");
+    $("#f18").attr("checked", "true");
+  }
   $("#f19").change(function () {
     checkboxCountCheck();
     $(".t19").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t19", 1);
+    } else {
+      localStorage.removeItem("t19");
+    }
   });
+  if (localStorage["t19"] == 1) {
+    $(".t19").removeClass("hide");
+    $("#f19").attr("checked", "true");
+  }
   $("#f20").change(function () {
     checkboxCountCheck();
     $(".t20").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t20", 1);
+    } else {
+      localStorage.removeItem("t20");
+    }
   });
+  if (localStorage["t20"] == 1) {
+    $(".t20").removeClass("hide");
+    $("#f20").attr("checked", "true");
+  }
   $("#f21").change(function () {
     checkboxCountCheck();
     $(".t21").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t21", 1);
+    } else {
+      localStorage.removeItem("t21");
+    }
   });
+  if (localStorage["t21"] == 1) {
+    $(".t21").removeClass("hide");
+    $("#f21").attr("checked", "true");
+  }
   $("#f22").change(function () {
     checkboxCountCheck();
     $(".t22").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t22", 1);
+    } else {
+      localStorage.removeItem("t22");
+    }
   });
+  if (localStorage["t22"] == 1) {
+    $(".t22").removeClass("hide");
+    $("#f22").attr("checked", "true");
+  }
   $("#f23").change(function () {
     checkboxCountCheck();
     $(".t23").toggleClass("hide");
+    if (this.checked) {
+      localStorage.setItem("t23", 1);
+    } else {
+      localStorage.removeItem("t23");
+    }
   });
+  if (localStorage["t23"] == 1) {
+    $(".t23").removeClass("hide");
+    $("#f23").attr("checked", "true");
+  }
+
+  // 设置排序图标
+  $(".sortable").click(function () {
+    var s = $(this).find("a").attr("sort");
+    localStorage.setItem("fund_sort", s);
+  });
+  var fund_sort = localStorage["fund_sort"];
+  if (fund_sort === null) {
+    fund_sort = "0";
+  }
+  $(`.sortable a[sort='${fund_sort}'] i`).removeClass("hide");
 });
