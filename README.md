@@ -1,4 +1,4 @@
-# x-stock
+# X-STOCK
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/axiaoxin-com/x-stock/)
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](http://golang.org)
@@ -6,7 +6,11 @@
 [![GitHub release](https://img.shields.io/github/release/axiaoxin-com/x-stock.svg)](https://gitHub.com/axiaoxin-com/x-stock/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/axiaoxin-com/x-stock/total.svg)](https://gitHub.com/axiaoxin-com/x-stock/releases/)
 
-使用 Golang 实现的个人股票工具，股票数据来源于东方财富网、亿牛网、腾讯证券。
+[![](./statics/img/sidenav_icon.png)](http://x-stock.axiaoxin.com)
+
+<http://x-stock.axiaoxin.com>
+
+使用 Golang 实现的个人股票工具，股票数据来源于东方财富网、亿牛网、新浪财经、天天基金。
 
 该程序不构成任何投资建议，程序只是我个人辅助获取数据的工具，具体分析仍然需要自己判断。
 
@@ -31,10 +35,12 @@
 - 支持负债流动比检测
 - 支持现金流检测
 - 提供 WEB 界面操作 <http://x-stock.axiaoxin.com>
+- 支持基金 4433 筛选
 
 TODO:
 
-- 支持基金 4433 筛选
+- 自定义基金筛选
+- 基金检测
 - 支持 ETF 筛选
 - 支持港股检测
 - 获取 K 线图数据
