@@ -8,3 +8,5 @@ echo "push..."
 git push && git push --tags -f && \
 echo "release..."
 goreleaser release --rm-dist
+echo "cdn清理..."
+qshell batchdelete blogpostpics -y -i /tmp/qiniu-del-list.txt
