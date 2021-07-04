@@ -63,7 +63,11 @@
                 <tr>
                     <th>基金代码</th>
                     <th>基金名称</th>
-                    <th>基金类型</th>
+                    <th>
+                        <a class="tooltipped" data-position="top" data-tooltip="展示全部类型" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}">
+                            基金类型<i class="material-icons tiny">settings_backup_restore</i>
+                        </a>
+                    </th>
                     <th class="hide t1">成立时间</th>
                     <th class="hide t2">基金规模</th>
                     <th class="hide t3">基金经理</th>
@@ -74,52 +78,52 @@
                     <th class="hide t8">最大回撤率</th>
                     <th class="hide t9">夏普比率</th>
                     <th class="hide t10 sortable">
-                        <a sort="0" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=0">
+                        <a sort="0" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=0&type={{ .Param.Type }}">
                             近1周绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t11 sortable">
-                        <a sort="1" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=1">
+                        <a sort="1" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=1&type={{ .Param.Type }}">
                             近1月绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t12 sortable">
-                        <a sort="2" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=2">
+                        <a sort="2" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=2&type={{ .Param.Type }}">
                             近3月绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t13 sortable">
-                        <a sort="3" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=3">
+                        <a sort="3" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=3&type={{ .Param.Type }}">
                             近6月绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t14 sortable">
-                        <a sort="4" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=4">
+                        <a sort="4" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=4&type={{ .Param.Type }}">
                             近1年绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t15 sortable">
-                        <a sort="5" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=5">
+                        <a sort="5" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=5&type={{ .Param.Type }}">
                             近2年绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t16 sortable">
-                        <a sort="6" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=6">
+                        <a sort="6" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=6&type={{ .Param.Type }}">
                             近3年绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t17 sortable">
-                        <a sort="7" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=7">
+                        <a sort="7" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=7&type={{ .Param.Type }}">
                             近5年绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t18 sortable">
-                        <a sort="8" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=8">
+                        <a sort="8" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=8&type={{ .Param.Type }}">
                             今年来绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
                     <th class="hide t19 sortable">
-                        <a sort="9" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=9">
+                        <a sort="9" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort=9&type={{ .Param.Type }}">
                             成立来绩效<i class="material-icons tiny hide">sort</i>
                         </a>
                     </th>
@@ -141,7 +145,7 @@
                         <a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a>
                     </td>
                     <td>
-                        {{ .Type }}
+                        <a class="tooltipped" data-position="top" data-tooltip="只看该类型" href="/fund?type={{ .Type }}">{{ .Type }}</a>
                     </td>
                     <td class="hide t1">
                         {{ .EstablishedDate }}
@@ -279,17 +283,17 @@
         </table>
         <ul class="pagination center">
             <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num=1&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">first_page</i></a>
+                <a href="/fund?page_num=1&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}&type={{ .Param.Type }}"><i class="material-icons">first_page</i></a>
             </li>
             <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">chevron_left</i></a>
+                <a href="/fund?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}&type={{ .Param.Type }}"><i class="material-icons">chevron_left</i></a>
             </li>
             <li><a class="tooltipped" data-position="top" data-tooltip="共{{ .Pagination.TotalCount }}只基金" href="#!">{{ .Pagination.PageNum }} / {{ .Pagination.PagesCount }}</a></li>
             <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">chevron_right</i></a>
+                <a href="/fund?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}&type={{ .Param.Type }}"><i class="material-icons">chevron_right</i></a>
             </li>
             <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-                <a href="/fund?page_num={{ .Pagination.PagesCount }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}"><i class="material-icons">last_page</i></a>
+                <a href="/fund?page_num={{ .Pagination.PagesCount }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}&type={{ .Param.Type }}"><i class="material-icons">last_page</i></a>
             </li>
         </ul>
     </div>

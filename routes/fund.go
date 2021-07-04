@@ -15,15 +15,15 @@ import (
 
 // ParamFundIndex FundIndex 请求参数
 type ParamFundIndex struct {
-	PageNum  int `json:"page_num"  form:"page_num"`
-	PageSize int `json:"page_size" form:"page_size"`
-	Sort     int `json:"sort"      form:"sort"`
+	PageNum  int    `json:"page_num"  form:"page_num"`
+	PageSize int    `json:"page_size" form:"page_size"`
+	Sort     int    `json:"sort"      form:"sort"`
+	Type     string `json:"type"      form:"type"`
 }
 
 // FundIndex godoc
 func FundIndex(c *gin.Context) {
 	fundList := services.Fund4433List
-	totalCount := len(fundList)
 	p := ParamFundIndex{
 		PageNum:  1,
 		PageSize: 10,
@@ -40,10 +40,16 @@ func FundIndex(c *gin.Context) {
 		return
 	}
 
+	// 过滤
+	if p.Type != "" {
+		fundList = fundList.FilterByType(p.Type)
+	}
+	// 排序
 	if p.Sort > 0 {
 		fundList.Sort(models.FundSortType(p.Sort))
 	}
-
+	// 分页
+	totalCount := len(fundList)
 	pagi := goutils.PaginateByPageNumSize(totalCount, p.PageNum, p.PageSize)
 
 	result := models.FundList{}

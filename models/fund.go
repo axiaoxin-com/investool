@@ -592,6 +592,16 @@ func (f FundList) Sort(st FundSortType) {
 	}
 }
 
+// FilterByType 按 type 字段过滤
+func (f FundList) FilterByType(t string) (results FundList) {
+	for _, i := range f {
+		if i.Type == t {
+			results = append(results, i)
+		}
+	}
+	return
+}
+
 // Is4433 判断是否满足4433法则
 func (f Fund) Is4433(ctx context.Context) bool {
 	// 没有5年数据则不满足
