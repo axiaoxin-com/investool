@@ -9,7 +9,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/datacenter/qq"
+	"github.com/axiaoxin-com/x-stock/datacenter/sina"
 	"github.com/axiaoxin-com/x-stock/models"
 )
 
@@ -24,9 +24,9 @@ func NewSearcher(ctx context.Context) Searcher {
 // Search 按股票名或代码搜索股票
 func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockList, error) {
 	// 根据关键词匹配股票代码
-	matchedResults := []qq.SearchResult{}
+	matchedResults := []sina.SearchResult{}
 	for _, kw := range keywords {
-		searchResults, err := datacenter.QQ.KeywordSearch(ctx, kw)
+		searchResults, err := datacenter.Sina.KeywordSearch(ctx, kw)
 		if err != nil {
 			logging.Errorf(ctx, "search %s error:", kw, err.Error())
 			continue

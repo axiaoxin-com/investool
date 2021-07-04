@@ -4,7 +4,7 @@ package datacenter
 import (
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/datacenter/eniu"
-	"github.com/axiaoxin-com/x-stock/datacenter/qq"
+	"github.com/axiaoxin-com/x-stock/datacenter/sina"
 )
 
 var (
@@ -12,12 +12,12 @@ var (
 	EastMoney eastmoney.EastMoney
 	// Eniu 亿牛网
 	Eniu eniu.Eniu
-	// QQ 腾讯证券
-	QQ qq.QQ
+	// Sina 新浪财经
+	Sina sina.Sina
 )
 
 func init() {
 	EastMoney = eastmoney.NewEastMoney()
 	Eniu = eniu.NewEniu()
-	QQ = qq.NewQQ()
+	Sina = sina.NewSina()
 }
