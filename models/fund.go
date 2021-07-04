@@ -440,7 +440,7 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 			Code:        s.Gpdm,
 			Name:        s.Gpjc,
 			Industry:    s.Indexname,
-			ExCode:      s.Texch,
+			ExCode:      s.Newtexch,
 			HoldRatio:   interfaceToFloat64(ctx, s.Jzbl),
 			AdjustRatio: interfaceToFloat64(ctx, s.Pctnvchg),
 		}
