@@ -67,5 +67,9 @@ func InitFund4433List() error {
 	if err != nil {
 		return err
 	}
-	return jsoniter.Unmarshal(fundlist, &Fund4433List)
+	if err := jsoniter.Unmarshal(fundlist, &Fund4433List); err != nil {
+		return err
+	}
+	Fund4433List.Sort(models.FundSortTypeWeek)
+	return nil
 }

@@ -23,6 +23,7 @@ type ParamFundIndex struct {
 // FundIndex godoc
 func FundIndex(c *gin.Context) {
 	fundList := services.Fund4433List
+	totalCount := len(fundList)
 	p := ParamFundIndex{
 		PageNum:  1,
 		PageSize: 10,
@@ -39,34 +40,29 @@ func FundIndex(c *gin.Context) {
 		return
 	}
 
-	fundList.Sort(models.FundSortType(p.Sort))
+	if p.Sort > 0 {
+		fundList.Sort(models.FundSortType(p.Sort))
+	}
 
-	totalCount := len(fundList)
-	pagedList := []models.FundList{}
+	pagi := goutils.PaginateByPageNumSize(totalCount, p.PageNum, p.PageSize)
+
+	result := models.FundList{}
 	if p.PageSize < 0 {
-		pagedList = append(pagedList, fundList)
-		totalCount = 1
+		result = fundList
+		pagi = goutils.PaginateByPageNumSize(totalCount, 1, totalCount)
 	} else {
-		for i := 0; i < totalCount; i += p.PageSize {
-			end := i + p.PageSize
+		offset := (p.PageNum - 1) * p.PageSize
+		if offset < 0 {
+			offset = 0
+		}
+		if offset <= totalCount {
+			end := offset + pagi.PageSize
 			if end > totalCount {
 				end = totalCount
 			}
-			pagedList = append(pagedList, fundList[i:end])
+			result = fundList[offset:end]
 		}
 	}
-
-	result := models.FundList{}
-	index := 0
-	if len(pagedList) > 0 {
-		if p.PageNum < 1 || p.PageNum > len(pagedList) {
-			index = 0
-		} else {
-			index = p.PageNum - 1
-		}
-		result = pagedList[index]
-	}
-	pagi := goutils.PaginateByPageNumSize(totalCount, p.PageNum, p.PageSize)
 	data := gin.H{
 		"Env":           viper.GetString("env"),
 		"Version":       version.Version,
