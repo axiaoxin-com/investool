@@ -65,7 +65,7 @@
                     <th>基金代码</th>
                     <th>基金名称</th>
                     <th>
-                        <a class="dropdown-trigger" data-target="4433fundtypes">
+                        <a style="color:black;" class="tooltipped dropdown-trigger" data-position="top" data-tooltip="查看指定类型" data-target="4433fundtypes">
                             基金类型<i class="material-icons tiny">arrow_drop_down</i>
                         </a>
                         <ul id="4433fundtypes" class="dropdown-content">
@@ -153,7 +153,7 @@
                         <a target="_blank" href="http://fund.eastmoney.com/{{ .Code }}.html">{{ .Name }}</a>
                     </td>
                     <td>
-                        <a class="tooltipped" data-position="top" data-tooltip="只看该类型" href="/fund?type={{ .Type }}">{{ .Type }}</a>
+                        {{ .Type }}
                     </td>
                     <td class="hide t1">
                         {{ .EstablishedDate }}
