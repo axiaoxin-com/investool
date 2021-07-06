@@ -14,6 +14,8 @@ import (
 var (
 	// StockIndustryList 东方财富股票行业列表
 	StockIndustryList []string
+	// FundTypeList 基金类型列表
+	FundTypeList []string
 	// FundAllList 全量基金列表
 	FundAllList models.FundList
 	// Fund4433List 满足4433法则的基金列表
@@ -26,6 +28,8 @@ var (
 	Fund4433ListFilename = "./fund_4433_list.json"
 	// IndustryListFilename 行业列表数据文件
 	IndustryListFilename = "./industry_list.json"
+	// FundTypeListFilename 基金类型数据文件
+	FundTypeListFilename = "./fund_type_list.json"
 )
 
 // Init 相关依赖服务的初始化或加载操作
@@ -37,6 +41,9 @@ func Init() error {
 		return err
 	}
 	if err := InitFund4433List(); err != nil {
+		return err
+	}
+	if err := InitFundTypeList(); err != nil {
 		return err
 	}
 	return nil
@@ -71,5 +78,17 @@ func InitFund4433List() error {
 		return err
 	}
 	Fund4433List.Sort(models.FundSortTypeWeek)
+	return nil
+}
+
+// InitFundTypeList 从json文件加载基金类型
+func InitFundTypeList() error {
+	types, err := ioutil.ReadFile(FundTypeListFilename)
+	if err != nil {
+		return err
+	}
+	if err := jsoniter.Unmarshal(types, &FundTypeList); err != nil {
+		return err
+	}
 	return nil
 }

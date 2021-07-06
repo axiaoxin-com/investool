@@ -79,6 +79,7 @@ func FundIndex(c *gin.Context) {
 		"UpdatedAt":     services.SyncFundTime.Format("2006-01-02 15:04:05"),
 		"AllFundCount":  len(services.FundAllList),
 		"Fund4433Count": totalCount,
+		"FundTypes":     services.Fund4433List.Types(),
 	}
 	c.HTML(http.StatusOK, "fund_index.html", data)
 	return

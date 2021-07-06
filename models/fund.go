@@ -602,6 +602,19 @@ func (f FundList) FilterByType(t string) (results FundList) {
 	return
 }
 
+// Types 返回基金列表中包含的全部基金类型
+func (f FundList) Types() (types []string) {
+	m := map[string]struct{}{}
+	for _, i := range f {
+		if _, exists := m[i.Type]; exists {
+			continue
+		}
+		m[i.Type] = struct{}{}
+		types = append(types, i.Type)
+	}
+	return
+}
+
 // Is4433 判断是否满足4433法则
 func (f Fund) Is4433(ctx context.Context) bool {
 	// 没有5年数据则不满足

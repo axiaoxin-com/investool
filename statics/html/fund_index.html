@@ -16,8 +16,8 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
-            <li class="tab col s4 l4"><a class="active" href="#4433">4433法则选基</a></li>
-            <li class="tab col s4 l4"><a href="#fundfilter">收益率选基</a></li>
+            <li class="tab col s4 l4"><a class="active" href="#4433">4433基金列表</a></li>
+            <li class="tab col s4 l4"><a href="#fundfilter">4433严选</a></li>
             <li class="tab col s4 l4"><a href="#fundcheck">基金检测</a></li>
         </ul>
     </div>
@@ -65,9 +65,16 @@
                     <th>基金代码</th>
                     <th>基金名称</th>
                     <th>
-                        <a class="tooltipped" data-position="top" data-tooltip="展示全部类型" href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}">
-                            基金类型<i class="material-icons tiny">settings_backup_restore</i>
+                        <a class="dropdown-trigger" data-target="4433fundtypes">
+                            基金类型<i class="material-icons tiny">arrow_drop_down</i>
                         </a>
+                        <ul id="4433fundtypes" class="dropdown-content">
+                            <li><a href="/fund?page_num={{ .Param.PageNum }}&page_size={{ .Param.PageSize }}&sort={{ .Param.Sort }}">全部类型</a></li>
+                            <li class="divider" tabindex="-1"></li>
+                            {{ range .FundTypes }}
+                            <li><a href="/fund?type={{ . }}">{{ . }}</a></li>
+                            {{ end }}
+                        </ul>
                     </th>
                     <th class="hide t1">成立时间</th>
                     <th class="hide t2">基金规模</th>
@@ -302,29 +309,63 @@
     <!--filter start-->
     <div id="fundfilter" class="col s12">
         <div class="row">
-            <form class="col s12" id="4433_form">
+            <form class="col s12" id="fundfilter_form">
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input name="fund_4433_1_y" value="4" type="number" min="0" step="1" class="validate">
-                        <label for="fund_4433_1_y">一年绩效排名前 1/X</label>
+                    <div class="input-field col s12 m12 l6">
+                        <input id="year_1_rank_ratio" value="25.00" type="number" step="5" class="validate">
+                        <label for="year_1_rank_ratio">近1年绩效排名前百分之:</label>
+                    </div>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="this_year_235_rank_ratio" type="number" class="validate" value="25.00" step="5">
+                        <label for="this_year_235_rank_ratio">近2,3,5年及今年来绩效排名前百分之:</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input name="fund_4433_1235_y" type="number" class="validate" value="4" min="0" step="1">
-                        <label for="fund_4433_1235_y">今年、两年、三年、五年绩效排名前 1/X</label>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="month_6_rank_ratio" type="number" class="validate" value="33.33" step="5">
+                        <label for="month_6_rank_ratio">近6个月绩效排名前百分之:</label>
+                    </div>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="month_3_rank_ratio" type="number" class="validate" value="33.33" step="5">
+                        <label for="month_3_rank_ratio">近3个月绩效排名前百分之:</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input name="fund_4433_6_m" type="number" class="validate" value="3" min="0" step="1">
-                        <label for="fund_4433_6_m">六个月绩效排名前 1/X</label>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="min_scale" type="number" class="validate" value="2" step="5">
+                        <label for="min_scale">基金规模最小值（亿）</label>
+                    </div>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="max_scale" type="number" class="validate" value="50" step="5">
+                        <label for="max_scale">基金规模最大值（亿）</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input name="fund_4433_3_m" type="number" class="validate" value="3" min="0" step="1">
-                        <label for="fund_4433_3_m">三个月绩效排名前 1/X</label>
+                    <div class="input-field col s12 m12 l6">
+                        <input name="min_manager_years" type="number" class="validate" value="5" step="1">
+                        <label for="min_manager_years">基金经理管理该基金最低年限</label>
+                    </div>
+                    <div class="input-field col s12 m12 l6">
+                        <select multiple name="types">
+                            {{ range $type := .FundTypeList }}
+                            <option value="{{ $type }}">{{ $type }}</option>
+                            {{ end }}
+                        </select>
+                        <label for="types">指定基金类型</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m12 l4">
+                        <input name="max_135_avg_stddev" type="number" class="validate" value="" step="1.0">
+                        <label for="max_135_avg_stddev">设置近1,3,5年波动率平均值的最大值</label>
+                    </div>
+                    <div class="input-field col s12 m12 l4">
+                        <input name="min_135_avg_sharp" type="number" class="validate" value="" step="1">
+                        <label for="min_135_avg_sharp">设置近1,3,5年夏普比率平均值的最小值</label>
+                    </div>
+                    <div class="input-field col s12 m12 l4">
+                        <input name="max_135_avg_retr" type="number" class="validate" value="" step="1">
+                        <label for="max_135_avg_retr">设置近1,3,5年最大回撤率平均值的最大值</label>
                     </div>
                 </div>
                 <div class="row">

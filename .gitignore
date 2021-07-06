@@ -23,4 +23,5 @@ x-stock
 statics/js/app.min.*.js
 fund_all_list.json
 fund_4433_list.json
+fund_type_list.json
 industry_list.json

@@ -26,7 +26,7 @@ type ParamFunderFilter struct {
 	MinScale float64 `json:"min_scale"                form:"min_scale"`
 	// 基金规模最大值（亿）
 	MaxScale float64 `json:"max_scale"                form:"max_scale"`
-	// 基金经理管理该基金年限
+	// 基金经理管理该基金最低年限
 	MinManagerYears float64 `json:"min_manager_years"        form:"min_manager_years"`
 	// 最近一年收益率排名比
 	Year1RankRatio float64 `json:"year_1_rank_ratio"        form:"year_1_rank_ratio"`

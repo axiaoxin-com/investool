@@ -21,19 +21,20 @@ import (
 func SyncFund() {
 	ctx := context.Background()
 	start := time.Now()
-	logging.Infof(ctx, "SyncFundAllList request start...")
+	logging.Infof(ctx, "SyncFund request start...")
 
 	// 获取全量列表
 	efundlist, err := datacenter.EastMoney.QueryAllFundList(ctx, eastmoney.FundTypeALL)
 	if err != nil {
-		logging.Errorf(ctx, "SyncFundAllList QueryAllFundList error:", err)
-		promSyncError.WithLabelValues("SyncFundAllList").Inc()
+		logging.Errorf(ctx, "SyncFund QueryAllFundList error:", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
 		return
 	}
 
 	// 遍历获取基金详情
 	workerCount := int(math.Min(float64(len(efundlist)), float64(500)))
 	reqChan := make(chan string, workerCount)
+	typeMap := map[string]struct{}{}
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
@@ -60,32 +61,44 @@ func SyncFund() {
 			)
 			if err != nil {
 				logging.Errorf(ctx, "QueryAllFundList QueryFundInfo code:%v err:%v", code, err)
-				promSyncError.WithLabelValues("SyncFundAllList").Inc()
+				promSyncError.WithLabelValues("SyncFund").Inc()
 				return
 			}
 			fund := models.NewFund(ctx, fundresp)
 			mu.Lock()
 			fundlist = append(fundlist, fund)
+			typeMap[fund.Type] = struct{}{}
 			mu.Unlock()
 		}()
 	}
 	wg.Wait()
-	logging.Infof(ctx, "SyncFundAllList request end. latency:%+v", time.Now().Sub(start))
+	logging.Infof(ctx, "SyncFund request end. latency:%+v", time.Now().Sub(start))
 
 	// 更新 services 变量
 	services.FundAllList = fundlist
+	services.FundTypeList = []string{}
+	for k := range typeMap {
+		services.FundTypeList = append(services.FundTypeList, k)
+	}
 
 	// 更新文件
 	b, err := jsoniter.Marshal(fundlist)
 	if err != nil {
-		logging.Errorf(ctx, "SyncFundAllList json marshal error:", err)
-		promSyncError.WithLabelValues("SyncFundAllList").Inc()
-		return
+		logging.Errorf(ctx, "SyncFund json marshal fundlist error:", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
 	if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
-		logging.Errorf(ctx, "SyncFundAllList WriteFile error:", err)
-		promSyncError.WithLabelValues("SyncFundAllList").Inc()
-		return
+		logging.Errorf(ctx, "SyncFund WriteFile fundlist error:", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
+	}
+	b, err = jsoniter.Marshal(services.FundTypeList)
+	if err != nil {
+		logging.Errorf(ctx, "SyncFund json marshal fundtypelist error:", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
+	}
+	if err := ioutil.WriteFile(services.FundTypeListFilename, b, 0666); err != nil {
+		logging.Errorf(ctx, "SyncFund WriteFile fundtypelist error:", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
 
 	// 更新4433列表
