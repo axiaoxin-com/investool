@@ -78,26 +78,15 @@ func (f Funder) Filter(ctx context.Context, p ParamFunderFilter) models.FundList
 		case p.MinManagerYears > 0 && (fund.Manager.ManageDays/365) < p.MinManagerYears:
 			// 指定基金经理管理该基金最低年限时，基金经理任职年数不能小于该值
 			continue
-		case p.Max135AvgStddev > 0:
+		case p.Max135AvgStddev > 0 && fund.Stddev.Avg() > p.Max135AvgStddev:
 			// 波动率平均值大于指定值时跳过
-			avg, _ := goutils.AvgFloat64([]float64{fund.Stddev.Year1, fund.Stddev.Year3, fund.Stddev.Year5})
-			if avg > p.Max135AvgStddev {
-				continue
-			}
-		case p.Max135AvgRetr > 0:
+			continue
+		case p.Max135AvgRetr > 0 && fund.MaxRetracement.Avg() > p.Max135AvgRetr:
 			// 最大回撤率平均值大于指定值时跳过
-			avg, _ := goutils.AvgFloat64(
-				[]float64{fund.MaxRetracement.Year1, fund.MaxRetracement.Year3, fund.MaxRetracement.Year5},
-			)
-			if avg > p.Max135AvgRetr {
-				continue
-			}
-		case p.Min135AvgSharp > 0:
+			continue
+		case p.Min135AvgSharp > 0 && fund.Sharp.Avg() < p.Min135AvgSharp:
 			// 夏普比率平均值小于指定值时跳过
-			avg, _ := goutils.AvgFloat64([]float64{fund.Sharp.Year1, fund.Sharp.Year3, fund.Sharp.Year5})
-			if avg < p.Min135AvgSharp {
-				continue
-			}
+			continue
 		}
 		results = append(results, fund)
 	}

@@ -647,3 +647,21 @@ func (f Fund) Is4433(ctx context.Context) bool {
 func (f Fund) NetAssetsScaleHuman() string {
 	return goutils.YiWanString(f.NetAssetsScale)
 }
+
+// Avg 1,3,5年波动率的平均值
+func (f FundStddev) Avg() float64 {
+	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
+	return r
+}
+
+// Avg 1,3,5年最大回撤率的平均值
+func (f FundMaxRetracement) Avg() float64 {
+	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
+	return r
+}
+
+// Avg 1,3,5年夏普比率的平均值
+func (f FundSharp) Avg() float64 {
+	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
+	return r
+}
