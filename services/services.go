@@ -16,6 +16,8 @@ var (
 	StockIndustryList []string
 	// FundTypeList 基金类型列表
 	FundTypeList []string
+	// Fund4433TypeList 4433基金类型列表
+	Fund4433TypeList []string
 	// FundAllList 全量基金列表
 	FundAllList models.FundList
 	// Fund4433List 满足4433法则的基金列表
@@ -78,6 +80,7 @@ func InitFund4433List() error {
 		return err
 	}
 	Fund4433List.Sort(models.FundSortTypeWeek)
+	Fund4433TypeList = Fund4433List.Types()
 	return nil
 }
 
