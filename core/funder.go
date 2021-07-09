@@ -42,8 +42,6 @@ type ParamFunderFilter struct {
 	Min135AvgSharp float64 `json:"min_135_avg_sharp"        form:"min_135_avg_sharp"`
 	// 1,3,5年最大回撤率平均值的最大值
 	Max135AvgRetr float64 `json:"max_135_avg_retr"         form:"max_135_avg_retr"`
-	// 排序方式
-	SortType models.FundSortType `json:"sort_type"                form:"sort_type"`
 }
 
 // Filter 按指定条件过滤
@@ -78,18 +76,17 @@ func (f Funder) Filter(ctx context.Context, p ParamFunderFilter) models.FundList
 		case p.MinManagerYears > 0 && (fund.Manager.ManageDays/365) < p.MinManagerYears:
 			// 指定基金经理管理该基金最低年限时，基金经理任职年数不能小于该值
 			continue
-		case p.Max135AvgStddev > 0 && fund.Stddev.Avg() > p.Max135AvgStddev:
+		case p.Max135AvgStddev > 0 && fund.Stddev.Avg135 > p.Max135AvgStddev:
 			// 波动率平均值大于指定值时跳过
 			continue
-		case p.Max135AvgRetr > 0 && fund.MaxRetracement.Avg() > p.Max135AvgRetr:
+		case p.Max135AvgRetr > 0 && fund.MaxRetracement.Avg135 > p.Max135AvgRetr:
 			// 最大回撤率平均值大于指定值时跳过
 			continue
-		case p.Min135AvgSharp > 0 && fund.Sharp.Avg() < p.Min135AvgSharp:
+		case p.Min135AvgSharp > 0 && fund.Sharp.Avg135 < p.Min135AvgSharp:
 			// 夏普比率平均值小于指定值时跳过
 			continue
 		}
 		results = append(results, fund)
 	}
-	results.Sort(p.SortType)
 	return results
 }

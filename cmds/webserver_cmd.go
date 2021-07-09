@@ -60,7 +60,7 @@ func ActionWebserver() func(c *cli.Context) error {
 		}
 
 		// 启动定时任务
-		go cron.RunCronJobs()
+		cron.RunCronJobs(true)
 		// 创建 gin app
 		middlewares := DefaultGinMiddlewares()
 		server := webserver.NewGinEngine(middlewares...)

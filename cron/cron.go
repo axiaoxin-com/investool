@@ -23,7 +23,7 @@ var (
 )
 
 // RunCronJobs 启动定时任务
-func RunCronJobs() {
+func RunCronJobs(async bool) {
 	timezone, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		panic(err)
@@ -33,4 +33,9 @@ func RunCronJobs() {
 	sched.Cron("0 18 * * 5").Do(SyncFund)
 	// 每月1号凌晨4点同步东方财富行业列表
 	sched.Cron("0 4 1 * *").Do(SyncIndustryList)
+	if async {
+		sched.StartAsync()
+	} else {
+		sched.StartBlocking()
+	}
 }

@@ -4,7 +4,7 @@ $(document).ready(function () {
 
   // 导航栏激活
   var currentNav = $(location).attr("pathname");
-  if (currentNav == "/fund") {
+  if (currentNav.startsWith("/fund")) {
     $("#nav-fund").addClass("active");
     $("#nav-fund").siblings().removeClass("active");
   } else if (currentNav == "/about") {

@@ -91,6 +91,8 @@ github.com/axiaoxin-com/goutils v0.0.0-20200909093258-aaf2fefcde7a/go.mod h1:F2a
 github.com/axiaoxin-com/goutils v1.0.3-0.20201019024427-66fe97b27be4/go.mod h1:ZuL0c9e5Nw6b6eirSmB9VaOeojiHS3BrmzGyKiKYLD0=
 github.com/axiaoxin-com/goutils v1.0.18-0.20210704121236-564b1172875c h1:2iDWGZB4ojaNj/SVIGmeUhRQXuPy1xqEYgN1TTkiCbg=
 github.com/axiaoxin-com/goutils v1.0.18-0.20210704121236-564b1172875c/go.mod h1:oYYlJEhTjMSyUDbTv1Sx4MSrlKqlAk/dcVh6vB/GYm0=
+github.com/axiaoxin-com/goutils v1.0.18-0.20210709080501-fbefa4767a72 h1:2kJRbc1j3zssPEevVIzw4QFHvmEc72k7YL1M2x7bMUY=
+github.com/axiaoxin-com/goutils v1.0.18-0.20210709080501-fbefa4767a72/go.mod h1:oYYlJEhTjMSyUDbTv1Sx4MSrlKqlAk/dcVh6vB/GYm0=
 github.com/axiaoxin-com/logging v1.2.3/go.mod h1:WM8Q9JLUi1jDh51XirUBDn8QXkxc8AO2oApFXHiEXf4=
 github.com/axiaoxin-com/logging v1.2.10 h1:6O/BERqjzwiRzusg4qXqimu/iFHa3PGaZZb4A4hzETA=
 github.com/axiaoxin-com/logging v1.2.10/go.mod h1:Jx322YD47doa/j9kn3pNPntze8b9bOVxf3So0LmdRMg=
@@ -247,6 +249,8 @@ github.com/go-playground/validator/v10 v10.3.0/go.mod h1:uOYAAleCW8F/7oMFd6aG0GO
 github.com/go-playground/validator/v10 v10.4.1/go.mod h1:nlOn6nFhuKACm19sB/8EGNn9GlaMV7XkbRSipzJ0Ii4=
 github.com/go-playground/validator/v10 v10.6.1 h1:W6TRDXt4WcWp4c4nf/G+6BkGdhiIo0k417gfr+V6u4I=
 github.com/go-playground/validator/v10 v10.6.1/go.mod h1:xm76BBt941f7yWdGnI2DVPFFg1UK3YY04qifoXU3lOk=
+github.com/go-playground/validator/v10 v10.7.0 h1:gLi5ajTBBheLNt0ctewgq7eolXoDALQd5/y90Hh9ZgM=
+github.com/go-playground/validator/v10 v10.7.0/go.mod h1:xm76BBt941f7yWdGnI2DVPFFg1UK3YY04qifoXU3lOk=
 github.com/go-redis/redis/v8 v8.0.0-beta.10/go.mod h1:CJP1ZIHwhosNYwIdaHPZK9vHsM3+roNBaZ7U9Of1DXc=
 github.com/go-redis/redis/v8 v8.3.2/go.mod h1:jszGxBCez8QA1HWSmQxJO9Y82kNibbUmeYhKWrBejTU=
 github.com/go-redis/redis/v8 v8.11.0 h1:O1Td0mQ8UFChQ3N9zFQqo6kTU2cJ+/it88gDB+zg0wo=
@@ -265,6 +269,8 @@ github.com/gocarina/gocsv v0.0.0-20210516172204-ca9e8a8ddea8/go.mod h1:5YoVOkjYA
 github.com/goccy/go-json v0.5.1/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/goccy/go-json v0.7.3 h1:Pznres7bC8RRKT9yOn3EZ7fK+8Kle6K9rW2U33QlXZI=
 github.com/goccy/go-json v0.7.3/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
+github.com/goccy/go-json v0.7.4 h1:B44qRUFwz/vxPKPISQ1KhvzRi9kZ28RAf6YtjriBZ5k=
+github.com/goccy/go-json v0.7.4/go.mod h1:6MelG93GURQebXPDq3khkgXZkazVtN9CRI+MGFi0w8I=
 github.com/godbus/dbus/v5 v5.0.4/go.mod h1:xhWf0FNVPg57R7Z0UbKHbJfkEywrmjJnf7w5xrFpKfA=
 github.com/gofrs/uuid v3.2.0+incompatible h1:y12jRkkFxsd7GpqdSZ+/KCs/fJbqpEXSGd4+jfEaewE=
 github.com/gofrs/uuid v3.2.0+incompatible/go.mod h1:b2aQJv3Z4Fp6yNu3cdSllBxTCLRxnplIgP/c0N/04lM=

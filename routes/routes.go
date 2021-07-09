@@ -10,6 +10,7 @@ func Routes(app *gin.Engine) {
 	app.POST("/selector", StockSelector)
 	app.POST("/checker", StockChecker)
 	app.GET("/fund", FundIndex)
+	app.GET("/fund/filter", FundFilter)
 	app.GET("/about", About)
 	app.GET("/comment", Comment)
 }

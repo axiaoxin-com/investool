@@ -221,6 +221,8 @@ type FundStddev struct {
 	Year3 float64 `json:"year_3"`
 	// 近5年波动率（%）
 	Year5 float64 `json:"year_5"`
+	// 1,3,5年均值
+	Avg135 float64 `json:"avg_135"`
 }
 
 // FundMaxRetracement 最大回撤
@@ -231,6 +233,8 @@ type FundMaxRetracement struct {
 	Year3 float64 `json:"year_3"`
 	// 近5年最大回撤（%）
 	Year5 float64 `json:"year_5"`
+	// 1,3,5年均值
+	Avg135 float64 `json:"avg_135"`
 }
 
 // FundSharp 夏普比率
@@ -241,6 +245,8 @@ type FundSharp struct {
 	Year3 float64 `json:"year_3"`
 	// 近5年夏普比率
 	Year5 float64 `json:"year_5"`
+	// 1,3,5年均值
+	Avg135 float64 `json:"avg_135"`
 }
 
 // FundStock 基金持仓股票
@@ -311,6 +317,29 @@ func interfaceToFloat64(ctx context.Context, unk interface{}) (result float64) {
 
 // NewFund 创建 Fund 实例
 func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
+	stddev1 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev1)
+	stddev3 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev3)
+	stddev5 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev5)
+	stddevavg, err := goutils.AvgFloat64([]float64{stddev1, stddev3, stddev5})
+	if err != nil {
+		logging.Errorf(ctx, "stddev avg error:", err.Error())
+	}
+
+	ret1 := interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra1)
+	ret3 := interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra3)
+	ret5 := interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra5)
+	retavg, err := goutils.AvgFloat64([]float64{ret1, ret3, ret5})
+	if err != nil {
+		logging.Errorf(ctx, "ret avg error:", err.Error())
+	}
+	sharp1 := interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp1)
+	sharp3 := interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp3)
+	sharp5 := interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp5)
+	sharpavg, err := goutils.AvgFloat64([]float64{sharp1, sharp3, sharp5})
+	if err != nil {
+		logging.Errorf(ctx, "sharp avg error:", err.Error())
+	}
+
 	fund := Fund{
 		Code:            efund.Jjxq.Datas.Fcode,
 		Name:            efund.Jjxq.Datas.Shortname,
@@ -320,20 +349,23 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 		IndexName:       efund.Jjxq.Datas.Indexname,
 		Rate:            efund.Jjxq.Datas.Rate,
 		Stddev: FundStddev{
-			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev1),
-			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev3),
-			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev5),
+			Year1:  stddev1,
+			Year3:  stddev3,
+			Year5:  stddev5,
+			Avg135: stddevavg,
 		},
 
 		MaxRetracement: FundMaxRetracement{
-			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra1),
-			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra3),
-			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Maxretra5),
+			Year1:  ret1,
+			Year3:  ret3,
+			Year5:  ret5,
+			Avg135: retavg,
 		},
 		Sharp: FundSharp{
-			Year1: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp1),
-			Year3: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp3),
-			Year5: interfaceToFloat64(ctx, efund.Tssj.Datas.Sharp5),
+			Year1:  sharp1,
+			Year3:  sharp3,
+			Year5:  sharp5,
+			Avg135: sharpavg,
 		},
 	}
 
@@ -544,6 +576,12 @@ const (
 	FundSortTypeThisYear
 	// FundSortTypeHistorical 按成立来收益率排序
 	FundSortTypeHistorical
+	// FundSortTypeStddev135Avg 按1，3，5年波动率平均值排序
+	FundSortTypeStddev135Avg
+	// FundSortTypeMaxRetr135Avg 按1，3，5年最大回撤率平均值排序
+	FundSortTypeMaxRetr135Avg
+	// FundSortTypeSharp135Avg 按1，3，5年夏普比率平均值排序
+	FundSortTypeSharp135Avg
 )
 
 // Sort 排序
@@ -588,6 +626,18 @@ func (f FundList) Sort(st FundSortType) {
 	case FundSortTypeHistorical:
 		sort.Slice(f, func(i, j int) bool {
 			return f[i].Performance.HistoricalProfitRatio > f[j].Performance.HistoricalProfitRatio
+		})
+	case FundSortTypeSharp135Avg:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Sharp.Avg135 > f[j].Sharp.Avg135
+		})
+	case FundSortTypeStddev135Avg:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].Stddev.Avg135 < f[j].Stddev.Avg135
+		})
+	case FundSortTypeMaxRetr135Avg:
+		sort.Slice(f, func(i, j int) bool {
+			return f[i].MaxRetracement.Avg135 < f[j].MaxRetracement.Avg135
 		})
 	}
 }
@@ -646,22 +696,4 @@ func (f Fund) Is4433(ctx context.Context) bool {
 // NetAssetsScaleHuman 净资产数字转换为亿、万单位
 func (f Fund) NetAssetsScaleHuman() string {
 	return goutils.YiWanString(f.NetAssetsScale)
-}
-
-// Avg 1,3,5年波动率的平均值
-func (f FundStddev) Avg() float64 {
-	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
-	return r
-}
-
-// Avg 1,3,5年最大回撤率的平均值
-func (f FundMaxRetracement) Avg() float64 {
-	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
-	return r
-}
-
-// Avg 1,3,5年夏普比率的平均值
-func (f FundSharp) Avg() float64 {
-	r, _ := goutils.AvgFloat64([]float64{f.Year1, f.Year3, f.Year5})
-	return r
 }

@@ -3,27 +3,25 @@
     <div id="desc_4433" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
         <div class="tap-target-content">
             <h5>4433法则</h5>
-            由台大财务金融学系邱显比教授提出的选基法则:
-            <ul>
-                <li>4-最近1年收益率排名在同类型基金的前1/4</li>
-                <li>4-最近2年、3年、5年及今年以来收益率排名均在同类型基金的前1/4</li>
-                <li>3-最近6个月收益率排名在同类型基金的前1/3</li>
-                <li>3-最近3个月收益率排名在同类型基金的前1/3</li>
-            </ul>
+            由台大财务金融学系邱显比教授提出的选基法则:</br>
+            4:最近1年收益率排名在同类型基金前1/4</br>
+            4:最近2年、3年、5年及今年来收益率排名均在同类型基金前1/4</br>
+            3:最近6个月收益率排名在同类型基金前1/3</br>
+            3:最近3个月收益率排名在同类型基金前1/3
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col s12">
         <ul class="tabs">
-            <li class="tab col s4 l4"><a class="active" href="#4433">4433基金列表</a></li>
-            <li class="tab col s4 l4"><a href="#fundfilter">4433严选</a></li>
+            <li class="tab col s4 l4"><a href="#4433">4433基金列表</a></li>
+            <li class="tab col s4 l4"><a href="#fundfilter">基金严选</a></li>
             <li class="tab col s4 l4"><a href="#fundcheck">基金检测</a></li>
         </ul>
     </div>
 
     <div id="4433" class="col s12">
-        <h4 class="center"><span onclick="$('#desc_4433').tapTarget('open')">4433法则<i class="tiny material-icons">help_outline</i></span>筛选结果</h4>
+        <h4 class="center"><span onclick="$('#desc_4433').tapTarget('open')">4433<i class="tiny material-icons">help_outline</i></span>基金列表</h4>
         <div class="divider"></div>
         <div class="left">
             更新时间:每周五18:00</br>
@@ -36,45 +34,45 @@
     <!--filter start-->
     <div id="fundfilter" class="col s12">
         <div class="row">
-            <form class="col s12" id="fundfilter_form">
+            <form class="col s12" id="fundfilter_form" action="/fund/filter" method="GET">
                 <div class="row">
                     <div class="input-field col s12 m12 l6">
-                        <input id="year_1_rank_ratio" value="25.00" type="number" step="5" class="validate">
+                        <input id="year_1_rank_ratio" name="year_1_rank_ratio" value="25.00" type="number" step="any" class="validate">
                         <label for="year_1_rank_ratio">近1年绩效排名前百分之:</label>
                     </div>
                     <div class="input-field col s12 m12 l6">
-                        <input name="this_year_235_rank_ratio" type="number" class="validate" value="25.00" step="5">
+                        <input id="this_year_235_rank_ratio" name="this_year_235_rank_ratio" type="number" class="validate" value="25.00" step="any">
                         <label for="this_year_235_rank_ratio">近2,3,5年及今年来绩效排名前百分之:</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m12 l6">
-                        <input name="month_6_rank_ratio" type="number" class="validate" value="33.33" step="5">
+                        <input id="month_6_rank_ratio" name="month_6_rank_ratio" type="number" class="validate" value="33.33" step="any">
                         <label for="month_6_rank_ratio">近6个月绩效排名前百分之:</label>
                     </div>
                     <div class="input-field col s12 m12 l6">
-                        <input name="month_3_rank_ratio" type="number" class="validate" value="33.33" step="5">
+                        <input id="month_3_rank_ratio" name="month_3_rank_ratio" type="number" class="validate" value="33.33" step="any">
                         <label for="month_3_rank_ratio">近3个月绩效排名前百分之:</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m12 l6">
-                        <input name="min_scale" type="number" class="validate" value="2" step="5">
+                        <input id="min_scale" name="min_scale" type="number" class="validate" value="2" step="1">
                         <label for="min_scale">基金规模最小值（亿）</label>
                     </div>
                     <div class="input-field col s12 m12 l6">
-                        <input name="max_scale" type="number" class="validate" value="50" step="5">
+                        <input id="max_scale" name="max_scale" type="number" class="validate" value="50" step="1">
                         <label for="max_scale">基金规模最大值（亿）</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m12 l6">
-                        <input name="min_manager_years" type="number" class="validate" value="5" step="1">
+                        <input id="min_manager_years" name="min_manager_years" type="number" class="validate" value="5" step="1">
                         <label for="min_manager_years">基金经理管理该基金最低年限</label>
                     </div>
                     <div class="input-field col s12 m12 l6">
-                        <select multiple name="types">
-                            {{ range $type := .FundTypeList }}
+                        <select multiple id="types" name="types">
+                            {{ range $type := .FundTypes }}
                             <option value="{{ $type }}">{{ $type }}</option>
                             {{ end }}
                         </select>
@@ -83,20 +81,20 @@
                 </div>
                 <div class="row">
                     <div class="input-field col s12 m12 l4">
-                        <input name="max_135_avg_stddev" type="number" class="validate" value="" step="1.0">
-                        <label for="max_135_avg_stddev">设置近1,3,5年波动率平均值的最大值</label>
+                        <input id="max_135_avg_stddev" name="max_135_avg_stddev" type="number" class="validate" value="25.0" step="1.0">
+                        <label for="max_135_avg_stddev">设置近1,3,5年波动率平均值的最大值(%)</label>
                     </div>
                     <div class="input-field col s12 m12 l4">
-                        <input name="min_135_avg_sharp" type="number" class="validate" value="" step="1">
-                        <label for="min_135_avg_sharp">设置近1,3,5年夏普比率平均值的最小值</label>
+                        <input id="min_135_avg_sharp" name="min_135_avg_sharp" type="number" class="validate" value="1.0" step="1.0">
+                        <label for="min_135_avg_sharp">设置近1,3,5年夏普比率平均值的最小值(%)</label>
                     </div>
                     <div class="input-field col s12 m12 l4">
-                        <input name="max_135_avg_retr" type="number" class="validate" value="" step="1">
-                        <label for="max_135_avg_retr">设置近1,3,5年最大回撤率平均值的最大值</label>
+                        <input id="max_135_avg_retr" name="max_135_avg_retr" type="number" class="validate" value="25.0" step="1.0">
+                        <label for="max_135_avg_retr">设置近1,3,5年最大回撤率平均值的最大值(%)</label>
                     </div>
                 </div>
                 <div class="row">
-                    <a onclick="M.toast({html: '开发中，敬请期待'})" class="btn waves-effect waves-light red lighten-2 col s12" id="fund_4433_submit_btn" >筛选</a>
+                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12" id="fund_4433_submit_btn" >筛选</button>
                 </div>
             </form>
         </div>
