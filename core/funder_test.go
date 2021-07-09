@@ -22,7 +22,6 @@ func TestFunderFilter(t *testing.T) {
 		Max135AvgStddev:      0.0,
 		Min135AvgSharp:       0.0,
 		Max135AvgRetr:        0.0,
-		SortType:             0,
 	}
 	results := funder.Filter(_ctx, p)
 	t.Log(len(results))
