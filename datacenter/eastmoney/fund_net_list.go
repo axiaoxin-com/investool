@@ -10,6 +10,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -114,7 +115,11 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 
 	// 算出总页数循环获取全量数据
 	pageCount := (totalCount + 30 - 1) / 30
-	reqChan := make(chan int, 100)
+	chanSize := viper.GetInt("app.chan_size")
+	if chanSize == 0 {
+		chanSize = 100
+	}
+	reqChan := make(chan int, chanSize)
 	var mu sync.Mutex
 	var wg sync.WaitGroup
 	var sm sync.Map

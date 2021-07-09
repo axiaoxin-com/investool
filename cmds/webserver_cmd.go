@@ -60,7 +60,9 @@ func ActionWebserver() func(c *cli.Context) error {
 		}
 
 		// 启动定时任务
-		cron.RunCronJobs(true)
+		if viper.GetString("env") == "prod" {
+			cron.RunCronJobs(true)
+		}
 		// 创建 gin app
 		middlewares := DefaultGinMiddlewares()
 		server := webserver.NewGinEngine(middlewares...)

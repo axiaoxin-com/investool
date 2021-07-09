@@ -15,6 +15,7 @@ import (
 	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/axiaoxin-com/x-stock/services"
 	jsoniter "github.com/json-iterator/go"
+	"github.com/spf13/viper"
 )
 
 // SyncFund 同步基金数据
@@ -32,7 +33,11 @@ func SyncFund() {
 	}
 
 	// 遍历获取基金详情
-	workerCount := int(math.Min(float64(len(efundlist)), float64(500)))
+	chanSize := viper.GetFloat64("app.chan_size")
+	if chanSize == 0 {
+		chanSize = 500
+	}
+	workerCount := int(math.Min(float64(len(efundlist)), chanSize))
 	reqChan := make(chan string, workerCount)
 	typeMap := map[string]struct{}{}
 	var wg sync.WaitGroup

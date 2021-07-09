@@ -374,7 +374,7 @@ $(document).ready(function () {
     closeOnClick: false,
   });
   $(".dropdown-content>li>a").css("color", "#000000");
-  $(".dropdown-content>li>a").css("font-size", "14px");
+  $(".dropdown-content>li>a").css("font-size", "11px");
   $(".dropdown-content>li>a").css("font-weight", "normal");
 
   for (let i = 1; i <= 52; i++) {

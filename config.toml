@@ -12,6 +12,11 @@
 env = "localhost"
 
 
+########## 业务相关配置
+[app]
+    # 并发拉取数据时channel的大小
+    chan_size = 100
+
 
 ########## server 相关配置
 [server]
