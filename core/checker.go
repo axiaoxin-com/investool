@@ -627,3 +627,6 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 
 	return
 }
+
+// CheckFundStocks 检测基金持仓股票
+func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) {}
