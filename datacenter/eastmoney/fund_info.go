@@ -30,10 +30,7 @@ type JJXQ struct {
 		// 规模截止日期
 		Fegmrq string `json:"FEGMRQ"`
 		// 基金评级
-		RlevelSz  string `json:"RLEVEL_SZ"`
-		Feature   string `json:"FEATURE"`
-		Bfundtype string `json:"BFUNDTYPE"`
-		Fundtype  string `json:"FUNDTYPE"`
+		RlevelSz string `json:"RLEVEL_SZ"`
 		// 日涨幅 (%)
 		Rzdf string `json:"RZDF"`
 		// 单位净值
@@ -81,216 +78,10 @@ type JJXQ struct {
 		// 近3年夏普比率
 		Sharp3 string `json:"SHARP3"`
 		// 近1年最大回撤
-		Maxretra1     string `json:"MAXRETRA1"`
-		Subscribetime string `json:"SUBSCRIBETIME"`
-		Isbuy         string `json:"ISBUY"`
-		Bagtype       string `json:"BAGTYPE"`
-		Cashbuy       string `json:"CASHBUY"`
-		Saletocash    string `json:"SALETOCASH"`
-		Stktocash     string `json:"STKTOCASH"`
-		Stkexchg      string `json:"STKEXCHG"`
-		Fundexchg     string `json:"FUNDEXCHG"`
-		Buy           bool   `json:"BUY"`
-		Issales       string `json:"ISSALES"`
-		Salemark      string `json:"SALEMARK"`
-		Realsgcode    string `json:"REALSGCODE"`
-		Qdtcode       string `json:"QDTCODE"`
-		Backcode      string `json:"BACKCODE"`
-		Indextexch    string `json:"INDEXTEXCH"`
-		Newindextexch string `json:"NEWINDEXTEXCH"`
-		Ssbcfmdata    string `json:"SSBCFMDATA"`
+		Maxretra1 string `json:"MAXRETRA1"`
 		// 买入确认日
-		Ssbcfday           string `json:"SSBCFDAY"`
-		Buymark            string `json:"BUYMARK"`
-		Tsrq               string `json:"TSRQ"`
-		Ttypename          string `json:"TTYPENAME"`
-		Ttype              string `json:"TTYPE"`
-		FundSubjectURL     string `json:"FundSubjectURL"`
-		Fbkindexcode       string `json:"FBKINDEXCODE"`
-		Fbkindexname       string `json:"FBKINDEXNAME"`
-		Fsrq               string `json:"FSRQ"`
-		Issbdate           string `json:"ISSBDATE"`
-		Rgbegin            string `json:"RGBEGIN"`
-		Issedate           string `json:"ISSEDATE"`
-		Rgend              string `json:"RGEND"`
-		Listtexch          string `json:"LISTTEXCH"`
-		Newtexch           string `json:"NEWTEXCH"`
-		Islist             string `json:"ISLIST"`
-		Islisttrade        string `json:"ISLISTTRADE"`
-		Isfnew             string `json:"ISFNEW"`
-		Isappoint          string `json:"ISAPPOINT"`
-		Minrg              string `json:"MINRG"`
-		Cycle              string `json:"CYCLE"`
-		Opestart           string `json:"OPESTART"`
-		Opeend             string `json:"OPEEND"`
-		Opeyield           string `json:"OPEYIELD"`
-		Fixincome          string `json:"FIXINCOME"`
-		Appointment        string `json:"APPOINTMENT"`
-		Appointmenturl     string `json:"APPOINTMENTURL"`
-		Isabnormal         string `json:"ISABNORMAL"`
-		Yzba               string `json:"YZBA"`
-		Fbyzq              string `json:"FBYZQ"`
-		Kfsgsh             string `json:"KFSGSH"`
-		Linkzsb            string `json:"LINKZSB"`
-		Listtexchmark      string `json:"LISTTEXCHMARK"`
-		Isharebonus        bool   `json:"ISHAREBONUS"`
-		PtdtY              string `json:"PTDT_Y"`
-		PtdtTwy            string `json:"PTDT_TWY"`
-		PtdtTry            string `json:"PTDT_TRY"`
-		PtdtFy             string `json:"PTDT_FY"`
-		MbdtY              string `json:"MBDT_Y"`
-		MbdtTwy            string `json:"MBDT_TWY"`
-		MbdtTry            string `json:"MBDT_TRY"`
-		MbdtFy             string `json:"MBDT_FY"`
-		YddtY              string `json:"YDDT_Y"`
-		YddtTwy            string `json:"YDDT_TWY"`
-		YddtTry            string `json:"YDDT_TRY"`
-		YddtFy             string `json:"YDDT_FY"`
-		DwdtY              string `json:"DWDT_Y"`
-		DwdtTwy            string `json:"DWDT_TWY"`
-		DwdtTry            string `json:"DWDT_TRY"`
-		DwdtFy             string `json:"DWDT_FY"`
-		Isyydt             string `json:"ISYYDT"`
-		SylZ               string `json:"SYL_Z"`
-		Syrq               string `json:"SYRQ"`
-		Comethod           string `json:"COMETHOD"`
-		Mcoverdate         string `json:"MCOVERDATE"`
-		Mcoverdetail       string `json:"MCOVERDETAIL"`
-		Comments           string `json:"COMMENTS"`
-		Trkerror           string `json:"TRKERROR"`
-		Estdiff            string `json:"ESTDIFF"`
-		Hrgrt              string `json:"HRGRT"`
-		Hsgrt              string `json:"HSGRT"`
-		Finsales           string `json:"FINSALES"`
-		Investmentidear    string `json:"INVESTMENTIDEAR"`
-		Investmentidearimg string `json:"INVESTMENTIDEARIMG"`
+		Ssbcfday string `json:"SSBCFDAY"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    struct {
-		Indexinfo struct {
-			Indexcode     string `json:"INDEXCODE"`
-			Indexname     string `json:"INDEXNAME"`
-			Fullindexname string `json:"FULLINDEXNAME"`
-			Pdate         string `json:"PDATE"`
-			Q             string `json:"Q"`
-			W             string `json:"W"`
-			M             string `json:"M"`
-			Hy            string `json:"HY"`
-			Y             string `json:"Y"`
-			Twy           string `json:"TWY"`
-			Sy            string `json:"SY"`
-			StddevW       string `json:"STDDEV_W"`
-			StddevM       string `json:"STDDEV_M"`
-			StddevQ       string `json:"STDDEV_Q"`
-			StddevHy      string `json:"STDDEV_HY"`
-			StddevY       string `json:"STDDEV_Y"`
-			StddevTwy     string `json:"STDDEV_TWY"`
-			StddevSy      string `json:"STDDEV_SY"`
-			Pettm         string `json:"PETTM"`
-			Pep100        string `json:"PEP100"`
-			Indexvalua    string `json:"INDEXVALUA"`
-			Pb            string `json:"PB"`
-			Pbp100        string `json:"PBP100"`
-			Gxl           string `json:"GXL"`
-			Roe           string `json:"ROE"`
-			Percentprice  string `json:"PERCENTPRICE"`
-			Bkname        string `json:"BKNAME"`
-			Makername     string `json:"MAKERNAME"`
-			Reaprofile    string `json:"REAPROFILE"`
-			Isusepbp      string `json:"ISUSEPBP"`
-		} `json:"INDEXINFO"`
-	} `json:"Expansion"`
-}
-
-// JJBQ 基金标签
-type JJBQ struct {
-	Datas []struct {
-		Featype string `json:"FEATYPE"`
-		Taglist []struct {
-			Feavalue string `json:"FEAVALUE"`
-			Featype  string `json:"FEATYPE"`
-			Feaname  string `json:"FEANAME"`
-			Feabrief string `json:"FEABRIEF"`
-			Featag   string `json:"FEATAG"`
-			Listcode string `json:"LISTCODE"`
-		} `json:"TAGLIST"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
-}
-
-// FHTS ???
-type FHTS struct {
-	Datas struct {
-		SameType struct {
-			Fcode     interface{} `json:"FCODE"`
-			Shortname interface{} `json:"SHORTNAME"`
-			Ftype     interface{} `json:"FTYPE"`
-			Fundtype  interface{} `json:"FUNDTYPE"`
-			Feature   interface{} `json:"FEATURE"`
-			Bfundtype interface{} `json:"BFUNDTYPE"`
-			Rzdf      interface{} `json:"RZDF"`
-			Dwjz      interface{} `json:"DWJZ"`
-			Hldwjz    string      `json:"HLDWJZ"`
-			Ljjz      interface{} `json:"LJJZ"`
-			Ftyi      interface{} `json:"FTYI"`
-			Teyi      interface{} `json:"TEYI"`
-			Tfyi      interface{} `json:"TFYI"`
-			SylZ      interface{} `json:"SYL_Z"`
-			SylY      interface{} `json:"SYL_Y"`
-			Syl3Y     string      `json:"SYL_3Y"`
-			Syl6Y     interface{} `json:"SYL_6Y"`
-			Syl1N     interface{} `json:"SYL_1N"`
-			Syl2N     interface{} `json:"SYL_2N"`
-			Syl3N     interface{} `json:"SYL_3N"`
-			Syl5N     interface{} `json:"SYL_5N"`
-			SylJn     interface{} `json:"SYL_JN"`
-			SylLn     interface{} `json:"SYL_LN"`
-		} `json:"SameType"`
-		Rele    interface{} `json:"Rele"`
-		Subject interface{} `json:"subject"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
-}
-
-// JJTX ???
-type JJTX struct {
-	Datas struct {
-		Trademarklist []interface{} `json:"TRADEMARKLIST"`
-		Warnlist      []interface{} `json:"WARNLIST"`
-		Sgztmark      interface{}   `json:"SGZTMARK"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
 }
 
 // JDZF 阶段涨幅
@@ -312,48 +103,6 @@ type JDZF struct {
 		Sc   interface{} `json:"sc"`
 		Diff string      `json:"diff"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    struct {
-		Estabdate  string `json:"ESTABDATE"`
-		Time       string `json:"TIME"`
-		Isupdating bool   `json:"ISUPDATING"`
-	} `json:"Expansion"`
-}
-
-// JJJL 基金经理
-type JJJL struct {
-	Datas []struct {
-		Mgrid string `json:"MGRID"`
-		// 基金经理名字
-		Mgrname string `json:"MGRNAME"`
-		// 基金代码
-		Fcode string `json:"FCODE"`
-		// 本基金任期天数
-		Days string `json:"DAYS"`
-		// 任期开始日期
-		Fempdate string `json:"FEMPDATE"`
-		Lempdate string `json:"LEMPDATE"`
-		// 任职回报（%）
-		Penavgrowth string `json:"PENAVGROWTH"`
-		Newphotourl string `json:"NEWPHOTOURL"`
-		Isinoffice  string `json:"ISINOFFICE"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
 }
 
 // JJJLNEW 基金经理。。
@@ -381,15 +130,6 @@ type JJJLNEW struct {
 			HjJn interface{} `json:"HJ_JN"`
 		} `json:"MANGER"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
 }
 
 // JJGM 基金规模
@@ -403,39 +143,6 @@ type JJGM struct {
 		Change string `json:"CHANGE"`
 		Issum  string `json:"ISSUM"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    string      `json:"Expansion"`
-}
-
-// HBCC ???
-type HBCC struct {
-	Datas struct {
-		FundMMAsset struct {
-			Bspctnv    string `json:"BSPCTNV"`
-			Abspctnv   string `json:"ABSPCTNV"`
-			Brepopctnv string `json:"BREPOPCTNV"`
-			Mpctnv     string `json:"MPCTNV"`
-			Oipctnv    string `json:"OIPCTNV"`
-			Jzc        string `json:"JZC"`
-		} `json:"FundMMAsset"`
-		FundMMDistribute interface{} `json:"FundMMDistribute"`
-	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    string      `json:"Expansion"`
 }
 
 // FHSP 分红送配
@@ -457,51 +164,6 @@ type FHSP struct {
 		} `json:"FHINFO"`
 		Fcinfo []interface{} `json:"FCINFO"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
-}
-
-// JJFX ???
-type JJFX struct {
-	Datas struct {
-		Fcode          string `json:"FCODE"`
-		Shortname      string `json:"SHORTNAME"`
-		Fundtype       string `json:"FUNDTYPE"`
-		Pltdate        string `json:"PLTDATE"`
-		Bfundtype      string `json:"BFUNDTYPE"`
-		Feature        string `json:"FEATURE"`
-		Fsrq           string `json:"FSRQ"`
-		Rzdf           string `json:"RZDF"`
-		Dwjz           string `json:"DWJZ"`
-		Syi            string `json:"SYI"`
-		Syl            string `json:"SYL"`
-		Sylname        string `json:"SYLNAME"`
-		Periodname     string `json:"PERIODNAME"`
-		Mcoverdetail   string `json:"MCOVERDETAIL"`
-		Comethod       string `json:"COMETHOD"`
-		Isbuy          string `json:"ISBUY"`
-		Buy            bool   `json:"BUY"`
-		Issales        string `json:"ISSALES"`
-		Mindt          string `json:"MINDT"`
-		Dtzt           string `json:"DTZT"`
-		Appointment    string `json:"APPOINTMENT"`
-		Appointmenturl string `json:"APPOINTMENTURL"`
-		Shareurl       string `json:"SHAREURL"`
-		Cfhid          string `json:"CFHID"`
-		CFHName        string `json:"CFHName"`
-		HeaderImgPath  string `json:"HeaderImgPath"`
-	} `json:"Datas"`
-	ErrCode    int         `json:"ErrCode"`
-	ErrMsg     interface{} `json:"ErrMsg"`
-	TotalCount int         `json:"TotalCount"`
-	Expansion  interface{} `json:"Expansion"`
 }
 
 // JJCC 基金持仓
@@ -568,29 +230,6 @@ type JJCC struct {
 		// }
 		SectorAllocation map[string][]map[string]string `json:"SectorAllocation"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    string      `json:"Expansion"`
-}
-
-// FHTX ???
-type FHTX struct {
-	Datas        []interface{} `json:"Datas"`
-	ErrCode      int           `json:"ErrCode"`
-	Success      bool          `json:"Success"`
-	ErrMsg       interface{}   `json:"ErrMsg"`
-	Message      interface{}   `json:"Message"`
-	ErrorCode    string        `json:"ErrorCode"`
-	ErrorMessage interface{}   `json:"ErrorMessage"`
-	ErrorMsgLst  interface{}   `json:"ErrorMsgLst"`
-	TotalCount   int           `json:"TotalCount"`
-	Expansion    interface{}   `json:"Expansion"`
 }
 
 // TSSJ 特色数据
@@ -658,32 +297,16 @@ type TSSJ struct {
 		Brokentimes string `json:"BROKENTIMES"`
 		Isexchg     string `json:"ISEXCHG"`
 	} `json:"Datas"`
-	ErrCode      int         `json:"ErrCode"`
-	Success      bool        `json:"Success"`
-	ErrMsg       interface{} `json:"ErrMsg"`
-	Message      interface{} `json:"Message"`
-	ErrorCode    string      `json:"ErrorCode"`
-	ErrorMessage interface{} `json:"ErrorMessage"`
-	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
-	TotalCount   int         `json:"TotalCount"`
-	Expansion    interface{} `json:"Expansion"`
 }
 
 // RespFundInfo QueryFundInfo 接口原始返回结构
 type RespFundInfo struct {
 	// 基金详情
 	Jjxq    JJXQ    `json:"JJXQ"`
-	Jjbq    JJBQ    `json:"JJBQ"`
-	Fhts    FHTS    `json:"FHTS"`
-	Jjtx    JJTX    `json:"JJTX"`
 	Jdzf    JDZF    `json:"JDZF"`
-	Jjjl    JJJL    `json:"JJJL"`
 	Jjgm    JJGM    `json:"JJGM"`
-	Hbcc    HBCC    `json:"HBCC"`
 	Fhsp    FHSP    `json:"FHSP"`
-	Jjfx    JJFX    `json:"JJFX"`
 	Jjcc    JJCC    `json:"JJCC"`
-	Fhtx    FHTX    `json:"FHTX"`
 	Tssj    TSSJ    `json:"TSSJ"`
 	Jjjlnew JJJLNEW `json:"JJJLNEW"`
 }
