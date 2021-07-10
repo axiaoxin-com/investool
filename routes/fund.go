@@ -106,6 +106,7 @@ func FundFilter(c *gin.Context) {
 	}
 	funder := core.NewFunder()
 	fundList := funder.Filter(c, p.ParamFunderFilter)
+	fundTypes := fundList.Types()
 	// 过滤
 	if p.ParamFundIndex.Type != "" {
 		fundList = fundList.FilterByType(p.ParamFundIndex.Type)
@@ -126,7 +127,7 @@ func FundFilter(c *gin.Context) {
 		"Pagination":  pagi,
 		"IndexParam":  p.ParamFundIndex,
 		"FilterParam": p.ParamFunderFilter,
-		"FundTypes":   fundList.Types(),
+		"FundTypes":   fundTypes,
 	}
 	c.HTML(http.StatusOK, "fund_filter.html", data)
 	return
