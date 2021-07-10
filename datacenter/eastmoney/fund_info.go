@@ -312,7 +312,7 @@ type RespFundInfo struct {
 }
 
 // QueryFundInfo 查询基金详情
-func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (RespFundInfo, error) {
+func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFundInfo, error) {
 	apiurl := fmt.Sprintf("http://j5.dfcfw.com/sc/tfs/qt/v2.0.1/%v.json", fundCode)
 	params := map[string]string{}
 	logging.Debug(ctx, "EastMoney QueryFundInfo "+apiurl+" begin", zap.Any("params", params))
@@ -320,7 +320,7 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (RespFund
 	resp := RespFundInfo{}
 	apiurl, err := goutils.NewHTTPGetURLWithQueryString(ctx, apiurl, params)
 	if err != nil {
-		return resp, err
+		return nil, err
 	}
 	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
@@ -330,5 +330,5 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (RespFund
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
-	return resp, err
+	return &resp, err
 }

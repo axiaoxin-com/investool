@@ -51,8 +51,11 @@ func SyncFund() {
 			defer func() {
 				wg.Done()
 			}()
+			// 低配机器 oom fix
+			time.Sleep(time.Millisecond * 100)
+
 			code := <-reqChan
-			fundresp := eastmoney.RespFundInfo{}
+			fundresp := &eastmoney.RespFundInfo{}
 			err := retry.Do(
 				func() error {
 					var err error

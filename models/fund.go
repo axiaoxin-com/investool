@@ -316,7 +316,7 @@ func interfaceToFloat64(ctx context.Context, unk interface{}) (result float64) {
 }
 
 // NewFund 创建 Fund 实例
-func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
+func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	stddev1 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev1)
 	stddev3 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev3)
 	stddev5 := interfaceToFloat64(ctx, efund.Tssj.Datas.Stddev5)
@@ -546,11 +546,11 @@ func NewFund(ctx context.Context, efund eastmoney.RespFundInfo) Fund {
 		}
 	}
 
-	return fund
+	return &fund
 }
 
 // FundList list
-type FundList []Fund
+type FundList []*Fund
 
 // FundSortType 基金排序类型
 type FundSortType int
