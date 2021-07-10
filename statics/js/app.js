@@ -431,8 +431,8 @@ $(document).ready(function () {
 
     // 基金检测提交
   $("#check_fund_submit_btn").click(function () {
-    if ($("#checker_keyword").val() == "") {
-      $("#err_msg").text("请填写股票代码或简称");
+    if ($("#fundcode").val() == "") {
+      $("#err_msg").text("请填写基金代码");
       $("#error_modal").modal("open");
       return;
     }
