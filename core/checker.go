@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
@@ -628,5 +629,31 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	return
 }
 
+// FundStocksCheckResult 股票持仓检测结果
+type FundStocksCheckResult struct {
+	Names        []string
+	CheckResults []CheckResult
+}
+
 // CheckFundStocks 检测基金持仓股票
-func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) {}
+// 返回结果 {"stockname": {"ROE": "xx", "EPS": ""}}
+func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) (results FundStocksCheckResult, err error) {
+	var wg sync.WaitGroup
+	wg.Add(len(fund.Stocks))
+	codes := []string{}
+	for _, s := range fund.Stocks {
+		codes = append(codes, s.Code)
+	}
+	searcher := NewSearcher(ctx)
+	stocks, err := searcher.Search(ctx, codes)
+	if err != nil {
+		return
+	}
+	for _, stock := range stocks {
+		result, _ := c.CheckFundamentals(ctx, stock)
+		name := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
+		results.Names = append(results.Names, name)
+		results.CheckResults = append(results.CheckResults, result)
+	}
+	return
+}

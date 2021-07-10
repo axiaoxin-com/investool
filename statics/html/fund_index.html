@@ -106,6 +106,12 @@
         <div class="row">
             <form class="col s12" id="fundcheck_form">
                 <div class="row">
+                    <div class="input-field col s12">
+                        <input id="code" name="code" type="text" class="validate" required>
+                        <label for="code">输入基金代码</label>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s12 m12 l6">
                         <input id="year_1_rank_ratio" name="year_1_rank_ratio" value="25.00" type="number" step="any" class="validate">
                         <label for="year_1_rank_ratio">近1年绩效排名前百分之:</label>
@@ -154,21 +160,30 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label class="col l6 s12">
-                        <input name="check_4433" type="checkbox" class="filled-in" checked="checked" value="true" />
-                        <span>检测是否满足4433选基法则</span>
-                    </label>
-                    <label class="col l6 s12">
-                        <input name="check_stocks" type="checkbox" class="filled-in" checked="checked" value="true" />
+                    <label class="col l2 s12">
+                        <input id="check_stocks" name="check_stocks" type="checkbox" class="filled-in" checked="checked" value="true" />
                         <span>检测持仓个股</span>
                     </label>
                 </div>
+
+                <div id="checker_options" class="collection with-header collapsible">
+                    <div class="collection-header">检测指标</div>
+                    <div class="collection-item">
+                        {{ template "checker_form_content" . }}
+                    </div>
+                </div>
                 <div class="row">
-                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12" id="fund_4433_submit_btn" >筛选</button>
+                    <a class="btn waves-effect waves-light red lighten-2 col s12" id="checker_submit_btn" >检测</a>
                 </div>
             </form>
         </div>
     </div>
+
+    <div id="fund_check_results" class="row hide">
+        <h4 class="center">检测结果</h4>
+    </div>
     <!--基金检测 end-->
+
+    {{ template "modal" . }}
 </div>
 {{ template "footer" . }}

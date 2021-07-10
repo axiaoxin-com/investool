@@ -67,6 +67,12 @@ $(document).ready(function () {
         } else {
           $.each(data.Stocks, function (i, stock) {
             var cm = stock.code.split(".");
+            if (stock.right_price != "--") {
+              stock.right_price = stock.right_price.toFixed(2);
+            }
+            if (stock.price_space != "--") {
+              stock.price_space = stock.price_space.toFixed(2);
+            }
             $("#selector_result tbody").append(
               "<tr>" +
                 '<td><span class="copybtn waves-effect waves-red" data-clipboard-text="' +
@@ -167,11 +173,11 @@ $(document).ready(function () {
                 "元" +
                 "</td>" +
                 '<td class="hide st_27">' +
-                stock.right_price.toFixed(2) +
+                stock.right_price +
                 "元" +
                 "</td>" +
                 '<td class="hide st_28">' +
-                stock.price_space.toFixed(2) +
+                stock.price_space +
                 "元" +
                 "</td>" +
                 '<td class="hide st_29">' +
@@ -417,4 +423,36 @@ $(document).ready(function () {
     fund_sort = "0";
   }
   $(`.sortable a[sort='${fund_sort}'] i`).removeClass("hide");
+
+  // 基金检测表单中开关显示检测持仓股票
+  $("#check_stocks").click(function () {
+    $("#checker_options").toggle();
+  });
+
+    // 基金检测提交
+  $("#check_fund_submit_btn").click(function () {
+    if ($("#checker_keyword").val() == "") {
+      $("#err_msg").text("请填写股票代码或简称");
+      $("#error_modal").modal("open");
+      return;
+    }
+    $(this).addClass("disabled");
+    $("#model_header").text($(this).text() + "中，请稍候...");
+    $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
+    $("#load_modal").modal("open");
+    $.ajax({
+      url: "/checker",
+      type: "post",
+      data: $("#checker_form").serialize(),
+      success: function (data) {
+        if (data.Error != "") {
+          $("#err_msg").text(data.Error);
+          $("#error_modal").modal("open");
+          $("#checker_submit_btn").removeClass("disabled");
+          $("#load_modal").modal("close");
+          return;
+        }
+      }
+    });
+  });
 });

@@ -157,8 +157,6 @@ type ParamFundCheck struct {
 	Min135AvgSharp float64 `json:"min_135_avg_sharp"        form:"min_135_avg_sharp"`
 	// 1,3,5年最大回撤率平均值的最大值
 	Max135AvgRetr float64 `json:"max_135_avg_retr"         form:"max_135_avg_retr"`
-	// 是否满足4433
-	Check4433 bool `json:"check_4433"               form:"check_4433"`
 	// 是否检测持仓个股
 	CheckStocks bool `json:"check_stocks"             form:"check_stocks"`
 	// 股票检测参数
@@ -178,8 +176,7 @@ func FundCheck(c *gin.Context) {
 		Max135AvgStddev:      25.0,
 		Min135AvgSharp:       1.0,
 		Max135AvgRetr:        25.0,
-		Check4433:            true,
-		CheckStocks:          true,
+		CheckStocks:          false,
 	}
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
@@ -188,7 +185,7 @@ func FundCheck(c *gin.Context) {
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Error":     err.Error(),
 		}
-		c.HTML(http.StatusOK, "fund_filter.html", data)
+		c.JSON(http.StatusOK, data)
 		return
 	}
 
@@ -199,7 +196,7 @@ func FundCheck(c *gin.Context) {
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Error":     "请填写基金代码",
 		}
-		c.HTML(http.StatusOK, "fund_filter.html", data)
+		c.JSON(http.StatusOK, data)
 		return
 	}
 
@@ -211,20 +208,42 @@ func FundCheck(c *gin.Context) {
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Error":     err.Error(),
 		}
-		c.HTML(http.StatusOK, "fund_index.html", data)
+		c.JSON(http.StatusOK, data)
 		return
 	}
 	fund := models.NewFund(c, fundresp)
 
-	checker := core.NewChecker(c, p.StockCheckerOptions)
-	checker.CheckFundStocks(c, fund)
-	data := gin.H{
-		"Env":       viper.GetString("env"),
-		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 基金 | 基金严选",
-		"Fund":      fund,
-		"Is4433":    fund.Is4433(c),
+	if !p.CheckStocks {
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "X-STOCK | 基金 | 基金严选",
+			"Fund":      fund,
+			"Is4433":    fund.Is4433(c),
+		}
+		c.JSON(http.StatusOK, data)
+		return
 	}
-	c.HTML(http.StatusOK, "fund_filter.html", data)
+	checker := core.NewChecker(c, p.StockCheckerOptions)
+	checkResult, err := checker.CheckFundStocks(c, fund)
+	if err != nil {
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"Error":     err.Error(),
+		}
+		c.JSON(http.StatusOK, data)
+		return
+	}
+	data := gin.H{
+		"Env":              viper.GetString("env"),
+		"Version":          version.Version,
+		"PageTitle":        "X-STOCK | 基金 | 基金严选",
+		"Fund":             fund,
+		"Is4433":           fund.Is4433(c),
+		"StockCheckResult": checkResult,
+	}
+	c.JSON(http.StatusOK, data)
 	return
 }
