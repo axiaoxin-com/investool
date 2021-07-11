@@ -161,12 +161,12 @@
                 </div>
                 <div class="row">
                     <label class="col l2 s12">
-                        <input id="check_stocks" name="check_stocks" type="checkbox" class="filled-in" checked="checked" value="true" />
+                        <input id="check_stocks" name="check_stocks" type="checkbox" class="filled-in" value="true" />
                         <span>检测持仓个股</span>
                     </label>
                 </div>
 
-                <div id="checker_options" class="collection with-header collapsible">
+                <div id="checker_options" class="hide collection with-header collapsible">
                     <div class="collection-header">检测指标</div>
                     <div class="collection-item">
                         {{ template "checker_form_content" . }}

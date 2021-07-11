@@ -426,10 +426,10 @@ $(document).ready(function () {
 
   // 基金检测表单中开关显示检测持仓股票
   $("#check_stocks").click(function () {
-    $("#checker_options").toggle();
+    $("#checker_options").toggleClass("hide");
   });
 
-    // 基金检测提交
+  // 基金检测提交
   $("#check_fund_submit_btn").click(function () {
     if ($("#fundcode").val() == "") {
       $("#err_msg").text("请填写基金代码");
@@ -441,9 +441,9 @@ $(document).ready(function () {
     $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
     $("#load_modal").modal("open");
     $.ajax({
-      url: "/checker",
+      url: "/fund/check",
       type: "post",
-      data: $("#checker_form").serialize(),
+      data: $("#fundcheck_form").serialize(),
       success: function (data) {
         if (data.Error != "") {
           $("#err_msg").text(data.Error);
@@ -452,7 +452,7 @@ $(document).ready(function () {
           $("#load_modal").modal("close");
           return;
         }
-      }
+      },
     });
   });
 });

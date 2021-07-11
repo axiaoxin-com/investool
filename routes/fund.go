@@ -3,6 +3,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/axiaoxin-com/goutils"
@@ -136,7 +137,7 @@ func FundFilter(c *gin.Context) {
 // ParamFundCheck FundCheck 请求参数
 type ParamFundCheck struct {
 	// 基金代码
-	Code string `json:"code"                     form:"code"`
+	Code string `json:"fundcode"                 form:"fundcode"`
 	// 基金规模最小值（亿）
 	MinScale float64 `json:"min_scale"                form:"min_scale"`
 	// 基金规模最大值（亿）
@@ -201,6 +202,7 @@ func FundCheck(c *gin.Context) {
 	}
 
 	fundresp, err := datacenter.EastMoney.QueryFundInfo(c, p.Code)
+	fmt.Println("----->", fundresp)
 	if err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),

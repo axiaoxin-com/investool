@@ -330,5 +330,8 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFun
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if resp.Jjxq.Datas.Fcode == "" {
+		err = fmt.Errorf("基金代码(%v)不存在", fundCode)
+	}
 	return &resp, err
 }
