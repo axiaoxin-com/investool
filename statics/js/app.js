@@ -650,6 +650,52 @@ $(document).ready(function () {
             "</table>" +
             "</div>"
         );
+        if (data.StockCheckResult) {
+          $("#fund_check_results").append(
+            '<div class="divider"></div><h6>基金持仓股票检测结果</h6>'
+          );
+          $.each(data.StockCheckResult.check_results, function (i, result) {
+            var cm = data.StockCheckResult.names[i].split("-")[1].split(".");
+            $("#fund_check_results").append(
+              '<div class="divider"></div>' +
+                '<div id="checker_result_' +
+                i +
+                '">' +
+                '<div class="row">' +
+                '<a class="col s12" target="_blank" href="http://quote.eastmoney.com/' +
+                cm[1] +
+                cm[0] +
+                '.html">' +
+                data.StockCheckResult.names[i] +
+                "</a></br>" +
+                '<span class="col s12 l6">当前检测财报数据来源:' +
+                data.StockCheckResult.fina_report_names[i] +
+                '</span><span class="col l6 right-align">最新财报预约发布日期:' +
+                data.StockCheckResult.fina_appoint_publish_dates[i] +
+                "</span></div>" +
+                '<table class="striped">' +
+                '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
+                "<tbody></tbody>" +
+                "</table>" +
+                "</div>"
+            );
+            $.each(result, function (k, v) {
+              okdesc = "❌异常";
+              if (v.ok == "true") {
+                okdesc = "✅正常";
+              }
+              $("#checker_result_" + i + " tbody").append(
+                "<tr><td>" +
+                  k +
+                  "</td><td>" +
+                  v.desc +
+                  "</td><td>" +
+                  okdesc +
+                  "</td></tr>"
+              );
+            });
+          });
+        }
         $("title").text(data.PageTitle);
         $("#index_content").remove();
         $("#fund_check_results").removeClass("hide");

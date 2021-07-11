@@ -631,8 +631,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 
 // FundStocksCheckResult 股票持仓检测结果
 type FundStocksCheckResult struct {
-	Names        []string
-	CheckResults []CheckResult
+	Names                   []string      `json:"names"`
+	CheckResults            []CheckResult `json:"check_results"`
+	FinaReportNames         []string      `json:"fina_report_names"`
+	FinaAppointPublishDates []string      `json:"fina_appoint_publish_dates"`
 }
 
 // CheckFundStocks 检测基金持仓股票
@@ -654,6 +656,15 @@ func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) (result
 		name := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
 		results.Names = append(results.Names, name)
 		results.CheckResults = append(results.CheckResults, result)
+		finaReportName := ""
+		if len(stock.HistoricalFinaMainData) > 0 {
+			finaReportName = stock.HistoricalFinaMainData[0].ReportDateName
+		}
+		results.FinaReportNames = append(results.FinaReportNames, finaReportName)
+		results.FinaAppointPublishDates = append(
+			results.FinaAppointPublishDates,
+			strings.Split(stock.FinaAppointPublishDate, " ")[0],
+		)
 	}
 	return
 }
