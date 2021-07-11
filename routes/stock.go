@@ -64,6 +64,7 @@ func StockSelector(c *gin.Context) {
 		c.JSON(http.StatusOK, data)
 		return
 	}
+	stocks.SortByROE()
 	dlist := models.ExportorDataList{}
 	for _, s := range stocks {
 		dlist = append(dlist, models.NewExportorData(c, s))

@@ -264,6 +264,5 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		}
 		result = append(result, i)
 	}
-	result.SortByROE()
 	return result, nil
 }

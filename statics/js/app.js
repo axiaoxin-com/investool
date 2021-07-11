@@ -299,22 +299,18 @@ $(document).ready(function () {
           $.each(data.Results, function (i, result) {
             var cm = data.StockNames[i].split("-")[1].split(".");
             $("#checker_results").append(
-              '<div class="divider"></div>' +
-                '<div id="checker_result_' +
+              '</br><div class="divider"></div></br><div id="checker_result_' +
                 i +
-                '">' +
-                '<div class="row">' +
-                '<a class="col s12" target="_blank" href="http://quote.eastmoney.com/' +
+                '"><div class="row"><a target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
                 '.html">' +
                 data.StockNames[i] +
-                "</a></br>" +
-                '<span class="col s12 l6">当前检测财报数据来源:' +
+                "</a></br>当前检测财报数据来源:" +
                 data.FinaReportNames[i] +
-                '</span><span class="col l6 right-align">最新财报预约发布日期:' +
+                "</br>最新财报预约发布日期:" +
                 data.FinaAppointPublishDates[i] +
-                "</span></div>" +
+                "</div>" +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
@@ -601,9 +597,11 @@ $(document).ready(function () {
             max_scale +
             "</td></tr><tr><td>基金经理管理该基金不低于" +
             data.Param.min_manager_years +
-            "年</td><td>基金经理:" +
+            '年</td><td>基金经理:<a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid=' +
+            data.Fund.manager.id +
+            '" target="_blank">' +
             data.Fund.manager.name +
-            "</br>管理该基金:" +
+            "</a></br>管理该基金:" +
             (data.Fund.manager.manage_days / 365.0).toFixed(2) +
             "年</br>任职回报:" +
             data.Fund.manager.manage_repay.toFixed(2) +
@@ -652,27 +650,30 @@ $(document).ready(function () {
         );
         if (data.StockCheckResult) {
           $("#fund_check_results").append(
-            '<div class="divider"></div><h6>基金持仓股票检测结果</h6>'
+            '</br><h5 class="center">持仓股票检测结果</h5>'
           );
           $.each(data.StockCheckResult.check_results, function (i, result) {
             var cm = data.StockCheckResult.names[i].split("-")[1].split(".");
             $("#fund_check_results").append(
-              '<div class="divider"></div>' +
-                '<div id="checker_result_' +
+              '</br><div class="divider"></div></br><div id="checker_result_' +
                 i +
-                '">' +
-                '<div class="row">' +
-                '<a class="col s12" target="_blank" href="http://quote.eastmoney.com/' +
+                '"><div class="row"><a target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
                 '.html">' +
                 data.StockCheckResult.names[i] +
-                "</a></br>" +
-                '<span class="col s12 l6">当前检测财报数据来源:' +
+                "</a></br>持仓占比:" +
+                data.Fund.stocks[i].hold_ratio +
+                "%</br>所属行业:" +
+                data.Fund.stocks[i].industry +
+                "</br>最新调仓:" +
+                data.Fund.stocks[i].adjust_ratio +
+                "%" +
+                "</br>当前检测财报数据来源:" +
                 data.StockCheckResult.fina_report_names[i] +
-                '</span><span class="col l6 right-align">最新财报预约发布日期:' +
+                "</br>最新财报预约发布日期:" +
                 data.StockCheckResult.fina_appoint_publish_dates[i] +
-                "</span></div>" +
+                "</div>" +
                 '<table class="striped">' +
                 '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
