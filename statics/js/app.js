@@ -520,7 +520,7 @@ $(document).ready(function () {
           data.Fund.manager.manage_days / 365.0 >=
           data.Param.min_manager_years
         ) {
-          max_scale = "✅";
+          manager = "✅";
         }
         var stddev_avg135 = "❌";
         if (data.Fund.stddev.avg_135 <= data.Param.max_135_avg_stddev) {
