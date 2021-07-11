@@ -11,7 +11,7 @@
         </div>
     </div>
 </div>
-<div class="row">
+<div id="index_content" class="row">
     <div class="col s12">
         <ul class="tabs">
             <li class="tab col s4 l4"><a href="#4433">4433基金列表</a></li>
@@ -178,12 +178,11 @@
             </form>
         </div>
     </div>
-
-    <div id="fund_check_results" class="row hide">
-        <h4 class="center">检测结果</h4>
-    </div>
     <!--基金检测 end-->
-
-    {{ template "modal" . }}
 </div>
+
+<div id="fund_check_results" class="row hide">
+    <h4 class="center"><span id="checked_fund_name"></span>检测结果</h4>
+</div>
+{{ template "modal" . }}
 {{ template "footer" . }}

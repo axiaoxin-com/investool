@@ -3,7 +3,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/axiaoxin-com/goutils"
@@ -202,7 +201,6 @@ func FundCheck(c *gin.Context) {
 	}
 
 	fundresp, err := datacenter.EastMoney.QueryFundInfo(c, p.Code)
-	fmt.Println("----->", fundresp)
 	if err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
@@ -219,9 +217,10 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金严选",
+			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Fund":      fund,
 			"Is4433":    fund.Is4433(c),
+			"Param":     p,
 		}
 		c.JSON(http.StatusOK, data)
 		return
@@ -241,10 +240,11 @@ func FundCheck(c *gin.Context) {
 	data := gin.H{
 		"Env":              viper.GetString("env"),
 		"Version":          version.Version,
-		"PageTitle":        "X-STOCK | 基金 | 基金严选",
+		"PageTitle":        "X-STOCK | 基金 | 基金检测",
 		"Fund":             fund,
 		"Is4433":           fund.Is4433(c),
 		"StockCheckResult": checkResult,
+		"Param":            p,
 	}
 	c.JSON(http.StatusOK, data)
 	return

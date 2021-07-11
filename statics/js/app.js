@@ -52,7 +52,7 @@ $(document).ready(function () {
       type: "post",
       data: $("#selector_form").serialize(),
       success: function (data) {
-        if (data.Error != "") {
+        if (data.Error) {
           $("#err_msg").text(data.Error);
           $("#error_modal").modal("open");
           $("#selector_submit_btn").removeClass("disabled");
@@ -286,7 +286,7 @@ $(document).ready(function () {
       type: "post",
       data: $("#checker_form").serialize(),
       success: function (data) {
-        if (data.Error != "") {
+        if (data.Error) {
           $("#err_msg").text(data.Error);
           $("#error_modal").modal("open");
           $("#checker_submit_btn").removeClass("disabled");
@@ -445,13 +445,216 @@ $(document).ready(function () {
       type: "post",
       data: $("#fundcheck_form").serialize(),
       success: function (data) {
-        if (data.Error != "") {
+        if (data.Error) {
           $("#err_msg").text(data.Error);
           $("#error_modal").modal("open");
-          $("#checker_submit_btn").removeClass("disabled");
+          $("#check_fund_submit_btn").removeClass("disabled");
           $("#load_modal").modal("close");
           return;
         }
+
+        $("#checked_fund_name").html(
+          '<a target="_blank" href="http://fund.eastmoney.com/' +
+            data.Fund.code +
+            '.html">' +
+            data.Fund.name +
+            "(" +
+            data.Fund.code +
+            ")</a>"
+        );
+
+        var year_1_rank_ratio = "❌";
+        if (
+          data.Fund.performance.year_1_rank_ratio < data.Param.year_1_rank_ratio
+        ) {
+          year_1_rank_ratio = "✅";
+        }
+        var year_2_rank_ratio = "❌";
+        if (
+          data.Fund.performance.year_2_rank_ratio <
+          data.Param.this_year_235_rank_ratio
+        ) {
+          year_2_rank_ratio = "✅";
+        }
+        var year_3_rank_ratio = "❌";
+        if (
+          data.Fund.performance.year_3_rank_ratio <
+          data.Param.this_year_235_rank_ratio
+        ) {
+          year_3_rank_ratio = "✅";
+        }
+        var year_5_rank_ratio = "❌";
+        if (
+          data.Fund.performance.year_5_rank_ratio <
+          data.Param.this_year_235_rank_ratio
+        ) {
+          year_5_rank_ratio = "✅";
+        }
+        var this_year_rank_ratio = "❌";
+        if (
+          data.Fund.performance.this_year_rank_ratio <
+          data.Param.this_year_235_rank_ratio
+        ) {
+          this_year_rank_ratio = "✅";
+        }
+        var month_6_rank_ratio = "❌";
+        if (
+          data.Fund.performance.month_6_rank_ratio <
+          data.Param.month_6_rank_ratio
+        ) {
+          month_6_rank_ratio = "✅";
+        }
+        var month_3_rank_ratio = "❌";
+        if (
+          data.Fund.performance.month_3_rank_ratio <
+          data.Param.month_3_rank_ratio
+        ) {
+          month_3_rank_ratio = "✅";
+        }
+        var min_scale = "❌";
+        if (data.Fund.net_assets_scale / 100000000.0 >= data.Param.min_scale) {
+          min_scale = "✅";
+        }
+        var max_scale = "❌";
+        if (data.Fund.net_assets_scale / 100000000.0 <= data.Param.max_scale) {
+          max_scale = "✅";
+        }
+        var manager = "❌";
+        if (
+          data.Fund.manager.manage_days / 365.0 >=
+          data.Param.min_manager_years
+        ) {
+          max_scale = "✅";
+        }
+        var stddev_avg135 = "❌";
+        if (data.Fund.stddev.avg_135 <= data.Param.max_135_avg_stddev) {
+          stddev_avg135 = "✅";
+        }
+        var sharp_avg135 = "❌";
+        if (data.Fund.sharp.avg_135 >= data.Param.min_135_avg_sharp) {
+          sharp_avg135 = "✅";
+        }
+        var maxretr_avg135 = "❌";
+        if (data.Fund.max_retracement.avg_135 <= data.Param.max_135_avg_retr) {
+          maxretr_avg135 = "✅";
+        }
+
+        $("#fund_check_results").append(
+          '<div class="divider"></div>' +
+            '<div class="row">' +
+            '<table class="striped">' +
+            '<thead><tr><th width="45%">指标</th><th width="45%">描述</th><th width="10%">结果</th></tr></thead>' +
+            "<tbody>" +
+            "<tr><td>近1年绩效排名前" +
+            data.Param.year_1_rank_ratio +
+            "%</td><td>近1年绩效排名前" +
+            data.Fund.performance.year_1_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            year_1_rank_ratio +
+            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+            data.Param.this_year_235_rank_ratio +
+            "%</td><td>近2年绩效排名前" +
+            data.Fund.performance.year_2_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            year_2_rank_ratio +
+            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+            data.Param.this_year_235_rank_ratio +
+            "%</td><td>近3年绩效排名前" +
+            data.Fund.performance.year_3_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            year_3_rank_ratio +
+            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+            data.Param.this_year_235_rank_ratio +
+            "%</td><td>近5年绩效排名前" +
+            data.Fund.performance.year_5_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            year_5_rank_ratio +
+            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+            data.Param.this_year_235_rank_ratio +
+            "%</td><td>今年来绩效排名前" +
+            data.Fund.performance.this_year_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            this_year_rank_ratio +
+            "</td></tr><tr><td>近6个月绩效排名前" +
+            data.Param.month_6_rank_ratio +
+            "%</td><td>近6个月绩效排名前" +
+            data.Fund.performance.month_6_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            month_6_rank_ratio +
+            "</td></tr><tr><td>近3个月绩效排名前" +
+            data.Param.month_3_rank_ratio +
+            "%</td><td>近3个月绩效排名前" +
+            data.Fund.performance.month_3_rank_ratio.toFixed(2) +
+            "%</td><td>" +
+            month_3_rank_ratio +
+            "</td></tr><tr><td>基金规模最低" +
+            data.Param.min_scale +
+            "亿</td><td>基金规模" +
+            (data.Fund.net_assets_scale / 100000000.0).toFixed(2) +
+            "亿</td><td>" +
+            min_scale +
+            "</td></tr><tr><td>基金规模最高" +
+            data.Param.max_scale +
+            "亿</td><td>基金规模" +
+            (data.Fund.net_assets_scale / 100000000.0).toFixed(2) +
+            "亿</td><td>" +
+            max_scale +
+            "</td></tr><tr><td>基金经理管理该基金不低于" +
+            data.Param.min_manager_years +
+            "年</td><td>基金经理:" +
+            data.Fund.manager.name +
+            "</br>管理该基金:" +
+            (data.Fund.manager.manage_days / 365.0).toFixed(2) +
+            "年</br>任职回报:" +
+            data.Fund.manager.manage_repay.toFixed(2) +
+            "%</td><td>" +
+            manager +
+            "</td></tr><tr><td>近1,3,5年波动率平均值不高于" +
+            data.Param.max_135_avg_stddev.toFixed(2) +
+            "%</td><td>近1,3,5年波动率平均值:" +
+            data.Fund.stddev.avg_135.toFixed(2) +
+            "%</br>近1年波动率:" +
+            data.Fund.stddev.year_1.toFixed(2) +
+            "%</br>近3年波动率:" +
+            data.Fund.stddev.year_3.toFixed(2) +
+            "%</br>近5年波动率:" +
+            data.Fund.stddev.year_5.toFixed(2) +
+            "%</td><td>" +
+            stddev_avg135 +
+            "</td></tr><tr><td>近1,3,5年夏普比率平均值不低于" +
+            data.Param.min_135_avg_sharp.toFixed(2) +
+            "%</td><td>近1,3,5年夏普比率平均值:" +
+            data.Fund.sharp.avg_135.toFixed(2) +
+            "%</br>近1年夏普比率:" +
+            data.Fund.sharp.year_1.toFixed(2) +
+            "%</br>近3年夏普比率:" +
+            data.Fund.sharp.year_3.toFixed(2) +
+            "%</br>近5年夏普比率:" +
+            data.Fund.sharp.year_5.toFixed(2) +
+            "%</td><td>" +
+            sharp_avg135 +
+            "</td></tr><tr><td>近1,3,5年最大回撤率平均值不高于" +
+            data.Param.max_135_avg_stddev.toFixed(2) +
+            "%</td><td>近1,3,5年最大回撤率平均值:" +
+            data.Fund.max_retracement.avg_135.toFixed(2) +
+            "%</br>近1年最大回撤率:" +
+            data.Fund.max_retracement.year_1.toFixed(2) +
+            "%</br>近3年最大回撤率:" +
+            data.Fund.max_retracement.year_3.toFixed(2) +
+            "%</br>近5年最大回撤率:" +
+            data.Fund.max_retracement.year_5.toFixed(2) +
+            "%</td><td>" +
+            maxretr_avg135 +
+            "</td></tr>" +
+            "</tbody>" +
+            "</table>" +
+            "</div>"
+        );
+        $("title").text(data.PageTitle);
+        $("#index_content").remove();
+        $("#fund_check_results").removeClass("hide");
+        $("html, body").animate({ scrollTop: 0 }, 0);
+        $("#load_modal").modal("close");
       },
     });
   });
