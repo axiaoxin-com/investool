@@ -5,6 +5,8 @@ package sina
 import (
 	"context"
 	"fmt"
+	"sort"
+	"strconv"
 	"strings"
 	"time"
 
@@ -23,6 +25,8 @@ type SearchResult struct {
 	Secucode string
 	// 股票名称
 	Name string
+	// 股市类型: 11=A股 31=港股 41=美股 103=英股
+	Market int
 }
 
 // KeywordSearch 关键词搜索， 股票、代码、拼音
@@ -47,14 +51,22 @@ func (q Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 		if len(lineitems) != 9 {
 			continue
 		}
-
+		market, err := strconv.Atoi(lineitems[1])
+		if err != nil {
+			logging.Errorf(ctx, "market:%s atoi error:%v", lineitems[1], err)
+		}
 		secucode := lineitems[3][2:] + "." + lineitems[3][:2]
 		result := SearchResult{
 			SecurityCode: lineitems[2],
 			Secucode:     secucode,
 			Name:         lineitems[6],
+			Market:       market,
 		}
 		results = append(results, result)
 	}
+	// 按股市编号排序确保A股在前面
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].Market < results[j].Market
+	})
 	return
 }

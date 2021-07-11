@@ -7,7 +7,7 @@ import (
 )
 
 func TestKeywordSearch(t *testing.T) {
-	results, err := _s.KeywordSearch(_ctx, "东方")
+	results, err := _s.KeywordSearch(_ctx, "比亚迪")
 	require.Nil(t, err)
 	t.Log(results)
 }
