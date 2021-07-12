@@ -4,13 +4,19 @@ package core
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"math"
+	"sync"
+	"time"
 
+	"github.com/avast/retry-go"
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/datacenter/sina"
 	"github.com/axiaoxin-com/x-stock/models"
+	"github.com/spf13/viper"
 )
 
 // Searcher 搜索器实例
@@ -21,8 +27,12 @@ func NewSearcher(ctx context.Context) Searcher {
 	return Searcher{}
 }
 
-// Search 按股票名或代码搜索股票
-func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockList, error) {
+// SearchStocks 按股票名或代码搜索股票
+func (s Searcher) SearchStocks(ctx context.Context, keywords []string) (map[string]models.Stock, error) {
+	kLen := len(keywords)
+	if kLen == 0 {
+		return nil, errors.New("empty keywords")
+	}
 	// 根据关键词匹配股票代码
 	matchedResults := []sina.SearchResult{}
 	for _, kw := range keywords {
@@ -39,7 +49,7 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 		matchedResults = append(matchedResults, searchResults[0])
 	}
 	if len(matchedResults) == 0 {
-		return nil, fmt.Errorf("can't find the %v", keywords)
+		return nil, fmt.Errorf("无法获取对应数据 %v", keywords)
 	}
 	// 查询匹配到的股票代码的股票信息
 	filter := eastmoney.Filter{}
@@ -50,14 +60,62 @@ func (c Searcher) Search(ctx context.Context, keywords []string) (models.StockLi
 	if err != nil {
 		return nil, err
 	}
-	results := models.StockList{}
+	results := map[string]models.Stock{}
 	for _, stock := range stocks {
 		mstock, err := models.NewStock(ctx, stock)
 		if err != nil {
 			logging.Errorf(ctx, "%s new models stock error:%v", stock.SecurityCode, err.Error())
 			continue
 		}
-		results = append(results, mstock)
+		results[stock.SecurityCode] = mstock
 	}
 	return results, nil
+}
+
+// SearchFunds 按基金代码搜索基金
+func (s Searcher) SearchFunds(ctx context.Context, fundCodes []string) (map[string]*models.Fund, error) {
+	codeLen := len(fundCodes)
+	if codeLen == 0 {
+		return nil, errors.New("empty fund codes")
+	}
+	start := time.Now()
+	logging.Infof(ctx, "SearchFunds request start...")
+	workerCount := int(math.Min(float64(codeLen), viper.GetFloat64("app.chan_size")))
+	reqChan := make(chan string, workerCount)
+	result := map[string]*models.Fund{}
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	for _, code := range fundCodes {
+		wg.Add(1)
+		reqChan <- code
+		go func() {
+			defer func() {
+				wg.Done()
+			}()
+
+			code := <-reqChan
+			fundresp := &eastmoney.RespFundInfo{}
+			err := retry.Do(
+				func() error {
+					var err error
+					fundresp, err = datacenter.EastMoney.QueryFundInfo(ctx, code)
+					return err
+				},
+				retry.OnRetry(func(n uint, err error) {
+					logging.Errorf(ctx, "retry#%d: code:%v %v\n", n, code, err)
+				}),
+			)
+			if err != nil {
+				logging.Errorf(ctx, "SearchFunds QueryFundInfo code:%v err:%v", code, err)
+				return
+			}
+			fund := models.NewFund(ctx, fundresp)
+			mu.Lock()
+			result[fund.Code] = fund
+			mu.Unlock()
+		}()
+	}
+	wg.Wait()
+	logging.Infof(ctx, "SearchFunds request end. latency:%+v", time.Now().Sub(start))
+	return result, nil
 }

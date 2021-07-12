@@ -22,6 +22,7 @@ import (
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/models"
+	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
 
@@ -48,7 +49,7 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 	logging.Infof(ctx, "AutoFilterStocks will filter from %d stocks by %s", len(stocks), s.Filter.String())
 
 	// 并发执行筛选任务
-	workerCount := int(math.Min(float64(len(stocks)), float64(500)))
+	workerCount := int(math.Min(float64(len(stocks)), float64(viper.GetFloat64("app.chan_size"))))
 	jobChan := make(chan struct{}, workerCount)
 	wg := sync.WaitGroup{}
 	var mu sync.Mutex

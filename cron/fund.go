@@ -34,9 +34,6 @@ func SyncFund() {
 
 	// 遍历获取基金详情
 	chanSize := viper.GetFloat64("app.chan_size")
-	if chanSize == 0 {
-		chanSize = 500
-	}
 	workerCount := int(math.Min(float64(len(efundlist)), chanSize))
 	reqChan := make(chan string, workerCount)
 	typeMap := map[string]struct{}{}

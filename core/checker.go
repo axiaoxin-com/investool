@@ -647,7 +647,7 @@ func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) (result
 		codes = append(codes, s.Code)
 	}
 	searcher := NewSearcher(ctx)
-	stocks, err := searcher.Search(ctx, codes)
+	stocks, err := searcher.SearchStocks(ctx, codes)
 	if err != nil {
 		return
 	}

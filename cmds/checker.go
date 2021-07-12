@@ -16,7 +16,7 @@ import (
 func Check(ctx context.Context, keywords []string, opts core.CheckerOptions) (results map[string]core.CheckResult, err error) {
 	results = make(map[string]core.CheckResult)
 	searcher := core.NewSearcher(ctx)
-	stocks, err := searcher.Search(ctx, keywords)
+	stocks, err := searcher.SearchStocks(ctx, keywords)
 	if err != nil {
 		logging.Fatal(ctx, err.Error())
 	}

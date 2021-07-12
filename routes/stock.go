@@ -101,7 +101,7 @@ func StockChecker(c *gin.Context) {
 	}
 	searcher := core.NewSearcher(c)
 	keywords := strings.Split(param.Keyword, "/")
-	stocks, err := searcher.Search(c, keywords)
+	stocks, err := searcher.SearchStocks(c, keywords)
 	if err != nil {
 		data["Error"] = err.Error()
 		c.JSON(http.StatusOK, data)
