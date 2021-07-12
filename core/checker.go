@@ -5,6 +5,7 @@ package core
 import (
 	"context"
 	"fmt"
+	"sort"
 	"strings"
 	"sync"
 
@@ -12,6 +13,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/models"
+	mapset "github.com/deckarep/golang-set"
 )
 
 // CheckerOptions 检测条件选项
@@ -667,4 +669,65 @@ func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) (result
 		)
 	}
 	return
+}
+
+//FundStocksSimilarity 基金持仓相似度
+type FundStocksSimilarity struct {
+	Fund1Code   string        `json:"fund_1_code"`
+	Fund1Name   string        `json:"fund_1_name"`
+	Fund1Stocks []interface{} `json:"fund_1_stocks"`
+	Fund2Code   string        `json:"fund_2_code"`
+	Fund2Name   string        `json:"fund_2_name"`
+	Fund2Stocks []interface{} `json:"fund_2_stocks"`
+	// 1:完全相同 0:完全不同
+	SimilarityValue float64 `json:"similarity_value"`
+	// 相同的股票数
+	SameCount int `json:"same_count"`
+}
+
+// GetFundStocksSimilarity 返回基金持仓相似度
+func (c Checker) GetFundStocksSimilarity(ctx context.Context, codes []string) ([]FundStocksSimilarity, error) {
+	s := NewSearcher(ctx)
+	funds, err := s.SearchFunds(ctx, codes)
+	if err != nil {
+		return nil, err
+	}
+	fundCodes := []string{}
+	fundNames := []string{}
+	fundStocksList := [][]interface{}{}
+	for _, fund := range funds {
+		stocks := []interface{}{}
+		for _, stock := range fund.Stocks {
+			stocks = append(stocks, stock.Name)
+		}
+		fundStocksList = append(fundStocksList, stocks)
+		fundNames = append(fundNames, fund.Name)
+		fundCodes = append(fundCodes, fund.Code)
+	}
+	sims := []FundStocksSimilarity{}
+	for i := 0; i < len(fundStocksList); i++ {
+		for j := i + 1; j < len(fundStocksList); j++ {
+			A := mapset.NewSetFromSlice(fundStocksList[i])
+			B := mapset.NewSetFromSlice(fundStocksList[j])
+			AiB := A.Intersect(B)
+			AuB := A.Union(B)
+			value := float64(AiB.Cardinality()) / float64(AuB.Cardinality())
+
+			sim := FundStocksSimilarity{
+				Fund1Code:       fundCodes[i],
+				Fund1Name:       fundNames[i],
+				Fund1Stocks:     fundStocksList[i],
+				Fund2Code:       fundCodes[j],
+				Fund2Name:       fundNames[j],
+				Fund2Stocks:     fundStocksList[j],
+				SimilarityValue: value,
+				SameCount:       AiB.Cardinality(),
+			}
+			sims = append(sims, sim)
+		}
+	}
+	sort.Slice(sims, func(i, j int) bool {
+		return sims[i].SimilarityValue > sims[j].SimilarityValue
+	})
+	return sims, nil
 }

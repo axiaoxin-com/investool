@@ -9,6 +9,7 @@ require (
 	github.com/axiaoxin-com/goutils v1.0.18-0.20210712041447-3fcbf074cbdf
 	github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba
 	github.com/axiaoxin-com/ratelimiter v1.0.3
+	github.com/deckarep/golang-set v1.7.1
 	github.com/denisenkom/go-mssqldb v0.10.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/getsentry/sentry-go v0.11.0 // indirect
