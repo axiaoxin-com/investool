@@ -4,6 +4,7 @@ package routes
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/x-stock/core"
@@ -246,5 +247,30 @@ func FundCheck(c *gin.Context) {
 		"Param":            p,
 	}
 	c.JSON(http.StatusOK, data)
+	return
+}
+
+// FundSimilarity 基金相似度
+// http://localhost:1688/fund/similarity?codes=001975,163807,001869,519133,519644,270028,377530,550009,210003,002160,166301,001365,519642,000073,001808,001279,001397,000592,001938,008314,001679,163406,162605
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,550009
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,001279
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,166301
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406,166301
+// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406,166301,001279,550009
+func FundSimilarity(c *gin.Context) {
+	codes := c.Query("codes")
+	if codes == "" {
+		return
+	}
+	codeList := strings.Split(codes, ",")
+	checker := core.NewChecker(c, core.DefaultCheckerOptions)
+	data, err := checker.GetFundStocksSimilarity(c, codeList)
+	if err != nil {
+		c.IndentedJSON(200, gin.H{"err": err.Error()})
+		return
+	}
+	c.IndentedJSON(200, data)
 	return
 }

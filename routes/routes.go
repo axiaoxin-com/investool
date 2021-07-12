@@ -14,4 +14,5 @@ func Routes(app *gin.Engine) {
 	app.POST("/fund/check", FundCheck)
 	app.GET("/about", About)
 	app.GET("/comment", Comment)
+	app.GET("/fund/similarity", FundSimilarity)
 }

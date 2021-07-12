@@ -331,7 +331,7 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFun
 		zap.Any("resp", resp),
 	)
 	if resp.Jjxq.Datas.Fcode == "" {
-		err = fmt.Errorf("基金代码(%v)不存在", fundCode)
+		err = fmt.Errorf("无法获取基金信息(%v)", fundCode)
 	}
 	return &resp, err
 }
