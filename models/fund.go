@@ -7,6 +7,7 @@ import (
 	"math"
 	"sort"
 	"strconv"
+	"time"
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
@@ -689,6 +690,8 @@ type ParamFundListFilter struct {
 	Min135AvgSharp float64 `json:"min_135_avg_sharp"        form:"min_135_avg_sharp"`
 	// 1,3,5年最大回撤率平均值的最大值
 	Max135AvgRetr float64 `json:"max_135_avg_retr"         form:"max_135_avg_retr"`
+	// 最低成立年限
+	MinEstabYears float64 `json:"min_estab_years"          form:"min_estab_years"`
 }
 
 // Filter 按参数过滤
@@ -696,19 +699,22 @@ func (f FundList) Filter(ctx context.Context, p ParamFundListFilter) FundList {
 	results := FundList{}
 	for _, fund := range f {
 		switch {
-		case fund.Performance.Year5RankNum == 0:
-			// 排除成立没有5年以上的基金
+		case p.MinEstabYears > 0 && fund.EstabYears(ctx) > 0 && fund.EstabYears(ctx) < p.MinEstabYears:
+			// 排除成立年限不达标的
 			continue
-		case fund.Performance.Year1RankRatio > p.Year1RankRatio:
+		case p.Year1RankRatio > 0 && fund.Performance.Year1RankRatio > p.Year1RankRatio:
 			// 最近1年排名大于前百分比的排除
 			continue
-		case (fund.Performance.Year2RankRatio > p.ThisYear235RankRatio || fund.Performance.Year3RankRatio > p.ThisYear235RankRatio || fund.Performance.Year5RankRatio > p.ThisYear235RankRatio || fund.Performance.ThisYearRankRatio > p.ThisYear235RankRatio):
+		case p.ThisYear235RankRatio > 0 && (fund.Performance.Year2RankRatio > p.ThisYear235RankRatio ||
+			fund.Performance.Year3RankRatio > p.ThisYear235RankRatio ||
+			fund.Performance.Year5RankRatio > p.ThisYear235RankRatio ||
+			fund.Performance.ThisYearRankRatio > p.ThisYear235RankRatio):
 			// 最近2,3,5以及今年来排名大于前百分比的排除
 			continue
-		case fund.Performance.Month6RankRatio > p.Month6RankRatio:
+		case p.Month6RankRatio > 0 && fund.Performance.Month6RankRatio > p.Month6RankRatio:
 			// 最近6个月排名大于前百分比的排除
 			continue
-		case fund.Performance.Month3RankRatio > p.Month3RankRatio:
+		case p.Month3RankRatio > 0 && fund.Performance.Month3RankRatio > p.Month3RankRatio:
 			// 最近3个月排名大于前百分比的排除
 			continue
 		case len(p.Types) > 0 && !goutils.IsStrInSlice(fund.Type, p.Types):
@@ -769,4 +775,14 @@ func (f Fund) Is4433(ctx context.Context) bool {
 // NetAssetsScaleHuman 净资产数字转换为亿、万单位
 func (f Fund) NetAssetsScaleHuman() string {
 	return goutils.YiWanString(f.NetAssetsScale)
+}
+
+// EstabYears 成立年限
+func (f Fund) EstabYears(ctx context.Context) float64 {
+	date, err := time.Parse("2006-01-02", f.EstablishedDate)
+	if err != nil {
+		logging.Errorf(ctx, "EstabYears parse date err:%v", err)
+		return 0
+	}
+	return time.Now().Sub(date).Hours() / 24.0 / 365.0
 }

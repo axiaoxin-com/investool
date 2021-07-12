@@ -83,6 +83,7 @@ func FundFilter(c *gin.Context) {
 		ParamFundListFilter: models.ParamFundListFilter{
 			MinScale:             2.0,
 			MaxScale:             50.0,
+			MinEstabYears:        5.0,
 			MinManagerYears:      5.0,
 			Year1RankRatio:       25.0,
 			ThisYear235RankRatio: 25.0,
@@ -219,7 +220,6 @@ func FundCheck(c *gin.Context) {
 			"Version":   version.Version,
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Fund":      fund,
-			"Is4433":    fund.Is4433(c),
 			"Param":     p,
 		}
 		c.JSON(http.StatusOK, data)
@@ -242,7 +242,6 @@ func FundCheck(c *gin.Context) {
 		"Version":          version.Version,
 		"PageTitle":        "X-STOCK | 基金 | 基金检测",
 		"Fund":             fund,
-		"Is4433":           fund.Is4433(c),
 		"StockCheckResult": checkResult,
 		"Param":            p,
 	}
