@@ -318,9 +318,9 @@ $(document).ready(function () {
                 "</div>"
             );
             $.each(result, function (k, v) {
-              okdesc = "❌异常";
+              okdesc = "❌";
               if (v.ok == "true") {
-                okdesc = "✅正常";
+                okdesc = "✅";
               }
               $("#checker_result_" + i + " tbody").append(
                 "<tr><td>" +
@@ -449,254 +449,247 @@ $(document).ready(function () {
           return;
         }
 
-        $("#checked_fund_name").html(
-          '<a target="_blank" href="http://fund.eastmoney.com/' +
-            data.Fund.code +
-            '.html">' +
-            data.Fund.name +
-            "(" +
-            data.Fund.code +
-            ")</a>"
-        );
-
-        var year_1_rank_ratio = "❌";
-        if (
-          data.Fund.performance.year_1_rank_ratio < data.Param.year_1_rank_ratio
-        ) {
-          year_1_rank_ratio = "✅";
-        }
-        var year_2_rank_ratio = "❌";
-        if (
-          data.Fund.performance.year_2_rank_ratio <
-          data.Param.this_year_235_rank_ratio
-        ) {
-          year_2_rank_ratio = "✅";
-        }
-        var year_3_rank_ratio = "❌";
-        if (
-          data.Fund.performance.year_3_rank_ratio <
-          data.Param.this_year_235_rank_ratio
-        ) {
-          year_3_rank_ratio = "✅";
-        }
-        var year_5_rank_ratio = "❌";
-        if (
-          data.Fund.performance.year_5_rank_ratio <
-          data.Param.this_year_235_rank_ratio
-        ) {
-          year_5_rank_ratio = "✅";
-        }
-        var this_year_rank_ratio = "❌";
-        if (
-          data.Fund.performance.this_year_rank_ratio <
-          data.Param.this_year_235_rank_ratio
-        ) {
-          this_year_rank_ratio = "✅";
-        }
-        var month_6_rank_ratio = "❌";
-        if (
-          data.Fund.performance.month_6_rank_ratio <
-          data.Param.month_6_rank_ratio
-        ) {
-          month_6_rank_ratio = "✅";
-        }
-        var month_3_rank_ratio = "❌";
-        if (
-          data.Fund.performance.month_3_rank_ratio <
-          data.Param.month_3_rank_ratio
-        ) {
-          month_3_rank_ratio = "✅";
-        }
-        var min_scale = "❌";
-        if (data.Fund.net_assets_scale / 100000000.0 >= data.Param.min_scale) {
-          min_scale = "✅";
-        }
-        var max_scale = "❌";
-        if (data.Fund.net_assets_scale / 100000000.0 <= data.Param.max_scale) {
-          max_scale = "✅";
-        }
-        var manager = "❌";
-        if (
-          data.Fund.manager.manage_days / 365.0 >=
-          data.Param.min_manager_years
-        ) {
-          manager = "✅";
-        }
-        var stddev_avg135 = "❌";
-        if (data.Fund.stddev.avg_135 <= data.Param.max_135_avg_stddev) {
-          stddev_avg135 = "✅";
-        }
-        var sharp_avg135 = "❌";
-        if (data.Fund.sharp.avg_135 >= data.Param.min_135_avg_sharp) {
-          sharp_avg135 = "✅";
-        }
-        var maxretr_avg135 = "❌";
-        if (data.Fund.max_retracement.avg_135 <= data.Param.max_135_avg_retr) {
-          maxretr_avg135 = "✅";
-        }
-
-        $("#fund_check_results").append(
-          '<div class="divider"></div>' +
-            '<div class="row">' +
-            '<table class="striped">' +
-            '<thead><tr><th width="45%">指标</th><th width="45%">描述</th><th width="10%">结果</th></tr></thead>' +
-            "<tbody>" +
-            "<tr><td>近1年绩效排名前" +
-            data.Param.year_1_rank_ratio +
-            "%</td><td>近1年绩效排名前" +
-            data.Fund.performance.year_1_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            year_1_rank_ratio +
-            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
-            data.Param.this_year_235_rank_ratio +
-            "%</td><td>近2年绩效排名前" +
-            data.Fund.performance.year_2_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            year_2_rank_ratio +
-            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
-            data.Param.this_year_235_rank_ratio +
-            "%</td><td>近3年绩效排名前" +
-            data.Fund.performance.year_3_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            year_3_rank_ratio +
-            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
-            data.Param.this_year_235_rank_ratio +
-            "%</td><td>近5年绩效排名前" +
-            data.Fund.performance.year_5_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            year_5_rank_ratio +
-            "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
-            data.Param.this_year_235_rank_ratio +
-            "%</td><td>今年来绩效排名前" +
-            data.Fund.performance.this_year_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            this_year_rank_ratio +
-            "</td></tr><tr><td>近6个月绩效排名前" +
-            data.Param.month_6_rank_ratio +
-            "%</td><td>近6个月绩效排名前" +
-            data.Fund.performance.month_6_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            month_6_rank_ratio +
-            "</td></tr><tr><td>近3个月绩效排名前" +
-            data.Param.month_3_rank_ratio +
-            "%</td><td>近3个月绩效排名前" +
-            data.Fund.performance.month_3_rank_ratio.toFixed(2) +
-            "%</td><td>" +
-            month_3_rank_ratio +
-            "</td></tr><tr><td>基金规模最低" +
-            data.Param.min_scale +
-            "亿</td><td>基金规模" +
-            (data.Fund.net_assets_scale / 100000000.0).toFixed(2) +
-            "亿</td><td>" +
-            min_scale +
-            "</td></tr><tr><td>基金规模最高" +
-            data.Param.max_scale +
-            "亿</td><td>基金规模" +
-            (data.Fund.net_assets_scale / 100000000.0).toFixed(2) +
-            "亿</td><td>" +
-            max_scale +
-            "</td></tr><tr><td>基金经理管理该基金不低于" +
-            data.Param.min_manager_years +
-            '年</td><td>基金经理:<a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid=' +
-            data.Fund.manager.id +
-            '" target="_blank">' +
-            data.Fund.manager.name +
-            "</a></br>管理该基金:" +
-            (data.Fund.manager.manage_days / 365.0).toFixed(2) +
-            "年</br>任职回报:" +
-            data.Fund.manager.manage_repay.toFixed(2) +
-            "%</td><td>" +
-            manager +
-            "</td></tr><tr><td>近1,3,5年波动率平均值不高于" +
-            data.Param.max_135_avg_stddev.toFixed(2) +
-            "%</td><td>近1,3,5年波动率平均值:" +
-            data.Fund.stddev.avg_135.toFixed(2) +
-            "%</br>近1年波动率:" +
-            data.Fund.stddev.year_1.toFixed(2) +
-            "%</br>近3年波动率:" +
-            data.Fund.stddev.year_3.toFixed(2) +
-            "%</br>近5年波动率:" +
-            data.Fund.stddev.year_5.toFixed(2) +
-            "%</td><td>" +
-            stddev_avg135 +
-            "</td></tr><tr><td>近1,3,5年夏普比率平均值不低于" +
-            data.Param.min_135_avg_sharp.toFixed(2) +
-            "%</td><td>近1,3,5年夏普比率平均值:" +
-            data.Fund.sharp.avg_135.toFixed(2) +
-            "%</br>近1年夏普比率:" +
-            data.Fund.sharp.year_1.toFixed(2) +
-            "%</br>近3年夏普比率:" +
-            data.Fund.sharp.year_3.toFixed(2) +
-            "%</br>近5年夏普比率:" +
-            data.Fund.sharp.year_5.toFixed(2) +
-            "%</td><td>" +
-            sharp_avg135 +
-            "</td></tr><tr><td>近1,3,5年最大回撤率平均值不高于" +
-            data.Param.max_135_avg_stddev.toFixed(2) +
-            "%</td><td>近1,3,5年最大回撤率平均值:" +
-            data.Fund.max_retracement.avg_135.toFixed(2) +
-            "%</br>近1年最大回撤率:" +
-            data.Fund.max_retracement.year_1.toFixed(2) +
-            "%</br>近3年最大回撤率:" +
-            data.Fund.max_retracement.year_3.toFixed(2) +
-            "%</br>近5年最大回撤率:" +
-            data.Fund.max_retracement.year_5.toFixed(2) +
-            "%</td><td>" +
-            maxretr_avg135 +
-            "</td></tr>" +
-            "</tbody>" +
-            "</table>" +
-            "</div>"
-        );
-        if (data.StockCheckResult) {
+        $.each(data.Funds, function (code, fund) {
+          var year_1_rank_ratio = "❌";
+          if (
+            fund.performance.year_1_rank_ratio < data.Param.year_1_rank_ratio
+          ) {
+            year_1_rank_ratio = "✅";
+          }
+          var year_2_rank_ratio = "❌";
+          if (
+            fund.performance.year_2_rank_ratio <
+            data.Param.this_year_235_rank_ratio
+          ) {
+            year_2_rank_ratio = "✅";
+          }
+          var year_3_rank_ratio = "❌";
+          if (
+            fund.performance.year_3_rank_ratio <
+            data.Param.this_year_235_rank_ratio
+          ) {
+            year_3_rank_ratio = "✅";
+          }
+          var year_5_rank_ratio = "❌";
+          if (
+            fund.performance.year_5_rank_ratio <
+            data.Param.this_year_235_rank_ratio
+          ) {
+            year_5_rank_ratio = "✅";
+          }
+          var this_year_rank_ratio = "❌";
+          if (
+            fund.performance.this_year_rank_ratio <
+            data.Param.this_year_235_rank_ratio
+          ) {
+            this_year_rank_ratio = "✅";
+          }
+          var month_6_rank_ratio = "❌";
+          if (
+            fund.performance.month_6_rank_ratio < data.Param.month_6_rank_ratio
+          ) {
+            month_6_rank_ratio = "✅";
+          }
+          var month_3_rank_ratio = "❌";
+          if (
+            fund.performance.month_3_rank_ratio < data.Param.month_3_rank_ratio
+          ) {
+            month_3_rank_ratio = "✅";
+          }
+          var min_scale = "❌";
+          if (fund.net_assets_scale / 100000000.0 >= data.Param.min_scale) {
+            min_scale = "✅";
+          }
+          var max_scale = "❌";
+          if (fund.net_assets_scale / 100000000.0 <= data.Param.max_scale) {
+            max_scale = "✅";
+          }
+          var manager = "❌";
+          if (
+            fund.manager.manage_days / 365.0 >=
+            data.Param.min_manager_years
+          ) {
+            manager = "✅";
+          }
+          var stddev_avg135 = "❌";
+          if (fund.stddev.avg_135 <= data.Param.max_135_avg_stddev) {
+            stddev_avg135 = "✅";
+          }
+          var sharp_avg135 = "❌";
+          if (fund.sharp.avg_135 >= data.Param.min_135_avg_sharp) {
+            sharp_avg135 = "✅";
+          }
+          var maxretr_avg135 = "❌";
+          if (fund.max_retracement.avg_135 <= data.Param.max_135_avg_retr) {
+            maxretr_avg135 = "✅";
+          }
           $("#fund_check_results").append(
-            '</br><h5 class="center">持仓股票检测结果</h5>'
+            '<div class="row" id="' +
+              fund.code +
+              '"><h4 class="center"><a target="_blank" href="http://fund.eastmoney.com/' +
+              fund.code +
+              '.html">' +
+              fund.name +
+              "(" +
+              fund.code +
+              ')</a>检测结果</h4><div class="divider"></div><table class="striped"><thead><tr><th width="45%">指标</th><th width="45%">描述</th><th width="10%">结果</th></tr></thead><tbody><tr><td>近1年绩效排名前' +
+              data.Param.year_1_rank_ratio +
+              "%</td><td>近1年绩效排名前" +
+              fund.performance.year_1_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              year_1_rank_ratio +
+              "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+              data.Param.this_year_235_rank_ratio +
+              "%</td><td>近2年绩效排名前" +
+              fund.performance.year_2_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              year_2_rank_ratio +
+              "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+              data.Param.this_year_235_rank_ratio +
+              "%</td><td>近3年绩效排名前" +
+              fund.performance.year_3_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              year_3_rank_ratio +
+              "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+              data.Param.this_year_235_rank_ratio +
+              "%</td><td>近5年绩效排名前" +
+              fund.performance.year_5_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              year_5_rank_ratio +
+              "</td></tr><tr><td>近2,3,5年及今年来绩效排名前" +
+              data.Param.this_year_235_rank_ratio +
+              "%</td><td>今年来绩效排名前" +
+              fund.performance.this_year_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              this_year_rank_ratio +
+              "</td></tr><tr><td>近6个月绩效排名前" +
+              data.Param.month_6_rank_ratio +
+              "%</td><td>近6个月绩效排名前" +
+              fund.performance.month_6_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              month_6_rank_ratio +
+              "</td></tr><tr><td>近3个月绩效排名前" +
+              data.Param.month_3_rank_ratio +
+              "%</td><td>近3个月绩效排名前" +
+              fund.performance.month_3_rank_ratio.toFixed(2) +
+              "%</td><td>" +
+              month_3_rank_ratio +
+              "</td></tr><tr><td>基金规模最低" +
+              data.Param.min_scale +
+              "亿</td><td>基金规模" +
+              (fund.net_assets_scale / 100000000.0).toFixed(2) +
+              "亿</td><td>" +
+              min_scale +
+              "</td></tr><tr><td>基金规模最高" +
+              data.Param.max_scale +
+              "亿</td><td>基金规模" +
+              (fund.net_assets_scale / 100000000.0).toFixed(2) +
+              "亿</td><td>" +
+              max_scale +
+              "</td></tr><tr><td>基金经理管理该基金不低于" +
+              data.Param.min_manager_years +
+              '年</td><td>基金经理:<a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid=' +
+              fund.manager.id +
+              '" target="_blank">' +
+              fund.manager.name +
+              "</a></br>管理该基金:" +
+              (fund.manager.manage_days / 365.0).toFixed(2) +
+              "年</br>任职回报:" +
+              fund.manager.manage_repay.toFixed(2) +
+              "%</td><td>" +
+              manager +
+              "</td></tr><tr><td>近1,3,5年波动率平均值不高于" +
+              data.Param.max_135_avg_stddev.toFixed(2) +
+              "%</td><td>近1,3,5年波动率平均值:" +
+              fund.stddev.avg_135.toFixed(2) +
+              "%</br>近1年波动率:" +
+              fund.stddev.year_1.toFixed(2) +
+              "%</br>近3年波动率:" +
+              fund.stddev.year_3.toFixed(2) +
+              "%</br>近5年波动率:" +
+              fund.stddev.year_5.toFixed(2) +
+              "%</td><td>" +
+              stddev_avg135 +
+              "</td></tr><tr><td>近1,3,5年夏普比率平均值不低于" +
+              data.Param.min_135_avg_sharp.toFixed(2) +
+              "%</td><td>近1,3,5年夏普比率平均值:" +
+              fund.sharp.avg_135.toFixed(2) +
+              "%</br>近1年夏普比率:" +
+              fund.sharp.year_1.toFixed(2) +
+              "%</br>近3年夏普比率:" +
+              fund.sharp.year_3.toFixed(2) +
+              "%</br>近5年夏普比率:" +
+              fund.sharp.year_5.toFixed(2) +
+              "%</td><td>" +
+              sharp_avg135 +
+              "</td></tr><tr><td>近1,3,5年最大回撤率平均值不高于" +
+              data.Param.max_135_avg_stddev.toFixed(2) +
+              "%</td><td>近1,3,5年最大回撤率平均值:" +
+              fund.max_retracement.avg_135.toFixed(2) +
+              "%</br>近1年最大回撤率:" +
+              fund.max_retracement.year_1.toFixed(2) +
+              "%</br>近3年最大回撤率:" +
+              fund.max_retracement.year_3.toFixed(2) +
+              "%</br>近5年最大回撤率:" +
+              fund.max_retracement.year_5.toFixed(2) +
+              "%</td><td>" +
+              maxretr_avg135 +
+              "</td></tr>" +
+              "</tbody>" +
+              "</table>" +
+              "</div>"
           );
-          $.each(data.StockCheckResult.check_results, function (i, result) {
-            var cm = data.StockCheckResult.names[i].split("-")[1].split(".");
-            $("#fund_check_results").append(
-              '</br><div class="divider"></div></br><div id="checker_result_' +
-                i +
-                '"><div class="row"><a target="_blank" href="http://quote.eastmoney.com/' +
-                cm[1] +
-                cm[0] +
-                '.html">' +
-                data.StockCheckResult.names[i] +
-                "</a></br>持仓占比:" +
-                data.Fund.stocks[i].hold_ratio +
-                "%</br>所属行业:" +
-                data.Fund.stocks[i].industry +
-                "</br>最新调仓:" +
-                data.Fund.stocks[i].adjust_ratio +
-                "%" +
-                "</br>当前检测财报数据来源:" +
-                data.StockCheckResult.fina_report_names[i] +
-                "</br>最新财报预约发布日期:" +
-                data.StockCheckResult.fina_appoint_publish_dates[i] +
-                "</div>" +
-                '<table class="striped">' +
-                '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
-                "<tbody></tbody>" +
-                "</table>" +
-                "</div>"
+          if (data.StockCheckResults) {
+            var stockCheckResult = data.StockCheckResults[fund.code];
+            $(`#${fund.code}`).append(
+              '</br><h5 class="center">持仓股票检测结果</h5>'
             );
-            $.each(result, function (k, v) {
-              okdesc = "❌异常";
-              if (v.ok == "true") {
-                okdesc = "✅正常";
-              }
-              $("#checker_result_" + i + " tbody").append(
-                "<tr><td>" +
-                  k +
-                  "</td><td>" +
-                  v.desc +
-                  "</td><td>" +
-                  okdesc +
-                  "</td></tr>"
+            $.each(stockCheckResult.check_results, function (i, result) {
+              var cm = stockCheckResult.names[i].split("-")[1].split(".");
+              $(`#${fund.code}`).append(
+                '<div id="checker_result_' +
+                  i +
+                  '"><div class="row"><a target="_blank" href="http://quote.eastmoney.com/' +
+                  cm[1] +
+                  cm[0] +
+                  '.html">' +
+                  stockCheckResult.names[i] +
+                  "</a></br>持仓占比:" +
+                  fund.stocks[i].hold_ratio +
+                  "%</br>所属行业:" +
+                  fund.stocks[i].industry +
+                  "</br>最新调仓:" +
+                  fund.stocks[i].adjust_ratio +
+                  "%" +
+                  "</br>当前检测财报数据来源:" +
+                  stockCheckResult.fina_report_names[i] +
+                  "</br>最新财报预约发布日期:" +
+                  stockCheckResult.fina_appoint_publish_dates[i] +
+                  "</div>" +
+                  '<table class="striped">' +
+                  '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
+                  "<tbody></tbody>" +
+                  "</table>" +
+                  "</div>"
               );
+              $.each(result, function (k, v) {
+                okdesc = "❌";
+                if (v.ok == "true") {
+                  okdesc = "✅";
+                }
+                $("#checker_result_" + i + " tbody").append(
+                  "<tr><td>" +
+                    k +
+                    "</td><td>" +
+                    v.desc +
+                    "</td><td>" +
+                    okdesc +
+                    "</td></tr>"
+                );
+              });
             });
-          });
-        }
+          }
+        });
         $("title").text(data.PageTitle);
         $("#index_content").remove();
         $("#fund_check_results").removeClass("hide");

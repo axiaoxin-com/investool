@@ -5,10 +5,11 @@ package routes
 import (
 	"net/http"
 	"strings"
+	"sync"
 
 	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/axiaoxin-com/x-stock/services"
 	"github.com/axiaoxin-com/x-stock/version"
@@ -202,7 +203,9 @@ func FundCheck(c *gin.Context) {
 		return
 	}
 
-	fundresp, err := datacenter.EastMoney.QueryFundInfo(c, p.Code)
+	codes := strings.Split(p.Code, "/")
+	searcher := core.NewSearcher(c)
+	funds, err := searcher.SearchFunds(c, codes)
 	if err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
@@ -213,52 +216,64 @@ func FundCheck(c *gin.Context) {
 		c.JSON(http.StatusOK, data)
 		return
 	}
-	fund := models.NewFund(c, fundresp)
-
 	if !p.CheckStocks {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
-			"Fund":      fund,
+			"Funds":     funds,
 			"Param":     p,
 		}
 		c.JSON(http.StatusOK, data)
 		return
 	}
-	checker := core.NewChecker(c, p.StockCheckerOptions)
-	checkResult, err := checker.CheckFundStocks(c, fund)
-	if err != nil {
+
+	if len(funds) > 50 {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
-			"Error":     err.Error(),
+			"Error":     "基金数量超过限制",
+			"Funds":     funds,
+			"Param":     p,
 		}
 		c.JSON(http.StatusOK, data)
 		return
 	}
+	stockCheckResults := map[string]core.FundStocksCheckResult{}
+	checker := core.NewChecker(c, p.StockCheckerOptions)
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	for _, fund := range funds {
+		wg.Add(1)
+		go func(fund *models.Fund) {
+			defer func() {
+				wg.Done()
+			}()
+			checkResult, err := checker.CheckFundStocks(c, fund)
+			if err != nil {
+				logging.Errorf(c, "CheckFundStocks code:%s err:%v", fund.Code, err)
+				return
+			}
+			mu.Lock()
+			stockCheckResults[fund.Code] = checkResult
+			mu.Unlock()
+		}(fund)
+	}
+	wg.Wait()
 	data := gin.H{
-		"Env":              viper.GetString("env"),
-		"Version":          version.Version,
-		"PageTitle":        "X-STOCK | 基金 | 基金检测",
-		"Fund":             fund,
-		"StockCheckResult": checkResult,
-		"Param":            p,
+		"Env":               viper.GetString("env"),
+		"Version":           version.Version,
+		"PageTitle":         "X-STOCK | 基金 | 基金检测",
+		"Funds":             funds,
+		"StockCheckResults": stockCheckResults,
+		"Param":             p,
 	}
 	c.JSON(http.StatusOK, data)
 	return
 }
 
 // FundSimilarity 基金相似度
-// http://localhost:1688/fund/similarity?codes=001975,163807,001869,519133,519644,270028,377530,550009,210003,002160,166301,001365,519642,000073,001808,001279,001397,000592,001938,008314,001679,163406,162605
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,550009
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,001279
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,166301
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406,166301
-// http://localhost:1688/fund/similarity?codes=001975,519133,519644,001365,163406,166301,001279,550009
 func FundSimilarity(c *gin.Context) {
 	codes := c.Query("codes")
 	if codes == "" {
