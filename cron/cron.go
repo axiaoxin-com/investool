@@ -29,9 +29,9 @@ func RunCronJobs(async bool) {
 		panic(err)
 	}
 	sched := gocron.NewScheduler(timezone)
-	// 每周五18点同步基金净值列表和4433列表
-	sched.Cron("0 18 * * 5").Do(SyncFund)
-	// 每月1号凌晨4点同步东方财富行业列表
+	// 同步基金净值列表和4433列表
+	sched.Cron("0 18 * * *").Do(SyncFund)
+	// 同步东方财富行业列表
 	sched.Cron("0 4 1 * *").Do(SyncIndustryList)
 	if async {
 		sched.StartAsync()

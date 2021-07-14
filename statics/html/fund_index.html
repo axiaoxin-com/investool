@@ -25,8 +25,7 @@
         <h4 class="center"><span onclick="$('#desc_4433').tapTarget('open')">4433<i class="tiny material-icons">help_outline</i></span>基金列表</h4>
         <div class="divider"></div>
         <div class="left">
-            更新时间:每周五18:00</br>
-            上次更新:{{ .UpdatedAt }}</br>
+            更新时间:{{ .UpdatedAt }}</br>
             4433总数:{{ .Fund4433Count }}/筛选总数:{{ .AllFundCount }}
         </div>
         {{ template "fundtable" . }}
