@@ -5,26 +5,16 @@
     <table class="striped centered">
         <thead>
             <tr>
-                <th>基金代码</th>
-                <th>基金名称</th>
-                <th>持仓股票</th>
-                <th>重复持仓</th>
-                <th>持仓相似度</th>
+                <th width="35%">基金名称</th>
+                <th width="35%">重复持仓</th>
+                <th width="30%">持仓相似度</th>
             </tr>
         </thead>
         <tbody>
         {{ range .Result }}
         <tr>
             <td>
-                <span class="copybtn waves-effect waves-red" data-clipboard-text="{{ .Fund.Code  }}">{{ .Fund.Code }}<i class="material-icons tiny">content_copy</i></span>
-            </td>
-            <td>
                 <a target="_blank" href="http://fund.eastmoney.com/{{ .Fund.Code }}.html">{{ .Fund.Name }}</a>
-            </td>
-            <td>
-                {{ range $i, $s := .Fund.Stocks }}
-                {{ $i }}.{{ $s.Name }}</br>
-                {{ end }}
             </td>
             <td>
                 {{ range $i, $s := .SameStocks }}
