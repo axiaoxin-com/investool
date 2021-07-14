@@ -20,6 +20,8 @@ config.prod.toml
 tmp/
 
 x-stock
+*.tar.gz
+
 statics/js/app.min.*.js
 fund_all_list.json
 fund_4433_list.json

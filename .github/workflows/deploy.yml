@@ -23,6 +23,9 @@ jobs:
     - name: Build
       run: CGO_ENABLED=0 go build -o app -tags=jsoniter
 
+    - name: Tar
+      run: tar czvf app.tar.gz app
+
     - name: SCP Files
       uses: appleboy/scp-action@master
       with:
@@ -30,7 +33,7 @@ jobs:
         username: ${{ secrets.REMOTE_USER }}
         port: ${{ secrets.REMOTE_PORT }}
         key: ${{ secrets.SERVER_SSH_KEY }}
-        source: 'app'
+        source: 'app.tar.gz'
         target: ${{ secrets.REMOTE_TARGET }}
 
     - name: SSH Remote Commands
