@@ -14,9 +14,10 @@
 <div id="index_content" class="row">
     <div class="col s12">
         <ul class="tabs">
-            <li class="tab col s4 l4"><a href="#4433">4433基金列表</a></li>
-            <li class="tab col s4 l4"><a href="#fundfilter">基金严选</a></li>
-            <li class="tab col s4 l4"><a href="#fundcheck">基金检测</a></li>
+            <li class="tab col s4 l3"><a href="#4433">4433基金列表</a></li>
+            <li class="tab col s4 l3"><a href="#fundfilter">基金严选</a></li>
+            <li class="tab col s4 l3"><a href="#fundcheck">基金检测</a></li>
+            <li class="tab col s4 l3"><a href="#fundsim">持仓相似度</a></li>
         </ul>
     </div>
 
@@ -98,7 +99,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12" id="fund_4433_submit_btn" >筛选</button>
+                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12">筛选</button>
                 </div>
             </form>
         </div>
@@ -188,7 +189,23 @@
             </form>
         </div>
     </div>
-    <!--基金检测 end-->
+    <!-- 基金检测 end -->
+
+    <!-- 持仓相似度 start -->
+    <div id="fundsim" class="col s12">
+        <div class="row">
+            <form class="col s12" id="fundsim_form" action="/fund/similarity" method="GET">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="codes" name="codes" class="materialize-textarea validate" required></textarea>
+                        <label for="codes">输入需要比较的基金代码</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12">检测</button>
+                </div>
+            </form>
+        </div>
 </div>
 
 <div id="fund_check_results" class="row hide">

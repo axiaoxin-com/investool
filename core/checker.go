@@ -673,11 +673,10 @@ func (c Checker) CheckFundStocks(ctx context.Context, fund *models.Fund) (result
 
 //FundStocksSimilarity 基金持仓相似度
 type FundStocksSimilarity struct {
-	FundCode string `json:"fund_code"`
-	FundName string `json:"fund_name"`
+	Fund *models.Fund `json:"fund"`
 	// 1:完全相同 0:完全不同
-	SimilarityValue float64     `json:"similarity_value"`
-	SameStocks      interface{} `json:"same_stocks"`
+	SimilarityValue float64  `json:"similarity_value"`
+	SameStocks      []string `json:"same_stocks"`
 }
 
 // GetFundStocksSimilarity 返回基金持仓相似度
@@ -691,7 +690,7 @@ func (c Checker) GetFundStocksSimilarity(ctx context.Context, codes []string) ([
 	for codeA, fund := range funds {
 		setA := mapset.NewSet()
 		for _, stock := range fund.Stocks {
-			setA.Add(stock.Name + "-" + stock.Code)
+			setA.Add(stock.Name)
 		}
 		setB := mapset.NewSet()
 		for codeB, fund := range funds {
@@ -699,17 +698,20 @@ func (c Checker) GetFundStocksSimilarity(ctx context.Context, codes []string) ([
 				continue
 			}
 			for _, stock := range fund.Stocks {
-				setB.Add(stock.Name + "-" + stock.Code)
+				setB.Add(stock.Name)
 			}
 		}
 		AiB := setA.Intersect(setB)
 		AuB := setA.Union(setB)
 		value := float64(AiB.Cardinality()) / float64(AuB.Cardinality())
+		sameStocks := []string{}
+		for i := range AiB.Iterator().C {
+			sameStocks = append(sameStocks, i.(string))
+		}
 		sim := FundStocksSimilarity{
-			FundCode:        fund.Code,
-			FundName:        fund.Name,
+			Fund:            fund,
 			SimilarityValue: value,
-			SameStocks:      AiB,
+			SameStocks:      sameStocks,
 		}
 		sims = append(sims, sim)
 	}

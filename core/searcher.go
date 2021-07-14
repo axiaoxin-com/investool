@@ -7,6 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"regexp"
+	"strings"
 	"sync"
 	"time"
 
@@ -86,6 +88,17 @@ func (s Searcher) SearchFunds(ctx context.Context, fundCodes []string) (map[stri
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 	for _, code := range fundCodes {
+		if strings.TrimSpace(code) == "" {
+			continue
+		}
+		matched, err := regexp.MatchString(`\d{6}`, code)
+		if err != nil {
+			logging.Errorf(ctx, "SearchFunds match code:%v err:%v", code, err)
+			continue
+		}
+		if !matched {
+			continue
+		}
 		wg.Add(1)
 		reqChan <- code
 		go func() {

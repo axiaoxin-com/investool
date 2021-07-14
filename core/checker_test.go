@@ -54,7 +54,7 @@ func TestGetFundStocksSimilarity(t *testing.T) {
 	require.Nil(t, err)
 
 	for _, s := range sims {
-		if s.SameCount < 4 {
+		if len(s.SameStocks) < 4 {
 			continue
 		}
 		sim, _ := json.MarshalIndent(s, "", "  ")

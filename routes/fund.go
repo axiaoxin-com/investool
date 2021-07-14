@@ -4,6 +4,7 @@ package routes
 
 import (
 	"net/http"
+	"regexp"
 	"strings"
 	"sync"
 
@@ -273,19 +274,53 @@ func FundCheck(c *gin.Context) {
 	return
 }
 
-// FundSimilarity 基金相似度
+// ParamFundSimilarity FundSimilarity 请求参数
+type ParamFundSimilarity struct {
+	Codes string `json:"codes" form:"codes"`
+}
+
+// FundSimilarity 基金持仓相似度
 func FundSimilarity(c *gin.Context) {
-	codes := c.Query("codes")
-	if codes == "" {
+	p := ParamFundSimilarity{}
+	if err := c.ShouldBind(&p); err != nil {
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"Error":     err.Error(),
+		}
+		c.HTML(http.StatusOK, "fund_similarity.html", data)
 		return
 	}
-	codeList := strings.Split(codes, ",")
+	if p.Codes == "" {
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"Error":     "请填写待检测的基金代码",
+		}
+		c.HTML(http.StatusOK, "fund_similarity.html", data)
+		return
+	}
+	codeList := regexp.MustCompile("[\\/\\:\\,\\;\\.\\s]+").Split(p.Codes, -1)
 	checker := core.NewChecker(c, core.DefaultCheckerOptions)
-	data, err := checker.GetFundStocksSimilarity(c, codeList)
+	result, err := checker.GetFundStocksSimilarity(c, codeList)
 	if err != nil {
-		c.IndentedJSON(200, gin.H{"err": err.Error()})
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"Error":     err.Error(),
+		}
+		c.HTML(http.StatusOK, "fund_similarity.html", data)
 		return
 	}
-	c.IndentedJSON(200, data)
+	data := gin.H{
+		"Env":       viper.GetString("env"),
+		"Version":   version.Version,
+		"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+		"Result":    result,
+	}
+	c.HTML(http.StatusOK, "fund_similarity.html", data)
 	return
 }
