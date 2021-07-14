@@ -115,9 +115,9 @@ func (s Searcher) SearchFunds(ctx context.Context, fundCodes []string) (map[stri
 					return err
 				},
 				retry.OnRetry(func(n uint, err error) {
-					logging.Errorf(ctx, "retry#%d: code:%v %v\n", n, code, err)
+					logging.Errorf(ctx, "retry#%d: code:%v %v", n, code, err)
 				}),
-				retry.Attempts(3),
+				retry.Attempts(5),
 				retry.Delay(500*time.Millisecond),
 			)
 			if err != nil {
