@@ -247,13 +247,24 @@ const (
 	ValueListTypeJLL ValueListType = "JLL"
 )
 
+// FinaValueList 历史数据值列表
+type FinaValueList []float64
+
+func (fvl FinaValueList) String() string {
+	s := []string{}
+	for _, i := range fvl {
+		s = append(s, fmt.Sprint(i))
+	}
+	return strings.Join(s, "</br>")
+}
+
 // ValueList 获取历史数据值，最新的在最前面
 func (h HistoricalFinaMainData) ValueList(
 	ctx context.Context,
 	valueType ValueListType,
 	count int,
 	reportType FinaReportType,
-) []float64 {
+) FinaValueList {
 	r := []float64{}
 	data := h.FilterByReportType(ctx, reportType)
 	dataLen := len(data)

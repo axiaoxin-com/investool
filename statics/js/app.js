@@ -311,8 +311,8 @@ $(document).ready(function () {
                 "</br>最新财报预约发布日期:" +
                 data.FinaAppointPublishDates[i] +
                 "</div>" +
-                '<table class="striped">' +
-                '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
+                '<table class="centered striped">' +
+                '<thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead>' +
                 "<tbody></tbody>" +
                 "</table>" +
                 "</div>"
