@@ -8,6 +8,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/avast/retry-go"
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
 	"github.com/spf13/viper"
@@ -129,8 +130,19 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 				wg.Done()
 			}()
 			index := <-reqChan
-
-			resp, err := e.QueryFundListByPage(ctx, fundType, index)
+			resp := RespFundList{}
+			err := retry.Do(
+				func() error {
+					var err error
+					resp, err = e.QueryFundListByPage(ctx, fundType, index)
+					return err
+				},
+				retry.OnRetry(func(n uint, err error) {
+					logging.Errorf(ctx, "retry#%d: page:%v %v", n, index, err)
+				}),
+				retry.Attempts(10),
+				retry.Delay(100*time.Millisecond),
+			)
 			if err != nil {
 				logging.Errorf(ctx, "QueryAllFundList QueryFundListByPage:%d err:%v", index, err)
 				return
@@ -190,7 +202,10 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 		return resp, err
 	}
 	if resp.ErrCode != 0 {
-		return resp, fmt.Errorf("QueryFundListByPage error %v", resp.ErrMsg)
+		return resp, fmt.Errorf("QueryFundListByPage ErrCode != 0: %+v", resp)
+	}
+	if resp.ErrCode == 0 && len(resp.Datas) == 0 {
+		return resp, fmt.Errorf("QueryFundListByPage ErrCode == 0 but not data: %+v", resp)
 	}
 	return resp, nil
 }
