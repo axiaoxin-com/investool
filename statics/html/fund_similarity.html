@@ -14,7 +14,7 @@
         {{ range .Result }}
         <tr>
             <td>
-                <a target="_blank" href="http://fund.eastmoney.com/{{ .Fund.Code }}.html">{{ .Fund.Name }}</a>
+                <a target="_blank" href="http://fund.eastmoney.com/{{ .Fund.Code }}.html">{{ .Fund.Name }}({{ .Fund.Code }})</a>
             </td>
             <td>
                 {{ range $i, $s := .SameStocks }}
