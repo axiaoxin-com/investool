@@ -141,10 +141,10 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 						logging.Warnf(ctx, "code:%v is already exist", d.Fcode)
 						continue
 					}
-					sm.Store(d.Fcode, struct{}{})
 					mu.Lock()
 					result = append(result, d)
 					mu.Unlock()
+					sm.Store(d.Fcode, struct{}{})
 				}
 			}
 		}()
@@ -167,9 +167,9 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 		"pageIndex":  fmt.Sprint(pageIndex),
 		"pageSize":   "30",
 		"plat":       "Iphone",
-		"deviceid":   "-",
+		"deviceid":   fmt.Sprint(time.Now().UnixNano()),
 		"product":    "EFund",
-		"version":    "-",
+		"version":    "6.4.5",
 	}
 	logging.Debug(ctx, "EastMoney QueryFundListByPage "+apiurl+" begin", zap.Any("params", params))
 	beginTime := time.Now()
