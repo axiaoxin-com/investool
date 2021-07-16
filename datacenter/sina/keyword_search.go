@@ -30,11 +30,11 @@ type SearchResult struct {
 }
 
 // KeywordSearch 关键词搜索， 股票、代码、拼音
-func (q Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchResult, err error) {
+func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchResult, err error) {
 	apiurl := fmt.Sprintf("https://suggest3.sinajs.cn/suggest/key=%s", kw)
 	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" begin")
 	beginTime := time.Now()
-	resp, err := goutils.HTTPGETRaw(ctx, q.HTTPClient, apiurl)
+	resp, err := goutils.HTTPGETRaw(ctx, s.HTTPClient, apiurl)
 	utf8resp := transcode.FromString(string(resp)).Decode("GBK").ToString()
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", utf8resp))
