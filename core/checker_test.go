@@ -19,7 +19,7 @@ func TestCheckFundamentals(t *testing.T) {
 	t.Log(ok, result)
 }
 
-func TestGetFundStocksSimilarity(t *testing.T) {
+func _TestGetFundStocksSimilarity(t *testing.T) {
 	viper.SetDefault("app.chan_size", 500)
 	c := NewChecker(_ctx, DefaultCheckerOptions)
 	codes := []string{
