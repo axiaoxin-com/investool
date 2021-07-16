@@ -293,6 +293,9 @@ $(document).ready(function () {
           $("#load_modal").modal("close");
           return;
         }
+        $("title").text(data.PageTitle);
+        $("#stock_forms").remove();
+        $("#checker_results").removeClass("hide");
         if (data.Results.length == 0) {
           $("#checker_results h4").text("暂不支持对该股进行检测");
         } else {
@@ -332,32 +335,27 @@ $(document).ready(function () {
                   "</td></tr>"
               );
             });
-            const svg = document.querySelector(".line-chart");
-            // new chartXkcd.Line(svg, {
-            //   title: "历史数据",
-            //   xLabel: "年",
-            //   yLabel: "",
-            //   data: {
-            //     labels: ["", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-            //     datasets: [
-            //       {
-            //         label: "Plan",
-            //         data: [30, 70, 200, 300, 500, 800, 1500, 2900, 5000, 8000],
-            //       },
-            //       {
-            //         label: "Reality",
-            //         data: [0, 1, 30, 70, 80, 100, 50, 80, 40, 150],
-            //       },
-            //     ],
-            //   },
-            //   options: {},
-            // });
-            // $(".line-chart").removeClass("hide");
+            $("#checker_result_" + i).append(
+              '<div class="row">' +
+                '</br><h6 class="center">年报数据趋势概览</h6>' +
+                '<div class="col s12 m12 l6">' +
+                '<svg id="line-chart-' +
+                i +
+                '-0"></svg>' +
+                "</div>" +
+                '<div class="col s12 m12 l6">' +
+                '<svg id="line-chart-' +
+                i +
+                '-1"></svg>' +
+                "</div>" +
+                "</div>"
+            );
+            for (let j = 0; j < 2; j++) {
+              const svg = document.querySelector(`#line-chart-${i}-${j}`);
+              new chartXkcd.Line(svg, data.Lines[i][j]);
+            }
           });
         }
-        $("title").text(data.PageTitle);
-        $("#stock_forms").remove();
-        $("#checker_results").removeClass("hide");
         $("html, body").animate({ scrollTop: 0 }, 0);
         $("#load_modal").modal("close");
       },
