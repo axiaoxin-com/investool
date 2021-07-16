@@ -337,7 +337,7 @@ $(document).ready(function () {
             });
             $("#checker_result_" + i).append(
               '<div class="row">' +
-                '</br><h6 class="center">年报数据趋势概览</h6>' +
+                '</br><h5 class="center">年报数据趋势概览</h5>' +
                 '<div class="col s12 m12 l6">' +
                 '<svg id="line-chart-' +
                 i +
@@ -467,6 +467,10 @@ $(document).ready(function () {
           return;
         }
 
+        $("title").text(data.PageTitle);
+        $("#index_content").remove();
+        $("#fund_check_results").removeClass("hide");
+
         $.each(data.Funds, function (code, fund) {
           var year_1_rank_ratio = "❌";
           if (
@@ -550,7 +554,7 @@ $(document).ready(function () {
               fund.name +
               "(" +
               fund.code +
-              ')</a>检测结果</h4><div class="divider"></div><table class="striped"><thead><tr><th width="45%">指标</th><th width="45%">描述</th><th width="10%">结果</th></tr></thead><tbody><tr><td>近1年绩效排名前' +
+              ')</a>检测结果</h4><div class="divider"></div><table class="centered striped"><thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead><tbody><tr><td>近1年绩效排名前' +
               data.Param.year_1_rank_ratio +
               "%</td><td>近1年绩效排名前" +
               fund.performance.year_1_rank_ratio.toFixed(2) +
@@ -652,11 +656,55 @@ $(document).ready(function () {
               fund.max_retracement.year_5.toFixed(2) +
               "%</td><td>" +
               maxretr_avg135 +
-              "</td></tr>" +
-              "</tbody>" +
-              "</table>" +
+              "</td></tr></tbody></table>" +
               "</div>"
           );
+          $(`#${fund.code}`).append(
+            '<div class="row"><div class="col s12 m12 l12">' +
+              '<svg id="svg_hold_ratio_' +
+              fund.code +
+              '"></svg></div>' +
+              '<div class="col s12 m12 l6">' +
+              '<svg id="svg_industry_prop_' +
+              fund.code +
+              '"></svg></div></div>'
+          );
+          const svgHoldRatio = document.querySelector(
+            `#svg_hold_ratio_${fund.code}`
+          );
+          var chartData = data.ChartData[fund.code];
+          new chartXkcd.StackedBar(svgHoldRatio, {
+            title: "持仓股票",
+            xLabel: "",
+            yLabel: "%",
+            data: {
+              labels: chartData.hold_ratio_labels,
+              datasets: [
+                {
+                  label: "持仓占比",
+                  data: chartData.hold_ratio_data,
+                },
+                {
+                  label: "最新调仓",
+                  data: chartData.adjust_ratio_data,
+                },
+              ],
+            },
+          });
+          const svgIndustry = document.querySelector(
+            `#svg_industry_prop_${fund.code}`
+          );
+          new chartXkcd.Pie(svgIndustry, {
+            title: "行业占比",
+            data: {
+              labels: chartData.industry_labels,
+              datasets: [
+                {
+                  data: chartData.industry_data,
+                },
+              ],
+            },
+          });
           if (data.StockCheckResults) {
             var stockCheckResult = data.StockCheckResults[fund.code];
             $(`#${fund.code}`).append(
@@ -667,25 +715,25 @@ $(document).ready(function () {
               $(`#${fund.code}`).append(
                 '<div id="checker_result_' +
                   i +
-                  '"><div class="row"><a target="_blank" href="http://quote.eastmoney.com/' +
+                  '"><div class="row"><div class="divider"></div><div class="col s12 m12 l6"><a target="_blank" href="http://quote.eastmoney.com/' +
                   cm[1] +
                   cm[0] +
                   '.html">' +
                   stockCheckResult.names[i] +
-                  "</a></br>持仓占比:" +
+                  "</a> | 持仓占比:" +
                   fund.stocks[i].hold_ratio +
                   "%</br>所属行业:" +
                   fund.stocks[i].industry +
-                  "</br>最新调仓:" +
+                  " | 最新调仓:" +
                   fund.stocks[i].adjust_ratio +
                   "%" +
-                  "</br>当前检测财报数据来源:" +
+                  '</div><div class="col s12 m12 l6 right-align">当前检测财报数据来源:' +
                   stockCheckResult.fina_report_names[i] +
                   "</br>最新财报预约发布日期:" +
                   stockCheckResult.fina_appoint_publish_dates[i] +
-                  "</div>" +
-                  '<table class="striped">' +
-                  '<thead><tr><th width="25%">指标</th><th width="65%">描述</th><th width="10%">结果</th></tr></thead>' +
+                  "</div></div>" +
+                  '<table class="centered striped">' +
+                  '<thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead>' +
                   "<tbody></tbody>" +
                   "</table>" +
                   "</div>"
@@ -708,9 +756,6 @@ $(document).ready(function () {
             });
           }
         });
-        $("title").text(data.PageTitle);
-        $("#index_content").remove();
-        $("#fund_check_results").removeClass("hide");
         $("html, body").animate({ scrollTop: 0 }, 0);
         $("#load_modal").modal("close");
       },

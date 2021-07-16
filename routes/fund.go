@@ -215,6 +215,35 @@ func FundCheck(c *gin.Context) {
 		c.JSON(http.StatusOK, data)
 		return
 	}
+
+	// 构造图表数据
+	chartData := map[string]gin.H{}
+	for _, fund := range funds {
+		holdRatioLabels := []string{}
+		holdRatioData := []float64{}
+		adjustRatioData := []float64{}
+		for _, s := range fund.Stocks {
+			holdRatioLabels = append(holdRatioLabels, s.Name)
+			holdRatioData = append(holdRatioData, s.HoldRatio)
+			adjustRatioData = append(adjustRatioData, s.AdjustRatio)
+		}
+		industryLabels := []string{}
+		industryData := []string{}
+		for i, p := range fund.IndustryProportions {
+			if i != len(fund.IndustryProportions)-1 {
+				industryLabels = append(industryLabels, p.Industry)
+				industryData = append(industryData, p.Prop)
+			}
+		}
+		chartData[fund.Code] = gin.H{
+			"hold_ratio_labels": holdRatioLabels,
+			"hold_ratio_data":   holdRatioData,
+			"adjust_ratio_data": adjustRatioData,
+			"industry_labels":   industryLabels,
+			"industry_data":     industryData,
+		}
+	}
+
 	if !p.CheckStocks {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
@@ -222,6 +251,7 @@ func FundCheck(c *gin.Context) {
 			"PageTitle": "X-STOCK | 基金 | 基金检测",
 			"Funds":     funds,
 			"Param":     p,
+			"ChartData": chartData,
 		}
 		c.JSON(http.StatusOK, data)
 		return
@@ -267,6 +297,7 @@ func FundCheck(c *gin.Context) {
 		"Funds":             funds,
 		"StockCheckResults": stockCheckResults,
 		"Param":             p,
+		"ChartData":         chartData,
 	}
 	c.JSON(http.StatusOK, data)
 	return

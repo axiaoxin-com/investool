@@ -103,6 +103,11 @@ func StockChecker(c *gin.Context) {
 	}
 	searcher := core.NewSearcher(c)
 	keywords := goutils.SplitStringFields(param.Keyword)
+	if len(keywords) > 50 {
+		data["Error"] = "股票数量超过限制"
+		c.JSON(http.StatusOK, data)
+		return
+	}
 	stocks, err := searcher.SearchStocks(c, keywords)
 	if err != nil {
 		data["Error"] = err.Error()
