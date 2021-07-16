@@ -4,8 +4,6 @@ package routes
 
 import (
 	"net/http"
-	"regexp"
-	"strings"
 	"sync"
 
 	"github.com/axiaoxin-com/goutils"
@@ -204,7 +202,7 @@ func FundCheck(c *gin.Context) {
 		return
 	}
 
-	codes := strings.Split(p.Code, "/")
+	codes := goutils.SplitStringFields(p.Code)
 	searcher := core.NewSearcher(c)
 	funds, err := searcher.SearchFunds(c, codes)
 	if err != nil {
@@ -302,7 +300,7 @@ func FundSimilarity(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_similarity.html", data)
 		return
 	}
-	codeList := regexp.MustCompile("[\\/\\:\\,\\;\\.\\s]+").Split(p.Codes, -1)
+	codeList := goutils.SplitStringFields(p.Codes)
 	checker := core.NewChecker(c, core.DefaultCheckerOptions)
 	result, err := checker.GetFundStocksSimilarity(c, codeList)
 	if err != nil {

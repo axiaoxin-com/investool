@@ -102,7 +102,7 @@ func StockChecker(c *gin.Context) {
 		return
 	}
 	searcher := core.NewSearcher(c)
-	keywords := strings.Split(param.Keyword, "/")
+	keywords := goutils.SplitStringFields(param.Keyword)
 	stocks, err := searcher.SearchStocks(c, keywords)
 	if err != nil {
 		data["Error"] = err.Error()

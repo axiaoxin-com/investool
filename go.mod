@@ -6,7 +6,7 @@ require (
 	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/avast/retry-go v3.0.0+incompatible
-	github.com/axiaoxin-com/goutils v1.0.19
+	github.com/axiaoxin-com/goutils v1.0.20-0.20210716041855-3e573fda9d16
 	github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba
 	github.com/axiaoxin-com/ratelimiter v1.0.3
 	github.com/deckarep/golang-set v1.7.1
