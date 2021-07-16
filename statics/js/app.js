@@ -659,52 +659,6 @@ $(document).ready(function () {
               "</td></tr></tbody></table>" +
               "</div>"
           );
-          $(`#${fund.code}`).append(
-            '<div class="row"><div class="col s12 m12 l12">' +
-              '<svg id="svg_hold_ratio_' +
-              fund.code +
-              '"></svg></div>' +
-              '<div class="col s12 m12 l6">' +
-              '<svg id="svg_industry_prop_' +
-              fund.code +
-              '"></svg></div></div>'
-          );
-          const svgHoldRatio = document.querySelector(
-            `#svg_hold_ratio_${fund.code}`
-          );
-          var chartData = data.ChartData[fund.code];
-          new chartXkcd.StackedBar(svgHoldRatio, {
-            title: "持仓股票",
-            xLabel: "",
-            yLabel: "%",
-            data: {
-              labels: chartData.hold_ratio_labels,
-              datasets: [
-                {
-                  label: "持仓占比",
-                  data: chartData.hold_ratio_data,
-                },
-                {
-                  label: "最新调仓",
-                  data: chartData.adjust_ratio_data,
-                },
-              ],
-            },
-          });
-          const svgIndustry = document.querySelector(
-            `#svg_industry_prop_${fund.code}`
-          );
-          new chartXkcd.Pie(svgIndustry, {
-            title: "行业占比",
-            data: {
-              labels: chartData.industry_labels,
-              datasets: [
-                {
-                  data: chartData.industry_data,
-                },
-              ],
-            },
-          });
           if (data.StockCheckResults) {
             var stockCheckResult = data.StockCheckResults[fund.code];
             $(`#${fund.code}`).append(
