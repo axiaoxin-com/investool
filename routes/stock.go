@@ -130,6 +130,7 @@ func StockChecker(c *gin.Context) {
 	data["StockNames"] = stockNames
 	data["FinaReportNames"] = finaReportNames
 	data["FinaAppointPublishDates"] = finaAppointPublishDates
+	data["Line"] = gin.H{}
 	c.JSON(http.StatusOK, data)
 	return
 }

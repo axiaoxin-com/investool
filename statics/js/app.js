@@ -332,6 +332,27 @@ $(document).ready(function () {
                   "</td></tr>"
               );
             });
+            const svg = document.querySelector(".line-chart");
+            // new chartXkcd.Line(svg, {
+            //   title: "历史数据",
+            //   xLabel: "年",
+            //   yLabel: "",
+            //   data: {
+            //     labels: ["", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+            //     datasets: [
+            //       {
+            //         label: "Plan",
+            //         data: [30, 70, 200, 300, 500, 800, 1500, 2900, 5000, 8000],
+            //       },
+            //       {
+            //         label: "Reality",
+            //         data: [0, 1, 30, 70, 80, 100, 50, 80, 40, 150],
+            //       },
+            //     ],
+            //   },
+            //   options: {},
+            // });
+            // $(".line-chart").removeClass("hide");
           });
         }
         $("title").text(data.PageTitle);
@@ -395,7 +416,6 @@ $(document).ready(function () {
   // 基金字段
   for (let i = 1; i <= 23; i++) {
     $(`#f${i}`).change(function () {
-      checkboxCountCheck();
       $(`.t${i}`).toggleClass("hide");
       if (this.checked) {
         localStorage.setItem(`t${i}`, 1);
