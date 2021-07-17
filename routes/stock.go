@@ -4,6 +4,7 @@ package routes
 
 import (
 	"fmt"
+	"math"
 	"net/http"
 	"strings"
 	"time"
@@ -120,11 +121,6 @@ func StockChecker(c *gin.Context) {
 	finaReportNames := []string{}
 	finaAppointPublishDates := []string{}
 	lines := [][]gin.H{}
-	yearLabels := []string{}
-	year := time.Now().Year()
-	for i := param.CheckerOptions.CheckYears; i > 0; i-- {
-		yearLabels = append(yearLabels, fmt.Sprint(year-i))
-	}
 
 	type dataset struct {
 		Label string    `json:"label"`
@@ -143,6 +139,20 @@ func StockChecker(c *gin.Context) {
 		finaReportNames = append(finaReportNames, finaReportName)
 
 		finaAppointPublishDates = append(finaAppointPublishDates, strings.Split(stock.FinaAppointPublishDate, " ")[0])
+
+		roeList := goutils.ReversedFloat64Slice(
+			stock.HistoricalFinaMainData.ValueList(
+				c,
+				eastmoney.ValueListTypeROE,
+				param.CheckerOptions.CheckYears,
+				eastmoney.FinaReportTypeYear,
+			))
+		yearLabels := []string{}
+		year := time.Now().Year()
+		yearcount := int(math.Min(float64(param.CheckerOptions.CheckYears), float64(len(roeList))))
+		for i := yearcount; i > 0; i-- {
+			yearLabels = append(yearLabels, fmt.Sprint(year-i))
+		}
 		line0 := gin.H{
 			"title":  "",
 			"xLable": "年",
@@ -152,12 +162,7 @@ func StockChecker(c *gin.Context) {
 				"datasets": []dataset{
 					{
 						Label: "ROE",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeROE,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
+						Data:  roeList,
 					},
 					{
 						Label: "EPS",
