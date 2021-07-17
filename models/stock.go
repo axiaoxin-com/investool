@@ -61,6 +61,8 @@ type Stock struct {
 	NetcashFinance float64 `json:"netcash_finance"`
 	// 自由现金流
 	NetcashFree float64 `json:"netcash_free"`
+	// 十大流通股东
+	FreeHoldersTop10 eastmoney.FreeHolderList `json:"free_holders_top_10"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -298,6 +300,20 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 				s.NetcashFree = s.NetcashOperate - s.NetcashInvest
 			}
 		}
+	}(ctx, s)
+
+	// 获取前10大流通股东
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		holders, err := datacenter.EastMoney.QueryFreeHolders(ctx, s.BaseInfo.Secucode)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryFreeHolders err:"+err.Error())
+			return
+		}
+		s.FreeHoldersTop10 = holders
 	}(ctx, s)
 
 	wg.Wait()

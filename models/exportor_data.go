@@ -121,6 +121,8 @@ type ExportorData struct {
 	NetcashFinance string `json:"netcash_finance"           csv:"筹资现金流净额"`
 	// 自由现金流
 	NetcashFree string `json:"netcash_free"              csv:"自由现金流"`
+	// 十大流通股东
+	FreeHoldersTop10 string `json:"free_holders_top_10"       csv:"十大流通股东"`
 }
 
 // GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
@@ -232,11 +234,12 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		),
 		JLL5Y: stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeJLL, 5, eastmoney.FinaReportTypeYear),
 
-		ListingDate:    stock.BaseInfo.ListingDate,
-		NetcashOperate: goutils.YiWanString(stock.NetcashOperate),
-		NetcashInvest:  goutils.YiWanString(stock.NetcashInvest),
-		NetcashFinance: goutils.YiWanString(stock.NetcashFinance),
-		NetcashFree:    goutils.YiWanString(stock.NetcashFree),
+		ListingDate:      stock.BaseInfo.ListingDate,
+		NetcashOperate:   goutils.YiWanString(stock.NetcashOperate),
+		NetcashInvest:    goutils.YiWanString(stock.NetcashInvest),
+		NetcashFinance:   goutils.YiWanString(stock.NetcashFinance),
+		NetcashFree:      goutils.YiWanString(stock.NetcashFree),
+		FreeHoldersTop10: stock.FreeHoldersTop10.String(),
 	}
 }
 
