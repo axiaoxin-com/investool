@@ -6,11 +6,13 @@ import (
 	"context"
 	"sort"
 	"sync"
+	"time"
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/axiaoxin-com/x-stock/datacenter/eniu"
+	"github.com/axiaoxin-com/x-stock/datacenter/zszx"
 )
 
 // Stock 接口返回的股票信息结构
@@ -63,6 +65,8 @@ type Stock struct {
 	NetcashFree float64 `json:"netcash_free"`
 	// 十大流通股东
 	FreeHoldersTop10 eastmoney.FreeHolderList `json:"free_holders_top_10"`
+	// 主力资金净流入
+	MainMoneyNetInflows zszx.NetInflowList `json:"main_money_net_inflows"`
 }
 
 // GetPrice 返回股价，没开盘时可能是字符串“-”，此时返回最近历史股价，无历史价则返回 -1
@@ -219,7 +223,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
 		if err != nil {
-			logging.Error(ctx, "NewStock QueryOrgRating err:"+err.Error())
+			logging.Warn(ctx, "NewStock QueryOrgRating err:"+err.Error())
 			return
 		}
 		s.OrgRatingList = orgRatings
@@ -233,7 +237,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
 		if err != nil {
-			logging.Error(ctx, "NewStock QueryProfitPredict err:"+err.Error())
+			logging.Warn(ctx, "NewStock QueryProfitPredict err:"+err.Error())
 			return
 		}
 		s.ProfitPredictList = pps
@@ -314,6 +318,24 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.FreeHoldersTop10 = holders
+	}(ctx, s)
+
+	// 获取最近30日的主力资金净流入
+	wg.Add(1)
+	go func(ctx context.Context, s *Stock) {
+		defer func() {
+			wg.Done()
+		}()
+		now := time.Now()
+		end := now.Format("2006-01-02")
+		d, _ := time.ParseDuration("-720h")
+		start := now.Add(d).Format("2006-01-02")
+		inflows, err := datacenter.Zszx.QueryMainMoneyNetInflows(ctx, s.BaseInfo.Secucode, start, end)
+		if err != nil {
+			logging.Error(ctx, "NewStock QueryMainMoneyNetInflows err:"+err.Error())
+			return
+		}
+		s.MainMoneyNetInflows = inflows
 	}(ctx, s)
 
 	wg.Wait()

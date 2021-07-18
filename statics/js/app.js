@@ -261,6 +261,9 @@ $(document).ready(function () {
                 '<td class="hide st_53">' +
                 stock.free_holders_top_10 +
                 "</td>" +
+                '<td class="hide st_54">' +
+                stock.main_money_net_inflows +
+                "</td>" +
                 "</tr>"
             );
           });
@@ -401,7 +404,7 @@ $(document).ready(function () {
   $(".dropdown-content>li>a").css("font-size", "11px");
   $(".dropdown-content>li>a").css("font-weight", "normal");
 
-  for (let i = 1; i <= 53; i++) {
+  for (let i = 1; i <= 54; i++) {
     $(`#sf_${i}`).change(function () {
       checkboxCountCheck();
       $(`.st_${i}`).toggleClass("hide");

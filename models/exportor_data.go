@@ -4,6 +4,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -123,6 +124,8 @@ type ExportorData struct {
 	NetcashFree string `json:"netcash_free"              csv:"自由现金流"`
 	// 十大流通股东
 	FreeHoldersTop10 string `json:"free_holders_top_10"       csv:"十大流通股东"`
+	// 主力净流入
+	MainMoneyNetInflows string `json:"main_money_net_inflows"    csv:"主力资金净流入"`
 }
 
 // GetHeaderValueMap 获取以 csv tag 为 key 的 Data map
@@ -166,6 +169,26 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 	if len(stock.HistoricalFinaMainData) == 0 {
 		return ExportorData{}
 	}
+
+	netInflowsLen := len(stock.MainMoneyNetInflows)
+	netInflow3days := "--"
+	if netInflowsLen >= 3 {
+		netInflow3days = fmt.Sprintf("近3日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:3].SumMainNetIn(ctx))
+	}
+	netInflow5days := "--"
+	if netInflowsLen >= 5 {
+		netInflow5days = fmt.Sprintf("近5日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:5].SumMainNetIn(ctx))
+	}
+	netInflow10days := "--"
+	if netInflowsLen >= 10 {
+		netInflow10days = fmt.Sprintf("近10日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:10].SumMainNetIn(ctx))
+	}
+	netInflow20days := "--"
+	if netInflowsLen >= 20 {
+		netInflow20days = fmt.Sprintf("近20日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:20].SumMainNetIn(ctx))
+	}
+	mainNetInflows := fmt.Sprintf("%s</br>%s</br>%s</br>%s", netInflow3days, netInflow5days, netInflow10days, netInflow20days)
+
 	fina := stock.HistoricalFinaMainData[0]
 	return ExportorData{
 		Name:            stock.BaseInfo.SecurityNameAbbr,
@@ -234,12 +257,13 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		),
 		JLL5Y: stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeJLL, 5, eastmoney.FinaReportTypeYear),
 
-		ListingDate:      stock.BaseInfo.ListingDate,
-		NetcashOperate:   goutils.YiWanString(stock.NetcashOperate),
-		NetcashInvest:    goutils.YiWanString(stock.NetcashInvest),
-		NetcashFinance:   goutils.YiWanString(stock.NetcashFinance),
-		NetcashFree:      goutils.YiWanString(stock.NetcashFree),
-		FreeHoldersTop10: stock.FreeHoldersTop10.String(),
+		ListingDate:         stock.BaseInfo.ListingDate,
+		NetcashOperate:      goutils.YiWanString(stock.NetcashOperate),
+		NetcashInvest:       goutils.YiWanString(stock.NetcashInvest),
+		NetcashFinance:      goutils.YiWanString(stock.NetcashFinance),
+		NetcashFree:         goutils.YiWanString(stock.NetcashFree),
+		FreeHoldersTop10:    stock.FreeHoldersTop10.String(),
+		MainMoneyNetInflows: mainNetInflows,
 	}
 }
 
