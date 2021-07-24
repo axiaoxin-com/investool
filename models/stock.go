@@ -223,7 +223,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
 		if err != nil {
-			logging.Warn(ctx, "NewStock QueryOrgRating err:"+err.Error())
+			logging.Debug(ctx, "NewStock QueryOrgRating err:"+err.Error())
 			return
 		}
 		s.OrgRatingList = orgRatings

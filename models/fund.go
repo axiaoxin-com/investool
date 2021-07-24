@@ -380,7 +380,7 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	if len(efund.Jjgm.Datas) > 0 {
 		fund.NetAssetsScale = interfaceToFloat64(ctx, efund.Jjgm.Datas[0].Netnav)
 	} else {
-		logging.Warnf(ctx, "code:%v jjgm no data", fund.Code)
+		logging.Debugf(ctx, "code:%v jjgm no data", fund.Code)
 	}
 
 	// 绩效
