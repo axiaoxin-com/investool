@@ -4,6 +4,7 @@
         <ul class="tabs">
             <li class="tab col s6"><a class="active" href="#checker">个股检测</a></li>
             <li class="tab col s6"><a href="#selector">基本面选股</a></li>
+            <li class="tab col s6"><a href="#chip">筹码面</a></li>
         </ul>
     </div>
 
@@ -260,6 +261,24 @@
         </div>
     </div>
     <!--selector end-->
+
+    <!-- 筹码面 start -->
+    <div id="chip" class="col s12">
+        <div class="row">
+            <form class="col s12" id="chip_form">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="keyword" name="keyword" class="materialize-textarea validate" required></textarea>
+                        <label for="keyword">输入股票代码或简称</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <a class="btn waves-effect waves-light red lighten-2 col s12" id="chip_btn" >查询</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 筹码面 end -->
 </div>
 
 {{ template "modal" . }}
@@ -278,19 +297,20 @@
             <li><label><input id="sf_6" type="checkbox" /><span>数据源</span></label></li>
             <li><label><input id="sf_7" type="checkbox" /><span>财报审计意见</span></label></li>
             <li><label><input id="sf_8" type="checkbox" /><span>价值评估</span></label></li>
-            <li><label><input id="sf_9" type="checkbox" /><span>最新一期 ROE</span></label></li>
-            <li><label><input id="sf_10" type="checkbox" /><span>ROE 同比增长 (%)</span></label></li>
-            <li><label><input id="sf_11" type="checkbox" /><span>近五年 ROE</span></label></li>
-            <li><label><input id="sf_12" type="checkbox" /><span>最新一期 EPS</span></label></li>
-            <li><label><input id="sf_13" type="checkbox" /><span>EPS 同比增长 (%)</span></label></li>
-            <li><label><input id="sf_14" type="checkbox" /><span>近五年 EPS</span></label></li>
+            <li><label><input id="sf_9" type="checkbox" /><span>当前ROE</span></label></li>
+            <li><label><input id="sf_55" type="checkbox" /><span>最近财报ROE</span></label></li>
+            <li><label><input id="sf_10" type="checkbox" /><span>ROE同比增长(%)</span></label></li>
+            <li><label><input id="sf_11" type="checkbox" /><span>近五年ROE</span></label></li>
+            <li><label><input id="sf_12" type="checkbox" /><span>最新一期EPS</span></label></li>
+            <li><label><input id="sf_13" type="checkbox" /><span>EPS同比增长(%)</span></label></li>
+            <li><label><input id="sf_14" type="checkbox" /><span>近五年EPS</span></label></li>
             <li><label><input id="sf_15" type="checkbox" /><span>营业总收入</span></label></li>
-            <li><label><input id="sf_16" type="checkbox" /><span>营业总收入同比增长 (%)</span></label></li>
+            <li><label><input id="sf_16" type="checkbox" /><span>营业总收入同比增长(%)</span></label></li>
             <li><label><input id="sf_17" type="checkbox" /><span>近五年营收</span></label></li>
             <li><label><input id="sf_18" type="checkbox" /><span>归属净利润（元）</span></label></li>
-            <li><label><input id="sf_19" type="checkbox" /><span>归属净利润同比增长 (%)</span></label></li>
+            <li><label><input id="sf_19" type="checkbox" /><span>归属净利润同比增长(%)</span></label></li>
             <li><label><input id="sf_20" type="checkbox" /><span>近五年净利润</span></label></li>
-            <li><label><input id="sf_21" type="checkbox" /><span>最新股息率 (%)</span></label></li>
+            <li><label><input id="sf_21" type="checkbox" /><span>最新股息率(%)</span></label></li>
             <li><label><input id="sf_22" type="checkbox" /><span>财报披露日期</span></label></li>
             <li><label><input id="sf_23" type="checkbox" /><span>预约财报披露日期</span></label></li>
             <li><label><input id="sf_24" type="checkbox" /><span>实际财报披露日期</span></label></li>
@@ -299,12 +319,12 @@
             <li><label><input id="sf_27" type="checkbox" /><span>估算合理价格</span></label></li>
             <li><label><input id="sf_28" type="checkbox" /><span>合理价差</span></label></li>
             <li><label><input id="sf_29" type="checkbox" /><span>历史波动率</span></label></li>
-            <li><label><input id="sf_30" type="checkbox" /><span>最新负债率 (%)</span></label></li>
+            <li><label><input id="sf_30" type="checkbox" /><span>最新负债率(%)</span></label></li>
             <li><label><input id="sf_31" type="checkbox" /><span>负债流动比</span></label></li>
-            <li><label><input id="sf_32" type="checkbox" /><span>净利润 3 年复合增长率 (%)</span></label></li>
-            <li><label><input id="sf_33" type="checkbox" /><span>营收 3 年复合增长率 (%)</span></label></li>
-            <li><label><input id="sf_34" type="checkbox" /><span>上市以来年化收益率 (%)</span></label></li>
-            <li><label><input id="sf_35" type="checkbox" /><span>年化波动率 (%)</span></label></li>
+            <li><label><input id="sf_32" type="checkbox" /><span>净利润3年复合增长率(%)</span></label></li>
+            <li><label><input id="sf_33" type="checkbox" /><span>营收3年复合增长率(%)</span></label></li>
+            <li><label><input id="sf_34" type="checkbox" /><span>上市以来年化收益率(%)</span></label></li>
+            <li><label><input id="sf_35" type="checkbox" /><span>年化波动率(%)</span></label></li>
             <li><label><input id="sf_36" type="checkbox" /><span>市盈率</span></label></li>
             <li><label><input id="sf_37" type="checkbox" /><span>PEG</span></label></li>
             <li><label><input id="sf_38" type="checkbox" /><span>机构评级</span></label></li>
@@ -341,7 +361,8 @@
                     <th class="hide st_6">数据源</th>
                     <th class="hide st_7">财报审计意见</th>
                     <th class="hide st_8">价值评估</th>
-                    <th class="hide st_9">最新一期 ROE</th>
+                    <th class="hide st_9">当前ROE</th>
+                    <th class="hide st_55">最近财报ROE</th>
                     <th class="hide st_10">ROE同比增长</th>
                     <th class="hide st_11">近五年ROE</th>
                     <th class="hide st_12">最新一期EPS</th>

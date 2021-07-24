@@ -41,7 +41,7 @@ $(document).ready(function () {
     return result;
   };
 
-  // 表单提交按钮点击事件
+  // 基本面选股请求处理
   $("#selector_submit_btn").click(function () {
     $(this).addClass("disabled");
     $("#model_header").text($(this).text() + "中，请稍候...");
@@ -113,6 +113,10 @@ $(document).ready(function () {
                 "</td>" +
                 '<td class="hide st_9">' +
                 stock.latest_roe +
+                "%" +
+                "</td>" +
+                '<td class="hide st_55">' +
+                stock.latest_fina_roe +
                 "%" +
                 "</td>" +
                 '<td class="hide st_10">' +
@@ -277,6 +281,7 @@ $(document).ready(function () {
     });
   });
 
+  // 个股检测请求处理
   $("#checker_submit_btn").click(function () {
     if ($("#checker_keyword").val() == "") {
       $("#err_msg").text("请填写股票代码或简称");
@@ -368,6 +373,59 @@ $(document).ready(function () {
     });
   });
 
+  // 筹码面
+  $("#chip_submit_btn").click(function () {
+    if ($("#chip_keyword").val() == "") {
+      $("#err_msg").text("请填写股票代码或简称");
+      $("#error_modal").modal("open");
+      return;
+    }
+    $(this).addClass("disabled");
+    $("#model_header").text($(this).text() + "中，请稍候...");
+    $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
+    $("#load_modal").modal("open");
+    $.ajax({
+      url: "/chip",
+      type: "post",
+      data: $("#chip_form").serialize(),
+      success: function (data) {
+        if (data.Error) {
+          $("#err_msg").text(data.Error);
+          $("#error_modal").modal("open");
+          $("#checker_submit_btn").removeClass("disabled");
+          $("#load_modal").modal("close");
+          return;
+        }
+        $("title").text(data.PageTitle);
+        $("#stock_forms").remove();
+        $("#chip_results").removeClass("hide");
+        $.each(data.MainMoneyNetInflows, function (code, inflows) {
+          $("#chip_result_" + code).append(
+            '<div class="row">' +
+              '</br><h5 class="center">年报数据趋势概览</h5>' +
+              '<div class="col s12 m12 l6">' +
+              '<svg id="line-chart-' +
+              i +
+              '-0"></svg>' +
+              "</div>" +
+              '<div class="col s12 m12 l6">' +
+              '<svg id="line-chart-' +
+              i +
+              '-1"></svg>' +
+              "</div>" +
+              "</div>"
+          );
+          for (let j = 0; j < 2; j++) {
+            const svg = document.querySelector(`#line-chart-${i}-${j}`);
+            new chartXkcd.Line(svg, data.Lines[i][j]);
+          }
+        });
+        $("html, body").animate({ scrollTop: 0 }, 0);
+        $("#load_modal").modal("close");
+      },
+    });
+  });
+
   // 返回顶部按钮
   $("#to-top").click(function () {
     $("html, body").animate({ scrollTop: 0 }, 500);
@@ -404,7 +462,7 @@ $(document).ready(function () {
   $(".dropdown-content>li>a").css("font-size", "11px");
   $(".dropdown-content>li>a").css("font-weight", "normal");
 
-  for (let i = 1; i <= 54; i++) {
+  for (let i = 1; i <= 55; i++) {
     $(`#sf_${i}`).change(function () {
       checkboxCountCheck();
       $(`.st_${i}`).toggleClass("hide");

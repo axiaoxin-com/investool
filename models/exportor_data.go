@@ -34,8 +34,10 @@ type ExportorData struct {
 	ReportOpinion interface{} `json:"report_opinion"            csv:"财报审计意见"`
 	// 价值评估
 	JZPG string `json:"jzpg"                      csv:"价值评估"`
-	// 最新一期 ROE
-	LatestROE float64 `json:"latest_roe"                csv:"最新一期 ROE"`
+	// 当前 ROE
+	LatestROE float64 `json:"latest_roe"                csv:"当前 ROE"`
+	// 最近财报 ROE
+	LatestFinaROE float64 `json:"latest_fina_roe"           csv:"最新财报 ROE"`
 	// ROE 同比增长
 	ROETBZZ float64 `json:"roe_tbzz"                  csv:"ROE 同比增长 (%)"`
 	// 近五年 ROE
@@ -201,7 +203,8 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		ReportDateName:  fina.ReportDateName,
 		ReportOpinion:   reportOpinion,
 		JZPG:            stock.JZPG.String(),
-		LatestROE:       fina.Roejq,
+		LatestROE:       stock.BaseInfo.RoeWeight,
+		LatestFinaROE:   fina.Roejq,
 		ROETBZZ:         fina.Roejqtz,
 		ROE5Y:           stock.HistoricalFinaMainData.ValueList(ctx, eastmoney.ValueListTypeROE, 5, eastmoney.FinaReportTypeYear),
 		LatestEPS:       fina.Epsjb,
