@@ -35,12 +35,12 @@ func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" begin")
 	beginTime := time.Now()
 	resp, err := goutils.HTTPGETRaw(ctx, s.HTTPClient, apiurl)
-	utf8resp := transcode.FromString(string(resp)).Decode("GBK").ToString()
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", utf8resp))
+	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", string(resp)))
 	if err != nil {
 		return nil, err
 	}
+	utf8resp := transcode.FromString(string(resp)).Decode("GBK").ToString()
 	ds := strings.Split(utf8resp, "=")
 	if len(ds) != 2 {
 		return nil, errors.New("search resp invalid:" + utf8resp)
