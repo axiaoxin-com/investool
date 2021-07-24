@@ -47,7 +47,7 @@ func (s Searcher) SearchStocks(ctx context.Context, keywords []string) (map[stri
 			}()
 			searchResults, err := datacenter.Sina.KeywordSearch(ctx, kw)
 			if err != nil {
-				logging.Errorf(ctx, "search %s error:", kw, err.Error())
+				logging.Errorf(ctx, "search %s error:%s", kw, err.Error())
 				return
 			}
 			if len(searchResults) == 0 {

@@ -40,7 +40,8 @@ func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 	if err != nil {
 		return nil, err
 	}
-	utf8resp := transcode.FromString(string(resp)).Decode("GBK").ToString()
+	trans := transcode.FromByteArray(resp)
+	utf8resp := trans.Decode("GBK").ToString()
 	ds := strings.Split(utf8resp, "=")
 	if len(ds) != 2 {
 		return nil, errors.New("search resp invalid:" + utf8resp)
