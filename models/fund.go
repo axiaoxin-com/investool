@@ -779,6 +779,9 @@ func (f Fund) NetAssetsScaleHuman() string {
 
 // EstabYears 成立年限
 func (f Fund) EstabYears(ctx context.Context) float64 {
+	if f.EstablishedDate == "--" {
+		return 0
+	}
 	date, err := time.Parse("2006-01-02", f.EstablishedDate)
 	if err != nil {
 		logging.Errorf(ctx, "EstabYears parse date err:%v", err)

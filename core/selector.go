@@ -83,7 +83,7 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 					result = append(result, stock)
 					mu.Unlock()
 				} else {
-					logging.Info(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("details", details))
+					logging.Debug(ctx, fmt.Sprintf("%s %s has some defects", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode), zap.Any("details", details))
 				}
 			}
 		}(ctx, baseInfo)

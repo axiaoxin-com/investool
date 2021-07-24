@@ -237,7 +237,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
 		if err != nil {
-			logging.Warn(ctx, "NewStock QueryProfitPredict err:"+err.Error())
+			logging.Debug(ctx, "NewStock QueryProfitPredict err:"+err.Error())
 			return
 		}
 		s.ProfitPredictList = pps
@@ -251,7 +251,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		jzpg, err := datacenter.EastMoney.QueryJiaZhiPingGu(ctx, s.BaseInfo.Secucode)
 		if err != nil {
-			logging.Error(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
+			logging.Debug(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
 			return
 		}
 		s.JZPG = jzpg
