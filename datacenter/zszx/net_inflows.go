@@ -37,6 +37,44 @@ type NetInflow struct {
 // NetInflowList 净流入详情列表
 type NetInflowList []NetInflow
 
+func (n NetInflowList) String() string {
+	ctx := context.Background()
+	netInflowsLen := len(n)
+	netInflow3days := "--"
+	if netInflowsLen >= 3 {
+		netInflow3days = fmt.Sprintf("近3日主力资金净流入:%.2f万元", n[:3].SumMainNetIn(ctx))
+	}
+	netInflow5days := "--"
+	if netInflowsLen >= 5 {
+		netInflow5days = fmt.Sprintf("近5日主力资金净流入:%.2f万元", n[:5].SumMainNetIn(ctx))
+	}
+	netInflow10days := "--"
+	if netInflowsLen >= 10 {
+		netInflow10days = fmt.Sprintf("近10日主力资金净流入:%.2f万元", n[:10].SumMainNetIn(ctx))
+	}
+	netInflow20days := "--"
+	if netInflowsLen >= 20 {
+		netInflow20days = fmt.Sprintf("近20日主力资金净流入:%.2f万元", n[:20].SumMainNetIn(ctx))
+	}
+	netInflow30days := "--"
+	if netInflowsLen >= 30 {
+		netInflow30days = fmt.Sprintf("近30日主力资金净流入:%.2f万元", n[:30].SumMainNetIn(ctx))
+	}
+	netInflow40days := "--"
+	if netInflowsLen >= 40 {
+		netInflow40days = fmt.Sprintf("近40日主力资金净流入:%.2f万元", n[:40].SumMainNetIn(ctx))
+	}
+	return fmt.Sprintf(
+		"%s</br>%s</br>%s</br>%s</br>%s</br>%s",
+		netInflow3days,
+		netInflow5days,
+		netInflow10days,
+		netInflow20days,
+		netInflow30days,
+		netInflow40days,
+	)
+}
+
 // SumMainNetIn 主力净流入列表求和
 func (n NetInflowList) SumMainNetIn(ctx context.Context) float64 {
 	var netFlowin float64 = 0.0

@@ -4,7 +4,6 @@ package models
 
 import (
 	"context"
-	"fmt"
 	"sort"
 	"strings"
 
@@ -172,25 +171,6 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		return ExportorData{}
 	}
 
-	netInflowsLen := len(stock.MainMoneyNetInflows)
-	netInflow3days := "--"
-	if netInflowsLen >= 3 {
-		netInflow3days = fmt.Sprintf("近3日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:3].SumMainNetIn(ctx))
-	}
-	netInflow5days := "--"
-	if netInflowsLen >= 5 {
-		netInflow5days = fmt.Sprintf("近5日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:5].SumMainNetIn(ctx))
-	}
-	netInflow10days := "--"
-	if netInflowsLen >= 10 {
-		netInflow10days = fmt.Sprintf("近10日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:10].SumMainNetIn(ctx))
-	}
-	netInflow20days := "--"
-	if netInflowsLen >= 20 {
-		netInflow20days = fmt.Sprintf("近20日主力资金净流入:%.2f万元", stock.MainMoneyNetInflows[:20].SumMainNetIn(ctx))
-	}
-	mainNetInflows := fmt.Sprintf("%s</br>%s</br>%s</br>%s", netInflow3days, netInflow5days, netInflow10days, netInflow20days)
-
 	fina := stock.HistoricalFinaMainData[0]
 	return ExportorData{
 		Name:            stock.BaseInfo.SecurityNameAbbr,
@@ -266,7 +246,7 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 		NetcashFinance:      goutils.YiWanString(stock.NetcashFinance),
 		NetcashFree:         goutils.YiWanString(stock.NetcashFree),
 		FreeHoldersTop10:    stock.FreeHoldersTop10.String(),
-		MainMoneyNetInflows: mainNetInflows,
+		MainMoneyNetInflows: stock.MainMoneyNetInflows.String(),
 	}
 }
 

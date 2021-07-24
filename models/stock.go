@@ -320,7 +320,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		s.FreeHoldersTop10 = holders
 	}(ctx, s)
 
-	// 获取最近30日的主力资金净流入
+	// 获取最近60日的主力资金净流入
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
 		defer func() {
@@ -328,7 +328,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}()
 		now := time.Now()
 		end := now.Format("2006-01-02")
-		d, _ := time.ParseDuration("-720h")
+		d, _ := time.ParseDuration("-1440h")
 		start := now.Add(d).Format("2006-01-02")
 		inflows, err := datacenter.Zszx.QueryMainMoneyNetInflows(ctx, s.BaseInfo.Secucode, start, end)
 		if err != nil {

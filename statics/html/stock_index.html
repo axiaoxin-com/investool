@@ -4,7 +4,6 @@
         <ul class="tabs">
             <li class="tab col s6"><a class="active" href="#checker">个股检测</a></li>
             <li class="tab col s6"><a href="#selector">基本面选股</a></li>
-            <li class="tab col s6"><a href="#chip">筹码面</a></li>
         </ul>
     </div>
 
@@ -261,24 +260,6 @@
         </div>
     </div>
     <!--selector end-->
-
-    <!-- 筹码面 start -->
-    <div id="chip" class="col s12">
-        <div class="row">
-            <form class="col s12" id="chip_form">
-                <div class="row">
-                    <div class="input-field col s12">
-                        <textarea id="keyword" name="keyword" class="materialize-textarea validate" required></textarea>
-                        <label for="keyword">输入股票代码或简称</label>
-                    </div>
-                </div>
-                <div class="row">
-                    <a class="btn waves-effect waves-light red lighten-2 col s12" id="chip_btn" >查询</a>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- 筹码面 end -->
 </div>
 
 {{ template "modal" . }}

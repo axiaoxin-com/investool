@@ -121,6 +121,7 @@ func StockChecker(c *gin.Context) {
 	finaReportNames := []string{}
 	finaAppointPublishDates := []string{}
 	lines := [][]gin.H{}
+	mainInflows := []string{}
 
 	type dataset struct {
 		Label string    `json:"label"`
@@ -131,6 +132,7 @@ func StockChecker(c *gin.Context) {
 		results = append(results, result)
 		stockName := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
 		stockNames = append(stockNames, stockName)
+		mainInflows = append(mainInflows, stock.MainMoneyNetInflows.String())
 
 		finaReportName := ""
 		if len(stock.HistoricalFinaMainData) > 0 {
@@ -247,47 +249,7 @@ func StockChecker(c *gin.Context) {
 	data["FinaReportNames"] = finaReportNames
 	data["FinaAppointPublishDates"] = finaAppointPublishDates
 	data["Lines"] = lines
-	c.JSON(http.StatusOK, data)
-	return
-}
-
-// ParamStockChip StockChip 请求参数
-type ParamStockChip struct {
-	Keyword string `json:"keyword" form:"keyword"`
-}
-
-// StockChip 筹码面
-func StockChip(c *gin.Context) {
-	data := gin.H{
-		"Env":       viper.GetString("env"),
-		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 股票 | 筹码面",
-		"Error":     "",
-	}
-	param := ParamStockChip{}
-	if err := c.ShouldBind(&param); err != nil {
-		data["Error"] = err.Error()
-		c.JSON(http.StatusOK, data)
-		return
-	}
-	if param.Keyword == "" {
-		data["Error"] = "请填写股票代码或简称"
-		c.JSON(http.StatusOK, data)
-		return
-	}
-	keywords := goutils.SplitStringFields(param.Keyword)
-	searcher := core.NewSearcher(c)
-	stocks, err := searcher.SearchStocks(c, keywords)
-	if err != nil {
-		data["Error"] = err.Error()
-		c.JSON(http.StatusOK, data)
-		return
-	}
-	mainNetInflows := gin.H{}
-	for _, stock := range stocks {
-		mainNetInflows[stock.BaseInfo.Secucode] = stock.MainMoneyNetInflows
-	}
-	data["MainMoneyNetInflows"] = mainNetInflows
+	data["MainMoneyNetInflows"] = mainInflows
 	c.JSON(http.StatusOK, data)
 	return
 }
