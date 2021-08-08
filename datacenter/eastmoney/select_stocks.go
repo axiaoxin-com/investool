@@ -73,11 +73,19 @@ func (f Filter) String() string {
 	filter := ""
 	// 特定查询
 	if len(f.SpecialSecurityNameAbbrList) > 0 {
-		filter += fmt.Sprintf(`(SECURITY_NAME_ABBR in (%s))`, strings.Join(f.SpecialSecurityNameAbbrList, ","))
+		names := []string{}
+		for _, name := range f.SpecialSecurityNameAbbrList {
+			names = append(names, fmt.Sprintf(`"%s"`, name))
+		}
+		filter += fmt.Sprintf(`(SECURITY_NAME_ABBR in (%s))`, strings.Join(names, ","))
 		return filter
 	}
 	if len(f.SpecialSecurityCodeList) > 0 {
-		filter += fmt.Sprintf(`(SECURITY_CODE in ("%s"))`, strings.Join(f.SpecialSecurityCodeList, ","))
+		codes := []string{}
+		for _, code := range f.SpecialSecurityCodeList {
+			codes = append(codes, fmt.Sprintf(`"%s"`, code))
+		}
+		filter += fmt.Sprintf(`(SECURITY_CODE in (%s))`, strings.Join(codes, ","))
 		return filter
 	}
 	// 必要参数
