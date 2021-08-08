@@ -4,6 +4,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strings"
 
@@ -73,7 +74,7 @@ type ExportorData struct {
 	Price float64 `json:"price"                     csv:"价格"`
 	// 估算合理价格
 	RightPrice interface{} `json:"right_price"               csv:"估算合理价格"`
-	// 合理价格与当时价的价格差
+	// 合理价格与当时价的价格差(%)
 	PriceSpace interface{} `json:"price_space"               csv:"合理价差"`
 	// 历史波动率
 	HV float64 `json:"hv"                        csv:"历史波动率"`
@@ -146,7 +147,7 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 	var reportOpinion interface{} = "--"
 	if stock.RightPrice > 0 {
 		rightPrice = stock.RightPrice
-		priceSpace = stock.RightPrice - stock.GetPrice()
+		priceSpace = fmt.Sprintf("%.2f%%", stock.RightPrice/stock.GetPrice()*100)
 	}
 	if stock.FinaReportOpinion != "" {
 		reportOpinion = stock.FinaReportOpinion
