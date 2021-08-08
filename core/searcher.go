@@ -54,7 +54,7 @@ func (s Searcher) SearchStocks(ctx context.Context, keywords []string) (map[stri
 				logging.Warnf(ctx, "search %s no data", kw)
 				return
 			}
-			logging.Debugf(ctx, "search results:%+v, %s matched", searchResults, searchResults[0])
+			logging.Infof(ctx, "search results:%+v, %s matched", searchResults, searchResults[0])
 			mu.Lock()
 			matchedResults = append(matchedResults, searchResults[0])
 			mu.Unlock()

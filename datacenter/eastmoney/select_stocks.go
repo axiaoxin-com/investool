@@ -229,7 +229,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"p":      "1",      // page
 		"ps":     "100000", // page size
 	}
-	logging.Debug(ctx, "EastMoney QuerySelectedStocksWithFilter "+apiurl+" begin", zap.Any("reqData", reqData))
+	logging.Infof(ctx, "EastMoney QuerySelectedStocksWithFilter "+apiurl+" begin", zap.Any("reqData", reqData))
 	beginTime := time.Now()
 	req, err := goutils.NewHTTPMultipartReq(ctx, apiurl, reqData)
 	if err != nil {
@@ -238,7 +238,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 	resp := RespSelectStocks{}
 	err = goutils.HTTPPOST(ctx, e.HTTPClient, req, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
-	logging.Debug(
+	logging.Info(
 		ctx,
 		"EastMoney SelectStocksWithFilter "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
