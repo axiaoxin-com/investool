@@ -3,8 +3,10 @@
 package sina
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"io/ioutil"
 	"sort"
 	"strconv"
 	"strings"
@@ -12,9 +14,10 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
-	"github.com/piex/transcode"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 )
 
 // SearchResult 搜索结果
@@ -40,11 +43,15 @@ func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 	if err != nil {
 		return nil, err
 	}
-	trans := transcode.FromByteArray(resp)
-	utf8resp := trans.Decode("GBK").ToString()
-	ds := strings.Split(utf8resp, "=")
+
+	trans := transform.NewReader(bytes.NewReader(resp), simplifiedchinese.GBK.NewDecoder())
+	utf8resp, err := ioutil.ReadAll(trans)
+	if err != nil {
+		logging.Error(ctx, "transform ReadAll error:"+err.Error())
+	}
+	ds := strings.Split(string(utf8resp), "=")
 	if len(ds) != 2 {
-		return nil, errors.New("search resp invalid:" + utf8resp)
+		return nil, errors.New("search resp invalid:" + string(utf8resp))
 	}
 	data := strings.Trim(ds[1], `"`)
 	for _, line := range strings.Split(data, ";") {
