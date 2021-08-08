@@ -70,9 +70,6 @@ $(document).ready(function () {
             if (stock.right_price != "--") {
               stock.right_price = stock.right_price.toFixed(2);
             }
-            if (stock.price_space != "--") {
-              stock.price_space = stock.price_space.toFixed(2);
-            }
             $("#selector_result tbody").append(
               "<tr>" +
                 '<td><span class="copybtn waves-effect waves-red" data-clipboard-text="' +
@@ -182,7 +179,6 @@ $(document).ready(function () {
                 "</td>" +
                 '<td class="hide st_28">' +
                 stock.price_space +
-                "元" +
                 "</td>" +
                 '<td class="hide st_29">' +
                 (stock.hv * 100).toFixed(2) +
