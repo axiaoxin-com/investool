@@ -77,7 +77,7 @@ func (f Filter) String() string {
 		return filter
 	}
 	if len(f.SpecialSecurityCodeList) > 0 {
-		filter += fmt.Sprintf(`(SECURITY_CODE in (%s))`, strings.Join(f.SpecialSecurityCodeList, ","))
+		filter += fmt.Sprintf(`(SECURITY_CODE in ("%s"))`, strings.Join(f.SpecialSecurityCodeList, ","))
 		return filter
 	}
 	// 必要参数
