@@ -23,7 +23,7 @@ func SyncFund() {
 	// 获取全量列表
 	efundlist, err := datacenter.EastMoney.QueryAllFundList(ctx, eastmoney.FundTypeALL)
 	if err != nil {
-		logging.Errorf(ctx, "SyncFund QueryAllFundList error:", err)
+		logging.Error(ctx, "SyncFund QueryAllFundList error:"+err.Error())
 		promSyncError.WithLabelValues("SyncFund").Inc()
 		return
 	}

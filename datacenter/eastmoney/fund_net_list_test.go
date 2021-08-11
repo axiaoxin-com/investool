@@ -14,3 +14,9 @@ func _TestQueryAllFundNetList(t *testing.T) {
 	require.NotEmpty(t, data)
 	t.Log("data len:", len(data))
 }
+
+func TestQueryFundListByPage(t *testing.T) {
+	result, err := _em.QueryFundListByPage(_ctx, FundTypeALL, 1)
+	require.Nil(t, err)
+	t.Log(result)
+}

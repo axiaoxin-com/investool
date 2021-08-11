@@ -36,11 +36,11 @@
 - 支持现金流检测
 - 提供 WEB 界面操作 <http://x-stock.axiaoxin.com>
 - 支持基金 4433 筛选
+- 自定义基金筛选
+- 基金检测
 
 TODO:
 
-- 自定义基金筛选
-- 基金检测
 - 支持 ETF 筛选
 - 支持港股检测
 - 获取 K 线图数据
@@ -267,11 +267,6 @@ OPTIONS:
 ```
 ./x-stock -l error checker -k 比亚迪
 ```
-
-检测结果：
-
-![](./docs/checker.png)
-![](./docs/checker2.png)
 
 ## 欢迎 Star
 
