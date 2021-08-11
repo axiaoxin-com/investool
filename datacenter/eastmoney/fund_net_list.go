@@ -150,7 +150,7 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 			if len(resp.Datas) != 0 {
 				for _, d := range resp.Datas[0] {
 					if _, exist := sm.Load(d.Fcode); exist {
-						logging.Warnf(ctx, "code:%v is already exist", d.Fcode)
+						logging.Debugf(ctx, "code:%v is already exist", d.Fcode)
 						continue
 					}
 					mu.Lock()
