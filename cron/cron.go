@@ -30,7 +30,7 @@ func RunCronJobs(async bool) {
 	}
 	sched := gocron.NewScheduler(timezone)
 	// 同步基金净值列表和4433列表
-	sched.Cron("0 18 * * *").Do(SyncFund)
+	sched.Cron("0 18 * * 1-5").Do(SyncFund)
 	// 同步东方财富行业列表
 	sched.Cron("0 4 1 * *").Do(SyncIndustryList)
 	if async {
