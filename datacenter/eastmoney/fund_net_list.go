@@ -138,10 +138,10 @@ func (e EastMoney) QueryAllFundList(ctx context.Context, fundType FundType) (Fun
 					return err
 				},
 				retry.OnRetry(func(n uint, err error) {
-					logging.Errorf(ctx, "retry#%d: page:%v %v", n, index, err)
+					logging.Debugf(ctx, "retry#%d: page:%v %v", n, index, err)
 				}),
-				retry.Attempts(10),
-				retry.Delay(100*time.Millisecond),
+				retry.Attempts(3),
+				retry.Delay(300*time.Millisecond),
 			)
 			if err != nil {
 				logging.Errorf(ctx, "QueryAllFundList QueryFundListByPage:%d err:%v", index, err)
