@@ -16,7 +16,7 @@ func _TestQueryAllFundNetList(t *testing.T) {
 }
 
 func TestQueryFundListByPage(t *testing.T) {
-	result, err := _em.QueryFundListByPage(_ctx, FundTypeALL, 263)
+	result, err := _em.QueryFundListByPage(_ctx, FundTypeALL, 1)
 	require.Nil(t, err)
-	t.Log(result)
+	t.Logf("%#v\n", result)
 }

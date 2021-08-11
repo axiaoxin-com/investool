@@ -174,7 +174,7 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 	apiurl := "http://fundmobapi.eastmoney.com/FundMNewApi/FundMNNetNewList"
 	params := map[string]string{
 		"FundType":   fmt.Sprint(fundType), // 基金类型
-		"SortColumn": "DWJZ",               // 按净值排序
+		"SortColumn": "RZDF",               // 按净值排序
 		"Sort":       "desc",               // 降序排列
 		"pageIndex":  fmt.Sprint(pageIndex),
 		"pageSize":   "30",
