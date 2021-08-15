@@ -490,8 +490,8 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 			manager.ID = m.Mgrid
 			manager.Name = m.Mgrname
 			manager.WorkingDays = interfaceToFloat64(ctx, m.Totaldays)
-			manager.ManageDays = interfaceToFloat64(ctx, jjjl.Days)
-			manager.ManageRepay = interfaceToFloat64(ctx, jjjl.Penavgrowth)
+			manager.ManageDays = interfaceToFloat64(ctx, m.Days)
+			manager.ManageRepay = interfaceToFloat64(ctx, m.Penavgrowth)
 			manager.YearsAvgRepay = interfaceToFloat64(ctx, m.Yieldse)
 			fund.Manager = manager
 		} else {

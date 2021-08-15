@@ -108,14 +108,7 @@ type JDZF struct {
 // JJJLNEW 基金经理。。
 type JJJLNEW struct {
 	Datas []struct {
-		// 任职该基金天数
-		Days interface{} `json:"DAYS"`
-		// 任职该基金开始时间
-		Fempdate string `json:"FEMPDATE"`
-		Lempdate string `json:"LEMPDATE"`
-		// 任职回报（%）
-		Penavgrowth interface{} `json:"PENAVGROWTH"`
-		Manger      []struct {
+		Manger []struct {
 			Mgrid string `json:"MGRID"`
 			// 基金经理名字
 			Mgrname     string `json:"MGRNAME"`
@@ -124,7 +117,14 @@ type JJJLNEW struct {
 			// 年均回报（%）
 			Yieldse interface{} `json:"YIELDSE"`
 			// 从业天数
-			Totaldays       interface{} `json:"TOTALDAYS"`
+			Totaldays interface{} `json:"TOTALDAYS"`
+			// 任职该基金天数
+			Days interface{} `json:"DAYS"`
+			// 任职该基金开始时间
+			Fempdate string `json:"FEMPDATE"`
+			Lempdate string `json:"LEMPDATE"`
+			// 任职回报（%）
+			Penavgrowth     interface{} `json:"PENAVGROWTH"`
 			Investmentidear string      `json:"INVESTMENTIDEAR"`
 			// 金牛奖获奖次数
 			HjJn interface{} `json:"HJ_JN"`
