@@ -56,7 +56,7 @@ func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 	data := strings.Trim(ds[1], `"`)
 	for _, line := range strings.Split(data, ";") {
 		lineitems := strings.Split(line, ",")
-		if len(lineitems) != 9 {
+		if len(lineitems) < 9 {
 			continue
 		}
 		market, err := strconv.Atoi(lineitems[1])
