@@ -47,6 +47,9 @@ func (s Selector) AutoFilterStocks(ctx context.Context) (result models.StockList
 		return
 	}
 	logging.Infof(ctx, "AutoFilterStocks will filter from %d stocks by %s", len(stocks), s.Filter.String())
+	if len(stocks) == 0 {
+		return
+	}
 
 	// 并发执行筛选任务
 	workerCount := int(math.Min(float64(len(stocks)), float64(viper.GetFloat64("app.chan_size"))))

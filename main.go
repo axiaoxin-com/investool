@@ -11,6 +11,7 @@ import (
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/cmds"
 	"github.com/axiaoxin-com/x-stock/version"
+	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
 )
 
@@ -20,6 +21,10 @@ var (
 	// ProcessorOptions 要启动运行的进程可选项
 	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor, cmds.ProcessorWebserver}
 )
+
+func init() {
+	viper.SetDefault("app.chan_size", 50)
+}
 
 func main() {
 	app := cli.NewApp()

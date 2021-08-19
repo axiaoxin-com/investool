@@ -9,7 +9,6 @@ import (
 	"github.com/axiaoxin-com/x-stock/datacenter"
 	"github.com/axiaoxin-com/x-stock/models"
 	jsoniter "github.com/json-iterator/go"
-	"github.com/spf13/viper"
 )
 
 var (
@@ -37,7 +36,6 @@ var (
 
 // Init 相关依赖服务的初始化或加载操作
 func Init() error {
-	viper.SetDefault("app.chan_size", 500)
 	if err := InitIndustryList(); err != nil {
 		return err
 	}
