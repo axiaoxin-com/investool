@@ -549,6 +549,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			desc = fmt.Sprintf("PEG:%v</br>高于:%v", stock.PEG, c.Options.MaxPEG)
 			ok = false
 			itemOK = false
+		} else if stock.PEG < 0 {
+			desc = fmt.Sprintf("PEG:%v</br>低于:0", stock.PEG)
+			ok = false
+			itemOK = false
 		}
 	}
 	result[checkItemName] = map[string]string{
