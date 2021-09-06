@@ -6,6 +6,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/axiaoxin-com/logging"
 	"github.com/axiaoxin-com/x-stock/core"
@@ -61,7 +62,7 @@ func renderTable(table *tablewriter.Table, checkResult core.CheckResult, footers
 		tablewriter.Colors{tablewriter.Bold, footerValColor},
 	)
 	for k, m := range checkResult {
-		row := []string{k, m["desc"]}
+		row := []string{k, strings.ReplaceAll(m["desc"], "</br>", "\n")}
 
 		if m["ok"] == "false" {
 			table.Rich(
