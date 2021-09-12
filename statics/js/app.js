@@ -76,7 +76,7 @@ $(document).ready(function () {
                 cm[0] +
                 '">' +
                 cm[0] +
-                '<i class="material-icons tiny">content_copy</i></span></td>' +
+                //     '<i class="material-icons tiny">content_copy</i></span></td>' +
                 '<td><a target="_blank" href="http://quote.eastmoney.com/' +
                 cm[1] +
                 cm[0] +
