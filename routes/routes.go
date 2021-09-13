@@ -15,4 +15,5 @@ func Routes(app *gin.Engine) {
 	app.GET("/about", About)
 	app.GET("/comment", Comment)
 	app.GET("/fund/similarity", FundSimilarity)
+	app.GET("/materials", Materials)
 }

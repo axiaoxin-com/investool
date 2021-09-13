@@ -1,0 +1,7 @@
+{{ template "header" . }}
+{{ range $aml := .AllMaterialsList }}
+    {{ range $amlKey, $amlVal := $aml }}
+        <h4>{{ $amlKey }}</h4>
+    {{ end }}
+{{ end }}
+{{ template "footer" . }}
