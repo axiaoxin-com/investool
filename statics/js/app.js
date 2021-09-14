@@ -13,6 +13,9 @@ $(document).ready(function () {
   } else if (currentNav == "/comment") {
     $("#nav-comment").addClass("active");
     $("#nav-comment").siblings().removeClass("active");
+  } else if (currentNav == "/materials") {
+    $("#nav-materials").addClass("active");
+    $("#nav-materials").siblings().removeClass("active");
   } else {
     $("#nav-stock").addClass("active");
     $("#nav-stock").siblings().removeClass("active");

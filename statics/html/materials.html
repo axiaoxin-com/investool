@@ -1,17 +1,25 @@
 {{ template "header" . }}
 {{ range $TypedMaterialSeries := .AllMaterialsList }}
+    <div class="section">
     {{ range $TypeName, $MaterialSeriesList := $TypedMaterialSeries }}
-        <h4>{{ $TypeName }}</h4>
+        <h2 class="header">{{ $TypeName }}</h2>
+        <div class="divider"></div>
         {{ range $MaterialSeries := $MaterialSeriesList }}
+        <div class="section">
             {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
-            <h6>{{ $SeriesName }}</h6>
+                <h4 class="header">{{ $SeriesName }}</h4>
+                <div class="section">
                 {{ range $MaterialItem := $MaterialItemList }}
-                    <p>{{ $MaterialItem.Name }}</p>
-                    <p>{{ $MaterialItem.DownloadURL }}</p>
-                    <p>{{ $MaterialItem.Desc }}</p>
+                    <div class="card-panel">
+                        <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank">{{ $MaterialItem.Name }}</a></p>
+                        <p>{{ $MaterialItem.Desc }}</p>
+                    </div>
                 {{ end }}
+                </div>
             {{ end }}
+        </div>
         {{ end }}
     {{ end }}
+    </div>
 {{ end }}
 {{ template "footer" . }}
