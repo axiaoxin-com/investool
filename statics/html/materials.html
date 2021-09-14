@@ -1,7 +1,17 @@
 {{ template "header" . }}
-{{ range $aml := .AllMaterialsList }}
-    {{ range $amlKey, $amlVal := $aml }}
-        <h4>{{ $amlKey }}</h4>
+{{ range $TypedMaterialSeries := .AllMaterialsList }}
+    {{ range $TypeName, $MaterialSeriesList := $TypedMaterialSeries }}
+        <h4>{{ $TypeName }}</h4>
+        {{ range $MaterialSeries := $MaterialSeriesList }}
+            {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
+            <h6>{{ $SeriesName }}</h6>
+                {{ range $MaterialItem := $MaterialItemList }}
+                    <p>{{ $MaterialItem.Name }}</p>
+                    <p>{{ $MaterialItem.DownloadURL }}</p>
+                    <p>{{ $MaterialItem.Desc }}</p>
+                {{ end }}
+            {{ end }}
+        {{ end }}
     {{ end }}
 {{ end }}
 {{ template "footer" . }}

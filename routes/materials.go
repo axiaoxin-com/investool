@@ -15,9 +15,9 @@ import (
 
 // MaterialItem 学习资料具体信息
 type MaterialItem struct {
-	Name        string `json:"name"`
-	DownloadURL string `json:"download_url"`
-	Desc        string `json:"desc"`
+	Name        string
+	DownloadURL string
+	Desc        string
 }
 
 // MaterialSeries 某一个系列的资料
