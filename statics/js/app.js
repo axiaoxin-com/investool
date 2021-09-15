@@ -335,7 +335,7 @@ $(document).ready(function () {
               if (v.ok == "true") {
                 okdesc = "✅";
               }
-              $("#checker_result_" + i + " tbody").append(
+              $(`#checker_result_${i} tbody`).append(
                 "<tr><td>" +
                   k +
                   "</td><td>" +
@@ -345,12 +345,12 @@ $(document).ready(function () {
                   "</td></tr>"
               );
             });
-            $("#checker_result_" + i + " tbody").append(
+            $(`#checker_result_${i} tbody`).append(
               "<tr><td>主力资金净流入</td><td>" +
                 data.MainMoneyNetInflows[i] +
                 "</td><td>--</td></tr>"
             );
-            $("#checker_result_" + i).append(
+            $(`#checker_result_${i}`).append(
               '<div class="row">' +
                 '</br><h5 class="center">年报数据趋势概览</h5>' +
                 '<div class="col s12 m12 l6">' +
@@ -569,7 +569,7 @@ $(document).ready(function () {
               fund.name +
               "(" +
               fund.code +
-              ')</a>检测结果</h4><div class="divider"></div><table class="centered striped"><thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead><tbody><tr><td>近1年绩效排名前' +
+              ')</a>检测结果</h4><p class="tiny center">以下所有数据与信息仅供参考，不构成投资建议</p><div class="divider"></div><table class="centered striped"><thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead><tbody><tr><td>近1年绩效排名前' +
               data.Param.year_1_rank_ratio +
               "%</td><td>近1年绩效排名前" +
               fund.performance.year_1_rank_ratio.toFixed(2) +
@@ -681,10 +681,11 @@ $(document).ready(function () {
             );
             $.each(stockCheckResult.check_results, function (i, result) {
               var cm = stockCheckResult.names[i].split("-")[1].split(".");
+              var index = i+1;
               $(`#${fund.code}`).append(
                 '<div id="checker_result_' +
                   i +
-                  '"><div class="row"><div class="divider"></div><div class="col s12 m12 l6"><a target="_blank" href="http://quote.eastmoney.com/' +
+                  '"><div class="row"><div class="divider"></div><div class="col s12 m12 l6">'+index+'. <a target="_blank" href="http://quote.eastmoney.com/' +
                   cm[1] +
                   cm[0] +
                   '.html">' +
@@ -696,11 +697,11 @@ $(document).ready(function () {
                   " | 最新调仓:" +
                   fund.stocks[i].adjust_ratio +
                   "%" +
-                  '</div><div class="col s12 m12 l6 right-align">当前检测财报数据来源:' +
+                  '</br>当前检测财报数据来源:' +
                   stockCheckResult.fina_report_names[i] +
                   "</br>最新财报预约发布日期:" +
                   stockCheckResult.fina_appoint_publish_dates[i] +
-                  "</div></div>" +
+                  "</div>" +
                   '<table class="centered striped">' +
                   '<thead><tr><th width="30%">指标</th><th width="40%">描述</th><th width="30%">结果</th></tr></thead>' +
                   "<tbody></tbody>" +
@@ -712,7 +713,7 @@ $(document).ready(function () {
                 if (v.ok == "true") {
                   okdesc = "✅";
                 }
-                $("#checker_result_" + i + " tbody").append(
+                $(`#${fund.code} #checker_result_${i} tbody`).append(
                   "<tr><td>" +
                     k +
                     "</td><td>" +
