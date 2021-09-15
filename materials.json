@@ -150,42 +150,44 @@
     {
         "电子书": [
             {
-                "理财投资": [
+                "财商": [
                     {
                         "name": "《小狗钱钱》",
                         "desc": "链接: https://pan.baidu.com/s/14Vj3dHpkAvILk9apzXfQtQ 提取码: 8brg",
                         "download_url": "https://pan.baidu.com/s/14Vj3dHpkAvILk9apzXfQtQ"
-
-                    },
-                    {
-                        "name": "《指数基金投资指南》",
-                        "desc": "链接: https://pan.baidu.com/s/1YUQYgbIfA-77HHvjwyNwiQ 提取码: ccht",
-                        "download_url": "https://pan.baidu.com/s/1YUQYgbIfA-77HHvjwyNwiQ"
-
                     },
                     {
                         "name": "《投资最重要的事》",
                         "desc": "链接: https://pan.baidu.com/s/1B9GRJCdcRBqndI82CnB73Q 提取码: e7p7",
                         "download_url": "https://pan.baidu.com/s/1B9GRJCdcRBqndI82CnB73Q"
-
-                    },
-                    {
-                        "name": "《基金长青：范勇宏讲述华夏基金15周年》",
-                        "desc": "链接: https://pan.baidu.com/s/1Maj4yKZ4fEtCvzm7l-ACCQ 提取码: jrk6",
-                        "download_url": "https://pan.baidu.com/s/1Maj4yKZ4fEtCvzm7l-ACCQ"
-
-                    },
-                    {
-                        "name": "《股市稳赚》",
-                        "desc": "链接: https://pan.baidu.com/s/1Zj1TYZwkS-3BI7Iqotfugg 提取码: qb4h",
-                        "download_url": "https://pan.baidu.com/s/1Zj1TYZwkS-3BI7Iqotfugg"
-
                     },
                     {
                         "name": "《不落俗套的成功：最好的个人投资方法》",
                         "desc": "链接: https://pan.baidu.com/s/1CA3TIxvNgCjwbGdUUhut6A 提取码: dgn3",
                         "download_url": "https://pan.baidu.com/s/1CA3TIxvNgCjwbGdUUhut6A"
-
+                    }
+                ]
+            },
+            {
+                "基金": [
+                    {
+                        "name": "《指数基金投资指南》",
+                        "desc": "链接: https://pan.baidu.com/s/1YUQYgbIfA-77HHvjwyNwiQ 提取码: ccht",
+                        "download_url": "https://pan.baidu.com/s/1YUQYgbIfA-77HHvjwyNwiQ"
+                    },
+                    {
+                        "name": "《基金长青：范勇宏讲述华夏基金15周年》",
+                        "desc": "链接: https://pan.baidu.com/s/1Maj4yKZ4fEtCvzm7l-ACCQ 提取码: jrk6",
+                        "download_url": "https://pan.baidu.com/s/1Maj4yKZ4fEtCvzm7l-ACCQ"
+                    }
+                ]
+            },
+            {
+                "股票": [
+                    {
+                        "name": "《股市稳赚》",
+                        "desc": "链接: https://pan.baidu.com/s/1Zj1TYZwkS-3BI7Iqotfugg 提取码: qb4h",
+                        "download_url": "https://pan.baidu.com/s/1Zj1TYZwkS-3BI7Iqotfugg"
                     }
                 ]
             }
