@@ -75,7 +75,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	CheckYears:           5,
 	NoCheckYearsROE:      20.0,
 	MaxDebtAssetRatio:    60.0,
-	MaxHV:                1.0,
+	MaxHV:                0.5,
 	MinTotalMarketCap:    100.0,
 	BankMinROA:           0.5,
 	BankMinZBCZL:         8.0,
@@ -451,10 +451,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	checkItemName = "毛利率稳定性"
-	itemOK = true
-	desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
 	if c.Options.IsCheckMLLStability && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
+		checkItemName = "毛利率稳定性"
+		itemOK = true
+		desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
 		if !stock.HistoricalFinaMainData.IsStability(
 			ctx,
 			eastmoney.ValueListTypeMLL,
@@ -465,17 +465,17 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			ok = false
 			itemOK = false
 		}
-	}
-	result[checkItemName] = map[string]string{
-		"desc": desc,
-		"ok":   fmt.Sprint(itemOK),
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
+		}
 	}
 
-	// 毛利率逐年递增
-	checkItemName = "毛利率逐年递增且>0"
-	itemOK = true
-	desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
-	if c.Options.IsCheckMLLGrow && len(mllList) > 0 {
+	// 毛利率逐年递增 （只检测非金融股）
+	if c.Options.IsCheckMLLGrow && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) && len(mllList) > 0 {
+		checkItemName = "毛利率逐年递增且>0"
+		itemOK = true
+		desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
 		if revList[len(mllList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
 				ctx,
@@ -486,10 +486,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			ok = false
 			itemOK = false
 		}
-	}
-	result[checkItemName] = map[string]string{
-		"desc": desc,
-		"ok":   fmt.Sprint(itemOK),
+		result[checkItemName] = map[string]string{
+			"desc": desc,
+			"ok":   fmt.Sprint(itemOK),
+		}
 	}
 
 	// 净利率稳定性

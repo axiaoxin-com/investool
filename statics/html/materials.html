@@ -7,7 +7,7 @@
         {{ range $i, $MaterialSeries := $MaterialSeriesList }}
         <li {{ if eq $i 0 }}class="active"{{ end }}>
                 {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
-                    <div class="collapsible-header">{{ $SeriesName }}</div>
+                    <div class="collapsible-header" id="{{ $SeriesName }}">{{ $SeriesName }}</div>
                     <div class="collapsible-body collection">
                     {{ range $MaterialItem := $MaterialItemList }}
                         <div class="collection-item">
