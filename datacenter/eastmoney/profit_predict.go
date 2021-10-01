@@ -66,7 +66,7 @@ func (e EastMoney) QueryProfitPredict(ctx context.Context, secuCode string) (Pro
 		return nil, err
 	}
 	resp := RespProfitPredict{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "EastMoney QueryProfitPredict "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", resp))
 	if err != nil {

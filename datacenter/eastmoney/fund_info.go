@@ -322,7 +322,7 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFun
 	if err != nil {
 		return nil, err
 	}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
@@ -330,6 +330,9 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFun
 		zap.Int64("latency(ms)", latency),
 		zap.Any("resp", resp),
 	)
+	if err != nil {
+		return nil, err
+	}
 	if resp.Jjxq.Datas.Fcode == "" {
 		err = fmt.Errorf("无法获取基金信息(%v)", fundCode)
 	}

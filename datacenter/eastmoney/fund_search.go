@@ -26,7 +26,7 @@ func (e EastMoney) SearchFund(ctx context.Context, kw string) (results []SearchF
 	apiurl := fmt.Sprintf("https://fundsuggest.eastmoney.com/FundCodeNew.aspx?input=%s&count=%d&cb=x", kw, count)
 	logging.Debug(ctx, "EastMoney SearchFund "+apiurl+" begin")
 	beginTime := time.Now()
-	resp, err := goutils.HTTPGETRaw(ctx, e.HTTPClient, apiurl)
+	resp, err := goutils.HTTPGETRaw(ctx, e.HTTPClient, apiurl, nil)
 	strresp := string(resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "EastMoney SearchFund "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", strresp))

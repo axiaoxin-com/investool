@@ -313,7 +313,7 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 		return profile, err
 	}
 	resp1 := RespCPBD{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp1)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp1)
 	latency = time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,

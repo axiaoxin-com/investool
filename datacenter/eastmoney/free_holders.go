@@ -75,7 +75,7 @@ func (e EastMoney) QueryFreeHolders(ctx context.Context, secuCode string) (FreeH
 		return nil, err
 	}
 	resp := RespFreeHolders{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,

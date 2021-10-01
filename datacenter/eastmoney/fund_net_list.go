@@ -190,7 +190,7 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 		return RespFundList{}, err
 	}
 	resp := RespFundList{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,

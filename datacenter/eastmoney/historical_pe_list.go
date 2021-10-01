@@ -67,7 +67,7 @@ func (e EastMoney) QueryHistoricalPEList(ctx context.Context, secuCode string) (
 		return nil, err
 	}
 	resp := RespHistoricalPE{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, &resp)
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,
