@@ -29,7 +29,7 @@ func (q QQ) KeywordSearch(ctx context.Context, kw string) (results []SearchResul
 	apiurl := fmt.Sprintf("https://smartbox.gtimg.cn/s3/?v=2&q=%s&t=all&c=1", kw)
 	logging.Debug(ctx, "QQ KeywordSearch "+apiurl+" begin")
 	beginTime := time.Now()
-	resp, err := goutils.HTTPGETRaw(ctx, q.HTTPClient, apiurl)
+	resp, err := goutils.HTTPGETRaw(ctx, q.HTTPClient, apiurl, nil)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "QQ KeywordSearch "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", string(resp)))
 	if err != nil {

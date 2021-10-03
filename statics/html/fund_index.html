@@ -18,6 +18,7 @@
             <li class="tab"><a href="#fundfilter">基金严选</a></li>
             <li class="tab"><a href="#fundcheck">基金检测</a></li>
             <li class="tab"><a href="#fundsim">持仓相似度</a></li>
+            <li class="tab"><a href="#querybystock">股票选基</a></li>
         </ul>
     </div>
 
@@ -208,6 +209,24 @@
         </div>
     </div>
     <!-- 持仓相似度 end -->
+
+    <!-- 股票选基 start -->
+    <div id="querybystock" class="col s12">
+        <div class="row">
+            <form class="col s12" id="fundsim_form" action="/fund/query_by_stock" method="POST">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <textarea id="keywords" name="keywords" class="materialize-textarea validate" required></textarea>
+                        <label for="keywords">输入持仓股票名称或代码</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12">查询</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- 股票选基 end -->
 </div>
 
 <div id="fund_check_results" class="hide">

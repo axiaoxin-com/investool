@@ -41,6 +41,6 @@ func QueryFundByStock(c *gin.Context) {
 		return
 	}
 	data["Funds"] = dlist
-	c.JSON(http.StatusOK, data)
+	c.HTML(http.StatusOK, "hold_stock_fund.html", data)
 	return
 }

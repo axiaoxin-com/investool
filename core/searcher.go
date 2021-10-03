@@ -204,5 +204,6 @@ func (s Searcher) SearchFundByStock(ctx context.Context, stockNames ...string) (
 			results = append(results, fundMap[fcode])
 		}
 	}
+	logging.Infof(ctx, "SearchFundByStock with %v has %d results", stockNames, len(results))
 	return results, nil
 }

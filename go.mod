@@ -8,7 +8,6 @@ require (
 	github.com/axiaoxin-com/goutils v1.0.21-0.20211001073654-f48c01a6b469
 	github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba
 	github.com/axiaoxin-com/ratelimiter v1.0.3
-	github.com/bketelsen/crypt v0.0.4 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/deckarep/golang-set v1.7.1
@@ -18,17 +17,14 @@ require (
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-co-op/gocron v1.6.2
-	github.com/go-kit/kit v0.10.0 // indirect
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-redis/redis/v8 v8.11.3 // indirect
 	github.com/gocarina/gocsv v0.0.0-20210516172204-ca9e8a8ddea8
-	github.com/goccy/go-json v0.7.9 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/jmoiron/sqlx v1.3.4 // indirect
 	github.com/json-iterator/go v1.1.12
-	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
 	github.com/olekukonko/tablewriter v0.0.5
@@ -52,8 +48,6 @@ require (
 	golang.org/x/sys v0.0.0-20210930212924-f542c8878de8 // indirect
 	golang.org/x/text v0.3.7
 	golang.org/x/time v0.0.0-20210611083556-38a9dc6acbc6 // indirect
-	golang.org/x/tools v0.1.5 // indirect
-	google.golang.org/protobuf v1.27.1 // indirect
 	gorm.io/driver/mysql v1.1.2 // indirect
 	gorm.io/driver/postgres v1.1.2 // indirect
 	gorm.io/driver/sqlite v1.1.5 // indirect
