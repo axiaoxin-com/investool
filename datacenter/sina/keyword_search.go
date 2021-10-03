@@ -37,7 +37,7 @@ func (s Sina) KeywordSearch(ctx context.Context, kw string) (results []SearchRes
 	apiurl := fmt.Sprintf("https://suggest3.sinajs.cn/suggest/key=%s", kw)
 	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" begin")
 	beginTime := time.Now()
-	resp, err := goutils.HTTPGETRaw(ctx, s.HTTPClient, apiurl)
+	resp, err := goutils.HTTPGETRaw(ctx, s.HTTPClient, apiurl, nil)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(ctx, "Sina KeywordSearch "+apiurl+" end", zap.Int64("latency(ms)", latency), zap.Any("resp", string(resp)))
 	if err != nil {

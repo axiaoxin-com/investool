@@ -25,3 +25,11 @@ func TestSearchFunds(t *testing.T) {
 	require.NotEmpty(t, data)
 	t.Log("data:", data["000209"])
 }
+
+func TestSearchFundByStock(t *testing.T) {
+	viper.SetDefault("app.chan_size", 500)
+	s := NewSearcher(_ctx)
+	result, err := s.SearchFundByStock(_ctx, "金域医学", "韦尔股份")
+	require.Nil(t, err)
+	t.Log("result:", result)
+}

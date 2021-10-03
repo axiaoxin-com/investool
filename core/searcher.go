@@ -154,3 +154,55 @@ func (s Searcher) SearchFunds(ctx context.Context, fundCodes []string) (map[stri
 	logging.Infof(ctx, "SearchFunds request end. latency:%+v", time.Now().Sub(start))
 	return result, nil
 }
+
+// SearchFundByStock 根据股票名称查询持有该股票的基金
+func (s Searcher) SearchFundByStock(ctx context.Context, stockNames ...string) ([]eastmoney.HoldStockFund, error) {
+	var wg sync.WaitGroup
+	var mu sync.Mutex
+	kLen := len(stockNames)
+	if kLen == 0 {
+		return nil, errors.New("empty stockNames")
+	}
+	// 基金出现次数统计：key=基金代码 value=出现次数
+	countMap := map[string]int{}
+	fundMap := map[string]eastmoney.HoldStockFund{}
+	for _, kw := range stockNames {
+		wg.Add(1)
+		go func(kw string) {
+			defer func() {
+				wg.Done()
+			}()
+			searchResults, err := datacenter.Sina.KeywordSearch(ctx, kw)
+			if err != nil {
+				logging.Errorf(ctx, "search %s error:%s", kw, err.Error())
+				return
+			}
+			if len(searchResults) == 0 {
+				logging.Warnf(ctx, "search %s no data", kw)
+				return
+			}
+			logging.Infof(ctx, "search keyword:%s results:%+v, %+v matched", kw, searchResults, searchResults[0])
+			result := searchResults[0]
+			holdStockFunds, err := datacenter.EastMoney.QueryFundByStock(ctx, result.Name, result.SecurityCode)
+			if err != nil {
+				logging.Error(ctx, "SearchFundByStock QueryFundByStock err:"+err.Error())
+			}
+			mu.Lock()
+			for _, f := range holdStockFunds {
+				countMap[f.Fcode] = countMap[f.Fcode] + 1
+				fundMap[f.Fcode] = f
+			}
+			mu.Unlock()
+		}(kw)
+	}
+	wg.Wait()
+
+	stockCount := len(stockNames)
+	results := []eastmoney.HoldStockFund{}
+	for fcode, count := range countMap {
+		if count == stockCount {
+			results = append(results, fundMap[fcode])
+		}
+	}
+	return results, nil
+}
