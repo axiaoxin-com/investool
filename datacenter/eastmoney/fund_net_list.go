@@ -11,6 +11,7 @@ import (
 	"github.com/avast/retry-go"
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
+	"github.com/corpix/uarand"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )
@@ -190,7 +191,10 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 		return RespFundList{}, err
 	}
 	resp := RespFundList{}
-	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
+	header := map[string]string{
+		"user-agent": uarand.GetRandom(),
+	}
+	err = goutils.HTTPGET(ctx, e.HTTPClient, apiurl, header, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,

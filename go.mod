@@ -9,6 +9,7 @@ require (
 	github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba
 	github.com/axiaoxin-com/ratelimiter v1.0.3
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/corpix/uarand v0.1.1
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/deckarep/golang-set v1.7.1
 	github.com/denisenkom/go-mssqldb v0.11.0 // indirect
