@@ -58,7 +58,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		ctx,
 		"EastMoney QueryValuationStatus "+apiurl1+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", secuCode, resp)
@@ -83,7 +83,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		ctx,
 		"EastMoney QueryValuationStatus "+apiurl2+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", secuCode, resp)
@@ -108,7 +108,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		ctx,
 		"EastMoney QueryValuationStatus "+apiurl3+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if resp.Code != 0 {
 		return nil, fmt.Errorf("%s %#v", secuCode, resp)
@@ -131,7 +131,7 @@ func (e EastMoney) QueryValuationStatus(ctx context.Context, secuCode string) (m
 		ctx,
 		"EastMoney QueryValuationStatus "+apiurl4+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err

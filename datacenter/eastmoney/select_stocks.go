@@ -250,7 +250,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		ctx,
 		"EastMoney SelectStocksWithFilter "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err

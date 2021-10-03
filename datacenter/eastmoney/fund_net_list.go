@@ -196,7 +196,7 @@ func (e EastMoney) QueryFundListByPage(ctx context.Context, fundType FundType, p
 		ctx,
 		"EastMoney QueryFundListByPage "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return resp, err

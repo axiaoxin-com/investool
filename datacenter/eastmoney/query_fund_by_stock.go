@@ -65,7 +65,7 @@ func (e EastMoney) QueryFundByStock(ctx context.Context, stockName, stockCode st
 		ctx,
 		"EastMoney QueryFundByStock "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err

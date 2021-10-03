@@ -328,7 +328,7 @@ func (e EastMoney) QueryFundInfo(ctx context.Context, fundCode string) (*RespFun
 		ctx,
 		"EastMoney QueryFundInfo "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err

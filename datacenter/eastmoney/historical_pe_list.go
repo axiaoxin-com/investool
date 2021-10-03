@@ -73,7 +73,7 @@ func (e EastMoney) QueryHistoricalPEList(ctx context.Context, secuCode string) (
 		ctx,
 		"EastMoney QueryHistoricalPEList "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err

@@ -286,7 +286,7 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 		ctx,
 		"EastMoney QueryCompanyProfile "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return profile, err
@@ -319,7 +319,7 @@ func (e EastMoney) QueryCompanyProfile(ctx context.Context, secuCode string) (Co
 		ctx,
 		"EastMoney QueryCompanyProfile "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp1),
+		// zap.Any("resp", resp1),
 	)
 	if err != nil {
 		return profile, err

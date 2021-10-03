@@ -396,7 +396,7 @@ func (e EastMoney) QueryHistoricalFinaMainData(ctx context.Context, secuCode str
 		ctx,
 		"EastMoney QueryHistoricalFinaMainData "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err
@@ -461,7 +461,7 @@ func (e EastMoney) QueryFinaPublishDateList(ctx context.Context, securityCode st
 		ctx,
 		"EastMoney QueryFinaPublishDate "+apiurl+" end",
 		zap.Int64("latency(ms)", latency),
-		zap.Any("resp", resp),
+		// zap.Any("resp", resp),
 	)
 	if err != nil {
 		return nil, err
