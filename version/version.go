@@ -1,4 +1,4 @@
 package version
 
 // Version 版本号
-const Version = "1.2.26"
+const Version = "1.2.27"
