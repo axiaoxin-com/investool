@@ -4,6 +4,7 @@ package cron
 import (
 	"time"
 
+	"github.com/axiaoxin-com/logging"
 	"github.com/go-co-op/gocron"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -26,8 +27,9 @@ var (
 func RunCronJobs(async bool) {
 	timezone, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
-		panic(err)
+		logging.Error(nil, "RunCronJobs time LoadLocation error:"+err.Error())
 	}
+	logging.Debugf(nil, "cron timezone:%v", timezone)
 	sched := gocron.NewScheduler(timezone)
 	// 同步基金净值列表和4433列表
 	sched.Cron("0 18 * * 1-5").Do(SyncFund)

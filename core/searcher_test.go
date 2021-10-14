@@ -11,7 +11,7 @@ import (
 func TestSearchStocks(t *testing.T) {
 	logging.SetLevel("info")
 	s := NewSearcher(_ctx)
-	k := []string{"招商", "贵州茅台", "600038"}
+	k := []string{"招商银行", "贵州茅台", "600038"}
 	results, err := s.SearchStocks(_ctx, k)
 	require.Nil(t, err)
 	require.Len(t, results, 3)

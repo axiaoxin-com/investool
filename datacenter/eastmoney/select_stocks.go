@@ -237,7 +237,7 @@ func (e EastMoney) QuerySelectedStocksWithFilter(ctx context.Context, filter Fil
 		"p":      "1",      // page
 		"ps":     "100000", // page size
 	}
-	logging.Infof(ctx, "EastMoney QuerySelectedStocksWithFilter "+apiurl+" begin", zap.Any("reqData", reqData))
+	logging.Info(ctx, "EastMoney QuerySelectedStocksWithFilter "+apiurl+" begin", zap.Any("reqData", reqData))
 	beginTime := time.Now()
 	req, err := goutils.NewHTTPMultipartReq(ctx, apiurl, reqData)
 	if err != nil {

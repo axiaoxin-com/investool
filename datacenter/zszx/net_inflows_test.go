@@ -21,6 +21,4 @@ func TestQueryMainMoneyNetInflows(t *testing.T) {
 	t.Logf("last5days:%#v, sum:%f", last5days, last5days.SumMainNetIn(_ctx))
 	last10days := results[:10]
 	t.Logf("last10days:%#v, sum:%f", last10days, last10days.SumMainNetIn(_ctx))
-	last20days := results[:20]
-	t.Logf("last20days:%#v, sum:%f", last20days, last20days.SumMainNetIn(_ctx))
 }
