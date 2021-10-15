@@ -27,7 +27,8 @@ var (
 func RunCronJobs(async bool) {
 	timezone, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
-		logging.Error(nil, "RunCronJobs time LoadLocation error:"+err.Error())
+		logging.Errorf(nil, "RunCronJobs time LoadLocation error:%v, using Local timezone as default", err.Error())
+		timezone, _ = time.LoadLocation("Local")
 	}
 	logging.Debugf(nil, "cron timezone:%v", timezone)
 	sched := gocron.NewScheduler(timezone)
