@@ -9,6 +9,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/logging"
+	"github.com/corpix/uarand"
 	"go.uber.org/zap"
 )
 
@@ -59,7 +60,10 @@ func (e EastMoney) QueryFundByStock(ctx context.Context, stockName, stockCode st
 	logging.Debug(ctx, "EastMoney QueryFundByStock "+apiurl+" begin")
 	beginTime := time.Now()
 	resp := RespQueryFundByStock{}
-	err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, nil, &resp)
+	header := map[string]string{
+		"user-agent": uarand.GetRandom(),
+	}
+	err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, header, &resp)
 	latency := time.Now().Sub(beginTime).Milliseconds()
 	logging.Debug(
 		ctx,

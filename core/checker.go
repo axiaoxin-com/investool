@@ -116,6 +116,9 @@ type CheckResult map[string]map[string]string
 // CheckFundamentals 检测股票基本面
 // [[检测失败项, 原因], ...]
 func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (result CheckResult, ok bool) {
+	if len(stock.HistoricalFinaMainData) == 0 {
+		return
+	}
 	ok = true
 	result = make(CheckResult)
 
@@ -337,22 +340,20 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// 负债率低于 MaxDebtRatio （可选条件），金融股不检测该项
 	checkItemName = "负债率"
 	itemOK = true
-	if len(stock.HistoricalFinaMainData) > 0 {
-		fzl := stock.HistoricalFinaMainData[0].Zcfzl
-		desc = fmt.Sprintf("负债率:%f", fzl)
-		if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
-			if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
-				if fzl > c.Options.MaxDebtAssetRatio {
-					desc = fmt.Sprintf("负债率:%f</br>高于:%f", fzl, c.Options.MaxDebtAssetRatio)
-					ok = false
-					itemOK = false
-				}
+	fzl := stock.HistoricalFinaMainData[0].Zcfzl
+	desc = fmt.Sprintf("负债率:%f", fzl)
+	if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
+		if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
+			if fzl > c.Options.MaxDebtAssetRatio {
+				desc = fmt.Sprintf("负债率:%f</br>高于:%f", fzl, c.Options.MaxDebtAssetRatio)
+				ok = false
+				itemOK = false
 			}
 		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 历史波动率 （可选条件）
@@ -387,7 +388,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 
 	// 银行股特殊检测
-	if stock.GetOrgType() == "银行" && len(stock.HistoricalFinaMainData) > 0 {
+	if stock.GetOrgType() == "银行" {
 		fmd := stock.HistoricalFinaMainData[0]
 		checkItemName = "总资产收益率(ROA)"
 		itemOK = true
@@ -608,17 +609,15 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// 负债流动比检测
 	checkItemName = "负债流动比"
 	itemOK = true
-	if len(stock.HistoricalFinaMainData) > 0 {
-		fzldb := stock.HistoricalFinaMainData[0].Ld
-		desc = fmt.Sprintf("最新负债流动比: %f", fzldb)
-		if fzldb < c.Options.MinFZLDB {
-			ok = false
-			itemOK = false
-		}
-		result[checkItemName] = map[string]string{
-			"desc": desc,
-			"ok":   fmt.Sprint(itemOK),
-		}
+	fzldb := stock.HistoricalFinaMainData[0].Ld
+	desc = fmt.Sprintf("最新负债流动比: %f", fzldb)
+	if fzldb < c.Options.MinFZLDB {
+		ok = false
+		itemOK = false
+	}
+	result[checkItemName] = map[string]string{
+		"desc": desc,
+		"ok":   fmt.Sprint(itemOK),
 	}
 
 	// 现金流检测
