@@ -221,12 +221,11 @@ func ActionExportor() func(c *cli.Context) error {
 
 		checkerOpts := NewCheckerOptions(c)
 		checker := core.NewChecker(ctx, checkerOpts)
-
+		if c.Bool("disable_check") {
+			checker = nil
+		}
 		filter := NewFilter(c)
 		selector := core.NewSelector(ctx, filter, checker)
-		if c.Bool("disable_check") {
-			selector = core.NewSelector(ctx, filter, nil)
-		}
 		b, _ := json.MarshalIndent(map[string]interface{}{
 			"filter":  filter,
 			"checker": checker,

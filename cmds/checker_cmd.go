@@ -4,6 +4,7 @@ package cmds
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/axiaoxin-com/logging"
@@ -34,111 +35,147 @@ func FlagsCheckerOptions() []cli.Flag {
 	return []cli.Flag{
 		&cli.Float64Flag{
 			Name:        "checker.min_roe",
-			Value:       8.0,
+			Value:       core.DefaultCheckerOptions.MinROE,
 			Usage:       "最新一期 ROE 不低于该值",
-			DefaultText: "8.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MinROE),
 		},
 		&cli.IntFlag{
 			Name:        "checker.check_years",
-			Value:       5,
+			Value:       core.DefaultCheckerOptions.CheckYears,
 			Usage:       "连续增长年数",
-			DefaultText: "5",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.CheckYears),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.no_check_years_roe",
-			Value:       20.0,
+			Value:       core.DefaultCheckerOptions.NoCheckYearsROE,
 			Usage:       "ROE 高于该值时不做连续增长检查",
-			DefaultText: "20.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.NoCheckYearsROE),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.max_debt_asset_ratio",
-			Value:       60.0,
+			Value:       core.DefaultCheckerOptions.MaxDebtAssetRatio,
 			Usage:       "最大资产负债率百分比(%)",
-			DefaultText: "60.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MaxDebtAssetRatio),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.max_hv",
-			Value:       1.0,
+			Value:       core.DefaultCheckerOptions.MaxHV,
 			Usage:       "最大历史波动率",
-			DefaultText: "1.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MaxHV),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.min_total_market_cap",
-			Value:       100.0,
+			Value:       core.DefaultCheckerOptions.MinTotalMarketCap,
 			Usage:       "最小市值（亿）",
-			DefaultText: "100.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MinTotalMarketCap),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.bank_min_roa",
-			Value:       0.5,
+			Value:       core.DefaultCheckerOptions.BankMinROA,
 			Usage:       "银行股最小 ROA",
-			DefaultText: "0.5",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.BankMinROA),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.bank_min_zbczl",
-			Value:       8.0,
+			Value:       core.DefaultCheckerOptions.BankMinZBCZL,
 			Usage:       "银行股最小资本充足率",
-			DefaultText: "8.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.BankMinZBCZL),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.bank_max_bldkl",
-			Value:       3.0,
+			Value:       core.DefaultCheckerOptions.BankMaxBLDKL,
 			Usage:       "银行股最大不良贷款率",
-			DefaultText: "3.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.BankMaxBLDKL),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.bank_min_bldkbbfgl",
-			Value:       100.0,
+			Value:       core.DefaultCheckerOptions.BankMinBLDKBBFGL,
 			Usage:       "银行股最低不良贷款拨备覆盖率",
-			DefaultText: "100.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.BankMinBLDKBBFGL),
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_mll_stability",
-			Value:       false,
+			Value:       core.DefaultCheckerOptions.IsCheckMLLStability,
 			Usage:       "是否检测毛利率稳定性",
-			DefaultText: "false",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckMLLStability),
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_jll_stability",
-			Value:       false,
+			Value:       core.DefaultCheckerOptions.IsCheckJLLStability,
 			Usage:       "是否检测净利率稳定性",
-			DefaultText: "false",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckJLLStability),
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_price_by_calc",
-			Value:       true,
+			Value:       core.DefaultCheckerOptions.IsCheckPriceByCalc,
 			Usage:       "是否使用估算合理价进行检测，高于估算价将被过滤",
-			DefaultText: "true",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckPriceByCalc),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.max_peg",
-			Value:       1.5,
+			Value:       core.DefaultCheckerOptions.MaxPEG,
 			Usage:       "最大 PEG",
-			DefaultText: "1.5",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MaxPEG),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.min_byys_ratio",
-			Value:       0.9,
+			Value:       core.DefaultCheckerOptions.MinBYYSRatio,
 			Usage:       "最小本业营收比",
-			DefaultText: "0.9",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MinBYYSRatio),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.max_byys_ratio",
-			Value:       1.1,
+			Value:       core.DefaultCheckerOptions.MaxBYYSRatio,
 			Usage:       "最大本业营收比",
-			DefaultText: "1.1",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MaxBYYSRatio),
 		},
 		&cli.Float64Flag{
 			Name:        "checker.min_fzldb",
-			Value:       1.0,
+			Value:       core.DefaultCheckerOptions.MinFZLDB,
 			Usage:       "最小负债流动比",
-			DefaultText: "1.0",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MinFZLDB),
 		},
 		&cli.BoolFlag{
 			Name:        "checker.is_check_cashflow",
-			Value:       false,
+			Value:       core.DefaultCheckerOptions.IsCheckCashflow,
 			Usage:       "是否检测现金流量",
-			DefaultText: "false",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckCashflow),
+		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_mll_grow",
+			Value:       core.DefaultCheckerOptions.IsCheckMLLGrow,
+			Usage:       "是否检测毛利率逐年递增",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckMLLGrow),
+		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_jll_grow",
+			Value:       core.DefaultCheckerOptions.IsCheckJLLGrow,
+			Usage:       "是否检测净利率逐年递增",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckJLLGrow),
+		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_eps_grow",
+			Value:       core.DefaultCheckerOptions.IsCheckEPSGrow,
+			Usage:       "是否检测EPS逐年递增",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckEPSGrow),
+		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_rev_grow",
+			Value:       core.DefaultCheckerOptions.IsCheckRevGrow,
+			Usage:       "是否检测营收逐年递增",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckRevGrow),
+		},
+		&cli.BoolFlag{
+			Name:        "checker.is_check_netprofit_grow",
+			Value:       core.DefaultCheckerOptions.IsCheckNetprofitGrow,
+			Usage:       "是否检测净利润逐年递增",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.IsCheckNetprofitGrow),
+		},
+		&cli.Float64Flag{
+			Name:        "checker.min_gxl",
+			Value:       core.DefaultCheckerOptions.MinGxl,
+			Usage:       "最低股息率",
+			DefaultText: fmt.Sprint(core.DefaultCheckerOptions.MinGxl),
 		},
 	}
 }
@@ -164,6 +201,12 @@ func NewCheckerOptions(c *cli.Context) core.CheckerOptions {
 	checkerOpts.MaxBYYSRatio = c.Float64("checker.max_byys_ratio")
 	checkerOpts.MinFZLDB = c.Float64("checker.min_fzldb")
 	checkerOpts.IsCheckCashflow = c.Bool("checker.is_check_cashflow")
+	checkerOpts.IsCheckMLLGrow = c.Bool("checker.is_check_mll_grow")
+	checkerOpts.IsCheckJLLGrow = c.Bool("checker.is_check_jll_grow")
+	checkerOpts.IsCheckEPSGrow = c.Bool("checker.is_check_eps_grow")
+	checkerOpts.IsCheckRevGrow = c.Bool("checker.is_check_rev_grow")
+	checkerOpts.IsCheckNetprofitGrow = c.Bool("checker.is_check_netprofit_grow")
+	checkerOpts.MinGxl = c.Float64("checker.min_gxl")
 	return checkerOpts
 }
 
