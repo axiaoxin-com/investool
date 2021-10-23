@@ -122,21 +122,19 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// ROE 高于 n%
 	checkItemName := "净资产收益率(ROE)"
 	itemOK := true
-	var lastFinaRoe float64
 	var lastFinaReport string
 	reports := stock.HistoricalFinaMainData.FilterByReportYear(ctx, time.Now().Year())
 	if len(reports) > 0 {
-		lastFinaRoe = reports[0].Roejq
 		lastFinaReport = reports[0].ReportDateName
 	}
-	desc := fmt.Sprintf("当前ROE:%f</br>%sROE:%f", stock.BaseInfo.RoeWeight, lastFinaReport, lastFinaRoe)
+	desc := fmt.Sprintf("%sROE:%f%%</br>同比增长:%f%%", lastFinaReport, stock.BaseInfo.RoeWeight, stock.HistoricalFinaMainData[0].Roejqtz)
 	if stock.BaseInfo.RoeWeight < c.Options.MinROE {
 		desc = fmt.Sprintf(
-			"当前ROE:%f</br>低于:%f</br>%sROE:%f",
+			"%sROE:%f%%</br>低于:%f%%</br>同比增长:%f%%",
+			lastFinaReport,
 			stock.BaseInfo.RoeWeight,
 			c.Options.MinROE,
-			lastFinaReport,
-			lastFinaRoe,
+			stock.HistoricalFinaMainData[0].Roejqtz,
 		)
 		ok = false
 		itemOK = false
@@ -160,16 +158,18 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
 	}
-	if roeavg < c.Options.NoCheckYearsROE &&
-		!stock.HistoricalFinaMainData.IsIncreasingByYears(
+	if roeavg < c.Options.NoCheckYearsROE {
+		// 年报的ROE递增
+		if !stock.HistoricalFinaMainData.IsIncreasingByYears(
 			ctx,
 			eastmoney.ValueListTypeROE,
 			c.Options.CheckYears,
 			eastmoney.FinaReportTypeYear,
 		) {
-		desc = fmt.Sprintf("%d年内未逐年递增:</br>%+v", c.Options.CheckYears, roeList)
-		ok = false
-		itemOK = false
+			desc = fmt.Sprintf("ROE%d年内未逐年递增:</br>%+v", c.Options.CheckYears, roeList)
+			ok = false
+			itemOK = false
+		}
 	}
 	result[checkItemName] = map[string]string{
 		"desc": desc,

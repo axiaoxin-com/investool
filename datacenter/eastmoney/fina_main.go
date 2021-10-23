@@ -26,7 +26,7 @@ type FinaMainData struct {
 	// 报告期
 	ReportDate string `json:"REPORT_DATE"`
 	// 财报类型：年报、三季报、中报、一季报
-	ReportType string `json:"REPORT_TYPE"`
+	ReportType FinaReportType `json:"REPORT_TYPE"`
 	// 财报名称: 2021 一季报
 	ReportDateName string `json:"REPORT_DATE_NAME"`
 	// 财报年份： 2021
@@ -193,20 +193,20 @@ type FinaReportType string
 
 const (
 	// FinaReportTypeQ1 一季报
-	FinaReportTypeQ1 = "一季报"
+	FinaReportTypeQ1 FinaReportType = "一季报"
 	// FinaReportTypeMid 中报
-	FinaReportTypeMid = "中报"
+	FinaReportTypeMid FinaReportType = "中报"
 	// FinaReportTypeQ3 三季报
-	FinaReportTypeQ3 = "三季报"
+	FinaReportTypeQ3 FinaReportType = "三季报"
 	// FinaReportTypeYear 年报
-	FinaReportTypeYear = "年报"
+	FinaReportTypeYear FinaReportType = "年报"
 )
 
 // FilterByReportType 按财报类型过滤：一季报，中报，三季报，年报
 func (h HistoricalFinaMainData) FilterByReportType(ctx context.Context, reportType FinaReportType) HistoricalFinaMainData {
 	result := HistoricalFinaMainData{}
 	for _, i := range h {
-		if i.ReportType == string(reportType) {
+		if i.ReportType == reportType {
 			result = append(result, i)
 		}
 	}

@@ -17,5 +17,4 @@ func TestQueryCompanyProfile(t *testing.T) {
 	require.NotEmpty(t, data.Concept)
 	require.NotEmpty(t, data.Profile)
 	require.NotEmpty(t, data.MainBusiness)
-	t.Log(data)
 }
