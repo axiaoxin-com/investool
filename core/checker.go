@@ -418,10 +418,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 
 		checkItemName = "不良贷款率"
 		itemOK = true
-		desc = fmt.Sprintf("不良贷款率:%f", fmd.Newcapitalader)
+		desc = fmt.Sprintf("不良贷款率:%f", fmd.NonPerLoan)
 		if c.Options.BankMaxBLDKL != 0 {
 			if fmd.NonPerLoan > c.Options.BankMaxBLDKL {
-				desc = fmt.Sprintf("不良贷款率:%f</br>高于:%f", fmd.Newcapitalader, c.Options.BankMinZBCZL)
+				desc = fmt.Sprintf("不良贷款率:%f</br>高于:%f", fmd.NonPerLoan, c.Options.BankMaxBLDKL)
 				ok = false
 				itemOK = false
 			}
@@ -433,9 +433,9 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 
 		checkItemName = "不良贷款拨备覆盖率"
 		itemOK = true
-		desc = fmt.Sprintf("不良贷款拨备覆盖率:%f", fmd.Newcapitalader)
+		desc = fmt.Sprintf("不良贷款拨备覆盖率:%f", fmd.Bldkbbl)
 		if fmd.Bldkbbl < c.Options.BankMinBLDKBBFGL {
-			desc = fmt.Sprintf("不良贷款拨备覆盖率:%f</br>低于:%f", fmd.Newcapitalader, c.Options.BankMinZBCZL)
+			desc = fmt.Sprintf("不良贷款拨备覆盖率:%f</br>低于:%f", fmd.Bldkbbl, c.Options.BankMinBLDKBBFGL)
 			ok = false
 			itemOK = false
 		}
