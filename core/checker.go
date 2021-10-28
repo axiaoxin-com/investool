@@ -314,14 +314,17 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// 股价低于合理价格
 	checkItemName = "合理股价"
 	itemOK = true
+	price := stock.GetPrice()
 	desc = fmt.Sprintf(
-		"最新股价:%f</br>合理价:%f</br>合理价差:%.2f%%",
-		stock.GetPrice(),
+		"最新股价:%f</br>合理价(年报):%.2f,合理价差:%.2f%%</br>合理价(最新财报):%.2f,合理价差:%.2f%%",
+		price,
 		stock.RightPrice,
-		(stock.RightPrice-stock.GetPrice())/stock.GetPrice()*100,
+		(stock.RightPrice-price)/price*100,
+		stock.RightPriceNewest,
+		(stock.RightPriceNewest-price)/price*100,
 	)
 	if c.Options.IsCheckPriceByCalc {
-		if stock.RightPrice != -1 && stock.GetPrice() > stock.RightPrice {
+		if stock.RightPrice != -1 && price > stock.RightPrice && price > stock.RightPriceNewest {
 			ok = false
 			itemOK = false
 		}

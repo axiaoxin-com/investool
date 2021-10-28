@@ -25,8 +25,10 @@ type Stock struct {
 	ValuationMap map[string]string `json:"valuation_map"`
 	// 历史市盈率
 	HistoricalPEList eastmoney.HistoricalPEList `json:"historical_pe_list"`
-	// 合理价格：历史市盈率中位数 * (去年EPS * (1 + 今年 Q1 营收增长比))
+	// 合理价格（年报）：历史市盈率中位数 * (去年EPS * (1 + 今年 Q1 营收增长比))
 	RightPrice float64 `json:"right_price"`
+	// 合理价格（最新一期财报）：历史市盈率中位数 * (当前EPS * (1 + 当前营收增长比))
+	RightPriceNewest float64 `json:"right_price_newest"`
 	// 历史股价
 	HistoricalPrice eniu.RespHistoricalStockPrice `json:"historical_price"`
 	// 历史波动率
@@ -117,6 +119,10 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock QueryHistoricalFinaMainData err:"+err.Error())
 			return
 		}
+		if len(hf) == 0 {
+			logging.Error(ctx, "HistoricalFinaMainData is empty")
+			return
+		}
 		s.HistoricalFinaMainData = hf
 
 		// 历史市盈率 && 合理价格
@@ -129,10 +135,17 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 
 		// 合理价格判断，一季报没有发布则设置合理价为 -1
 		s.RightPrice = -1
-		// 今年一季报营收增长比
-		ratio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
+		s.RightPriceNewest = -1
+		// 最新一期财报的营收增长比
+		q1RevIncrRatio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
 		if err != nil {
 			logging.Error(ctx, "NewStock Q1RevenueIncreasingRatio err:"+err.Error())
+			return
+		}
+		// 去年年报的eps
+		lastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
+		if lastYearReport == nil {
+			logging.Error(ctx, "NewStock GetReport nil")
 			return
 		}
 		// pe 中位数
@@ -141,10 +154,8 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetMidValue err:"+err.Error())
 			return
 		}
-		reports := s.HistoricalFinaMainData.FilterByReportType(ctx, eastmoney.FinaReportTypeYear)
-		if len(reports) > 0 {
-			s.RightPrice = peMidVal * (reports[0].Epsjb * (1 + ratio/100.0))
-		}
+		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + q1RevIncrRatio/100.0))
+		s.RightPriceNewest = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + s.HistoricalFinaMainData[0].Totaloperaterevetz/100.0))
 	}(ctx, s)
 
 	// 获取综合估值

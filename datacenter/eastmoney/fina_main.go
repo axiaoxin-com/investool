@@ -361,9 +361,9 @@ func (h HistoricalFinaMainData) MidValue(
 // Q1RevenueIncreasingRatio 获取今年一季报的营收增长比 (%)
 func (h HistoricalFinaMainData) Q1RevenueIncreasingRatio(ctx context.Context) (float64, error) {
 	year := time.Now().Year()
-	data := h.FilterByReportYear(ctx, year)
-	if len(data) > 0 {
-		return data[0].Totaloperaterevetz, nil
+	data := h.GetReport(ctx, year, FinaReportTypeQ1)
+	if data != nil {
+		return data.Totaloperaterevetz, nil
 	}
 	return 0, fmt.Errorf("%dQ1 report has not yet been published", year)
 }
