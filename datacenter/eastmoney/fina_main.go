@@ -225,6 +225,17 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 	return result
 }
 
+// Get 获取指定年份+季度的财报
+func (h HistoricalFinaMainData) GetReport(ctx context.Context, reportYear int, reportType FinaReportType) *FinaMainData {
+	year := fmt.Sprint(reportYear)
+	for _, i := range h {
+		if i.ReportYear == year && i.ReportType == reportType {
+			return &i
+		}
+	}
+	return nil
+}
+
 // ValueListType 列表数据的数据类型
 type ValueListType string
 

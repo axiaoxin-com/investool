@@ -122,23 +122,17 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	ok = true
 	result = make(CheckResult)
 
-	// ROE 高于 n%
+	// 最近一期的年报ROE 高于 n%
 	checkItemName := "净资产收益率(ROE)"
 	itemOK := true
-	var lastFinaReport string
-	reports := stock.HistoricalFinaMainData.FilterByReportYear(ctx, time.Now().Year())
-	if len(reports) > 0 {
-		lastFinaReport = reports[0].ReportDateName
-	}
-	desc := fmt.Sprintf("%sROE:%f%%</br>同比增长:%f%%", lastFinaReport, stock.BaseInfo.RoeWeight, stock.HistoricalFinaMainData[0].Roejqtz)
-	if stock.BaseInfo.RoeWeight < c.Options.MinROE {
-		desc = fmt.Sprintf(
-			"%sROE:%f%%</br>低于:%f%%</br>同比增长:%f%%",
-			lastFinaReport,
-			stock.BaseInfo.RoeWeight,
-			c.Options.MinROE,
-			stock.HistoricalFinaMainData[0].Roejqtz,
-		)
+	// 最新一期的年报
+	lastYearReport := stock.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
+	// 最新一期的财报
+	lastReport := stock.HistoricalFinaMainData[0]
+	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%</br>%sROE:%.2f%%，同比增长:%.2f%%",
+		lastYearReport.ReportDateName, lastYearReport.Roejq, lastYearReport.Roejqtz,
+		lastReport.ReportDateName, lastReport.Roejq, lastReport.Roejqtz)
+	if lastYearReport.Roejq < c.Options.MinROE {
 		ok = false
 		itemOK = false
 	}
