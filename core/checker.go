@@ -182,7 +182,14 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	desc = fmt.Sprintf("最新EPS:%f,同比增长:%.2f%%</br>%d年内EPS:%+v", curReport.Epsjb, curReport.Epsjbtz, c.Options.CheckYears, epsList)
+	desc = fmt.Sprintf(
+		"%sEPS:%f,同比增长:%.2f%%</br>%d年内EPS:%+v",
+		curReport.ReportDateName,
+		curReport.Epsjb,
+		curReport.Epsjbtz,
+		c.Options.CheckYears,
+		epsList,
+	)
 	if c.Options.IsCheckEPSGrow && len(epsList) > 0 {
 		if epsList[len(epsList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
@@ -213,7 +220,14 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	for _, rev := range revList {
 		revs = append(revs, goutils.YiWanString(rev))
 	}
-	desc = fmt.Sprintf("%d年内营收:</br>%s", c.Options.CheckYears, strings.Join(revs, "</br>"))
+	desc = fmt.Sprintf(
+		"%s营收:%s,同比增长:%.2f%%</br>%d年内营收:%s",
+		curReport.ReportDateName,
+		goutils.YiWanString(curReport.Totaloperatereve),
+		curReport.Totaloperaterevetz,
+		c.Options.CheckYears,
+		strings.Join(revs, ","),
+	)
 	if c.Options.IsCheckRevGrow && len(revList) > 0 {
 		if revList[len(revList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
@@ -244,7 +258,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	for _, np := range netprofitList {
 		nps = append(nps, goutils.YiWanString(np))
 	}
-	desc = fmt.Sprintf("%d年内净利润:</br>%s", c.Options.CheckYears, strings.Join(nps, "</br>"))
+	desc = fmt.Sprintf("%s净利润:%s,同比增长:%.2f%%</br>%d年内净利润:%s",
+		curReport.ReportDateName,
+		goutils.YiWanString(curReport.Parentnetprofit),
+		curReport.Parentnetprofittz,
+		c.Options.CheckYears,
+		strings.Join(nps, ","))
 	if c.Options.IsCheckNetprofitGrow && len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
