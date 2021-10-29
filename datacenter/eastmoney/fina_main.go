@@ -359,7 +359,7 @@ func (h HistoricalFinaMainData) MidValue(
 }
 
 // Q1RevenueIncreasingRatio 获取今年一季报的营收增长比 (%)
-func (h HistoricalFinaMainData) Q1RevenueIncreasingRatio(ctx context.Context) (float64, error) {
+func (h HistoricalFinaMainData) ThisYearQ1RevenueIncreasingRatio(ctx context.Context) (float64, error) {
 	year := time.Now().Year()
 	data := h.GetReport(ctx, year, FinaReportTypeQ1)
 	if data != nil {

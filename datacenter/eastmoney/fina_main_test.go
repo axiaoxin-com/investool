@@ -14,7 +14,7 @@ func TestQueryHistoricalFinaMainData(t *testing.T) {
 	require.NotEmpty(t, data1)
 	data2 := data.FilterByReportYear(_ctx, 2020)
 	require.Equal(t, 4, len(data2))
-	ratio, err := data.Q1RevenueIncreasingRatio(_ctx)
+	ratio, err := data.ThisYearQ1RevenueIncreasingRatio(_ctx)
 	t.Log("ratio:", ratio, " err:", err)
 	em, err := data.MidValue(_ctx, "EPS", 10, FinaReportTypeYear)
 	require.Nil(t, err)
