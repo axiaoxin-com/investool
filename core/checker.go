@@ -128,10 +128,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// 最新一期的年报
 	lastYearReport := stock.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
 	// 最新一期的财报
-	lastReport := stock.HistoricalFinaMainData[0]
+	curReport := stock.HistoricalFinaMainData.CurrentReport(ctx)
 	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%</br>%sROE:%.2f%%，同比增长:%.2f%%",
 		lastYearReport.ReportDateName, lastYearReport.Roejq, lastYearReport.Roejqtz,
-		lastReport.ReportDateName, lastReport.Roejq, lastReport.Roejqtz)
+		curReport.ReportDateName, curReport.Roejq, curReport.Roejqtz)
 	if lastYearReport.Roejq < c.Options.MinROE {
 		ok = false
 		itemOK = false
@@ -182,7 +182,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	desc = fmt.Sprintf("%d年内EPS:</br>%+v", c.Options.CheckYears, epsList)
+	desc = fmt.Sprintf("最新EPS:%f,同比增长:%.2f%%</br>%d年内EPS:%+v", curReport.Epsjb, curReport.Epsjbtz, c.Options.CheckYears, epsList)
 	if c.Options.IsCheckEPSGrow && len(epsList) > 0 {
 		if epsList[len(epsList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
@@ -324,7 +324,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		(stock.RightPriceNewest-price)/price*100,
 	)
 	if c.Options.IsCheckPriceByCalc {
-		if stock.RightPrice != -1 && price > stock.RightPrice && price > stock.RightPriceNewest {
+		if price > stock.RightPrice && price > stock.RightPriceNewest {
 			ok = false
 			itemOK = false
 		}
