@@ -225,13 +225,29 @@ func (h HistoricalFinaMainData) FilterByReportYear(ctx context.Context, reportYe
 	return result
 }
 
-// Get 获取指定年份+季度的财报
+// GetReport 获取指定年份+季度的财报
 func (h HistoricalFinaMainData) GetReport(ctx context.Context, reportYear int, reportType FinaReportType) *FinaMainData {
 	year := fmt.Sprint(reportYear)
 	for _, i := range h {
 		if i.ReportYear == year && i.ReportType == reportType {
 			return &i
 		}
+	}
+	return nil
+}
+
+// CurrentReport 当前最新一期财报
+func (h HistoricalFinaMainData) CurrentReport(ctx context.Context) *FinaMainData {
+	if len(h) > 0 {
+		return &h[0]
+	}
+	return nil
+}
+
+// PreviousReport 当前上一期财报
+func (h HistoricalFinaMainData) PreviousReport(ctx context.Context) *FinaMainData {
+	if len(h) > 1 {
+		return &h[1]
 	}
 	return nil
 }

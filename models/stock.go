@@ -4,6 +4,7 @@ package models
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"sync"
 	"time"
@@ -141,6 +142,11 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetReport nil")
 			return
 		}
+		thisYearQ1RevIncrRatio, err := s.HistoricalFinaMainData.ThisYearQ1RevenueIncreasingRatio(ctx)
+		if err != nil {
+			logging.Error(ctx, "ThisYearQ1RevenueIncreasingRatio err:"+err.Error())
+			return
+		}
 		// pe 中位数
 		peMidVal, err := peList.GetMidValue(ctx)
 		if err != nil {
@@ -148,9 +154,12 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + lastYearReport.Totaloperaterevetz/100.0))
+		RightPrice := peMidVal * (lastYearReport.Epsjb * (1 + thisYearQ1RevIncrRatio/100.0))
 		// 最新财报的合理价格
 		s.RightPriceNewest = -1
 		s.RightPriceNewest = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + s.HistoricalFinaMainData[0].Totaloperaterevetz/100.0))
+		RightPriceNewest := peMidVal * (s.HistoricalFinaMainData[1].Epsjb * (1 + s.HistoricalFinaMainData[0].Totaloperaterevetz/100.0))
+		fmt.Println(s.RightPrice, RightPrice, s.RightPriceNewest, RightPriceNewest)
 	}(ctx, s)
 
 	// 获取综合估值
