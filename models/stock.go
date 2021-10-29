@@ -135,14 +135,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 
 		// 合理价格判断，一季报没有发布则设置合理价为 -1
 		s.RightPrice = -1
-		s.RightPriceNewest = -1
-		// 最新一期财报的营收增长比
-		q1RevIncrRatio, err := s.HistoricalFinaMainData.Q1RevenueIncreasingRatio(ctx)
-		if err != nil {
-			logging.Error(ctx, "NewStock Q1RevenueIncreasingRatio err:"+err.Error())
-			return
-		}
-		// 去年年报的eps
+		// 去年年报
 		lastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
 		if lastYearReport == nil {
 			logging.Error(ctx, "NewStock GetReport nil")
@@ -154,7 +147,9 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetMidValue err:"+err.Error())
 			return
 		}
-		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + q1RevIncrRatio/100.0))
+		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + lastYearReport.Totaloperaterevetz/100.0))
+		// 最新财报的合理价格
+		s.RightPriceNewest = -1
 		s.RightPriceNewest = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + s.HistoricalFinaMainData[0].Totaloperaterevetz/100.0))
 	}(ctx, s)
 
