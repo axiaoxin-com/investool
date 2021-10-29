@@ -132,7 +132,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%</br>%sROE:%.2f%%，同比增长:%.2f%%",
 		lastYearReport.ReportDateName, lastYearReport.Roejq, lastYearReport.Roejqtz,
 		curReport.ReportDateName, curReport.Roejq, curReport.Roejqtz)
-	if lastYearReport.Roejq < c.Options.MinROE {
+	if lastYearReport.Roejq < c.Options.MinROE && curReport.Roejq < c.Options.MinROE {
 		ok = false
 		itemOK = false
 	}
