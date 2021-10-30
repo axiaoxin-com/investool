@@ -338,7 +338,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		"最新股价:%f</br>合理价:%.2f,合理价差:%.2f%%",
 		price,
 		stock.RightPrice,
-		(stock.RightPrice-price)/price*100,
+		stock.PriceSpace,
 	)
 	if c.Options.IsCheckPriceByCalc {
 		if price > stock.RightPrice {

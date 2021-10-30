@@ -147,7 +147,7 @@ func NewExportorData(ctx context.Context, stock Stock) ExportorData {
 	var reportOpinion interface{} = "--"
 	if stock.RightPrice > 0 {
 		rightPrice = stock.RightPrice
-		priceSpace = fmt.Sprintf("%.2f%%", (stock.RightPrice-stock.GetPrice())/stock.GetPrice()*100)
+		priceSpace = fmt.Sprintf("%.2f%%", stock.PriceSpace)
 	}
 	if stock.FinaReportOpinion != "" {
 		reportOpinion = stock.FinaReportOpinion

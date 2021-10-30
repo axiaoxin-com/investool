@@ -27,6 +27,8 @@ type Stock struct {
 	HistoricalPEList eastmoney.HistoricalPEList `json:"historical_pe_list"`
 	// 合理价格（年报）：历史市盈率中位数 * (去年EPS * (1 + 今年各期财报的平均营收增长比))
 	RightPrice float64 `json:"right_price"`
+	// 合理价差（%）
+	PriceSpace float64 `json:"price_space"`
 	// 历史股价
 	HistoricalPrice eniu.RespHistoricalStockPrice `json:"historical_price"`
 	// 历史波动率
@@ -99,19 +101,27 @@ func (s StockList) SortByROE() {
 	})
 }
 
+// SortByPriceSpace 股票列表按合理价差排序
+func (s StockList) SortByPriceSpace() {
+	sort.Slice(s, func(i, j int) bool {
+		return s[i].PriceSpace > s[j].PriceSpace
+	})
+}
+
 // NewStock 创建 Stock 对象
 func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) {
-	s := &Stock{
+	s := Stock{
 		BaseInfo: baseInfo,
 	}
-	var wg sync.WaitGroup
 
+	// PEG
+	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
+
+	var wg sync.WaitGroup
 	// 获取财报
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		hf, err := datacenter.EastMoney.QueryHistoricalFinaMainData(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryHistoricalFinaMainData err:"+err.Error())
@@ -150,28 +160,25 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearAvgRevIncrRatio/100.0))
-	}(ctx, s)
+		s.PriceSpace = (s.RightPrice - s.GetPrice()) / s.GetPrice() * 100
+	}(ctx, &s)
 
 	// 获取综合估值
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		valMap, err := datacenter.EastMoney.QueryValuationStatus(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryValuationStatus err:"+err.Error())
 			return
 		}
 		s.ValuationMap = valMap
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 历史股价 && 波动率
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		hisPrice, err := datacenter.Eniu.QueryHistoricalStockPrice(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryHistoricalStockPrice err:"+err.Error())
@@ -186,28 +193,24 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.HistoricalVolatility = hv
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 公司资料
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		cp, err := datacenter.EastMoney.QueryCompanyProfile(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryCompanyProfile err:"+err.Error())
 			return
 		}
 		s.CompanyProfile = cp
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 最新财报预约披露时间
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		finaPubDateList, err := datacenter.EastMoney.QueryFinaPublishDateList(ctx, s.BaseInfo.SecurityCode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryFinaPublishDateList err:"+err.Error())
@@ -218,59 +221,48 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			s.FinaActualPublishDate = finaPubDateList[0].ActualPublishDate
 			s.FinaReportDate = finaPubDateList[0].ReportDate
 		}
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 机构评级统计
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		orgRatings, err := datacenter.EastMoney.QueryOrgRating(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Debug(ctx, "NewStock QueryOrgRating err:"+err.Error())
 			return
 		}
 		s.OrgRatingList = orgRatings
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 盈利预测
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		pps, err := datacenter.EastMoney.QueryProfitPredict(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Debug(ctx, "NewStock QueryProfitPredict err:"+err.Error())
 			return
 		}
 		s.ProfitPredictList = pps
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 价值评估
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		jzpg, err := datacenter.EastMoney.QueryJiaZhiPingGu(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Debug(ctx, "NewStock QueryJiaZhiPingGu err:"+err.Error())
 			return
 		}
 		s.JZPG = jzpg
-	}(ctx, s)
-
-	// PEG
-	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
+	}(ctx, &s)
 
 	// 利润表数据
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		gincomeList, err := datacenter.EastMoney.QueryFinaGincomeData(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryFinaGincomeData err:"+err.Error())
@@ -284,14 +276,12 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			// 审计意见
 			s.FinaReportOpinion = gincome.OpinionType
 		}
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 现金流量表数据
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		cashflow, err := datacenter.EastMoney.QueryFinaCashflowData(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryFinaCashflowData err:"+err.Error())
@@ -309,28 +299,24 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 				s.NetcashFree = s.NetcashOperate - s.NetcashInvest
 			}
 		}
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 获取前10大流通股东
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		holders, err := datacenter.EastMoney.QueryFreeHolders(ctx, s.BaseInfo.Secucode)
 		if err != nil {
 			logging.Error(ctx, "NewStock QueryFreeHolders err:"+err.Error())
 			return
 		}
 		s.FreeHoldersTop10 = holders
-	}(ctx, s)
+	}(ctx, &s)
 
 	// 获取最近60日的主力资金净流入
 	wg.Add(1)
 	go func(ctx context.Context, s *Stock) {
-		defer func() {
-			wg.Done()
-		}()
+		defer wg.Done()
 		now := time.Now()
 		end := now.Format("2006-01-02")
 		d, _ := time.ParseDuration("-1440h")
@@ -341,9 +327,9 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.MainMoneyNetInflows = inflows
-	}(ctx, s)
+	}(ctx, &s)
 
 	wg.Wait()
 
-	return *s, nil
+	return s, nil
 }
