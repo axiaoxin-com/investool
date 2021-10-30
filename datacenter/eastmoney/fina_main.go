@@ -282,7 +282,7 @@ func (fvl FinaValueList) String() string {
 	for _, i := range fvl {
 		s = append(s, fmt.Sprint(i))
 	}
-	return strings.Join(s, "</br>")
+	return strings.Join(s, ",")
 }
 
 // ValueList 获取历史数据值，最新的在最前面
@@ -374,14 +374,20 @@ func (h HistoricalFinaMainData) MidValue(
 	return goutils.MidValueFloat64(data)
 }
 
-// Q1RevenueIncreasingRatio 获取今年一季报的营收增长比 (%)
-func (h HistoricalFinaMainData) ThisYearQ1RevenueIncreasingRatio(ctx context.Context) (float64, error) {
+// ThisYearAvgRevenueIncreasingRatio 获取今年已发布的各期财报的平均营收增长比 (%)
+func (h HistoricalFinaMainData) ThisYearAvgRevenueIncreasingRatio(ctx context.Context) float64 {
 	year := time.Now().Year()
-	data := h.GetReport(ctx, year, FinaReportTypeQ1)
-	if data != nil {
-		return data.Totaloperaterevetz, nil
+	data := h.FilterByReportYear(ctx, year)
+	dlen := len(data)
+	if dlen == 0 {
+		return 0
 	}
-	return 0, fmt.Errorf("%dQ1 report has not yet been published", year)
+	sum := 0.0
+	for _, d := range data {
+		sum += d.Totaloperaterevetz
+	}
+
+	return sum / float64(dlen)
 }
 
 // RespFinaMainData 接口返回 json 结构

@@ -25,10 +25,8 @@ type Stock struct {
 	ValuationMap map[string]string `json:"valuation_map"`
 	// 历史市盈率
 	HistoricalPEList eastmoney.HistoricalPEList `json:"historical_pe_list"`
-	// 合理价格（年报）：历史市盈率中位数 * (去年EPS * (1 + 今年 Q1 营收增长比))
+	// 合理价格（年报）：历史市盈率中位数 * (去年EPS * (1 + 今年各期财报的平均营收增长比))
 	RightPrice float64 `json:"right_price"`
-	// 合理价格（最新一期财报）：历史市盈率中位数 * (上期EPS * (1 + 当前营收增长比))
-	RightPriceNewest float64 `json:"right_price_newest"`
 	// 历史股价
 	HistoricalPrice eniu.RespHistoricalStockPrice `json:"historical_price"`
 	// 历史波动率
@@ -140,7 +138,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetReport nil")
 			return
 		}
-		thisYearQ1RevIncrRatio, err := s.HistoricalFinaMainData.ThisYearQ1RevenueIncreasingRatio(ctx)
+		thisYearAvgRevIncrRatio := s.HistoricalFinaMainData.ThisYearAvgRevenueIncreasingRatio(ctx)
 		if err != nil {
 			logging.Error(ctx, "ThisYearQ1RevenueIncreasingRatio err:"+err.Error())
 			return
@@ -151,11 +149,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetMidValue err:"+err.Error())
 			return
 		}
-		// s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + lastYearReport.Totaloperaterevetz/100.0))
-		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearQ1RevIncrRatio/100.0))
-		// 最新财报的合理价格
-		// s.RightPriceNewest = peMidVal * (s.HistoricalFinaMainData[0].Epsjb * (1 + s.HistoricalFinaMainData[0].Totaloperaterevetz/100.0))
-		s.RightPriceNewest = peMidVal * (s.HistoricalFinaMainData.PreviousReport(ctx).Epsjb * (1 + s.HistoricalFinaMainData.CurrentReport(ctx).Totaloperaterevetz/100.0))
+		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearAvgRevIncrRatio/100.0))
 	}(ctx, s)
 
 	// 获取综合估值
