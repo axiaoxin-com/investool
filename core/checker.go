@@ -226,7 +226,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		goutils.YiWanString(curReport.Totaloperatereve),
 		curReport.Totaloperaterevetz,
 		c.Options.CheckYears,
-		strings.Join(revs, ","),
+		strings.Join(revs, "</br>"),
 	)
 	if c.Options.IsCheckRevGrow && len(revList) > 0 {
 		if revList[len(revList)-1] <= 0 ||
@@ -263,7 +263,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		goutils.YiWanString(curReport.Parentnetprofit),
 		curReport.Parentnetprofittz,
 		c.Options.CheckYears,
-		strings.Join(nps, ","))
+		strings.Join(nps, "</br>"))
 	if c.Options.IsCheckNetprofitGrow && len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
