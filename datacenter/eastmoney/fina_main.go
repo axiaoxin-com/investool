@@ -376,9 +376,8 @@ func (h HistoricalFinaMainData) MidValue(
 	return goutils.MidValueFloat64(data)
 }
 
-// ThisYearAvgRevenueIncreasingRatio 获取今年已发布的各期财报的平均营收增长比 (%)
-func (h HistoricalFinaMainData) ThisYearAvgRevenueIncreasingRatio(ctx context.Context) float64 {
-	year := time.Now().Year()
+// GetAvgRevenueIncreasingRatioByYear 获取指定年内已发布的各期财报的平均营收增长比 (%)
+func (h HistoricalFinaMainData) GetAvgRevenueIncreasingRatioByYear(ctx context.Context, year int) float64 {
 	data := h.FilterByReportYear(ctx, year)
 	dlen := len(data)
 	if dlen == 0 {

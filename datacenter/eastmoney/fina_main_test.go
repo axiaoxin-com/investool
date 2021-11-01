@@ -2,6 +2,7 @@ package eastmoney
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -12,9 +13,10 @@ func TestQueryHistoricalFinaMainData(t *testing.T) {
 	require.NotEmpty(t, data)
 	data1 := data.FilterByReportType(_ctx, FinaReportTypeYear)
 	require.NotEmpty(t, data1)
-	data2 := data.FilterByReportYear(_ctx, 2020)
+	year := time.Now().Year() - 1
+	data2 := data.FilterByReportYear(_ctx, year)
 	require.Equal(t, 4, len(data2))
-	ratio := data.ThisYearAvgRevenueIncreasingRatio(_ctx)
+	ratio := data.GetAvgRevenueIncreasingRatioByYear(_ctx, year)
 	t.Log("ratio:", ratio)
 	em, err := data.MidValue(_ctx, "EPS", 10, FinaReportTypeYear)
 	require.Nil(t, err)

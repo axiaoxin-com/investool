@@ -21,6 +21,23 @@ type RespHistoricalStockPrice struct {
 	Price []float64 `json:"price"`
 }
 
+// LastYearFinalPrice 获取去年12月份最后一个交易日的股价
+func (p RespHistoricalStockPrice) LastYearFinalPrice() float64 {
+	if len(p.Date) == 0 {
+		return 0
+	}
+	for i := len(p.Date) - 1; i > 0; i-- {
+		prefix := fmt.Sprintf("%d-12-", time.Now().Year()-1)
+		date := p.Date[i]
+		if strings.Contains(date, prefix) {
+			price := p.Price[i]
+			logging.Debugf(nil, "date:%s price:%f", date, price)
+			return price
+		}
+	}
+	return 0
+}
+
 // HistoricalVolatility 计算历史波动率
 // 历史波动率计算方法：https://goodcalculators.com/historical-volatility-calculator/
 // 1、从市场上获得标的股票在固定时间间隔(如每天DAY、每周WEEK或每月MONTH等)上的价格。

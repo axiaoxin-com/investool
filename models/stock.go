@@ -29,6 +29,8 @@ type Stock struct {
 	RightPrice float64 `json:"right_price"`
 	// 合理价差（%）
 	PriceSpace float64 `json:"price_space"`
+	// 按前年年报算去年的合理价格：历史市盈率中位数 * (前年EPS * (1 + 去年各期财报的平均营收增长比))
+	LastYearRightPrice float64 `json:"last_year_right_price"`
 	// 历史股价
 	HistoricalPrice eniu.RespHistoricalStockPrice `json:"historical_price"`
 	// 历史波动率
@@ -149,7 +151,8 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			logging.Error(ctx, "NewStock GetReport nil")
 			return
 		}
-		thisYearAvgRevIncrRatio := s.HistoricalFinaMainData.ThisYearAvgRevenueIncreasingRatio(ctx)
+		thisYear := time.Now().Year()
+		thisYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear)
 		if err != nil {
 			logging.Error(ctx, "ThisYearQ1RevenueIncreasingRatio err:"+err.Error())
 			return
@@ -162,6 +165,9 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}
 		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearAvgRevIncrRatio/100.0))
 		s.PriceSpace = (s.RightPrice - price) / price * 100
+		beforeLastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-2, eastmoney.FinaReportTypeYear)
+		lastYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-1)
+		s.LastYearRightPrice = peMidVal * (beforeLastYearReport.Epsjb * (1 + lastYearAvgRevIncrRatio/100.0))
 	}(ctx, &s)
 
 	// 获取综合估值
