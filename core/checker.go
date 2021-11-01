@@ -183,7 +183,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		eastmoney.FinaReportTypeYear,
 	)
 	desc = fmt.Sprintf(
-		"%sEPS:%f,同比增长:%.2f%%</br>%d年内EPS:%+v",
+		"%sEPS:%f,同比增长:%.2f%%</br>%d年内EPS:</br>%+v",
 		curReport.ReportDateName,
 		curReport.Epsjb,
 		curReport.Epsjbtz,
@@ -221,7 +221,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		revs = append(revs, goutils.YiWanString(rev))
 	}
 	desc = fmt.Sprintf(
-		"%s营收:%s,同比增长:%.2f%%</br>%d年内营收:%s",
+		"%s营收:%s,同比增长:%.2f%%</br>%d年内营收:</br>%s",
 		curReport.ReportDateName,
 		goutils.YiWanString(curReport.Totaloperatereve),
 		curReport.Totaloperaterevetz,
@@ -258,7 +258,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	for _, np := range netprofitList {
 		nps = append(nps, goutils.YiWanString(np))
 	}
-	desc = fmt.Sprintf("%s净利润:%s,同比增长:%.2f%%</br>%d年内净利润:%s",
+	desc = fmt.Sprintf("%s净利润:%s,同比增长:%.2f%%</br>%d年内净利润:</br>%s",
 		curReport.ReportDateName,
 		goutils.YiWanString(curReport.Parentnetprofit),
 		curReport.Parentnetprofittz,

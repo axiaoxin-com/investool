@@ -27,7 +27,6 @@ func Check(ctx context.Context, keywords []string, opts core.CheckerOptions) (re
 		checkResult, ok := checker.CheckFundamentals(ctx, stock)
 		k := fmt.Sprintf("%s-%s", stock.BaseInfo.SecurityNameAbbr, stock.BaseInfo.Secucode)
 		results[k] = checkResult
-
 		table := newTable()
 		if !ok {
 			renderTable(table, checkResult, []string{k, "FAILED"})

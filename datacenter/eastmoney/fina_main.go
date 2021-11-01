@@ -360,7 +360,9 @@ func (h HistoricalFinaMainData) IsStability(
 		logging.Error(ctx, "IsStability StdDeviationFloat64 error:"+err.Error())
 		return false
 	}
-	return sd <= 1
+	logging.Debugf(ctx, "StdDeviation value:%v", sd)
+	// 2.51 这个值是取了37家银行的标准差的平均值作为标准
+	return sd <= 2.51
 }
 
 // MidValue 历史年报 roe/eps 中位数
