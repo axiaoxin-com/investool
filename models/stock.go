@@ -116,6 +116,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 
 	// PEG
 	s.PEG = s.BaseInfo.PE / s.BaseInfo.NetprofitGrowthrate3Y
+	price := s.GetPrice()
 
 	var wg sync.WaitGroup
 	// 获取财报
@@ -160,7 +161,7 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 			return
 		}
 		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearAvgRevIncrRatio/100.0))
-		s.PriceSpace = (s.RightPrice - s.GetPrice()) / s.GetPrice() * 100
+		s.PriceSpace = (s.RightPrice - price) / price * 100
 	}(ctx, &s)
 
 	// 获取综合估值
