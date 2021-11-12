@@ -20,6 +20,7 @@ config.prod.toml
 tmp/
 
 x-stock
+investool
 *.tar.gz
 
 statics/js/app.min.*.js
