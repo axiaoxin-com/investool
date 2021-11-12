@@ -21,6 +21,7 @@ tmp/
 
 x-stock
 investool
+app
 *.tar.gz
 
 statics/js/app.min.*.js
