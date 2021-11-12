@@ -18,10 +18,10 @@ import (
 	"math"
 	"sync"
 
+	"github.com/axiaoxin-com/investool/datacenter"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
+	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/datacenter"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/models"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 )

@@ -1,4 +1,4 @@
-module github.com/axiaoxin-com/x-stock
+module github.com/axiaoxin-com/investool
 
 go 1.16
 

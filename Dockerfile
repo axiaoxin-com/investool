@@ -1,8 +1,8 @@
 FROM alpine
 
-WORKDIR /srv/x-stock
+WORKDIR /srv/investool
 
-ADD ./dist/x-stock.tar.gz /srv/
+ADD ./dist/investool.tar.gz /srv/
 
 EXPOSE 4869 4870
-ENTRYPOINT ["./x-stock", "-c", "./config.toml"]
+ENTRYPOINT ["./investool", "-c", "./config.toml"]

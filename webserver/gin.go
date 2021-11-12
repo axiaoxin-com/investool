@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/x-stock/statics"
+	"github.com/axiaoxin-com/investool/statics"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/json-iterator/go/extra"

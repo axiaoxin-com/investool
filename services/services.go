@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"time"
 
-	"github.com/axiaoxin-com/x-stock/datacenter"
-	"github.com/axiaoxin-com/x-stock/models"
+	"github.com/axiaoxin-com/investool/datacenter"
+	"github.com/axiaoxin-com/investool/models"
 	jsoniter "github.com/json-iterator/go"
 )
 

@@ -19,7 +19,7 @@ BUILDING_FAILED=-2
 # vars
 BINARY_NAME=apiserver
 CONFIGFILE=config.default.toml
-TARNAME=x-stock
+TARNAME=investool
 
 # clean dist dir
 clean() {

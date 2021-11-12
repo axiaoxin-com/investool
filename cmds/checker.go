@@ -8,8 +8,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/axiaoxin-com/investool/core"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/core"
 	"github.com/olekukonko/tablewriter"
 )
 

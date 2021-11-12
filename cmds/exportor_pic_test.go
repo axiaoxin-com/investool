@@ -3,7 +3,7 @@ package cmds
 import (
 	"testing"
 
-	"github.com/axiaoxin-com/x-stock/models"
+	"github.com/axiaoxin-com/investool/models"
 	"github.com/stretchr/testify/require"
 )
 

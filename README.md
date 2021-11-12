@@ -1,27 +1,27 @@
-# X-STOCK
+# InvesTool
 
-[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/axiaoxin-com/x-stock/)
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/axiaoxin-com/investool/)
 [![made-with-Go](https://img.shields.io/badge/Made%20with-Go-1f425f.svg)](http://golang.org)
-[![visitors](https://visitor-badge.glitch.me/badge?page_id=axiaoxin-com.x-stock)](https://github.com/axiaoxin-com/x-stock)
-[![GitHub release](https://img.shields.io/github/release/axiaoxin-com/x-stock.svg)](https://gitHub.com/axiaoxin-com/x-stock/releases/)
-[![Github all releases](https://img.shields.io/github/downloads/axiaoxin-com/x-stock/total.svg)](https://gitHub.com/axiaoxin-com/x-stock/releases/)
+[![visitors](https://visitor-badge.glitch.me/badge?page_id=axiaoxin-com.investool)](https://github.com/axiaoxin-com/investool)
+[![GitHub release](https://img.shields.io/github/release/axiaoxin-com/investool.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
+[![Github all releases](https://img.shields.io/github/downloads/axiaoxin-com/investool/total.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
 
-[![](./statics/img/sidenav_icon.png)](http://x-stock.axiaoxin.com?from=github)
+[![](./statics/img/sidenav_icon.png)](http://investool.axiaoxin.com?from=github)
 
-<http://x-stock.axiaoxin.com?from=github>
+<http://investool.axiaoxin.com?from=github>
 
-X-STOCK 项目是使用 Golang 实现的对股票进行基本面分析的程序，提供命令行和Web网页两种方式进行操作，同时支持对基金做筛选。数据来源于东方财富网、亿牛网、新浪财经、天天基金。
+InvesTool 项目是使用 Golang 实现的对股票进行基本面分析的程序，提供命令行和Web网页两种方式进行操作，同时支持对基金做筛选。数据来源于东方财富网、亿牛网、新浪财经、天天基金。
 
 该程序不构成任何投资建议，仅作为个人对股票有限认知的辅助分析工具，不一定适用于任何人。
 
 Web服务使用的是[pink-lady项目模板](https://github.com/axiaoxin-com/pink-lady)
 
 
-# X-STOCK 解决什么问题？
+# InvesTool 解决什么问题？
 
-X-STOCK 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否可以长期持有。
+InvesTool 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否可以长期持有。
 
-需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 X-STOCK 来让这个过程自动化。
+需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 InvesTool 来让这个过程自动化。
 
 
 # 功能
@@ -46,7 +46,7 @@ X-STOCK 要解决的问题是，在使用东方财富选股器按设置的条件
 - 完善命令行使用方式，筛选参数和检测参数支持命令行自定义
 - 支持负债流动比检测
 - 支持现金流检测
-- 提供 WEB 界面操作 <http://x-stock.axiaoxin.com?from=github>
+- 提供 WEB 界面操作 <http://investool.axiaoxin.com?from=github>
 - 支持基金 4433 筛选
 - 自定义基金筛选
 - 基金检测
@@ -162,23 +162,23 @@ X-STOCK 要解决的问题是，在使用东方财富选股器按设置的条件
 - 支持4433指标的灵活配置，可以按自定义排名值进行筛选
 - 由于基金规模太小有存在清盘风险，规模太大不利于基金经理的灵活调仓，所以筛选4433时支持对基金规模进行筛选。建议值为2-50亿
 
-当前基金筛选、检测等操作目前只支持WEB界面操作<http://x-stock.axiaoxin.com/fund?from=github>，命令行暂未支持。
+当前基金筛选、检测等操作目前只支持WEB界面操作<http://investool.axiaoxin.com/fund?from=github>，命令行暂未支持。
 
 # 使用方法
 
-[点击下载对应系统最新版本解压得到可执行文件](https://github.com/axiaoxin-com/x-stock/releases/)
+[点击下载对应系统最新版本解压得到可执行文件](https://github.com/axiaoxin-com/investool/releases/)
 
 查看使用说明：
 
 ```
-$ ./x-stock -h
+$ ./investool -h
 NAME:
-   x-stock - axiaoxin 的股票工具程序
+   investool - axiaoxin 的股票工具程序
 
 USAGE:
    该程序不构成任何投资建议，程序只是个人辅助工具，具体分析仍然需要自己判断。
 
-官网地址: http://x-stock.axiaoxin.com
+官网地址: http://investool.axiaoxin.com
 
 VERSION:
    0.0.7
@@ -207,15 +207,15 @@ exportor 是数据导出器，不使用参数默认导出 EXCEL 文件。
 查看使用说明：
 
 ```
-./x-stock exportor -h
+./investool exportor -h
 NAME:
-   x-stock exportor - 股票筛选导出器
+   investool exportor - 股票筛选导出器
 
 USAGE:
    将按条件筛选出的股票导出到文件，根据文件后缀名自动判断导出类型。支持的后缀名：[xlsx|csv|json|png|all]，all 表示导出全部支持的类型。
 
 OPTIONS:
-   --filename value, -f value                      指定导出文件名 (default: ./dist/x-stock.20210509.xlsx) [$XSTOCK_EXPORTOR_FILENAME]
+   --filename value, -f value                      指定导出文件名 (default: ./dist/investool.20210509.xlsx) [$XSTOCK_EXPORTOR_FILENAME]
    --disable_check, -C                             关闭基本面检测，导出所有原始筛选结果 (default: false) [$XSTOCK_EXPORTOR_DISABLE_CHECK]
    --filter.min_roe value                          最低净资产收益率 (%) (default: 8.0)
    --filter.min_netprofit_yoy_ratio value          最低净利润增长率 (%) (default: 0.0)
@@ -263,37 +263,37 @@ OPTIONS:
 - 导出 JSON 文件：
 
 ```
-./x-stock -l error exportor -f ./stocks.json
+./investool -l error exportor -f ./stocks.json
 ```
 
 - 导出 CSV 文件：
 
 ```
-./x-stock -l error exportor -f ./stocks.csv
+./investool -l error exportor -f ./stocks.csv
 ```
 
 - 导出 EXCEL 文件：
 
 ```
-./x-stock -l error exportor -f ./stocks.xlsx
+./investool -l error exportor -f ./stocks.xlsx
 ```
 
 - 导出 PNG 图片：
 
 ```
-./x-stock -l error exportor -f ./stocks.png
+./investool -l error exportor -f ./stocks.png
 ```
 
 - 导出全部支持的类型：
 
 ```
-./x-stock -l error exportor -f ./stocks.all
+./investool -l error exportor -f ./stocks.all
 ```
 
 - 自定义筛选、检测参数
 
 ```
-./x-stock -l error exportor -f ./stocks.xlsx --filter.min_roe=6 --checker.min_roe=6
+./investool -l error exportor -f ./stocks.xlsx --filter.min_roe=6 --checker.min_roe=6
 ```
 
 ## checker
@@ -303,12 +303,12 @@ OPTIONS:
 查看使用说明：
 
 ```
-./x-stock checker -h
+./investool checker -h
 NAME:
-   x-stock checker - 股票检测器
+   investool checker - 股票检测器
 
 USAGE:
-   x-stock checker [command options] [arguments...]
+   investool checker [command options] [arguments...]
 
 OPTIONS:
    --keyword value, -k value             检给定股票名称或代码，多个股票批量检测使用/分割。如: 招商银行/中国平安/600519
@@ -334,7 +334,7 @@ OPTIONS:
 命令行使用示例：
 
 ```
-./x-stock -l error checker -k 比亚迪
+./investool -l error checker -k 比亚迪
 ```
 
 ## webserver
@@ -342,7 +342,7 @@ OPTIONS:
 启动WEB服务：
 
 ```
-./x-stock webserver
+./investool webserver
 ```
 
 可通过 `---config` 指定配置文件，默认读取当前目录下的 `./config.toml`
@@ -351,7 +351,7 @@ OPTIONS:
 
 # 欢迎 Star
 
-[![Stargazers over time](https://starchart.cc/axiaoxin-com/x-stock.svg)](https://githuv.com/axiaoxin-com/x-stock)
+[![Stargazers over time](https://starchart.cc/axiaoxin-com/investool.svg)](https://githuv.com/axiaoxin-com/investool)
 
 # 最后
 

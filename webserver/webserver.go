@@ -48,8 +48,8 @@ func InitWithConfigFile(configFile string) {
 	viper.SetDefault("server.mode", gin.ReleaseMode)
 	viper.SetDefault("server.pprof", true)
 
-	viper.SetDefault("apidocs.title", "x-stock swagger apidocs")
-	viper.SetDefault("apidocs.desc", "Using x-stock to develop gin app on fly.")
+	viper.SetDefault("apidocs.title", "investool swagger apidocs")
+	viper.SetDefault("apidocs.desc", "Using investool to develop gin app on fly.")
 	viper.SetDefault("apidocs.host", "localhost:4869")
 	viper.SetDefault("apidocs.basepath", "/")
 	viper.SetDefault("apidocs.schemes", []string{"http"})

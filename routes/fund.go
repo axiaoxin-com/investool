@@ -7,11 +7,11 @@ import (
 	"sync"
 
 	"github.com/axiaoxin-com/goutils"
+	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/models"
+	"github.com/axiaoxin-com/investool/services"
+	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/models"
-	"github.com/axiaoxin-com/x-stock/services"
-	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -36,7 +36,7 @@ func FundIndex(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金",
+			"PageTitle": "InvesTool | 基金",
 			"Error":     err.Error(),
 		}
 		c.HTML(http.StatusOK, "fund_index.html", data)
@@ -58,7 +58,7 @@ func FundIndex(c *gin.Context) {
 	data := gin.H{
 		"Env":           viper.GetString("env"),
 		"Version":       version.Version,
-		"PageTitle":     "X-STOCK | 基金",
+		"PageTitle":     "InvesTool | 基金",
 		"URLPath":       "/fund",
 		"FundList":      result,
 		"Pagination":    pagi,
@@ -101,7 +101,7 @@ func FundFilter(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金严选",
+			"PageTitle": "InvesTool | 基金 | 基金严选",
 			"Error":     err.Error(),
 		}
 		c.HTML(http.StatusOK, "fund_filter.html", data)
@@ -123,7 +123,7 @@ func FundFilter(c *gin.Context) {
 	data := gin.H{
 		"Env":         viper.GetString("env"),
 		"Version":     version.Version,
-		"PageTitle":   "X-STOCK | 基金 | 基金严选",
+		"PageTitle":   "InvesTool | 基金 | 基金严选",
 		"URLPath":     "/fund/filter",
 		"FundList":    result,
 		"Pagination":  pagi,
@@ -184,7 +184,7 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     err.Error(),
 		}
 		c.JSON(http.StatusOK, data)
@@ -195,7 +195,7 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     "请填写基金代码",
 		}
 		c.JSON(http.StatusOK, data)
@@ -209,7 +209,7 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     err.Error(),
 		}
 		c.JSON(http.StatusOK, data)
@@ -220,7 +220,7 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Funds":     funds,
 			"Param":     p,
 		}
@@ -232,7 +232,7 @@ func FundCheck(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 基金检测",
+			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     "基金数量超过限制",
 			"Funds":     funds,
 			"Param":     p,
@@ -264,7 +264,7 @@ func FundCheck(c *gin.Context) {
 	data := gin.H{
 		"Env":               viper.GetString("env"),
 		"Version":           version.Version,
-		"PageTitle":         "X-STOCK | 基金 | 基金检测",
+		"PageTitle":         "InvesTool | 基金 | 基金检测",
 		"Funds":             funds,
 		"StockCheckResults": stockCheckResults,
 		"Param":             p,
@@ -285,7 +285,7 @@ func FundSimilarity(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     err.Error(),
 		}
 		c.HTML(http.StatusOK, "fund_similarity.html", data)
@@ -295,7 +295,7 @@ func FundSimilarity(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     "请填写待检测的基金代码",
 		}
 		c.HTML(http.StatusOK, "fund_similarity.html", data)
@@ -308,7 +308,7 @@ func FundSimilarity(c *gin.Context) {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
 			"Version":   version.Version,
-			"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     err.Error(),
 		}
 		c.HTML(http.StatusOK, "fund_similarity.html", data)
@@ -317,7 +317,7 @@ func FundSimilarity(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 基金 | 持仓相似度",
+		"PageTitle": "InvesTool | 基金 | 持仓相似度",
 		"Result":    result,
 	}
 	c.HTML(http.StatusOK, "fund_similarity.html", data)

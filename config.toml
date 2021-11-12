@@ -122,9 +122,9 @@ env = "localhost"
 ########## apidocs 相关配置
 [apidocs]
     # 文档标题
-    title = "x-stock swagger apidocs"
+    title = "investool swagger apidocs"
     # 文档描述
-    desc = "Using x-stock to develop gin app on fly."
+    desc = "Using investool to develop gin app on fly."
     # 请求地址，端口要和 server.addr 一致，浏览器访问时需要区分 127.0.0.1 和 localhost
     host = "localhost:4869"
     # 请求地址的 basepath

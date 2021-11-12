@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="keywords" content="股票,基本面,技术面,东方财富,选股,基金,4433" />
-    <meta name="description" content="X-STOCK, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等" />
+    <meta name="description" content="InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等" />
     <meta name="author" content="axiaoxin" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
 
-    <link rel="shortcut icon" href="http://cdn.axiaoxin.com/x-stock/favicon.ico">
+    <link rel="shortcut icon" href="http://cdn.axiaoxin.com/investool/favicon.ico">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="http://cdn.axiaoxin.com/css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/css/app.css"{{ else }}"/statics/css/app.css"{{ end }} />
+    <link rel="stylesheet" href={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/css/app.css"{{ else }}"/statics/css/app.css"{{ end }} />
     <title>{{ .PageTitle }}</title>
     <!-- 百度统计 -->
     <script>
@@ -32,7 +32,7 @@
 <header>
     <nav>
         <div class="nav-wrapper">
-            <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>X-STOCK</a>
+            <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
             <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul class="right hide-on-med-and-down">
                 <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
@@ -48,10 +48,10 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_bg.png"{{ else }}"/statics/img/sidenav_bg.png"{{ end }}>
+                    <img src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/img/sidenav_bg.png"{{ else }}"/statics/img/sidenav_bg.png"{{ end }}>
                 </div>
-                <a href="#!"><img class="circle" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/img/sidenav_icon.png"{{ else }}"/statics/img/sidenav_icon.png"{{ end }}></a>
-                <a href="#!"><span class="white-text">X-STOCK v{{ .Version }}</span></a>
+                <a href="#!"><img class="circle" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/img/sidenav_icon.png"{{ else }}"/statics/img/sidenav_icon.png"{{ end }}></a>
+                <a href="#!"><span class="white-text">InvesTool v{{ .Version }}</span></a>
             </div>
         </li>
         <li><a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a></li>
@@ -130,8 +130,8 @@
         </div>
     </div>
     <div class="footer-copyright">
-        <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=x-stock&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
-        <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> X-STOCK, All rights reserved.</p>
+        <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=investool&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
+        <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> InvesTool, All rights reserved.</p>
     </div>
 </footer>
 <script type="text/javascript" src="http://cdn.axiaoxin.com/js/jquery-3.6.0.min.js" ></script>
@@ -140,7 +140,7 @@
 <script type="text/javascript" src="http://cdn.axiaoxin.com/js/clipboard.min.js" ></script>
 <script type="text/javascript" src="http://cdn.axiaoxin.com/js/chart.xkcd.min.js" ></script>
 
-<script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/x-stock/js/app.min.20211102-004414.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
+<script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/js/app.min.20211102-004414.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
 <script data-ad-client="ca-pub-3022214826355647" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>

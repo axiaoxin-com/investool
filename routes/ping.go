@@ -3,9 +3,9 @@
 package routes
 
 import (
-	"github.com/axiaoxin-com/x-stock/routes/response"
-	"github.com/axiaoxin-com/x-stock/services"
-	"github.com/axiaoxin-com/x-stock/version"
+	"github.com/axiaoxin-com/investool/routes/response"
+	"github.com/axiaoxin-com/investool/services"
+	"github.com/axiaoxin-com/investool/version"
 
 	"github.com/gin-gonic/gin"
 )

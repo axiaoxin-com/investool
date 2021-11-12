@@ -8,11 +8,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/axiaoxin-com/investool/datacenter"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
+	"github.com/axiaoxin-com/investool/datacenter/eniu"
+	"github.com/axiaoxin-com/investool/datacenter/zszx"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/datacenter"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/datacenter/eniu"
-	"github.com/axiaoxin-com/x-stock/datacenter/zszx"
 )
 
 // Stock 接口返回的股票信息结构

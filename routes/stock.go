@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
-	"github.com/axiaoxin-com/x-stock/models"
-	"github.com/axiaoxin-com/x-stock/services"
-	"github.com/axiaoxin-com/x-stock/version"
+	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
+	"github.com/axiaoxin-com/investool/models"
+	"github.com/axiaoxin-com/investool/services"
+	"github.com/axiaoxin-com/investool/version"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -24,7 +24,7 @@ func StockIndex(c *gin.Context) {
 	data := gin.H{
 		"Env":          viper.GetString("env"),
 		"Version":      version.Version,
-		"PageTitle":    "X-STOCK | 股票",
+		"PageTitle":    "InvesTool | 股票",
 		"Error":        "",
 		"IndustryList": services.StockIndustryList,
 	}
@@ -44,7 +44,7 @@ func StockSelector(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 股票 | 基本面筛选",
+		"PageTitle": "InvesTool | 股票 | 基本面筛选",
 		"Error":     "",
 		"Stocks":    models.StockList{},
 	}
@@ -88,7 +88,7 @@ func StockChecker(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 股票 | 个股检测",
+		"PageTitle": "InvesTool | 股票 | 个股检测",
 		"Error":     "",
 	}
 	param := ParamStockChecker{}

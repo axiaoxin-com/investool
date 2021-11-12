@@ -1,6 +1,6 @@
 //go:generate swag init --dir ./ --generalInfo routes/routes.go --propertyStrategy snakecase --output ./routes/docs
 
-// Package main x-stock is my stock bot
+// Package main investool is my stock bot
 package main
 
 import (
@@ -8,9 +8,9 @@ import (
 	"os"
 	"time"
 
+	"github.com/axiaoxin-com/investool/cmds"
+	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/cmds"
-	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
 )
@@ -29,11 +29,11 @@ func init() {
 func main() {
 	app := cli.NewApp()
 	app.EnableBashCompletion = true
-	app.Name = "x-stock"
+	app.Name = "investool"
 	app.Usage = "axiaoxin 的股票工具程序"
 	app.UsageText = `该程序不构成任何投资建议，程序只是个人辅助工具，具体分析仍然需要自己判断。
 
-官网地址: http://x-stock.axiaoxin.com`
+官网地址: http://investool.axiaoxin.com`
 	app.Version = version.Version
 	app.Compiled = time.Now()
 	app.Authors = []*cli.Author{

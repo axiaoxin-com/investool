@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 )
 
 // ExportorData 数据模板

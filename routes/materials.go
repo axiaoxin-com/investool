@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/version"
 	"github.com/gin-gonic/gin"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/viper"
@@ -53,7 +53,7 @@ func Materials(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 资料",
+		"PageTitle": "InvesTool | 资料",
 	}
 	f, err := ioutil.ReadFile(MaterialsFilename)
 	if err != nil {

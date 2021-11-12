@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/models"
 )
 
 // Exportor exportor 实例
@@ -56,7 +56,7 @@ func Export(ctx context.Context, exportFilename string, selector core.Selector) 
 		os.Mkdir(filedir, 0755)
 	}
 
-	logging.Infof(ctx, "x-stock exportor start export selected stocks to %s", exportFilename)
+	logging.Infof(ctx, "investool exportor start export selected stocks to %s", exportFilename)
 	var err error
 	// 自动筛选股票
 	stocks, err := selector.AutoFilterStocks(ctx)
@@ -89,7 +89,7 @@ func Export(ctx context.Context, exportFilename string, selector core.Selector) 
 	}
 
 	fmt.Printf(
-		"\nx-stock exportor export %s succuss, total:%d latency:%#vs\n",
+		"\ninvestool exportor export %s succuss, total:%d latency:%#vs\n",
 		exportType,
 		len(stocks),
 		time.Now().Sub(beginTime).Seconds(),

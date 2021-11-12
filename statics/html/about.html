@@ -3,22 +3,22 @@
     <div class="col s12 m9 l9">
         <div id="about_site" class="scrollspy section">
             <h5 class="header">关于网站</h5>
-            <p>X-STOCK(v{{ .Version  }}) 网站数据来源于东方财富网、亿牛网、新浪财经、天天基金，主要用于按财务指标对股票和基金进行检测筛选，快速找到可参考的优质投资标的。</p>
+            <p>InvesTool(v{{ .Version  }}) 网站数据来源于东方财富网、亿牛网、新浪财经、天天基金，主要用于按财务指标对股票和基金进行检测筛选，快速找到可参考的优质投资标的。</p>
             <p>本站不涉及任何投资推荐！检测筛选出的结果仅为参考，并非推荐，请勿以此为投资依据！不对投资者构成任何投资建议！</p>
             <p>免责声明：股市有风险，入市需谨慎！</p>
         </div>
 
         <div id="about_problem" class="scrollspy section">
-            <h5 class="header">X-STOCK 解决什么问题？</h5>
-            <p>X-STOCK 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否值得投资。</p>
-            <p>需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 X-STOCK 来让这个过程自动化。</p>
+            <h5 class="header">InvesTool 解决什么问题？</h5>
+            <p>InvesTool 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否值得投资。</p>
+            <p>需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 InvesTool 来让这个过程自动化。</p>
         </div>
 
         <div id="about_good_company" class="scrollspy section">
-            <h5 class="header">X-STOCK 对优质公司的判断标准</h5>
+            <h5 class="header">InvesTool 对优质公司的判断标准</h5>
             <p>能赚钱、不会倒、低估值、能成长的公司就是优质公司，但优质公司不代表当前股价在涨或近期会涨。</p>
             <p>买优质公司的股票买在高位也照样亏钱，按基本面选股筛选结果仅可作为长线存股的参考标的。</p>
-            <p>X-STOCK 的基本面选股认为符合以下条件的可以认定为优质公司:</p>
+            <p>InvesTool 的基本面选股认为符合以下条件的可以认定为优质公司:</p>
             <ol>
                 <li><span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span> 不能低于 8% 且至少 3-5 年内逐年递增</li>
                 <li><span onclick="$('#desc_eps').tapTarget('open')">EPS<i class="tiny material-icons">live_help</i></span> 至少 3-5 年内逐年递增</li>
@@ -47,11 +47,11 @@
         </div>
 
         <div id="about_check" class="scrollspy section">
-            <h5 class="header">X-STOCK 对股票的筛选和检测说明</h5>
-            <p>在基本面选股中，X-STOCK 先通过东方财富选股器支持的条件进行筛选。当前最新一期财报的<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>是主要筛选指标，但检测均采用年报指标。默认值即为 X-STOCK 认为的最优值，你也可以自行修改。</p>
+            <h5 class="header">InvesTool 对股票的筛选和检测说明</h5>
+            <p>在基本面选股中，InvesTool 先通过东方财富选股器支持的条件进行筛选。当前最新一期财报的<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>是主要筛选指标，但检测均采用年报指标。默认值即为 InvesTool 认为的最优值，你也可以自行修改。</p>
             <p>其中<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>指标是按最新一期的财报作为筛选标准，可以适当调整，只要保证年报中该值不低于8%即满足条件。</p>
             <p>筛选出的股票默认是开启指标检测过滤的，不满足检测条件的将会被过滤。按默认条件筛选出的股票可以初步视为优质股票，至少当前优质，因此如果你不想进行检测过滤，可以去掉对应的检测勾选。</p>
-            <p>X-STOCK 会对筛选出的每一支股票进行以下检测：</p>
+            <p>InvesTool 会对筛选出的每一支股票进行以下检测：</p>
             <ol>
                 <li>最新一期财报的<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>必须大于指定值</li>
                 <li>历史<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>逐年递增</li>
@@ -84,7 +84,7 @@
                 <li>3-最近6个月收益率排名在同类型基金的前1/3</li>
                 <li>3-最近3个月收益率排名在同类型基金的前1/3</li>
             </ul>
-            <p>X-STOCK 会定期对市场上的全部基金进行4433法则检测，只要收益率满足条件的所有类型的基金都会进入4433基金列表。</p>
+            <p>InvesTool 会定期对市场上的全部基金进行4433法则检测，只要收益率满足条件的所有类型的基金都会进入4433基金列表。</p>
             <p>在基金严选中，可以调整该法则的排名百分比并设置更多判断条件进行自定义筛选。</p>
             <p>使用基金检测可以根据给定的基金代码对该基金进行指定的收益率排名检测，同时也可以勾选检测持仓股票对其进行个股检测。</p>
         </div>
@@ -99,10 +99,10 @@
     <div class="col hide-on-small-only m3 l3">
         <div class="toc-wrapper pinned">
             <ul class="section table-of-contents">
-                <li><a href="#about_site" class="active">关于 X-STOCK 网站</a></li>
-                <li><a href="#about_problem" class="">X-STOCK 解决什么问题？</a></li>
-                <li><a href="#about_good_company" class="">X-STOCK 对优质公司的判断标准</a></li>
-                <li><a href="#about_check" class="">X-STOCK 对股票的筛选和检测说明</a></li>
+                <li><a href="#about_site" class="active">关于 InvesTool 网站</a></li>
+                <li><a href="#about_problem" class="">InvesTool 解决什么问题？</a></li>
+                <li><a href="#about_good_company" class="">InvesTool 对优质公司的判断标准</a></li>
+                <li><a href="#about_check" class="">InvesTool 对股票的筛选和检测说明</a></li>
                 <li><a href="#about_4433" class="">4433选基法则</a></li>
                 <li><a href="#about_fundsim" class="">基金持仓相似度</a></li>
             </ul>

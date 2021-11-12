@@ -388,7 +388,7 @@ $(document).ready(function () {
 
   // 导出结果csv文件
   $(".export-result-btn").click(function (e) {
-    tableExport("selector_result_table", "x-stock-exported", "csv");
+    tableExport("selector_result_table", "investool-exported", "csv");
   });
 
   // 展示字段设置

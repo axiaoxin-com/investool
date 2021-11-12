@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/logging"
-	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/datacenter/eastmoney"
 	"github.com/urfave/cli/v2"
 )
 
@@ -21,7 +21,7 @@ const (
 
 var (
 	// DefaultExportFilename 要导出的文件名默认值
-	DefaultExportFilename = fmt.Sprintf("./dist/x-stock.%s.xlsx", time.Now().Format("20060102"))
+	DefaultExportFilename = fmt.Sprintf("./dist/investool.%s.xlsx", time.Now().Format("20060102"))
 )
 
 // FlagsExportor exportor cli flags

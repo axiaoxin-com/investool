@@ -6,8 +6,8 @@ import (
 	"net/http"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/x-stock/core"
-	"github.com/axiaoxin-com/x-stock/version"
+	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/version"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
@@ -22,7 +22,7 @@ func QueryFundByStock(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
-		"PageTitle": "X-STOCK | 基金 | 股票选基",
+		"PageTitle": "InvesTool | 基金 | 股票选基",
 		"Error":     "",
 	}
 
