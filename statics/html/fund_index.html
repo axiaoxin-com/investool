@@ -31,20 +31,6 @@
             4433总数:{{ .Fund4433Count }}/筛选总数:{{ .AllFundCount }}
         </div>
         {{ template "fundtable" . }}
-        <div>
-            <!--investool4433基金列表底部广告 -->
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-format="fluid"
-                data-ad-layout-key="-fb+5w+4e-db+86"
-                data-ad-client="ca-pub-3022214826355647"
-                data-ad-slot="2503301496"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
     </div>
 
     <!--filter start-->
@@ -115,19 +101,6 @@
                 </div>
                 <div class="row">
                     <button type="submit" class="btn waves-effect waves-light red lighten-2 col s12">筛选</button>
-                </div>
-                <div class="row">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                        crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle"
-                        style="display:block"
-                        data-ad-format="fluid"
-                        data-ad-layout-key="-fb+5w+4e-db+86"
-                        data-ad-client="ca-pub-3022214826355647"
-                        data-ad-slot="8799625847"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
                 </div>
             </form>
         </div>
@@ -214,19 +187,6 @@
                 <div class="row">
                     <a class="btn waves-effect waves-light red lighten-2 col s12" id="check_fund_submit_btn" >检测</a>
                 </div>
-                <div class="row">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                        crossorigin="anonymous"></script>
-                    <ins class="adsbygoogle"
-                        style="display:block"
-                        data-ad-format="fluid"
-                        data-ad-layout-key="-gw-3+1f-3d+2z"
-                        data-ad-client="ca-pub-3022214826355647"
-                        data-ad-slot="6961421255"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
             </form>
         </div>
     </div>
@@ -267,6 +227,20 @@
     <!-- 股票选基 start -->
     <div id="querybystock" class="col s12">
         <div class="row">
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+                crossorigin="anonymous"></script>
+            <!-- investool股票选基表单顶部广告 -->
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-3022214826355647"
+                data-ad-slot="7713796962"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        <div class="row">
             <form class="col s12" id="fundsim_form" action="/fund/query_by_stock" method="POST">
                 <div class="row">
                     <div class="input-field col s12">
@@ -279,24 +253,24 @@
                 </div>
             </form>
         </div>
-        <div class="row">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                crossorigin="anonymous"></script>
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-format="fluid"
-                data-ad-layout-key="-6t+ed+2i-1n-4w"
-                data-ad-client="ca-pub-3022214826355647"
-                data-ad-slot="8601805989"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
     </div>
     <!-- 股票选基 end -->
 </div>
 
 <div id="fund_check_results" class="hide">
+    <div class="fund_check_results_ad">
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+            crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-format="fluid"
+            data-ad-layout-key="-gw-3+1f-3d+2z"
+            data-ad-client="ca-pub-3022214826355647"
+            data-ad-slot="6961421255"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 </div>
 {{ template "modal" . }}
 {{ template "footer" . }}

@@ -560,7 +560,7 @@ $(document).ready(function () {
           if (fund.max_retracement.avg_135 <= data.Param.max_135_avg_retr) {
             maxretr_avg135 = "✅";
           }
-          $("#fund_check_results").append(
+          $(
             '<div class="row" id="' +
               fund.code +
               '"><h4 class="center"><a target="_blank" href="http://fund.eastmoney.com/' +
@@ -673,7 +673,7 @@ $(document).ready(function () {
               maxretr_avg135 +
               "</td></tr></tbody></table>" +
               "</div>"
-          );
+          ).insertBefore(".fund_check_results_ad");
           if (data.StockCheckResults) {
             var stockCheckResult = data.StockCheckResults[fund.code];
             $(`#${fund.code}`).append(
@@ -681,11 +681,13 @@ $(document).ready(function () {
             );
             $.each(stockCheckResult.check_results, function (i, result) {
               var cm = stockCheckResult.names[i].split("-")[1].split(".");
-              var index = i+1;
+              var index = i + 1;
               $(`#${fund.code}`).append(
                 '<div id="checker_result_' +
                   i +
-                  '"><div class="row"><div class="divider"></div><div class="col s12 m12 l6">'+index+'. <a target="_blank" href="http://quote.eastmoney.com/' +
+                  '"><div class="row"><div class="divider"></div><div class="col s12 m12 l6">' +
+                  index +
+                  '. <a target="_blank" href="http://quote.eastmoney.com/' +
                   cm[1] +
                   cm[0] +
                   '.html">' +
@@ -697,7 +699,7 @@ $(document).ready(function () {
                   " | 最新调仓:" +
                   fund.stocks[i].adjust_ratio +
                   "%" +
-                  '</br>当前检测财报数据来源:' +
+                  "</br>当前检测财报数据来源:" +
                   stockCheckResult.fina_report_names[i] +
                   "</br>最新财报预约发布日期:" +
                   stockCheckResult.fina_appoint_publish_dates[i] +

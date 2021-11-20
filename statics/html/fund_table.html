@@ -290,4 +290,18 @@
             <a href="{{ $urlpath }}?page_num={{ .Pagination.PagesCount }}&page_size={{ .IndexParam.PageSize }}&sort={{ .IndexParam.Sort }}&type={{ .IndexParam.Type }}{{ if eq $urlpath "/fund/filter" }}&year_1_rank_ratio={{ $filterparam.Year1RankRatio }}&this_year_235_rank_ratio={{ $filterparam.ThisYear235RankRatio }}&month_6_rank_ratio={{ $filterparam.Month6RankRatio }}&month_3_rank_ratio={{ $filterparam.Month3RankRatio }}&min_scale={{ $filterparam.MinScale }}&max_scale={{ $filterparam.MaxScale }}&min_manager_years={{ $filterparam.MinManagerYears }}{{ range $filterparam.Types }}&types={{ . }}{{ end }}&max_135_avg_stddev={{ $filterparam.Max135AvgStddev }}&min_135_avg_sharp={{ $filterparam.Min135AvgSharp }}&max_135_avg_retr={{ $filterparam.Max135AvgRetr }}{{ end }}"><i class="material-icons">last_page</i></a>
         </li>
     </ul>
+    <div>
+        <!--investool4433基金列表底部广告 -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+            crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+            style="display:block"
+            data-ad-format="fluid"
+            data-ad-layout-key="-fb+5w+4e-db+86"
+            data-ad-client="ca-pub-3022214826355647"
+            data-ad-slot="2503301496"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
 {{ end }}

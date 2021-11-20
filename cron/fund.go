@@ -54,8 +54,7 @@ func SyncFund() {
 	if err != nil {
 		logging.Errorf(ctx, "SyncFund json marshal fundlist error:", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	}
-	if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncFund WriteFile fundlist error:", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
@@ -63,8 +62,7 @@ func SyncFund() {
 	if err != nil {
 		logging.Errorf(ctx, "SyncFund json marshal fundtypelist error:", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	}
-	if err := ioutil.WriteFile(services.FundTypeListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(services.FundTypeListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncFund WriteFile fundtypelist error:", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
@@ -95,8 +93,7 @@ func Update4433() {
 		logging.Errorf(ctx, "Update4433 json marshal error:", err)
 		promSyncError.WithLabelValues("Update4433").Inc()
 		return
-	}
-	if err := ioutil.WriteFile(services.Fund4433ListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(services.Fund4433ListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "Update4433 WriteFile error:", err)
 		promSyncError.WithLabelValues("Update4433").Inc()
 		return
