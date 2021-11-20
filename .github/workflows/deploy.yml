@@ -24,7 +24,7 @@ jobs:
       run: CGO_ENABLED=0 go build -o app -tags=jsoniter
 
     - name: Tar
-      run: tar czvf app.tar.gz app
+      run: tar czvf app.tar.gz app statics
 
     - name: SCP Files
       uses: appleboy/scp-action@master

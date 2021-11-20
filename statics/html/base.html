@@ -9,10 +9,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
 
-    <link rel="shortcut icon" href="http://cdn.axiaoxin.com/investool/favicon.ico">
+    <link rel="shortcut icon" href="/statics/favicon.ico">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="http://cdn.axiaoxin.com/css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/css/app.css"{{ else }}"/statics/css/app.css"{{ end }} />
+    <link type="text/css" rel="stylesheet" href="/statics/css/materialize.min.css" media="screen,projection" />
+    <link rel="stylesheet" href="/statics/css/app.css" />
     <title>{{ .PageTitle }}</title>
     <!-- 百度统计 -->
     <script>
@@ -48,9 +48,9 @@
         <li>
             <div class="user-view">
                 <div class="background">
-                    <img src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/img/sidenav_bg.png"{{ else }}"/statics/img/sidenav_bg.png"{{ end }}>
+                    <img src="/statics/img/sidenav_bg.png">
                 </div>
-                <a href="#!"><img class="circle" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/img/sidenav_icon.png"{{ else }}"/statics/img/sidenav_icon.png"{{ end }}></a>
+                <a href="#!"><img class="circle" src="/statics/img/sidenav_icon.png"></a>
                 <a href="#!"><span class="white-text">InvesTool v{{ .Version }}</span></a>
             </div>
         </li>
@@ -134,13 +134,13 @@
         <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> InvesTool, All rights reserved.</p>
     </div>
 </footer>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/js/jquery-3.6.0.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/js/materialize.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/js/tableExport.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/js/clipboard.min.js" ></script>
-<script type="text/javascript" src="http://cdn.axiaoxin.com/js/chart.xkcd.min.js" ></script>
+<script type="text/javascript" src="/statics/js/jquery-3.6.0.min.js" ></script>
+<script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
+<script type="text/javascript" src="/statics/js/tableExport.js" ></script>
+<script type="text/javascript" src="/statics/js/clipboard.min.js" ></script>
+<script type="text/javascript" src="/statics/js/chart.xkcd.min.js" ></script>
 
-<script type="text/javascript" src={{ if eq .Env "prod" }}"http://cdn.axiaoxin.com/investool/js/app.min.20211112-231949.js"{{ else }}"/statics/js/app.js"{{ end }} ></script>
+<script type="text/javascript" src="/statics/js/app.js" ></script>
 
 <!-- google auto ads -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"

@@ -20,7 +20,7 @@ archives:
       amd64: x86_64
     files:
       - config.toml
-      - statics/js/app.min.*.js
+      - statics/**/*
 checksum:
   name_template: 'checksums.txt'
 snapshot:
