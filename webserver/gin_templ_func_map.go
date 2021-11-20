@@ -3,6 +3,7 @@
 package webserver
 
 import (
+	"html/template"
 	"strings"
 	"unicode"
 
@@ -10,7 +11,7 @@ import (
 )
 
 // TemplFuncs is a template.FuncMap with functions that can be used as template actions.
-var TemplFuncs = map[string]interface{}{
+var TemplFuncs = template.FuncMap{
 	"StrContains":       func(s, substr string) bool { return strings.Contains(s, substr) },
 	"StrContainsAny":    func(s, chars string) bool { return strings.ContainsAny(s, chars) },
 	"StrContainsRune":   func(s string, r rune) bool { return strings.ContainsRune(s, r) },
@@ -54,4 +55,5 @@ var TemplFuncs = map[string]interface{}{
 	"StrTrimSuffix":     func(s, suffix string) string { return strings.TrimSuffix(s, suffix) },
 	"IsStrInSlice":      goutils.IsStrInSlice,
 	"YiWanString":       goutils.YiWanString,
+	"mod":               func(i, j int) bool { return i%j == 0 },
 }

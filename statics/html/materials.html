@@ -5,21 +5,49 @@
         <h3 class="header">{{ $TypeName }}</h3>
         <ul class="collapsible">
         {{ range $i, $MaterialSeries := $MaterialSeriesList }}
-        <li {{ if eq $i 0 }}class="active"{{ end }}>
+            <li {{ if eq $i 0 }}class="active"{{ end }}>
                 {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
                     <div class="collapsible-header" id="{{ $SeriesName }}">{{ $SeriesName }}</div>
                     <div class="collapsible-body collection">
-                    {{ range $MaterialItem := $MaterialItemList }}
+                    {{ range $j, $MaterialItem := $MaterialItemList }}
                         <div class="collection-item">
                             <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank">{{ $MaterialItem.Name }}</a></p>
                             <p>{{ $MaterialItem.Desc }}</p>
                         </div>
+                        {{ if .Mod $j 8 }}
+                        <div>
+                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+                                crossorigin="anonymous"></script>
+                            <ins class="adsbygoogle"
+                                style="display:block"
+                                data-ad-format="fluid"
+                                data-ad-layout-key="-gw-3+1f-3d+2z"
+                                data-ad-client="ca-pub-3022214826355647"
+                                data-ad-slot="6607549106"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                        {{ end }}
                     {{ end }}
                     </div>
                 {{ end }}
             </li>
         {{ end }}
         </ul>
+        <div>
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+                crossorigin="anonymous"></script>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-format="fluid"
+                data-ad-layout-key="-fb+5w+4e-db+86"
+                data-ad-client="ca-pub-3022214826355647"
+                data-ad-slot="8490125346"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
     {{ end }}
     </div>
 {{ end }}

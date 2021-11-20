@@ -43,16 +43,11 @@ func NewGinEngine(middlewares ...gin.HandlerFunc) *gin.Engine {
 		engine.Use(middleware)
 	}
 
-	// set template funcmap, must befor load templates
-	engine.SetFuncMap(TemplFuncs)
-
 	// load html template
 	tmplPath := viper.GetString("statics.tmpl_path")
 	if tmplPath != "" {
-		t, err := template.ParseFS(&statics.Files, tmplPath)
-		if err != nil {
-			panic(err)
-		}
+		engine.FuncMap = TemplFuncs
+		t := template.Must(template.ParseFS(&statics.Files, tmplPath))
 		engine.SetHTMLTemplate(t)
 	}
 	// register statics
