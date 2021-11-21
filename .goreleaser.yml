@@ -8,7 +8,6 @@ builds:
       - windows
       - darwin
     flags:
-      - -tags=jsoniter
       - -v
 
 archives:

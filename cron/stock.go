@@ -3,12 +3,12 @@ package cron
 
 import (
 	"context"
+	"encoding/json"
 	"io/ioutil"
 
 	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/logging"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // SyncIndustryList 同步行业列表
@@ -23,7 +23,7 @@ func SyncIndustryList() {
 	services.StockIndustryList = indlist
 
 	// 更新文件
-	b, err := jsoniter.Marshal(indlist)
+	b, err := json.Marshal(indlist)
 	if err != nil {
 		logging.Errorf(ctx, "SyncIndustryList json marshal error:", err)
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()

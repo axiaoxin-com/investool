@@ -2,10 +2,10 @@ package models
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,7 +14,7 @@ func TestNewFund(t *testing.T) {
 	efund, err := eastmoney.NewEastMoney().QueryFundInfo(ctx, "260104")
 	require.Nil(t, err)
 	fund := NewFund(ctx, efund)
-	b, err := jsoniter.Marshal(fund)
+	b, err := json.Marshal(fund)
 	require.Nil(t, err)
 	t.Log(string(b))
 }

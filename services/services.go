@@ -3,12 +3,12 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"io/ioutil"
 	"time"
 
 	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/models"
-	jsoniter "github.com/json-iterator/go"
 )
 
 var (
@@ -24,6 +24,8 @@ var (
 	Fund4433List models.FundList
 	// SyncFundTime 基金数据同步时间
 	SyncFundTime = time.Now()
+	// RawFundAllListFilename api返回的原始结果
+	RawFundAllListFilename = "./eastmoney_funds_list.json"
 	// FundAllListFilename 基金列表数据文件
 	FundAllListFilename = "./fund_all_list.json"
 	// Fund4433ListFilename 4433基金列表数据文件
@@ -67,7 +69,7 @@ func InitFundAllList() error {
 	if err != nil {
 		return err
 	}
-	return jsoniter.Unmarshal(fundlist, &FundAllList)
+	return json.Unmarshal(fundlist, &FundAllList)
 }
 
 // InitFund4433List 从json文件加载基金列表
@@ -76,7 +78,7 @@ func InitFund4433List() error {
 	if err != nil {
 		return err
 	}
-	if err := jsoniter.Unmarshal(fundlist, &Fund4433List); err != nil {
+	if err := json.Unmarshal(fundlist, &Fund4433List); err != nil {
 		return err
 	}
 	Fund4433List.Sort(models.FundSortTypeWeek)
@@ -90,7 +92,7 @@ func InitFundTypeList() error {
 	if err != nil {
 		return err
 	}
-	if err := jsoniter.Unmarshal(types, &FundTypeList); err != nil {
+	if err := json.Unmarshal(types, &FundTypeList); err != nil {
 		return err
 	}
 	return nil

@@ -3,6 +3,7 @@ package cron
 
 import (
 	"context"
+	"encoding/json"
 	"io/ioutil"
 	"time"
 
@@ -12,7 +13,6 @@ import (
 	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/logging"
-	jsoniter "github.com/json-iterator/go"
 )
 
 // SyncFund 同步基金数据
@@ -50,20 +50,28 @@ func SyncFund() {
 	services.FundTypeList = fundtypes
 
 	// 更新文件
-	b, err := jsoniter.Marshal(fundlist)
+	b, err := json.Marshal(efundlist)
 	if err != nil {
-		logging.Errorf(ctx, "SyncFund json marshal fundlist error:", err)
+		logging.Errorf(ctx, "SyncFund json marshal efundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	} else if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
-		logging.Errorf(ctx, "SyncFund WriteFile fundlist error:", err)
+	} else if err := ioutil.WriteFile(services.RawFundAllListFilename, b, 0666); err != nil {
+		logging.Errorf(ctx, "SyncFund WriteFile efundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
-	b, err = jsoniter.Marshal(services.FundTypeList)
+	b, err = json.Marshal(fundlist)
 	if err != nil {
-		logging.Errorf(ctx, "SyncFund json marshal fundtypelist error:", err)
+		logging.Errorf(ctx, "SyncFund json marshal fundlist error:%v", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
+	} else if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
+		logging.Errorf(ctx, "SyncFund WriteFile fundlist error:%v", err)
+		promSyncError.WithLabelValues("SyncFund").Inc()
+	}
+	b, err = json.Marshal(services.FundTypeList)
+	if err != nil {
+		logging.Errorf(ctx, "SyncFund json marshal fundtypelist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	} else if err := ioutil.WriteFile(services.FundTypeListFilename, b, 0666); err != nil {
-		logging.Errorf(ctx, "SyncFund WriteFile fundtypelist error:", err)
+		logging.Errorf(ctx, "SyncFund WriteFile fundtypelist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
 
@@ -88,7 +96,7 @@ func Update4433() {
 	services.Fund4433List = fundlist
 
 	// 更新文件
-	b, err := jsoniter.Marshal(fundlist)
+	b, err := json.Marshal(fundlist)
 	if err != nil {
 		logging.Errorf(ctx, "Update4433 json marshal error:", err)
 		promSyncError.WithLabelValues("Update4433").Inc()

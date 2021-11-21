@@ -3,13 +3,13 @@
 package routes
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
 	"github.com/gin-gonic/gin"
-	jsoniter "github.com/json-iterator/go"
 	"github.com/spf13/viper"
 )
 
@@ -63,7 +63,7 @@ func Materials(c *gin.Context) {
 		return
 	}
 	var mlist AllMaterialsList
-	if err := jsoniter.Unmarshal(f, &mlist); err != nil {
+	if err := json.Unmarshal(f, &mlist); err != nil {
 		logging.Errorf(c, "json Unmarshal AllMaterialsList err:%v", err)
 		data["Error"] = err
 		c.HTML(http.StatusOK, "materials.html", data)

@@ -66,7 +66,7 @@ build() {
         mkdir ${DIST_PATH}
     fi
     cd ${SRC_PATH}
-    GOOS=linux GOARCH=amd64 go build -o ${DIST_PATH}/${BINARY_NAME} -tags=jsoniter ${SRC_PATH}
+    GOOS=linux GOARCH=amd64 go build -o ${DIST_PATH}/${BINARY_NAME} ${SRC_PATH}
     if [ $? -ne 0 ]
     then
         echo -e "Build failed."
