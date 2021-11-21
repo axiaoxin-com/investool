@@ -89,8 +89,8 @@ github.com/avast/retry-go v3.0.0+incompatible h1:4SOWQ7Qs+oroOTQOYnAHqelpCO0biHS
 github.com/avast/retry-go v3.0.0+incompatible/go.mod h1:XtSnn+n/sHqQIpZ10K1qAevBhOOCWBLXXy3hyiqqBrY=
 github.com/axiaoxin-com/goutils v0.0.0-20200909093258-aaf2fefcde7a/go.mod h1:F2aOBYYYAavrWj+xErR2VsBJlacoY9mvVuxujFL3AvI=
 github.com/axiaoxin-com/goutils v1.0.3-0.20201019024427-66fe97b27be4/go.mod h1:ZuL0c9e5Nw6b6eirSmB9VaOeojiHS3BrmzGyKiKYLD0=
-github.com/axiaoxin-com/goutils v1.0.21-0.20211001073654-f48c01a6b469 h1:CLSoID3Vzr/iY3bmHOCfGAZCMiEUhr4uaYHNESWN1q4=
-github.com/axiaoxin-com/goutils v1.0.21-0.20211001073654-f48c01a6b469/go.mod h1:5TkHWwl5j2M2u4vFDxtelwB4Ts7JgyfpRJrs8v19+VM=
+github.com/axiaoxin-com/goutils v1.0.21-0.20211121142645-df2217972c07 h1:guM1/sZfL7uMlPomUm88KlrjSX0v5k3YkByuzpn6mFE=
+github.com/axiaoxin-com/goutils v1.0.21-0.20211121142645-df2217972c07/go.mod h1:5TkHWwl5j2M2u4vFDxtelwB4Ts7JgyfpRJrs8v19+VM=
 github.com/axiaoxin-com/logging v1.2.3/go.mod h1:WM8Q9JLUi1jDh51XirUBDn8QXkxc8AO2oApFXHiEXf4=
 github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba h1:cAErRDYhJOQr4MWHIBKYn5WI+/qnxTa41ycLyenreUE=
 github.com/axiaoxin-com/logging v1.2.11-0.20210710005236-5a960a1422ba/go.mod h1:Jx322YD47doa/j9kn3pNPntze8b9bOVxf3So0LmdRMg=
