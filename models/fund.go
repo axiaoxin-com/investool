@@ -387,7 +387,9 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	pfm := FundPerformance{}
 	for _, d := range efund.Jdzf.Datas {
 		rankRatio := interfaceToFloat64(ctx, interfaceToFloat64(ctx, d.Rank)) / interfaceToFloat64(ctx, d.Sc)
-		if math.IsNaN(rankRatio) {
+
+		// Note that a runtime 1.0 / 0.0 is +Inf
+		if math.IsNaN(rankRatio) || math.IsInf(rankRatio, 0) {
 			rankRatio = 0.0
 		}
 		rankRatio = rankRatio * 100.0 // %
