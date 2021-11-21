@@ -68,3 +68,29 @@ func (c ChinaBond) QueryFxsyl(ctx context.Context, treeItemID, date string) ([][
 
 	return resp.YcChartDataList[0].SeriesData, nil
 }
+
+// QueryCurrentSyl 返回债券当期收益率
+// 债券名称：https://yield.chinabond.com.cn/cbweb-mn/yield_main?locale=zh_CN
+func (c ChinaBond) QueryCurrentSyl(ctx context.Context, bondName string) (float64, error) {
+	bonds, err := c.QueryTree(ctx)
+	if err != nil {
+		return 0, err
+	}
+	id := bonds[bondName]
+	if id == "" {
+		return 0, fmt.Errorf("债券名称不存在:%v", bondName)
+	}
+	date := goutils.GetLatestTradingDay()
+	data, err := c.QueryFxsyl(ctx, id, date)
+	if err != nil {
+		return 0, err
+	}
+	if len(data) == 0 {
+		return 0, errors.New("收益率数据为空")
+	}
+	syl := data[0]
+	if len(syl) != 2 {
+		return 0, fmt.Errorf("收益率数据异常：%v", syl)
+	}
+	return syl[1], nil
+}

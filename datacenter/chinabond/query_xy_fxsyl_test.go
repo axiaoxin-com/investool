@@ -12,3 +12,9 @@ func TestQueryFxsyl(t *testing.T) {
 	require.NotEqual(t, len(results), 0)
 	require.NotZero(t, results[0][1])
 }
+func TestQueryCurrentSyl(t *testing.T) {
+	result, err := _c.QueryCurrentSyl(_ctx, "中债证券公司债收益率曲线(AAA)")
+	require.Nil(t, err)
+	require.NotZero(t, result)
+	t.Log(result)
+}
