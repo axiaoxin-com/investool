@@ -8,7 +8,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/datacenter"
-	"github.com/axiaoxin-com/investool/services"
+	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/logging"
 )
 
@@ -24,7 +24,7 @@ func SyncIndustryList() {
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()
 		return
 	}
-	services.StockIndustryList = indlist
+	models.StockIndustryList = indlist
 
 	// 更新文件
 	b, err := json.Marshal(indlist)
@@ -33,7 +33,7 @@ func SyncIndustryList() {
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()
 		return
 	}
-	if err := ioutil.WriteFile(services.IndustryListFilename, b, 0666); err != nil {
+	if err := ioutil.WriteFile(models.IndustryListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncIndustryList WriteFile error:", err)
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()
 		return

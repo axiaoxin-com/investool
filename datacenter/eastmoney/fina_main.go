@@ -391,6 +391,21 @@ func (h HistoricalFinaMainData) GetAvgRevenueIncreasingRatioByYear(ctx context.C
 	return sum / float64(dlen)
 }
 
+// GetAvgEpsIncreasingRatioByYear 获取指定年内已发布的各期财报的平均EPS增长比 (%)
+func (h HistoricalFinaMainData) GetAvgEpsIncreasingRatioByYear(ctx context.Context, year int) float64 {
+	data := h.FilterByReportYear(ctx, year)
+	dlen := len(data)
+	if dlen == 0 {
+		return 0
+	}
+	sum := 0.0
+	for _, d := range data {
+		sum += d.Epsjbtz
+	}
+
+	return sum / float64(dlen)
+}
+
 // RespFinaMainData 接口返回 json 结构
 type RespFinaMainData struct {
 	Version string `json:"version"`

@@ -335,10 +335,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	itemOK = true
 	price := stock.GetPrice()
 	desc = fmt.Sprintf(
-		"最新股价:%f</br>合理价:%.2f(%.2f%%)</br>去年合理价:%.2f,去年实际价格:%.2f",
+		"最新股价:%f</br>合理价:%.2f(%.2f%%)</br>内在价值:%.2f</br>去年合理价:%.2f,去年实际价格:%.2f",
 		price,
 		stock.RightPrice,
 		stock.PriceSpace,
+		stock.IntrinsicalValue,
 		stock.LastYearRightPrice,
 		stock.HistoricalPrice.LastYearFinalPrice(),
 	)

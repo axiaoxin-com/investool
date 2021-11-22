@@ -12,7 +12,6 @@ import (
 	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/investool/models"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/logging"
 )
 
@@ -46,19 +45,19 @@ func SyncFund() {
 	}
 
 	// 更新 services 变量
-	services.FundAllList = fundlist
+	models.FundAllList = fundlist
 	fundtypes := []string{}
 	for k := range typeMap {
 		fundtypes = append(fundtypes, k)
 	}
-	services.FundTypeList = fundtypes
+	models.FundTypeList = fundtypes
 
 	// 更新文件
 	b, err := json.Marshal(efundlist)
 	if err != nil {
 		logging.Errorf(ctx, "SyncFund json marshal efundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	} else if err := ioutil.WriteFile(services.RawFundAllListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(models.RawFundAllListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncFund WriteFile efundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
@@ -66,15 +65,15 @@ func SyncFund() {
 	if err != nil {
 		logging.Errorf(ctx, "SyncFund json marshal fundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	} else if err := ioutil.WriteFile(services.FundAllListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(models.FundAllListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncFund WriteFile fundlist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
-	b, err = json.Marshal(services.FundTypeList)
+	b, err = json.Marshal(models.FundTypeList)
 	if err != nil {
 		logging.Errorf(ctx, "SyncFund json marshal fundtypelist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
-	} else if err := ioutil.WriteFile(services.FundTypeListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(models.FundTypeListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "SyncFund WriteFile fundtypelist error:%v", err)
 		promSyncError.WithLabelValues("SyncFund").Inc()
 	}
@@ -83,21 +82,21 @@ func SyncFund() {
 	Update4433()
 
 	// 更新同步时间
-	services.SyncFundTime = time.Now()
+	models.SyncFundTime = time.Now()
 }
 
 // Update4433 更新4433检测结果
 func Update4433() {
 	ctx := context.Background()
 	fundlist := models.FundList{}
-	for _, fund := range services.FundAllList {
+	for _, fund := range models.FundAllList {
 		if fund.Is4433(ctx) {
 			fundlist = append(fundlist, fund)
 		}
 	}
-	// 更新 services 变量
+	// 更新 models 变量
 	fundlist.Sort(models.FundSortTypeWeek)
-	services.Fund4433List = fundlist
+	models.Fund4433List = fundlist
 
 	// 更新文件
 	b, err := json.Marshal(fundlist)
@@ -105,7 +104,7 @@ func Update4433() {
 		logging.Errorf(ctx, "Update4433 json marshal error:", err)
 		promSyncError.WithLabelValues("Update4433").Inc()
 		return
-	} else if err := ioutil.WriteFile(services.Fund4433ListFilename, b, 0666); err != nil {
+	} else if err := ioutil.WriteFile(models.Fund4433ListFilename, b, 0666); err != nil {
 		logging.Errorf(ctx, "Update4433 WriteFile error:", err)
 		promSyncError.WithLabelValues("Update4433").Inc()
 		return

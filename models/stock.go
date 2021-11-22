@@ -27,6 +27,8 @@ type Stock struct {
 	HistoricalPEList eastmoney.HistoricalPEList `json:"historical_pe_list"`
 	// 合理价格（年报）：历史市盈率中位数 * (去年EPS * (1 + 今年各期财报的平均营收增长比))
 	RightPrice float64 `json:"right_price"`
+	// 格雷厄姆内在价值
+	IntrinsicalValue float64 `json:"intrinsical_value"`
 	// 合理价差（%）
 	PriceSpace float64 `json:"price_space"`
 	// 按前年年报算去年的合理价格：历史市盈率中位数 * (前年EPS * (1 + 去年各期财报的平均营收增长比))
@@ -168,6 +170,11 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		beforeLastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-2, eastmoney.FinaReportTypeYear)
 		lastYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-1)
 		s.LastYearRightPrice = peMidVal * (beforeLastYearReport.Epsjb * (1 + lastYearAvgRevIncrRatio/100.0))
+		// 内在价值 E*(2r+8.5)*4.4/Y
+		if AAACompanyBondSyl != 0 {
+			thisYearAvgEpsIncrRatio := s.HistoricalFinaMainData.GetAvgEpsIncreasingRatioByYear(ctx, thisYear)
+			s.IntrinsicalValue = lastYearReport.Epsjb * (2*thisYearAvgEpsIncrRatio + 8.5) * 4.4 / AAACompanyBondSyl
+		}
 	}(ctx, &s)
 
 	// 获取综合估值

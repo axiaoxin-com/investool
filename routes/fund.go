@@ -9,7 +9,6 @@ import (
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/core"
 	"github.com/axiaoxin-com/investool/models"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
 	"github.com/gin-gonic/gin"
@@ -26,7 +25,7 @@ type ParamFundIndex struct {
 
 // FundIndex godoc
 func FundIndex(c *gin.Context) {
-	fundList := services.Fund4433List
+	fundList := models.Fund4433List
 	p := ParamFundIndex{
 		PageNum:  1,
 		PageSize: 10,
@@ -63,10 +62,10 @@ func FundIndex(c *gin.Context) {
 		"FundList":      result,
 		"Pagination":    pagi,
 		"IndexParam":    p,
-		"UpdatedAt":     services.SyncFundTime.Format("2006-01-02 15:04:05"),
-		"AllFundCount":  len(services.FundAllList),
+		"UpdatedAt":     models.SyncFundTime.Format("2006-01-02 15:04:05"),
+		"AllFundCount":  len(models.FundAllList),
 		"Fund4433Count": totalCount,
-		"FundTypes":     services.Fund4433TypeList,
+		"FundTypes":     models.Fund4433TypeList,
 	}
 	c.HTML(http.StatusOK, "fund_index.html", data)
 	return
@@ -107,7 +106,7 @@ func FundFilter(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_filter.html", data)
 		return
 	}
-	fundList := services.FundAllList.Filter(c, p.ParamFundListFilter)
+	fundList := models.FundAllList.Filter(c, p.ParamFundListFilter)
 	fundTypes := fundList.Types()
 	// 过滤
 	if p.ParamFundIndex.Type != "" {

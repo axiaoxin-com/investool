@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/investool/cmds"
+	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
 	"github.com/spf13/viper"
@@ -24,6 +25,7 @@ var (
 
 func init() {
 	viper.SetDefault("app.chan_size", 50)
+	models.InitGlobalVars()
 }
 
 func main() {

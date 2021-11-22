@@ -6,7 +6,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/datacenter"
-	"github.com/axiaoxin-com/investool/services"
+	"github.com/axiaoxin-com/investool/models"
 )
 
 // SyncBond 同步债券
@@ -15,5 +15,5 @@ func SyncBond() {
 		return
 	}
 	ctx := context.Background()
-	services.AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(ctx)
+	models.AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(ctx)
 }

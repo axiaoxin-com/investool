@@ -1,5 +1,7 @@
-// Package services 加载或初始化外部依赖服务
-package services
+// Package models
+// 全局变量
+
+package models
 
 import (
 	"context"
@@ -8,7 +10,7 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/investool/datacenter"
-	"github.com/axiaoxin-com/investool/models"
+	"github.com/axiaoxin-com/logging"
 )
 
 var (
@@ -19,9 +21,9 @@ var (
 	// Fund4433TypeList 4433基金类型列表
 	Fund4433TypeList []string
 	// FundAllList 全量基金列表
-	FundAllList models.FundList
+	FundAllList FundList
 	// Fund4433List 满足4433法则的基金列表
-	Fund4433List models.FundList
+	Fund4433List FundList
 	// SyncFundTime 基金数据同步时间
 	SyncFundTime = time.Now()
 	// RawFundAllListFilename api返回的原始结果
@@ -37,6 +39,22 @@ var (
 	// AAACompanyBondSyl AAA公司债当期收益率
 	AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(context.Background())
 )
+
+// InitGlobalVars 初始化全局变量
+func InitGlobalVars() {
+	if err := InitIndustryList(); err != nil {
+		logging.Error(nil, "init models global vars error:"+err.Error())
+	}
+	if err := InitFundAllList(); err != nil {
+		logging.Error(nil, "init models global vars error:"+err.Error())
+	}
+	if err := InitFund4433List(); err != nil {
+		logging.Error(nil, "init models global vars error:"+err.Error())
+	}
+	if err := InitFundTypeList(); err != nil {
+		logging.Error(nil, "init models global vars error:"+err.Error())
+	}
+}
 
 // InitIndustryList 初始化行业列表
 func InitIndustryList() error {
@@ -66,7 +84,7 @@ func InitFund4433List() error {
 	if err := json.Unmarshal(fundlist, &Fund4433List); err != nil {
 		return err
 	}
-	Fund4433List.Sort(models.FundSortTypeWeek)
+	Fund4433List.Sort(FundSortTypeWeek)
 	Fund4433TypeList = Fund4433List.Types()
 	return nil
 }

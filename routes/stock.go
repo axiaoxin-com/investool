@@ -13,7 +13,6 @@ import (
 	"github.com/axiaoxin-com/investool/core"
 	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/investool/models"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -26,7 +25,7 @@ func StockIndex(c *gin.Context) {
 		"Version":      version.Version,
 		"PageTitle":    "InvesTool | 股票",
 		"Error":        "",
-		"IndustryList": services.StockIndustryList,
+		"IndustryList": models.StockIndustryList,
 	}
 	c.HTML(http.StatusOK, "stock_index.html", data)
 	return
