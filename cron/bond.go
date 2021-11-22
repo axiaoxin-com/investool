@@ -15,5 +15,8 @@ func SyncBond() {
 		return
 	}
 	ctx := context.Background()
-	models.AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(ctx)
+	syl := datacenter.ChinaBond.QueryAAACompanyBondSyl(ctx)
+	if syl != 0 {
+		models.AAACompanyBondSyl = syl
+	}
 }
