@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/logging"
@@ -13,6 +14,9 @@ import (
 
 // SyncIndustryList 同步行业列表
 func SyncIndustryList() {
+	if !goutils.IsTradingDay() {
+		return
+	}
 	ctx := context.Background()
 	indlist, err := datacenter.EastMoney.QueryIndustryList(ctx)
 	if err != nil {

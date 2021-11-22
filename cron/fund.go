@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"time"
 
+	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/core"
 	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
@@ -17,6 +18,9 @@ import (
 
 // SyncFund 同步基金数据
 func SyncFund() {
+	if !goutils.IsTradingDay() {
+		return
+	}
 	ctx := context.Background()
 	logging.Infof(ctx, "SyncFund request start...")
 

@@ -35,7 +35,9 @@ func RunCronJobs(async bool) {
 	// 同步基金净值列表和4433列表
 	sched.Cron("0 18 * * 1-5").Do(SyncFund)
 	// 同步东方财富行业列表
-	sched.Cron("0 4 1 * *").Do(SyncIndustryList)
+	sched.Cron("0 4 * * 1-5").Do(SyncIndustryList)
+	// 同步AAA公司债券收益率
+	sched.Cron("0 4 * * 1-5").Do(SyncBond)
 	if async {
 		sched.StartAsync()
 	} else {

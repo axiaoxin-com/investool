@@ -94,3 +94,12 @@ func (c ChinaBond) QueryCurrentSyl(ctx context.Context, bondName string) (float6
 	}
 	return syl[1], nil
 }
+
+// QueryAAACompanyBondSyl AAA公司债当期收益率
+func (c ChinaBond) QueryAAACompanyBondSyl(ctx context.Context) float64 {
+	syl, err := c.QueryCurrentSyl(ctx, "中债证券公司债收益率曲线(AAA)")
+	if err != nil {
+		logging.Error(ctx, "QueryCurrentSyl error:"+err.Error())
+	}
+	return syl
+}
