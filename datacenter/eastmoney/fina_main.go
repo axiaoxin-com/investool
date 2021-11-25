@@ -376,7 +376,7 @@ func (h HistoricalFinaMainData) MidValue(
 	return goutils.MidValueFloat64(data)
 }
 
-// GetAvgRevenueIncreasingRatioByYear 获取指定年内已发布的各期财报的平均营收增长比 (%)
+// GetAvgRevenueIncreasingRatioByYear 获取指定年内已发布的各期财报的平均营收同比增长比 (%)
 func (h HistoricalFinaMainData) GetAvgRevenueIncreasingRatioByYear(ctx context.Context, year int) float64 {
 	data := h.FilterByReportYear(ctx, year)
 	dlen := len(data)
@@ -391,7 +391,7 @@ func (h HistoricalFinaMainData) GetAvgRevenueIncreasingRatioByYear(ctx context.C
 	return sum / float64(dlen)
 }
 
-// GetAvgEpsIncreasingRatioByYear 获取指定年内已发布的各期财报的平均EPS增长比 (%)
+// GetAvgEpsIncreasingRatioByYear 获取指定年内已发布的各期财报的平均EPS同比增长比 (%)
 func (h HistoricalFinaMainData) GetAvgEpsIncreasingRatioByYear(ctx context.Context, year int) float64 {
 	data := h.FilterByReportYear(ctx, year)
 	dlen := len(data)
@@ -401,6 +401,21 @@ func (h HistoricalFinaMainData) GetAvgEpsIncreasingRatioByYear(ctx context.Conte
 	sum := 0.0
 	for _, d := range data {
 		sum += d.Epsjbtz
+	}
+
+	return sum / float64(dlen)
+}
+
+// GetAvgParentNetprofitIncreasingRatioByYear 获取指定年内已发布的各期财报的平均归属净利润同比增长比 (%)
+func (h HistoricalFinaMainData) GetAvgParentNetprofitIncreasingRatioByYear(ctx context.Context, year int) float64 {
+	data := h.FilterByReportYear(ctx, year)
+	dlen := len(data)
+	if dlen == 0 {
+		return 0
+	}
+	sum := 0.0
+	for _, d := range data {
+		sum += d.Parentnetprofittz
 	}
 
 	return sum / float64(dlen)
