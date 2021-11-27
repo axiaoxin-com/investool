@@ -560,7 +560,7 @@ $(document).ready(function () {
           if (fund.max_retracement.avg_135 <= data.Param.max_135_avg_retr) {
             maxretr_avg135 = "✅";
           }
-          $(
+          $("#fund_check_results").append(
             '<div class="row" id="' +
               fund.code +
               '"><h4 class="center"><a target="_blank" href="http://fund.eastmoney.com/' +
@@ -673,7 +673,7 @@ $(document).ready(function () {
               maxretr_avg135 +
               "</td></tr></tbody></table>" +
               "</div>"
-          ).insertBefore(".fund_check_results_ad");
+          );
           if (data.StockCheckResults) {
             var stockCheckResult = data.StockCheckResults[fund.code];
             $(`#${fund.code}`).append(

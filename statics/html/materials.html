@@ -1,27 +1,22 @@
 {{ template "header" . }}
+<div>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+        crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="fluid"
+        data-ad-layout-key="-6t+ed+2i-1n-4w"
+        data-ad-client="ca-pub-3022214826355647"
+        data-ad-slot="8601805989"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</div>
+
 {{ range $TypedMaterialSeries := .AllMaterialsList }}
-    <div class="section">
-    {{ range $TypeName, $MaterialSeriesList := $TypedMaterialSeries }}
-        <h3 class="header">{{ $TypeName }}</h3>
-        <ul class="collapsible">
-        {{ range $i, $MaterialSeries := $MaterialSeriesList }}
-            <li {{ if eq $i 0 }}class="active"{{ end }}>
-                {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
-                    <div class="collapsible-header" id="{{ $SeriesName }}">{{ $SeriesName }}</div>
-                    <div class="collapsible-body collection">
-                    {{ range $MaterialItem := $MaterialItemList }}
-                        <div class="collection-item">
-                            <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank">{{ $MaterialItem.Name }}</a></p>
-                            <p>{{ $MaterialItem.Desc }}</p>
-                        </div>
-                    {{ end }}
-                    </div>
-                {{ end }}
-            </li>
-        {{ end }}
-        </ul>
-    {{ end }}
-    </div>
+<div class="section">
+{{ range $TypeName, $MaterialSeriesList := $TypedMaterialSeries }}
+    <h3 class="header">{{ $TypeName }}</h3>
     <div>
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
             crossorigin="anonymous"></script>
@@ -35,5 +30,24 @@
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
     </div>
+    <ul class="collapsible">
+    {{ range $i, $MaterialSeries := $MaterialSeriesList }}
+        <li {{ if eq $i 0 }}class="active"{{ end }}>
+            {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
+                <div class="collapsible-header" id="{{ $SeriesName }}">{{ $SeriesName }}</div>
+                <div class="collapsible-body collection">
+                {{ range $MaterialItem := $MaterialItemList }}
+                    <div class="collection-item">
+                        <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank">{{ $MaterialItem.Name }}</a></p>
+                        <p>{{ $MaterialItem.Desc }}</p>
+                    </div>
+                {{ end }}
+                </div>
+            {{ end }}
+        </li>
+    {{ end }}
+    </ul>
+{{ end }}
+</div>
 {{ end }}
 {{ template "footer" . }}
