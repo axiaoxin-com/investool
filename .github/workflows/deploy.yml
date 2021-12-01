@@ -21,7 +21,7 @@ jobs:
     #   run: go test -race ./...
 
     - name: Build
-      run: CGO_ENABLED=0 go build -o app -tags=jsoniter
+      run: CGO_ENABLED=0 go build -o app
 
     - name: Tar
       run: tar czvf app.tar.gz app statics
