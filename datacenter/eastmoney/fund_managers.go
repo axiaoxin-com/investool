@@ -45,11 +45,22 @@ type FundManagerInfo struct {
 	WorkingBestReturn float64 `json:"working_best_return"`
 }
 
+// FundManagerInfoList 基金经理列表
+type FundManagerInfoList []*FundManagerInfo
+
+// ParamFundManagerFilter 基金列表过滤参数
+type ParamFundManagerFilter struct{}
+
+// Filter 按条件过滤列表
+func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilter) FundManagerInfoList {
+	return nil
+}
+
 // FundMangers 查询基金经理列表（web接口）
 // ft（基金类型） all:全部 gp:股票型 hh:混合型 zq:债券型 sy:收益型
 // sc（排序字段）abbname:经理名 jjgspy:基金公司 totaldays:从业时间 netnav:基金规模 penavgrowth:现任基金最佳回报
 // st（排序类型）asc desc
-func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) ([]*FundManagerInfo, error) {
+func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundManagerInfoList, error) {
 	beginTime := time.Now()
 	header := map[string]string{
 		"user-agent": uarand.GetRandom(),
