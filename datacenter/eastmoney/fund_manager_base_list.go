@@ -61,7 +61,7 @@ type RespFundMangerBaseList struct {
 }
 
 // FundMangerBaseList 查询基金经理列表（app接口）
-// mftype 1:偏债类 2:偏股类 3:指数类 4:货币类 5:QDII
+// mftype "":全部 1:偏债类 2:偏股类 3:指数类 4:货币类 5:QDII
 // sortColum W:近1周平均收益 M:近1月平均收益 Q:近3月平均收益 HY:近半年平均收益 Y:近1年平均收益 NETNAV:管理规模 MGOLD:业绩评价 YIELDSE:从业年化回报
 func (e EastMoney) FundMangerBaseList(ctx context.Context, mftype string, sortColum string) ([]*FundManagerBaseInfo, error) {
 	beginTime := time.Now()
