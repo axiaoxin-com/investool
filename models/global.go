@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/axiaoxin-com/investool/datacenter"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/logging"
 )
 
@@ -24,6 +25,8 @@ var (
 	FundAllList FundList
 	// Fund4433List 满足4433法则的基金列表
 	Fund4433List FundList
+	// FundManagers 基金经理列表
+	FundManagers []*eastmoney.FundManagerInfo
 	// SyncFundTime 基金数据同步时间
 	SyncFundTime = time.Now()
 	// RawFundAllListFilename api返回的原始结果
@@ -36,6 +39,8 @@ var (
 	IndustryListFilename = "./industry_list.json"
 	// FundTypeListFilename 基金类型数据文件
 	FundTypeListFilename = "./fund_type_list.json"
+	// FundManagersFilename 基金经理数据文件
+	FundManagersFilename = "./fund_managers.json"
 	// AAACompanyBondSyl AAA公司债当期收益率
 	AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(context.Background())
 )
@@ -54,16 +59,18 @@ func InitGlobalVars() {
 	if err := InitFundTypeList(); err != nil {
 		logging.Error(nil, "init models global vars error:"+err.Error())
 	}
+	if err := InitFundManagers(); err != nil {
+		logging.Error(nil, "init models global vars error:"+err.Error())
+	}
 }
 
 // InitIndustryList 初始化行业列表
 func InitIndustryList() error {
-	indlist, err := datacenter.EastMoney.QueryIndustryList(context.Background())
+	indlist, err := ioutil.ReadFile(IndustryListFilename)
 	if err != nil {
 		return err
 	}
-	StockIndustryList = indlist
-	return nil
+	return json.Unmarshal(indlist, &StockIndustryList)
 }
 
 // InitFundAllList 从json文件加载基金列表
@@ -95,8 +102,14 @@ func InitFundTypeList() error {
 	if err != nil {
 		return err
 	}
-	if err := json.Unmarshal(types, &FundTypeList); err != nil {
+	return json.Unmarshal(types, &FundTypeList)
+}
+
+// InitFundManagers 初始化基金经理列表
+func InitFundManagers() error {
+	m, err := ioutil.ReadFile(FundManagersFilename)
+	if err != nil {
 		return err
 	}
-	return nil
+	return json.Unmarshal(m, &FundManagers)
 }

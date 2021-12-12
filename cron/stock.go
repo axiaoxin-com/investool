@@ -24,7 +24,9 @@ func SyncIndustryList() {
 		promSyncError.WithLabelValues("SyncIndustryList").Inc()
 		return
 	}
-	models.StockIndustryList = indlist
+	if len(indlist) != 0 {
+		models.StockIndustryList = indlist
+	}
 
 	// 更新文件
 	b, err := json.Marshal(indlist)

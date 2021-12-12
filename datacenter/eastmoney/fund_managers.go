@@ -38,7 +38,7 @@ type FundManagerInfo struct {
 	DbjjCode string
 	// 代表基金名称
 	DbjjName string
-	// 代表基金收益率
+	// 代表基金收益率(任职期间最佳基金回报)
 	Dbjjsyl float64
 }
 
