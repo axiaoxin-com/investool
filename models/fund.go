@@ -35,27 +35,27 @@ type Fund struct {
 	// 定投状态
 	FixedInvestmentStatus string `json:"fixed_investment_status"`
 	// 波动率
-	Stddev FundStddev `json:"stddev"`
+	Stddev fundStddev `json:"stddev"`
 	// 最大回撤率
-	MaxRetracement FundMaxRetracement `json:"max_retracement"`
+	MaxRetracement fundMaxRetracement `json:"max_retracement"`
 	// 夏普比率
-	Sharp FundSharp `json:"sharp"`
+	Sharp fundSharp `json:"sharp"`
 	// 绩效
-	Performance FundPerformance `json:"performance"`
+	Performance fundPerformance `json:"performance"`
 	// 持仓股票
-	Stocks []FundStock `json:"stocks"`
+	Stocks []fundStock `json:"stocks"`
 	// 基金经理
-	Manager FundManager `json:"manager"`
+	Manager fundManager `json:"manager"`
 	// 历史分红送配
-	HistoricalDividends []FundDividend `json:"historical_dividends"`
+	HistoricalDividends []fundDividend `json:"historical_dividends"`
 	// 资产占比
-	AssetsProportion FundAssetsProportion `json:"assets_proportion"`
+	AssetsProportion fundAssetsProportion `json:"assets_proportion"`
 	// 行业占比
-	IndustryProportions []FundIndustryProportion `json:"industry_proportions"`
+	IndustryProportions []fundIndustryProportion `json:"industry_proportions"`
 }
 
-// FundIndustryProportion 行业占比
-type FundIndustryProportion struct {
+// fundIndustryProportion 行业占比
+type fundIndustryProportion struct {
 	// 公布日期
 	PubDate string `json:"pub_date"`
 	// 行业名
@@ -64,8 +64,8 @@ type FundIndustryProportion struct {
 	Prop string `json:"prop"`
 }
 
-// FundAssetsProportion 资产占比
-type FundAssetsProportion struct {
+// fundAssetsProportion 资产占比
+type fundAssetsProportion struct {
 	// 公布日期
 	PubDate string `json:"pub_date"`
 	// 股票占比（%）
@@ -80,8 +80,8 @@ type FundAssetsProportion struct {
 	NetAssets string `json:"net_assets"`
 }
 
-// FundPerformance 基金绩效
-type FundPerformance struct {
+// fundPerformance 基金绩效
+type fundPerformance struct {
 	// 近一周收益率
 	WeekProfitRatio float64 `json:"week_profit_ratio"`
 	// 近一周涨跌幅
@@ -204,8 +204,8 @@ type FundPerformance struct {
 	HistoricalRankTotalCount float64 `json:"historical_rank_total_count"`
 }
 
-// FundDividend 分红送配
-type FundDividend struct {
+// fundDividend 分红送配
+type fundDividend struct {
 	// 权益登记日
 	RegDate string `json:"reg_date"`
 	// 每份分红（元）
@@ -214,8 +214,8 @@ type FundDividend struct {
 	RationDate string `json:"ration_date"`
 }
 
-// FundStddev 波动率
-type FundStddev struct {
+// fundStddev 波动率
+type fundStddev struct {
 	// 近1年波动率（%）
 	Year1 float64 `json:"year_1"`
 	// 近3年波动率（%）
@@ -226,8 +226,8 @@ type FundStddev struct {
 	Avg135 float64 `json:"avg_135"`
 }
 
-// FundMaxRetracement 最大回撤
-type FundMaxRetracement struct {
+// fundMaxRetracement 最大回撤
+type fundMaxRetracement struct {
 	// 近1年最大回撤（%）
 	Year1 float64 `json:"year_1"`
 	// 近3年最大回撤（%）
@@ -238,8 +238,8 @@ type FundMaxRetracement struct {
 	Avg135 float64 `json:"avg_135"`
 }
 
-// FundSharp 夏普比率
-type FundSharp struct {
+// fundSharp 夏普比率
+type fundSharp struct {
 	// 近1年夏普比率
 	Year1 float64 `json:"year_1"`
 	// 近3年夏普比率
@@ -250,8 +250,8 @@ type FundSharp struct {
 	Avg135 float64 `json:"avg_135"`
 }
 
-// FundStock 基金持仓股票
-type FundStock struct {
+// fundStock 基金持仓股票
+type fundStock struct {
 	// 股票代码
 	Code string `json:"code"`
 	// 股票名称
@@ -266,8 +266,8 @@ type FundStock struct {
 	AdjustRatio float64 `json:"adjust_ratio"`
 }
 
-// FundManager 基金经理
-type FundManager struct {
+// fundManager 基金经理
+type fundManager struct {
 	// ID
 	ID string `json:"id"`
 	// 基金经理名字
@@ -349,20 +349,20 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 		IndexCode:       efund.Jjxq.Datas.Indexcode,
 		IndexName:       efund.Jjxq.Datas.Indexname,
 		Rate:            efund.Jjxq.Datas.Rate,
-		Stddev: FundStddev{
+		Stddev: fundStddev{
 			Year1:  stddev1,
 			Year3:  stddev3,
 			Year5:  stddev5,
 			Avg135: stddevavg,
 		},
 
-		MaxRetracement: FundMaxRetracement{
+		MaxRetracement: fundMaxRetracement{
 			Year1:  ret1,
 			Year3:  ret3,
 			Year5:  ret5,
 			Avg135: retavg,
 		},
-		Sharp: FundSharp{
+		Sharp: fundSharp{
 			Year1:  sharp1,
 			Year3:  sharp3,
 			Year5:  sharp5,
@@ -384,7 +384,7 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	}
 
 	// 绩效
-	pfm := FundPerformance{}
+	pfm := fundPerformance{}
 	for _, d := range efund.Jdzf.Datas {
 		rankRatio := interfaceToFloat64(ctx, interfaceToFloat64(ctx, d.Rank)) / interfaceToFloat64(ctx, d.Sc)
 
@@ -469,9 +469,9 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	fund.Performance = pfm
 
 	// 持仓股票
-	stocks := []FundStock{}
+	stocks := []fundStock{}
 	for _, s := range efund.Jjcc.Datas.InverstPosition.FundStocks {
-		stock := FundStock{
+		stock := fundStock{
 			Code:        s.Gpdm,
 			Name:        s.Gpjc,
 			Industry:    s.Indexname,
@@ -484,7 +484,7 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	fund.Stocks = stocks
 
 	// 基金经理
-	manager := FundManager{}
+	manager := fundManager{}
 	if len(efund.Jjjlnew.Datas) > 0 {
 		jjjl := efund.Jjjlnew.Datas[0]
 		if len(jjjl.Manger) > 0 {
@@ -504,9 +504,9 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	}
 
 	// 分红送配
-	dividends := []FundDividend{}
+	dividends := []fundDividend{}
 	for _, d := range efund.Fhsp.Datas.Fhinfo {
-		fd := FundDividend{
+		fd := fundDividend{
 			RegDate:    d.Djr,
 			Value:      interfaceToFloat64(ctx, d.Fhfcz),
 			RationDate: d.Ffr,
@@ -522,7 +522,7 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 	for _, vlist := range efund.Jjcc.Datas.AssetAllocation {
 		if len(vlist) > 0 {
 			v := vlist[0]
-			ap := FundAssetsProportion{
+			ap := fundAssetsProportion{
 				PubDate:   v["FSRQ"],
 				Stock:     v["GP"] + "%",
 				Bond:      v["ZQ"] + "%",
@@ -540,7 +540,7 @@ func NewFund(ctx context.Context, efund *eastmoney.RespFundInfo) *Fund {
 			if i["ZJZBL"] == "0" || i["ZJZBL"] == "--" {
 				continue
 			}
-			ip := FundIndustryProportion{
+			ip := fundIndustryProportion{
 				PubDate:  date,
 				Industry: i["HYMC"],
 				Prop:     i["ZJZBL"],

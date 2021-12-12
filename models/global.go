@@ -26,7 +26,7 @@ var (
 	// Fund4433List 满足4433法则的基金列表
 	Fund4433List FundList
 	// FundManagers 基金经理列表
-	FundManagers []*eastmoney.FundManagerInfo
+	FundManagers eastmoney.FundManagerInfoList
 	// SyncFundTime 基金数据同步时间
 	SyncFundTime = time.Now()
 	// RawFundAllListFilename api返回的原始结果

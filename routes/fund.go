@@ -8,6 +8,7 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/core"
+	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
@@ -320,5 +321,43 @@ func FundSimilarity(c *gin.Context) {
 		"Result":    result,
 	}
 	c.HTML(http.StatusOK, "fund_similarity.html", data)
+	return
+}
+
+// ParamFundManagers 基金经理筛选参数
+type ParamFundManagers struct {
+	ParamFundManagerFilter eastmoney.ParamFundManagerFilter
+	PageNum                int `json:"page_num"  form:"page_num"`
+	PageSize               int `json:"page_size" form:"page_size"`
+}
+
+// FundManagers godoc
+func FundManagers(c *gin.Context) {
+	p := ParamFundManagers{}
+	if err := c.ShouldBind(&p); err != nil {
+		data := gin.H{
+			"Env":       viper.GetString("env"),
+			"Version":   version.Version,
+			"PageTitle": "InvesTool | 基金 | 基金经理",
+			"Error":     err.Error(),
+		}
+		c.HTML(http.StatusOK, "fund_managers.html", data)
+		return
+	}
+	managers := models.FundManagers.Filter(c, p.ParamFundManagerFilter)
+	// 分页
+	pagi := goutils.PaginateByPageNumSize(len(managers), p.PageNum, p.PageSize)
+	result := managers[pagi.StartIndex:pagi.EndIndex]
+	data := gin.H{
+		"Env":        viper.GetString("env"),
+		"Version":    version.Version,
+		"PageTitle":  "InvesTool | 基金 | 基金经理",
+		"URLPath":    "/fund/managers",
+		"Managers":   result,
+		"Pagination": pagi,
+		"PageNum":    p.PageNum,
+		"PageSize":   p.PageSize,
+	}
+	c.HTML(http.StatusOK, "fund_managers.html", data)
 	return
 }
