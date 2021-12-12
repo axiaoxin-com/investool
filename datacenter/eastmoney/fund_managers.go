@@ -1,4 +1,5 @@
 // 天天基金获取基金经理列表(web接口)
+// https://fund.eastmoney.com/manager/jjjl_all_penavgrowth_desc.html
 
 package eastmoney
 
@@ -19,32 +20,34 @@ import (
 // FundManagerInfo 基金经理信息
 type FundManagerInfo struct {
 	// ID
-	ID string
+	ID string `json:"id"`
 	// 姓名
-	Name string
+	Name string `json:"name"`
 	// 基金公司id
-	Jjgsid string
+	FundCompanyID string `json:"fund_company_id"`
 	// 基金公司名称
-	Jjgs string
-	// 管理规模（亿元）
-	Glgm float64
+	FundCompanyName string `json:"fund_company_name"`
 	// 现任基金代码列表
-	FundCodes []string
+	FundCodes []string `json:"fund_codes"`
 	// 现任基金名称列表
-	FundNames []string
+	FundNames []string `json:"fund_names"`
 	// 累计从业时间(天)
-	TotalDays int
-	// 代表基金代码
-	DbjjCode string
-	// 代表基金名称
-	DbjjName string
-	// 代表基金收益率(任职期间最佳基金回报)
-	Dbjjsyl float64
+	WorkingDays int `json:"working_days"`
+	// 现任基金最佳回报（%）
+	CurrentBestReturn float64 `json:"current_best_return"`
+	// 现任最佳基金代码
+	CurrentBestFundCode string `json:"current_best_fund_code"`
+	// 现任最佳基金名称
+	CurrentBestFundName string `json:"current_best_fund_name"`
+	// 现任基金资产总规模（亿元）
+	CurrentFundScale float64 `json:"current_fund_scale"`
+	// 任职期间最佳基金回报
+	WorkingBestReturn float64 `json:"working_best_return"`
 }
 
 // FundMangers 查询基金经理列表（web接口）
 // ft（基金类型） all:全部 gp:股票型 hh:混合型 zq:债券型 sy:收益型
-// sc（排序字段）abbname:经理名 jjgs:基金公司 totaldays:从业时间 netnav:基金规模 penavgrowth:现任基金最佳回报
+// sc（排序字段）abbname:经理名 jjgspy:基金公司 totaldays:从业时间 netnav:基金规模 penavgrowth:现任基金最佳回报
 // st（排序类型）asc desc
 func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) ([]*FundManagerInfo, error) {
 	beginTime := time.Now()
@@ -62,12 +65,13 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) ([]*FundM
 			st,
 		)
 		logging.Debug(ctx, "EastMoney FundMangers "+apiurl+" begin", zap.Int("index", index))
+		beginTime := time.Now()
 		resp, err := goutils.HTTPGETRaw(ctx, e.HTTPClient, apiurl, header)
 		strresp := string(resp)
 		latency := time.Now().Sub(beginTime).Milliseconds()
 		logging.Debug(ctx, "EastMoney FundMangers "+apiurl+" end",
 			zap.Int64("latency(ms)", latency),
-			// zap.Any("resp", strresp),
+			zap.Int("index", index),
 		)
 		if err != nil {
 			return nil, err
@@ -83,20 +87,12 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) ([]*FundM
 		}
 
 		for _, m := range matched {
-			// "30293769","武建刚","80000252","天治基金","006877,006878","天治量化核心精选混合A,天治量化核心精选混合C","306","-18.86%","006877","天治量化核心精选混合A","0.47亿元","-18.86%"
+			// "30057445","张少华","80000200","中银证券","009640,009641,010892,010893,501095","中银证券优选行业龙头混合A,中银证券优选行业龙头混合C,中银证券精选行业股票A,中银证券精选行业股票C,中银证券科创3年封闭混合","3993","26.52%","009640","中银证券优选行业龙头混合A","28.43亿元","82.97%"
 			field, _ := regexp.Compile(`"(.*?)"`)
 			fields := field.FindAllStringSubmatch(m[1], -1)
 			if len(fields) != 12 {
 				logging.Warnf(ctx, "invalid fields len:%v %v", len(fields), m[1])
 				continue
-			}
-			glgm := 0.0
-			if fields[10][1] != "" && fields[10][1] != "--" {
-				glgmNum := strings.TrimSuffix(fields[10][1], "亿元")
-				glgm, err = strconv.ParseFloat(glgmNum, 64)
-				if err != nil {
-					logging.Warnf(ctx, "parse glgm:%v to float64 error:%v", glgmNum, err)
-				}
 			}
 			totaldays := 0
 			if fields[6][1] != "" && fields[6][1] != "--" {
@@ -105,26 +101,43 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) ([]*FundM
 					logging.Warnf(ctx, "parse totaldays:%v to int error:%v", fields[6], err)
 				}
 			}
-			dbjjsyl := 0.0
-			if fields[11][1] != "" && fields[11][1] != "--" {
-				dbjjsylNum := strings.TrimSuffix(fields[11][1], "%")
-				dbjjsyl, err = strconv.ParseFloat(dbjjsylNum, 64)
+			bestReturn := 0.0
+			if fields[7][1] != "" && fields[7][1] != "--" {
+				bestReturnNum := strings.TrimSuffix(fields[7][1], "%")
+				bestReturn, err = strconv.ParseFloat(bestReturnNum, 64)
 				if err != nil {
-					logging.Warnf(ctx, "parse dbjjsyl:%v to float64 error:%v", dbjjsylNum, err)
+					logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", bestReturnNum, err)
+				}
+			}
+			scale := 0.0
+			if fields[10][1] != "" && fields[10][1] != "--" {
+				scaleNum := strings.TrimSuffix(fields[10][1], "亿元")
+				scale, err = strconv.ParseFloat(scaleNum, 64)
+				if err != nil {
+					logging.Warnf(ctx, "parse scale:%v to float64 error:%v", scaleNum, err)
+				}
+			}
+			wbestReturn := 0.0
+			if fields[11][1] != "" && fields[11][1] != "--" {
+				wbestReturnNum := strings.TrimSuffix(fields[11][1], "%")
+				wbestReturn, err = strconv.ParseFloat(wbestReturnNum, 64)
+				if err != nil {
+					logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", wbestReturnNum, err)
 				}
 			}
 			result = append(result, &FundManagerInfo{
-				ID:        fields[0][1],
-				Name:      fields[1][1],
-				Jjgsid:    fields[2][1],
-				Jjgs:      fields[3][1],
-				Glgm:      glgm,
-				FundCodes: strings.Split(fields[4][1], ","),
-				FundNames: strings.Split(fields[5][1], ","),
-				TotalDays: totaldays,
-				DbjjCode:  fields[8][1],
-				DbjjName:  fields[9][1],
-				Dbjjsyl:   dbjjsyl,
+				ID:                  fields[0][1],
+				Name:                fields[1][1],
+				FundCompanyID:       fields[2][1],
+				FundCompanyName:     fields[3][1],
+				FundCodes:           strings.Split(fields[4][1], ","),
+				FundNames:           strings.Split(fields[5][1], ","),
+				WorkingDays:         totaldays,
+				CurrentBestReturn:   bestReturn,
+				CurrentBestFundCode: fields[8][1],
+				CurrentBestFundName: fields[9][1],
+				CurrentFundScale:    scale,
+				WorkingBestReturn:   wbestReturn,
 			})
 		}
 		index++
