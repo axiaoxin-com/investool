@@ -41,19 +41,41 @@ type FundManagerInfo struct {
 	CurrentBestFundName string `json:"current_best_fund_name"`
 	// 现任基金资产总规模（亿元）
 	CurrentFundScale float64 `json:"current_fund_scale"`
-	// 任职期间最佳基金回报
+	// 任职期间最佳基金回报（%）
 	WorkingBestReturn float64 `json:"working_best_return"`
+	// 年化回报（%）
+	Yieldse float64 `json:"yieldse"`
 }
 
 // FundManagerInfoList 基金经理列表
 type FundManagerInfoList []*FundManagerInfo
 
 // ParamFundManagerFilter 基金列表过滤参数
-type ParamFundManagerFilter struct{}
+type ParamFundManagerFilter struct {
+	// 最低从业年限
+	MinWorkingYears int `json:"min_working_years"`
+	// 最低年化回报（%）
+	MinYieldse float64 `json:"min_yieldse"`
+	// 最大现任基金数量
+	MaxCurrentFundCount int `json:"max_current_fund_count"`
+}
 
 // Filter 按条件过滤列表
 func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilter) FundManagerInfoList {
-	return nil
+	result := FundManagerInfoList{}
+	for _, i := range f {
+		if i.WorkingDays/365 < p.MinWorkingYears {
+			continue
+		}
+		if i.Yieldse < p.MinYieldse {
+			continue
+		}
+		if len(i.CurrentBestFundCode) > p.MaxCurrentFundCount {
+			continue
+		}
+		result = append(result, i)
+	}
+	return result
 }
 
 // FundMangers 查询基金经理列表（web接口）
@@ -65,6 +87,7 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 	header := map[string]string{
 		"user-agent": uarand.GetRandom(),
 	}
+	// TODO: 并发优化
 	result := []*FundManagerInfo{}
 	index := 1
 	for {
@@ -136,6 +159,18 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 					logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", wbestReturnNum, err)
 				}
 			}
+			yieldse := 0.0
+			info, err := e.QueryFundMsnMangerInfo(ctx, fields[0][1])
+			if err != nil {
+				logging.Error(ctx, "QueryFundMsnMangerInfo err:"+err.Error())
+			} else {
+				if info.Datas.Yieldse != "" && info.Datas.Yieldse != "--" {
+					yieldse, err = strconv.ParseFloat(info.Datas.Yieldse, 64)
+					if err != nil {
+						logging.Warnf(ctx, "parse yieldse:%v to float64 error:%v", info.Datas.Yieldse, err)
+					}
+				}
+			}
 			result = append(result, &FundManagerInfo{
 				ID:                  fields[0][1],
 				Name:                fields[1][1],
@@ -149,6 +184,7 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 				CurrentBestFundName: fields[9][1],
 				CurrentFundScale:    scale,
 				WorkingBestReturn:   wbestReturn,
+				Yieldse:             yieldse,
 			})
 		}
 		index++

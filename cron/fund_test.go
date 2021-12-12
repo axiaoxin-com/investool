@@ -12,3 +12,9 @@ func _TestSyncFund(t *testing.T) {
 	viper.SetDefault("app.chan_size", 500)
 	SyncFund()
 }
+
+func TestSyncFundManagers(t *testing.T) {
+	logging.SetLevel("warn")
+	viper.SetDefault("app.chan_size", 500)
+	SyncFundManagers()
+}

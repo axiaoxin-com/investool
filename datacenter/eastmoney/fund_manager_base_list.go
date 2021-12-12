@@ -4,6 +4,7 @@ package eastmoney
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -69,6 +70,7 @@ func (e EastMoney) FundMangerBaseList(ctx context.Context, mftype string, sortCo
 	header := map[string]string{
 		"user-agent": uarand.GetRandom(),
 	}
+	// TODO: 并发优化
 	result := []*FundManagerBaseInfo{}
 	index := 1
 	size := 300
@@ -101,4 +103,96 @@ func (e EastMoney) FundMangerBaseList(ctx context.Context, mftype string, sortCo
 		zap.Int("resultCount", len(result)),
 	)
 	return result, nil
+}
+
+// RespFundMsnManagerInfo FundMsnManagerInfo接口返回结构
+type RespFundMsnManagerInfo struct {
+	Datas struct {
+		Mgrid            string `json:"MGRID"`
+		Mgrname          string `json:"MGRNAME"`
+		Resume           string `json:"RESUME"`
+		Investmentmethod string `json:"INVESTMENTMETHOD"`
+		Investmentidear  string `json:"INVESTMENTIDEAR"`
+		Totaldays        string `json:"TOTALDAYS"`
+		Netnav           string `json:"NETNAV"`
+		Fcount           string `json:"FCOUNT"`
+		Tcount           string `json:"TCOUNT"`
+		Precode          string `json:"PRECODE"`
+		Prename          string `json:"PRENAME"`
+		Awardnum         string `json:"AWARDNUM"`
+		Iswxpj           string `json:"ISWXPJ"`
+		Pf3              string `json:"PF_3"`
+		Yj3              string `json:"YJ_3"`
+		Maxpenavgrowth   string `json:"MAXPENAVGROWTH"`
+		Yieldse          string `json:"YIELDSE"`
+		Jjgs             string `json:"JJGS"`
+		Jjgsid           string `json:"JJGSID"`
+		Newphotourl      string `json:"NEWPHOTOURL"`
+		Mftype           string `json:"MFTYPE"`
+		AwardnumJn       string `json:"AWARDNUM_JN"`
+		AwardnumMx       string `json:"AWARDNUM_MX"`
+		Awardfnum        string `json:"AWARDFNUM"`
+		Fcode            string `json:"FCODE"`
+		Shortname        string `json:"SHORTNAME"`
+		Maxretra1        string `json:"MAXRETRA1"`
+		Maxearn1         string `json:"MAXEARN1"`
+		Fmaxearn1        string `json:"FMAXEARN1"`
+		Fmaxretra1       string `json:"FMAXRETRA1"`
+		Sex              string `json:"SEX"`
+		Wins             []struct {
+			Fcode         string `json:"FCODE"`
+			Shortname     string `json:"SHORTNAME"`
+			Awardfullname string `json:"AWARDFULLNAME"`
+			Awardname     string `json:"AWARDNAME"`
+			Noticedate    string `json:"NOTICEDATE"`
+		} `json:"WINS"`
+		Mgold  string `json:"MGOLD"`
+		Sday   string `json:"SDAY"`
+		Sct1   string `json:"SCT1"`
+		Sstd1  string `json:"SSTD1"`
+		Srt1   string `json:"SRT1"`
+		Sy1    string `json:"SY1"`
+		Sinfo1 string `json:"SINFO1"`
+		Strk1  string `json:"STRK1"`
+		Snav   string `json:"SNAV"`
+		Sgr    string `json:"SGR"`
+	} `json:"Datas"`
+	ErrCode      int         `json:"ErrCode"`
+	Success      bool        `json:"Success"`
+	ErrMsg       interface{} `json:"ErrMsg"`
+	Message      interface{} `json:"Message"`
+	ErrorCode    string      `json:"ErrorCode"`
+	ErrorMessage interface{} `json:"ErrorMessage"`
+	ErrorMsgLst  interface{} `json:"ErrorMsgLst"`
+	TotalCount   int         `json:"TotalCount"`
+	Expansion    interface{} `json:"Expansion"`
+}
+
+// QueryFundMsnMangerInfo 查询基金经理信息（app接口）
+func (e EastMoney) QueryFundMsnMangerInfo(ctx context.Context, mgrid string) (*RespFundMsnManagerInfo, error) {
+	beginTime := time.Now()
+	resp := &RespFundMsnManagerInfo{}
+	apiurl := fmt.Sprintf(
+		"https://fundztapi.eastmoney.com/FundSpecialApiNew/FundMSNMangerInfo?FCODE=%s&plat=Iphone&deviceid=123&product=EFund&version=6.4.7",
+		mgrid,
+	)
+	logging.Debug(ctx, "EastMoney QueryFundMsnMangerInfo "+apiurl+" begin")
+	header := map[string]string{
+		"user-agent": uarand.GetRandom(),
+	}
+	if err := goutils.HTTPGET(ctx, e.HTTPClient, apiurl, header, resp); err != nil {
+		return nil, err
+	}
+	latency := time.Now().Sub(beginTime).Milliseconds()
+	logging.Debug(
+		ctx,
+		"EastMoney QueryFundMsnMangerInfo end",
+		zap.Int64("latency(ms)", latency),
+	)
+
+	if resp.ErrCode != 0 {
+		return nil, errors.New(resp.ErrMsg.(string))
+	}
+
+	return resp, nil
 }

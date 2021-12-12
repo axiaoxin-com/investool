@@ -4,12 +4,10 @@
 package models
 
 import (
-	"context"
 	"encoding/json"
 	"io/ioutil"
 	"time"
 
-	"github.com/axiaoxin-com/investool/datacenter"
 	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/logging"
 )
@@ -42,7 +40,7 @@ var (
 	// FundManagersFilename 基金经理数据文件
 	FundManagersFilename = "./fund_managers.json"
 	// AAACompanyBondSyl AAA公司债当期收益率
-	AAACompanyBondSyl = datacenter.ChinaBond.QueryAAACompanyBondSyl(context.Background())
+	AAACompanyBondSyl = -1.0 // datacenter.ChinaBond.QueryAAACompanyBondSyl(context.Background())
 )
 
 // InitGlobalVars 初始化全局变量
