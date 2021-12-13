@@ -23,13 +23,14 @@ func SyncFundManagers() {
 	if err != nil {
 		logging.Error(ctx, "SyncFundManagers error:"+err.Error())
 	}
-
+	managers = managers.Filter(ctx, eastmoney.ParamFundManagerFilter{
+		MinWorkingYears:     8,
+		MinYieldse:          15.0,
+		MaxCurrentFundCount: 10,
+	})
+	managers.SortByYieldse()
 	if len(managers) != 0 {
-		models.FundManagers = managers.Filter(ctx, eastmoney.ParamFundManagerFilter{
-			MinWorkingYears:     8,
-			MinYieldse:          15.0,
-			MaxCurrentFundCount: 10,
-		})
+		models.FundManagers = managers
 	}
 
 	// 更新文件
