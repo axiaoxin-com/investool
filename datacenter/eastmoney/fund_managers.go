@@ -7,8 +7,10 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/axiaoxin-com/goutils"
@@ -58,6 +60,8 @@ type ParamFundManagerFilter struct {
 	MinYieldse float64 `json:"min_yieldse"`
 	// 最大现任基金数量
 	MaxCurrentFundCount int `json:"max_current_fund_count"`
+	// 最小管理规模（亿）
+	MinScale float64 `json:"min_scale"`
 }
 
 // Filter 按条件过滤列表
@@ -73,9 +77,19 @@ func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilte
 		if len(i.CurrentBestFundCode) > p.MaxCurrentFundCount {
 			continue
 		}
+		if i.CurrentFundScale < p.MinScale {
+			continue
+		}
 		result = append(result, i)
 	}
 	return result
+}
+
+// SortByYieldse 股票列表按 年化回报 排序
+func (f FundManagerInfoList) SortByYieldse() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].Yieldse > f[j].Yieldse
+	})
 }
 
 // FundMangers 查询基金经理列表（web接口）
@@ -87,7 +101,6 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 	header := map[string]string{
 		"user-agent": uarand.GetRandom(),
 	}
-	// TODO: 并发优化
 	result := []*FundManagerInfo{}
 	index := 1
 	for {
@@ -120,73 +133,85 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 			break
 		}
 
+		var mwg sync.WaitGroup
+		var mlock sync.Mutex
+		// 每页20只基金，并发内存不够可以先考虑每页获取少一点看看效果
+		field, _ := regexp.Compile(`"(.*?)"`)
 		for _, m := range matched {
-			// "30057445","张少华","80000200","中银证券","009640,009641,010892,010893,501095","中银证券优选行业龙头混合A,中银证券优选行业龙头混合C,中银证券精选行业股票A,中银证券精选行业股票C,中银证券科创3年封闭混合","3993","26.52%","009640","中银证券优选行业龙头混合A","28.43亿元","82.97%"
-			field, _ := regexp.Compile(`"(.*?)"`)
-			fields := field.FindAllStringSubmatch(m[1], -1)
-			if len(fields) != 12 {
-				logging.Warnf(ctx, "invalid fields len:%v %v", len(fields), m[1])
-				continue
-			}
-			totaldays := 0
-			if fields[6][1] != "" && fields[6][1] != "--" {
-				totaldays, err = strconv.Atoi(fields[6][1])
-				if err != nil {
-					logging.Warnf(ctx, "parse totaldays:%v to int error:%v", fields[6], err)
+			mwg.Add(1)
+			go func(m1 string) {
+				// "30057445","张少华","80000200","中银证券","009640,009641,010892,010893,501095","中银证券优选行业龙头混合A,中银证券优选行业龙头混合C,中银证券精选行业股票A,中银证券精选行业股票C,中银证券科创3年封闭混合","3993","26.52%","009640","中银证券优选行业龙头混合A","28.43亿元","82.97%"
+				defer mwg.Done()
+
+				fields := field.FindAllStringSubmatch(m1, -1)
+				if len(fields) != 12 {
+					logging.Warnf(ctx, "invalid fields len:%v %v", len(fields), m1)
+					return
 				}
-			}
-			bestReturn := 0.0
-			if fields[7][1] != "" && fields[7][1] != "--" {
-				bestReturnNum := strings.TrimSuffix(fields[7][1], "%")
-				bestReturn, err = strconv.ParseFloat(bestReturnNum, 64)
-				if err != nil {
-					logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", bestReturnNum, err)
-				}
-			}
-			scale := 0.0
-			if fields[10][1] != "" && fields[10][1] != "--" {
-				scaleNum := strings.TrimSuffix(fields[10][1], "亿元")
-				scale, err = strconv.ParseFloat(scaleNum, 64)
-				if err != nil {
-					logging.Warnf(ctx, "parse scale:%v to float64 error:%v", scaleNum, err)
-				}
-			}
-			wbestReturn := 0.0
-			if fields[11][1] != "" && fields[11][1] != "--" {
-				wbestReturnNum := strings.TrimSuffix(fields[11][1], "%")
-				wbestReturn, err = strconv.ParseFloat(wbestReturnNum, 64)
-				if err != nil {
-					logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", wbestReturnNum, err)
-				}
-			}
-			yieldse := 0.0
-			info, err := e.QueryFundMsnMangerInfo(ctx, fields[0][1])
-			if err != nil {
-				logging.Error(ctx, "QueryFundMsnMangerInfo err:"+err.Error())
-			} else {
-				if info.Datas.Yieldse != "" && info.Datas.Yieldse != "--" {
-					yieldse, err = strconv.ParseFloat(info.Datas.Yieldse, 64)
+				totaldays := 0
+				if fields[6][1] != "" && fields[6][1] != "--" {
+					totaldays, err = strconv.Atoi(fields[6][1])
 					if err != nil {
-						logging.Warnf(ctx, "parse yieldse:%v to float64 error:%v", info.Datas.Yieldse, err)
+						logging.Warnf(ctx, "parse totaldays:%v to int error:%v", fields[6], err)
 					}
 				}
-			}
-			result = append(result, &FundManagerInfo{
-				ID:                  fields[0][1],
-				Name:                fields[1][1],
-				FundCompanyID:       fields[2][1],
-				FundCompanyName:     fields[3][1],
-				FundCodes:           strings.Split(fields[4][1], ","),
-				FundNames:           strings.Split(fields[5][1], ","),
-				WorkingDays:         totaldays,
-				CurrentBestReturn:   bestReturn,
-				CurrentBestFundCode: fields[8][1],
-				CurrentBestFundName: fields[9][1],
-				CurrentFundScale:    scale,
-				WorkingBestReturn:   wbestReturn,
-				Yieldse:             yieldse,
-			})
+				bestReturn := 0.0
+				if fields[7][1] != "" && fields[7][1] != "--" {
+					bestReturnNum := strings.TrimSuffix(fields[7][1], "%")
+					bestReturn, err = strconv.ParseFloat(bestReturnNum, 64)
+					if err != nil {
+						logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", bestReturnNum, err)
+					}
+				}
+				scale := 0.0
+				if fields[10][1] != "" && fields[10][1] != "--" {
+					scaleNum := strings.TrimSuffix(fields[10][1], "亿元")
+					scale, err = strconv.ParseFloat(scaleNum, 64)
+					if err != nil {
+						logging.Warnf(ctx, "parse scale:%v to float64 error:%v", scaleNum, err)
+					}
+				}
+				wbestReturn := 0.0
+				if fields[11][1] != "" && fields[11][1] != "--" {
+					wbestReturnNum := strings.TrimSuffix(fields[11][1], "%")
+					wbestReturn, err = strconv.ParseFloat(wbestReturnNum, 64)
+					if err != nil {
+						logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", wbestReturnNum, err)
+					}
+				}
+				yieldse := 0.0
+				info, err := e.QueryFundMsnMangerInfo(ctx, fields[0][1])
+				if err != nil {
+					logging.Error(ctx, "QueryFundMsnMangerInfo err:"+err.Error())
+				} else {
+					if info.Datas.Yieldse != "" && info.Datas.Yieldse != "--" {
+						yieldse, err = strconv.ParseFloat(info.Datas.Yieldse, 64)
+						if err != nil {
+							logging.Warnf(ctx, "parse yieldse:%v to float64 error:%v", info.Datas.Yieldse, err)
+						}
+					}
+				}
+				mlock.Lock()
+				result = append(result, &FundManagerInfo{
+					ID:                  fields[0][1],
+					Name:                fields[1][1],
+					FundCompanyID:       fields[2][1],
+					FundCompanyName:     fields[3][1],
+					FundCodes:           strings.Split(fields[4][1], ","),
+					FundNames:           strings.Split(fields[5][1], ","),
+					WorkingDays:         totaldays,
+					CurrentBestReturn:   bestReturn,
+					CurrentBestFundCode: fields[8][1],
+					CurrentBestFundName: fields[9][1],
+					CurrentFundScale:    scale,
+					WorkingBestReturn:   wbestReturn,
+					Yieldse:             yieldse,
+				})
+				mlock.Unlock()
+			}(m[1])
 		}
+		mwg.Wait()
+		// 等20个goroutine全部完了再开始新的，不然内存可能不够
 		index++
 	}
 	latency := time.Now().Sub(beginTime).Milliseconds()

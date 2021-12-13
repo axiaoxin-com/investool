@@ -27,6 +27,7 @@ func SyncFundManagers() {
 		MinWorkingYears:     8,
 		MinYieldse:          15.0,
 		MaxCurrentFundCount: 10,
+		MinScale:            60.0,
 	})
 	managers.SortByYieldse()
 	if len(managers) != 0 {
@@ -34,7 +35,7 @@ func SyncFundManagers() {
 	}
 
 	// 更新文件
-	b, err := json.Marshal(managers)
+	b, err := json.MarshalIndent(managers, "", "  ")
 	if err != nil {
 		logging.Errorf(ctx, "SyncFundManagers json marshal error:", err)
 		promSyncError.WithLabelValues("SyncFundManagers").Inc()
