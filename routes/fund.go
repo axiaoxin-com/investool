@@ -3,7 +3,6 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
 	"sync"
 
@@ -361,7 +360,6 @@ func FundManagers(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_managers.html", data)
 		return
 	}
-	fmt.Println(p)
 	managers := models.FundManagers.Filter(c, eastmoney.ParamFundManagerFilter{
 		MinWorkingYears:     p.MinWorkingYears,
 		MinYieldse:          p.MinYieldse,
@@ -374,7 +372,31 @@ func FundManagers(c *gin.Context) {
 	}
 	// 分页
 	pagi := goutils.PaginateByPageNumSize(len(managers), p.PageNum, p.PageSize)
-	result := managers[pagi.StartIndex:pagi.EndIndex]
+	managers = managers[pagi.StartIndex:pagi.EndIndex]
+	// 获取这批基金经理的代表基金是否是4433基金
+	bestFundCodes := []string{}
+	for _, m := range managers {
+		bestFundCodes = append(bestFundCodes, m.CurrentBestFundCode)
+	}
+	searcher := core.NewSearcher(c)
+	bestFundInfoMap, err := searcher.SearchFunds(c, bestFundCodes)
+	if err != nil {
+		logging.Error(c, "SearchFunds err:"+err.Error())
+	}
+	type managerInfo struct {
+		eastmoney.FundManagerInfo
+		BestFundIs4433 bool
+	}
+	result := []managerInfo{}
+	for _, m := range managers {
+		i := bestFundInfoMap[m.CurrentBestFundCode]
+		r := managerInfo{
+			FundManagerInfo: *m,
+			BestFundIs4433:  i.Is4433(c),
+		}
+		result = append(result, r)
+	}
+
 	data := gin.H{
 		"Env":        viper.GetString("env"),
 		"Version":    version.Version,

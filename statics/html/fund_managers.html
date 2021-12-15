@@ -35,6 +35,7 @@
             <td><a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid={{ .ID }}" target="_blank">{{ .Name }}</a></td>
             <td>
                 <a target="_blank" href="http://fund.eastmoney.com/{{ .CurrentBestFundCode }}.html">{{ .CurrentBestFundName }}</a><br>
+                {{ if .BestFundIs4433 }}<span class="badge amber darken-1">4433基金</span><br>{{ end }}
                 <span class="copybtn waves-effect waves-red" data-clipboard-text="{{ .CurrentBestFundCode }}">
                     {{ .CurrentBestFundCode }}<i class="material-icons tiny">content_copy</i>
                 </span>
@@ -45,6 +46,7 @@
             <td>{{ .CurrentFundScale }}亿元</td>
             <td>{{ len .FundCodes }}</td>
             <td>{{ .WorkingBestReturn }}%</td>
+            <td>{{ .ManageRepay }}%</td>
         </tr>
         {{ else }}
         <th><td colspan="7">无数据</td></th>
