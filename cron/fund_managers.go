@@ -8,7 +8,6 @@ import (
 
 	"github.com/axiaoxin-com/goutils"
 	"github.com/axiaoxin-com/investool/datacenter"
-	"github.com/axiaoxin-com/investool/datacenter/eastmoney"
 	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/logging"
 )
@@ -23,12 +22,6 @@ func SyncFundManagers() {
 	if err != nil {
 		logging.Error(ctx, "SyncFundManagers error:"+err.Error())
 	}
-	managers = managers.Filter(ctx, eastmoney.ParamFundManagerFilter{
-		MinWorkingYears:     8,
-		MinYieldse:          15.0,
-		MaxCurrentFundCount: 10,
-		MinScale:            60.0,
-	})
 	managers.SortByYieldse()
 	if len(managers) != 0 {
 		models.FundManagers = managers

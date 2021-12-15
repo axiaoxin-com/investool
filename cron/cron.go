@@ -37,7 +37,7 @@ func RunCronJobs(async bool) {
 	// 同步东方财富行业列表
 	sched.Cron("0 4 * * 1-5").Do(SyncIndustryList)
 	// 同步基金经理列表
-	sched.Cron("0 4 * * 1-5").Do(SyncFundManagers)
+	sched.Cron("0 5 * * 1-5").Do(SyncFundManagers)
 	if async {
 		sched.StartAsync()
 	} else {

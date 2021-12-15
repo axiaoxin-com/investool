@@ -3,6 +3,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"sync"
 
@@ -326,14 +327,30 @@ func FundSimilarity(c *gin.Context) {
 
 // ParamFundManagers 基金经理筛选参数
 type ParamFundManagers struct {
-	ParamFundManagerFilter eastmoney.ParamFundManagerFilter
-	PageNum                int `json:"page_num"  form:"page_num"`
-	PageSize               int `json:"page_size" form:"page_size"`
+	// 最低从业年限
+	MinWorkingYears int `json:"min_working_years"      form:"min_working_years"`
+	// 最低年化回报（%）
+	MinYieldse float64 `json:"min_yieldse"            form:"min_yieldse"`
+	// 最大现任基金数量
+	MaxCurrentFundCount int `json:"max_current_fund_count" form:"max_current_fund_count"`
+	// 最小管理规模（亿）
+	MinScale float64 `json:"min_scale"              form:"min_scale"`
+	PageNum  int     `json:"page_num"               form:"page_num"`
+	PageSize int     `json:"page_size"              form:"page_size"`
+	Sort     string  `json:"sort"                   form:"sort"`
 }
 
 // FundManagers godoc
 func FundManagers(c *gin.Context) {
-	p := ParamFundManagers{}
+	p := ParamFundManagers{
+		MinWorkingYears:     8,
+		MinYieldse:          15.0,
+		MaxCurrentFundCount: 10,
+		MinScale:            60.0,
+		PageNum:             1,
+		PageSize:            10,
+		Sort:                "yieldse",
+	}
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
@@ -344,7 +361,17 @@ func FundManagers(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_managers.html", data)
 		return
 	}
-	managers := models.FundManagers.Filter(c, p.ParamFundManagerFilter)
+	fmt.Println(p)
+	managers := models.FundManagers.Filter(c, eastmoney.ParamFundManagerFilter{
+		MinWorkingYears:     p.MinWorkingYears,
+		MinYieldse:          p.MinYieldse,
+		MaxCurrentFundCount: p.MaxCurrentFundCount,
+		MinScale:            p.MinScale,
+	})
+	switch p.Sort {
+	case "yieldse":
+		managers.SortByYieldse()
+	}
 	// 分页
 	pagi := goutils.PaginateByPageNumSize(len(managers), p.PageNum, p.PageSize)
 	result := managers[pagi.StartIndex:pagi.EndIndex]
@@ -355,8 +382,7 @@ func FundManagers(c *gin.Context) {
 		"URLPath":    "/fund/managers",
 		"Managers":   result,
 		"Pagination": pagi,
-		"PageNum":    p.PageNum,
-		"PageSize":   p.PageSize,
+		"Params":     p,
 	}
 	c.HTML(http.StatusOK, "fund_managers.html", data)
 	return

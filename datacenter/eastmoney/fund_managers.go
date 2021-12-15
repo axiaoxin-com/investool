@@ -6,6 +6,7 @@ package eastmoney
 import (
 	"context"
 	"fmt"
+	"math"
 	"regexp"
 	"sort"
 	"strconv"
@@ -33,8 +34,8 @@ type FundManagerInfo struct {
 	FundCodes []string `json:"fund_codes"`
 	// 现任基金名称列表
 	FundNames []string `json:"fund_names"`
-	// 累计从业时间(天)
-	WorkingDays int `json:"working_days"`
+	// 累计从业年限
+	WorkingYears float64 `json:"working_years"`
 	// 现任基金最佳回报（%）
 	CurrentBestReturn float64 `json:"current_best_return"`
 	// 现任最佳基金代码
@@ -68,13 +69,13 @@ type ParamFundManagerFilter struct {
 func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilter) FundManagerInfoList {
 	result := FundManagerInfoList{}
 	for _, i := range f {
-		if i.WorkingDays/365 < p.MinWorkingYears {
+		if i.WorkingYears < float64(p.MinWorkingYears) {
 			continue
 		}
 		if i.Yieldse < p.MinYieldse {
 			continue
 		}
-		if len(i.CurrentBestFundCode) > p.MaxCurrentFundCount {
+		if len(i.FundCodes) > p.MaxCurrentFundCount {
 			continue
 		}
 		if i.CurrentFundScale < p.MinScale {
@@ -199,7 +200,7 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 					FundCompanyName:     fields[3][1],
 					FundCodes:           strings.Split(fields[4][1], ","),
 					FundNames:           strings.Split(fields[5][1], ","),
-					WorkingDays:         totaldays,
+					WorkingYears:        math.Round(float64(totaldays) / 365.0),
 					CurrentBestReturn:   bestReturn,
 					CurrentBestFundCode: fields[8][1],
 					CurrentBestFundName: fields[9][1],

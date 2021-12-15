@@ -90,6 +90,9 @@ env = "localhost"
             "/x/apidocs/.+\\.json",
             "/x/apidocs/.+\\.js",
             "/x/apidocs/.+\\.css",
+            ".+\\.js",
+            ".+\\.css",
+            ".+\\.png",
         ]
         # 慢请求阈值（毫秒）请求处理时间大于该值使用 WARN 级别打印请求日志
         slow_threshold = 200
