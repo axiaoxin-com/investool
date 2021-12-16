@@ -252,7 +252,7 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 				if err != nil {
 					logging.Error(ctx, "QueryFundMsnMangerInfo err:"+err.Error())
 				} else {
-					resume = strings.TrimSpace(info.Datas.Resume + info.Datas.Investmentmethod + info.Datas.Investmentidear)
+					resume = strings.TrimSpace(fmt.Sprintf("%s\n投资方法:%s\n投资理念:%s", info.Datas.Resume, info.Datas.Investmentmethod, info.Datas.Investmentidear))
 					currentBestFundType = MftypeDesc[info.Datas.Mftype]
 
 					if info.Datas.Yieldse != "" && info.Datas.Yieldse != "--" {
