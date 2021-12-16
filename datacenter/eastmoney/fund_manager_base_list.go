@@ -52,6 +52,15 @@ type FundManagerBaseInfo struct {
 	Sex string `json:"SEX"`
 }
 
+// MftypeDesc Mftype字段描述
+var MftypeDesc = map[string]string{
+	"1": "偏债类",
+	"2": "偏股类",
+	"3": "指数类",
+	"4": "货币类",
+	"5": "QDII",
+}
+
 // RespFundMangerBaseList FundMangerBaseList 接口原始返回结构
 type RespFundMangerBaseList struct {
 	Datas      []*FundManagerBaseInfo `json:"Datas"`

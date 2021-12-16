@@ -38,9 +38,9 @@ type FundManagerInfo struct {
 	WorkingYears float64 `json:"working_years"`
 	// 现任基金最佳回报（%）
 	CurrentBestReturn float64 `json:"current_best_return"`
-	// 现任最佳基金代码
+	// 现任最佳基金代码(PRECODE)
 	CurrentBestFundCode string `json:"current_best_fund_code"`
-	// 现任最佳基金名称
+	// 现任最佳基金名称(PRENAME)
 	CurrentBestFundName string `json:"current_best_fund_name"`
 	// 现任基金资产总规模（亿元）
 	CurrentFundScale float64 `json:"current_fund_scale"`
@@ -48,6 +48,14 @@ type FundManagerInfo struct {
 	WorkingBestReturn float64 `json:"working_best_return"`
 	// 年化回报（%）
 	Yieldse float64 `json:"yieldse"`
+	// 擅长领域
+	CurrentBestFundType string `json:"current_best_fund_type"`
+	// 业绩评分
+	Score float64 `json:"score"`
+	// 个人简介 + 投资方法 + 投资理念
+	Resume string `json:"resume"`
+	// 获奖数
+	AwardNum int `json:"award_num"`
 }
 
 // FundManagerInfoList 基金经理列表
@@ -55,6 +63,8 @@ type FundManagerInfoList []*FundManagerInfo
 
 // ParamFundManagerFilter 基金列表过滤参数
 type ParamFundManagerFilter struct {
+	// 指定名字搜索
+	Name string
 	// 最低从业年限
 	MinWorkingYears int `json:"min_working_years"`
 	// 最低年化回报（%）
@@ -63,12 +73,20 @@ type ParamFundManagerFilter struct {
 	MaxCurrentFundCount int `json:"max_current_fund_count"`
 	// 最小管理规模（亿）
 	MinScale float64 `json:"min_scale"`
+	// 擅长基金分类
+	FundType string `json:"fund_type"`
 }
 
 // Filter 按条件过滤列表
 func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilter) FundManagerInfoList {
 	result := FundManagerInfoList{}
 	for _, i := range f {
+		if p.Name != "" && p.Name != i.Name {
+			continue
+		}
+		if p.FundType != "" && p.FundType != i.CurrentBestFundType {
+			continue
+		}
 		if i.WorkingYears < float64(p.MinWorkingYears) {
 			continue
 		}
@@ -86,7 +104,49 @@ func (f FundManagerInfoList) Filter(ctx context.Context, p ParamFundManagerFilte
 	return result
 }
 
-// SortByYieldse 股票列表按 年化回报 排序
+// SortByFundCount 列表按 管理基金数 排序
+func (f FundManagerInfoList) SortByFundCount() {
+	sort.Slice(f, func(i, j int) bool {
+		return len(f[i].FundCodes) > len(f[j].FundCodes)
+	})
+}
+
+// SortByAwardNum 列表按 获奖数 排序
+func (f FundManagerInfoList) SortByAwardNum() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].AwardNum > f[j].AwardNum
+	})
+}
+
+// SortByScore 列表按 业绩评分 排序
+func (f FundManagerInfoList) SortByScore() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].Score > f[j].Score
+	})
+}
+
+// SortByScale 列表按 基金规模 排序
+func (f FundManagerInfoList) SortByScale() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].CurrentFundScale > f[j].CurrentFundScale
+	})
+}
+
+// SortByCurrentBestReturn 列表按 现任基金最佳回报 排序
+func (f FundManagerInfoList) SortByCurrentBestReturn() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].CurrentBestReturn > f[j].CurrentBestReturn
+	})
+}
+
+// SortByWorkingBestReturn 列表按 任职基金最佳回报 排序
+func (f FundManagerInfoList) SortByWorkingBestReturn() {
+	sort.Slice(f, func(i, j int) bool {
+		return f[i].WorkingBestReturn > f[j].WorkingBestReturn
+	})
+}
+
+// SortByYieldse 列表按 年化回报 排序
 func (f FundManagerInfoList) SortByYieldse() {
 	sort.Slice(f, func(i, j int) bool {
 		return f[i].Yieldse > f[j].Yieldse
@@ -180,15 +240,42 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 						logging.Warnf(ctx, "parse bestReturn:%v to float64 error:%v", wbestReturnNum, err)
 					}
 				}
+				currentBestFundCode := fields[8][1]
+				currentBestFundName := fields[9][1]
+				currentBestFundType := ""
 				yieldse := 0.0
+				score := 0.0
+				awardNum := 0
+				resume := ""
+
 				info, err := e.QueryFundMsnMangerInfo(ctx, fields[0][1])
 				if err != nil {
 					logging.Error(ctx, "QueryFundMsnMangerInfo err:"+err.Error())
 				} else {
+					resume = strings.TrimSpace(info.Datas.Resume + info.Datas.Investmentmethod + info.Datas.Investmentidear)
+					currentBestFundType = MftypeDesc[info.Datas.Mftype]
+
 					if info.Datas.Yieldse != "" && info.Datas.Yieldse != "--" {
 						yieldse, err = strconv.ParseFloat(info.Datas.Yieldse, 64)
 						if err != nil {
 							logging.Warnf(ctx, "parse yieldse:%v to float64 error:%v", info.Datas.Yieldse, err)
+						}
+					}
+					// msn info里面的代表基金可能会不一样，以msn里面的为准
+					if info.Datas.Precode != "" && info.Datas.Precode != "--" {
+						currentBestFundCode = info.Datas.Precode
+						currentBestFundName = info.Datas.Prename
+					}
+					if info.Datas.Mgold != "" && info.Datas.Mgold != "--" {
+						score, err = strconv.ParseFloat(info.Datas.Mgold, 64)
+						if err != nil {
+							logging.Error(ctx, "parse Mgold to score error:"+err.Error())
+						}
+					}
+					if info.Datas.Awardnum != "" && info.Datas.Awardnum != "--" {
+						awardNum, err = strconv.Atoi(info.Datas.Awardnum)
+						if err != nil {
+							logging.Error(ctx, "parse Awardnum error:"+err.Error())
 						}
 					}
 				}
@@ -202,11 +289,15 @@ func (e EastMoney) FundMangers(ctx context.Context, ft, sc, st string) (FundMana
 					FundNames:           strings.Split(fields[5][1], ","),
 					WorkingYears:        math.Round(float64(totaldays) / 365.0),
 					CurrentBestReturn:   bestReturn,
-					CurrentBestFundCode: fields[8][1],
-					CurrentBestFundName: fields[9][1],
+					CurrentBestFundCode: currentBestFundCode,
+					CurrentBestFundName: currentBestFundName,
 					CurrentFundScale:    scale,
 					WorkingBestReturn:   wbestReturn,
 					Yieldse:             yieldse,
+					CurrentBestFundType: currentBestFundType,
+					Score:               score,
+					Resume:              resume,
+					AwardNum:            awardNum,
 				})
 				mlock.Unlock()
 			}(m[1])

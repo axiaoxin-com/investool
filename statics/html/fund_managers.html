@@ -27,6 +27,10 @@
                 <th>现任管理规模</th>
                 <th>现任管理基金数</th>
                 <th>任职最佳回报</th>
+                <th>擅长领域</th>
+                <th>业绩评分</th>
+                <th>获奖数</th>
+                <th>个人简介</th>
             </tr>
         </thead>
         <tbody>
@@ -46,25 +50,27 @@
             <td>{{ .CurrentFundScale }}亿元</td>
             <td>{{ len .FundCodes }}</td>
             <td>{{ .WorkingBestReturn }}%</td>
+            <td>{{ .CurrentBestFundType }}</td>
+            <td>{{ .Score }}</td>
+            <td>{{ .AwardNum }}</td>
+            <td>{{ .Resume }}</td>
         </tr>
-        {{ else }}
-        <th><td colspan="7">无数据</td></th>
         {{ end }}
         </tbody>
     </table>
     <ul class="pagination center">
         <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num=1&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}"><i class="material-icons">first_page</i></a>
+            <a href="/fund/managers?page_num=1&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">first_page</i></a>
         </li>
         <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}"><i class="material-icons">chevron_left</i></a>
+            <a href="/fund/managers?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_left</i></a>
         </li>
         <li><a class="tooltipped" data-position="top" data-tooltip="共{{ .Pagination.TotalCount }}位基金经理" href="#!">{{ .Pagination.PageNum }} / {{ .Pagination.PagesCount }}</a></li>
         <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}"><i class="material-icons">chevron_right</i></a>
+            <a href="/fund/managers?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_right</i></a>
         </li>
         <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.PagesCount }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}"><i class="material-icons">last_page</i></a>
+            <a href="/fund/managers?page_num={{ .Pagination.PagesCount }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">last_page</i></a>
         </li>
     </ul>
 </div>

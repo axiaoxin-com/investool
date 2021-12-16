@@ -326,17 +326,20 @@ func FundSimilarity(c *gin.Context) {
 
 // ParamFundManagers 基金经理筛选参数
 type ParamFundManagers struct {
+	// 指定名字搜索
+	Name string `json:"name" form:"name"`
 	// 最低从业年限
-	MinWorkingYears int `json:"min_working_years"      form:"min_working_years"`
+	MinWorkingYears int `json:"min_working_years" form:"min_working_years"`
 	// 最低年化回报（%）
-	MinYieldse float64 `json:"min_yieldse"            form:"min_yieldse"`
+	MinYieldse float64 `json:"min_yieldse" form:"min_yieldse"`
 	// 最大现任基金数量
 	MaxCurrentFundCount int `json:"max_current_fund_count" form:"max_current_fund_count"`
 	// 最小管理规模（亿）
-	MinScale float64 `json:"min_scale"              form:"min_scale"`
-	PageNum  int     `json:"page_num"               form:"page_num"`
-	PageSize int     `json:"page_size"              form:"page_size"`
-	Sort     string  `json:"sort"                   form:"sort"`
+	MinScale float64 `json:"min_scale" form:"min_scale"`
+	PageNum  int     `json:"page_num" form:"page_num"`
+	PageSize int     `json:"page_size" form:"page_size"`
+	Sort     string  `json:"sort" form:"sort"`
+	FundType string  `json:"fund_type" form:"fund_type"`
 }
 
 // FundManagers godoc
@@ -349,6 +352,8 @@ func FundManagers(c *gin.Context) {
 		PageNum:             1,
 		PageSize:            10,
 		Sort:                "yieldse",
+		FundType:            "",
+		Name:                "",
 	}
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
@@ -360,19 +365,38 @@ func FundManagers(c *gin.Context) {
 		c.HTML(http.StatusOK, "fund_managers.html", data)
 		return
 	}
+
+	// 筛选
 	managers := models.FundManagers.Filter(c, eastmoney.ParamFundManagerFilter{
 		MinWorkingYears:     p.MinWorkingYears,
 		MinYieldse:          p.MinYieldse,
 		MaxCurrentFundCount: p.MaxCurrentFundCount,
 		MinScale:            p.MinScale,
+		FundType:            p.FundType,
 	})
+
+	// 排序
 	switch p.Sort {
 	case "yieldse":
 		managers.SortByYieldse()
+	case "scale":
+		managers.SortByScale()
+	case "score":
+		managers.SortByScore()
+	case "an":
+		managers.SortByAwardNum()
+	case "fc":
+		managers.SortByFundCount()
+	case "cbr":
+		managers.SortByCurrentBestReturn()
+	case "wbr":
+		managers.SortByCurrentBestReturn()
 	}
+
 	// 分页
 	pagi := goutils.PaginateByPageNumSize(len(managers), p.PageNum, p.PageSize)
 	managers = managers[pagi.StartIndex:pagi.EndIndex]
+
 	// 获取这批基金经理的代表基金是否是4433基金
 	bestFundCodes := []string{}
 	for _, m := range managers {
@@ -383,6 +407,8 @@ func FundManagers(c *gin.Context) {
 	if err != nil {
 		logging.Error(c, "SearchFunds err:"+err.Error())
 	}
+
+	// 返回结果item
 	type managerInfo struct {
 		eastmoney.FundManagerInfo
 		BestFundIs4433 bool
