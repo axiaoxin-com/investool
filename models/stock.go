@@ -147,15 +147,17 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		// 合理价格判断
 		// 去年年报
 		lastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
-		if lastYearReport == nil {
-			logging.Error(ctx, "NewStock GetReport nil")
-			return
-		}
+		beforeLastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-2, eastmoney.FinaReportTypeYear)
 		thisYear := time.Now().Year()
 		thisYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear)
-		if err != nil {
-			logging.Error(ctx, "ThisYearQ1RevenueIncreasingRatio err:"+err.Error())
-			return
+		lastYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-1)
+		// nil fix: 新的一年刚开始时，上一年的年报还没披露，年份数据全部-1，保证有数据返回
+		if lastYearReport == nil {
+			logging.Warn(ctx, "NewStock get last year report nil")
+			lastYearReport = beforeLastYearReport
+			beforeLastYearReport = s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-3, eastmoney.FinaReportTypeYear)
+			thisYearAvgRevIncrRatio = s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-1)
+			lastYearAvgRevIncrRatio = s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-2)
 		}
 		// pe 中位数
 		peMidVal, err := peList.GetMidValue(ctx)
@@ -165,8 +167,6 @@ func NewStock(ctx context.Context, baseInfo eastmoney.StockInfo) (Stock, error) 
 		}
 		s.RightPrice = peMidVal * (lastYearReport.Epsjb * (1 + thisYearAvgRevIncrRatio/100.0))
 		s.PriceSpace = (s.RightPrice - price) / price * 100
-		beforeLastYearReport := s.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-2, eastmoney.FinaReportTypeYear)
-		lastYearAvgRevIncrRatio := s.HistoricalFinaMainData.GetAvgRevenueIncreasingRatioByYear(ctx, thisYear-1)
 		s.LastYearRightPrice = peMidVal * (beforeLastYearReport.Epsjb * (1 + lastYearAvgRevIncrRatio/100.0))
 	}(ctx, &s)
 
