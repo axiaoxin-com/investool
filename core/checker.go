@@ -127,6 +127,10 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	itemOK := true
 	// 最新一期的年报
 	lastYearReport := stock.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-1, eastmoney.FinaReportTypeYear)
+	// nil fix: 新的一年刚开始，这时上一年的年报还没有披露
+	if lastYearReport == nil {
+		lastYearReport = stock.HistoricalFinaMainData.GetReport(ctx, time.Now().Year()-2, eastmoney.FinaReportTypeYear)
+	}
 	// 最新一期的财报
 	curReport := stock.HistoricalFinaMainData.CurrentReport(ctx)
 	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%</br>%sROE:%.2f%%，同比增长:%.2f%%",
