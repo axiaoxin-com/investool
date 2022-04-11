@@ -61,7 +61,7 @@ func renderTable(table *tablewriter.Table, checkResult core.CheckResult, footers
 		tablewriter.Colors{tablewriter.Bold, footerValColor},
 	)
 	for k, m := range checkResult {
-		row := []string{k, strings.ReplaceAll(m["desc"], "</br>", "\n")}
+		row := []string{k, strings.ReplaceAll(m["desc"], "<br/>", "\n")}
 
 		if m["ok"] == "false" {
 			table.Rich(

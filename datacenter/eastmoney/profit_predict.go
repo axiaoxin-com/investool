@@ -44,7 +44,7 @@ func (p ProfitPredictList) String() string {
 	for _, i := range p {
 		s = append(s, fmt.Sprintf("%d | 预测每股收益:%f 预测市盈率:%f", i.PredictYear, i.Eps, i.Pe))
 	}
-	return strings.Join(s, "</br>")
+	return strings.Join(s, "<br/>")
 }
 
 // QueryProfitPredict 获取盈利预测

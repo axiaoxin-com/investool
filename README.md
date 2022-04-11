@@ -283,6 +283,12 @@ OPTIONS:
 ./investool -l error exportor -f ./stocks.xlsx --filter.min_roe=6 --checker.min_roe=6
 ```
 
+- 导出指定名称的股票
+
+```
+./investool -l error exportor -f ./stocks.xlsx --filter.special_security_name_abbr_list 福莱特 --filter.special_security_name_abbr_list 旗滨集团 --disable_check
+```
+
 ## checker
 
 给定关键词/股票代码搜索股票进行评估检测

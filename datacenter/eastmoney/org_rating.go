@@ -43,7 +43,7 @@ func (o OrgRatingList) String() string {
 	for _, i := range o {
 		s = append(s, fmt.Sprintf("%s:%s", i.DateType, i.CompreRating))
 	}
-	return strings.Join(s, "</br>")
+	return strings.Join(s, "<br/>")
 }
 
 // QueryOrgRating 获取评级统计

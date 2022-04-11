@@ -75,7 +75,7 @@ var DefaultCheckerOptions = CheckerOptions{
 	CheckYears:           5,
 	NoCheckYearsROE:      20.0,
 	MaxDebtAssetRatio:    60.0,
-	MaxHV:                0.5,
+	MaxHV:                1.0,
 	MinTotalMarketCap:    100.0,
 	BankMinROA:           0.5,
 	BankMinZBCZL:         8.0,
@@ -133,7 +133,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	}
 	// 最新一期的财报
 	curReport := stock.HistoricalFinaMainData.CurrentReport(ctx)
-	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%</br>%sROE:%.2f%%，同比增长:%.2f%%",
+	desc := fmt.Sprintf("%sROE:%.2f%%，同比增长:%.2f%%<br/>%sROE:%.2f%%，同比增长:%.2f%%",
 		lastYearReport.ReportDateName, lastYearReport.Roejq, lastYearReport.Roejqtz,
 		curReport.ReportDateName, curReport.Roejq, curReport.Roejqtz)
 	if lastYearReport.Roejq < c.Options.MinROE && curReport.Roejq < c.Options.MinROE {
@@ -154,7 +154,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		c.Options.CheckYears,
 		eastmoney.FinaReportTypeYear,
 	)
-	desc = fmt.Sprintf("%d年内ROE(年报):</br>%+v", c.Options.CheckYears, roeList)
+	desc = fmt.Sprintf("%d年内ROE(年报):<br/>%+v", c.Options.CheckYears, roeList)
 	roeavg, err := goutils.AvgFloat64(roeList)
 	if err != nil {
 		logging.Warn(ctx, "roe avg error:"+err.Error())
@@ -167,7 +167,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			c.Options.CheckYears,
 			eastmoney.FinaReportTypeYear,
 		) {
-			desc = fmt.Sprintf("ROE%d年内未逐年递增:</br>%+v", c.Options.CheckYears, roeList)
+			desc = fmt.Sprintf("ROE%d年内未逐年递增:<br/>%+v", c.Options.CheckYears, roeList)
 			ok = false
 			itemOK = false
 		}
@@ -187,7 +187,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		eastmoney.FinaReportTypeYear,
 	)
 	desc = fmt.Sprintf(
-		"%sEPS:%f,同比增长:%.2f%%</br>%d年内EPS:</br>%+v",
+		"%sEPS:%f,同比增长:%.2f%%<br/>%d年内EPS:<br/>%+v",
 		curReport.ReportDateName,
 		curReport.Epsjb,
 		curReport.Epsjbtz,
@@ -225,12 +225,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		revs = append(revs, goutils.YiWanString(rev))
 	}
 	desc = fmt.Sprintf(
-		"%s营收:%s,同比增长:%.2f%%</br>%d年内营收:</br>%s",
+		"%s营收:%s,同比增长:%.2f%%<br/>%d年内营收:<br/>%s",
 		curReport.ReportDateName,
 		goutils.YiWanString(curReport.Totaloperatereve),
 		curReport.Totaloperaterevetz,
 		c.Options.CheckYears,
-		strings.Join(revs, "</br>"),
+		strings.Join(revs, "<br/>"),
 	)
 	if c.Options.IsCheckRevGrow && len(revList) > 0 {
 		if revList[len(revList)-1] <= 0 ||
@@ -262,12 +262,12 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	for _, np := range netprofitList {
 		nps = append(nps, goutils.YiWanString(np))
 	}
-	desc = fmt.Sprintf("%s净利润:%s,同比增长:%.2f%%</br>%d年内净利润:</br>%s",
+	desc = fmt.Sprintf("%s净利润:%s,同比增长:%.2f%%<br/>%d年内净利润:<br/>%s",
 		curReport.ReportDateName,
 		goutils.YiWanString(curReport.Parentnetprofit),
 		curReport.Parentnetprofittz,
 		c.Options.CheckYears,
-		strings.Join(nps, "</br>"))
+		strings.Join(nps, "<br/>"))
 	if c.Options.IsCheckNetprofitGrow && len(netprofitList) > 0 {
 		if netprofitList[len(netprofitList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
@@ -330,7 +330,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		itemOK = false
 	}
 	result[checkItemName] = map[string]string{
-		"desc": strings.Join(valuationDesc, "</br>"),
+		"desc": strings.Join(valuationDesc, "<br/>"),
 		"ok":   fmt.Sprint(itemOK),
 	}
 
@@ -339,7 +339,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	itemOK = true
 	price := stock.GetPrice()
 	desc = fmt.Sprintf(
-		"最新股价:%f</br>合理价:%.2f(%.2f%%)</br>去年合理价:%.2f,去年实际价格:%.2f",
+		"最新股价:%f<br/>合理价:%.2f(%.2f%%)<br/>去年合理价:%.2f,去年实际价格:%.2f",
 		price,
 		stock.RightPrice,
 		stock.PriceSpace,
@@ -365,7 +365,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	if !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
 		if c.Options.MaxDebtAssetRatio != 0 && len(stock.HistoricalFinaMainData) > 0 {
 			if fzl > c.Options.MaxDebtAssetRatio {
-				desc = fmt.Sprintf("负债率:%f</br>高于:%f", fzl, c.Options.MaxDebtAssetRatio)
+				desc = fmt.Sprintf("负债率:%f<br/>高于:%f", fzl, c.Options.MaxDebtAssetRatio)
 				ok = false
 				itemOK = false
 			}
@@ -382,7 +382,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("历史波动率:%f", stock.HistoricalVolatility)
 	if c.Options.MaxHV != 0 {
 		if stock.HistoricalVolatility > c.Options.MaxHV {
-			desc = fmt.Sprintf("历史波动率:%f</br>高于:%f", stock.HistoricalVolatility, c.Options.MaxHV)
+			desc = fmt.Sprintf("历史波动率:%f<br/>高于:%f", stock.HistoricalVolatility, c.Options.MaxHV)
 			ok = false
 			itemOK = false
 		}
@@ -398,7 +398,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	sz := goutils.YiWanString(stock.BaseInfo.TotalMarketCap)
 	desc = fmt.Sprintf("市值:%s", sz)
 	if stock.BaseInfo.TotalMarketCap < c.Options.MinTotalMarketCap*100000000 {
-		desc = fmt.Sprintf("市值:%s</br>低于:%f亿", sz, c.Options.MinTotalMarketCap)
+		desc = fmt.Sprintf("市值:%s<br/>低于:%f亿", sz, c.Options.MinTotalMarketCap)
 		ok = false
 		itemOK = false
 	}
@@ -414,7 +414,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		itemOK = true
 		desc = fmt.Sprintf("最新ROA:%f", stock.BaseInfo.ROA)
 		if stock.BaseInfo.ROA < c.Options.BankMinROA {
-			desc = fmt.Sprintf("ROA:%f</br>低于:%f", stock.BaseInfo.ROA, c.Options.BankMinROA)
+			desc = fmt.Sprintf("ROA:%f<br/>低于:%f", stock.BaseInfo.ROA, c.Options.BankMinROA)
 			ok = false
 			itemOK = false
 		}
@@ -427,7 +427,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		itemOK = true
 		desc = fmt.Sprintf("资本充足率:%f", fmd.Newcapitalader)
 		if fmd.Newcapitalader < c.Options.BankMinZBCZL {
-			desc = fmt.Sprintf("资本充足率:%f</br>低于:%f", fmd.Newcapitalader, c.Options.BankMinZBCZL)
+			desc = fmt.Sprintf("资本充足率:%f<br/>低于:%f", fmd.Newcapitalader, c.Options.BankMinZBCZL)
 			ok = false
 			itemOK = false
 		}
@@ -441,7 +441,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		desc = fmt.Sprintf("不良贷款率:%f", fmd.NonPerLoan)
 		if c.Options.BankMaxBLDKL != 0 {
 			if fmd.NonPerLoan > c.Options.BankMaxBLDKL {
-				desc = fmt.Sprintf("不良贷款率:%f</br>高于:%f", fmd.NonPerLoan, c.Options.BankMaxBLDKL)
+				desc = fmt.Sprintf("不良贷款率:%f<br/>高于:%f", fmd.NonPerLoan, c.Options.BankMaxBLDKL)
 				ok = false
 				itemOK = false
 			}
@@ -455,7 +455,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 		itemOK = true
 		desc = fmt.Sprintf("不良贷款拨备覆盖率:%f", fmd.Bldkbbl)
 		if fmd.Bldkbbl < c.Options.BankMinBLDKBBFGL {
-			desc = fmt.Sprintf("不良贷款拨备覆盖率:%f</br>低于:%f", fmd.Bldkbbl, c.Options.BankMinBLDKBBFGL)
+			desc = fmt.Sprintf("不良贷款拨备覆盖率:%f<br/>低于:%f", fmd.Bldkbbl, c.Options.BankMinBLDKBBFGL)
 			ok = false
 			itemOK = false
 		}
@@ -475,14 +475,14 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	if c.Options.IsCheckMLLStability && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) {
 		checkItemName = "毛利率稳定性"
 		itemOK = true
-		desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
+		desc = fmt.Sprintf("%d年内毛利率:<br/>%v", c.Options.CheckYears, mllList)
 		if !stock.HistoricalFinaMainData.IsStability(
 			ctx,
 			eastmoney.ValueListTypeMLL,
 			c.Options.CheckYears,
 			eastmoney.FinaReportTypeYear,
 		) {
-			desc = fmt.Sprintf("%d年内稳定性较差:</br>%v", c.Options.CheckYears, mllList)
+			desc = fmt.Sprintf("%d年内稳定性较差:<br/>%v", c.Options.CheckYears, mllList)
 			ok = false
 			itemOK = false
 		}
@@ -496,7 +496,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	if c.Options.IsCheckMLLGrow && !goutils.IsStrInSlice(stock.GetOrgType(), []string{"银行", "保险"}) && len(mllList) > 0 {
 		checkItemName = "毛利率逐年递增且>0"
 		itemOK = true
-		desc = fmt.Sprintf("%d年内毛利率:</br>%v", c.Options.CheckYears, mllList)
+		desc = fmt.Sprintf("%d年内毛利率:<br/>%v", c.Options.CheckYears, mllList)
 		if revList[len(mllList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
 				ctx,
@@ -522,7 +522,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	)
 	checkItemName = "净利率稳定性"
 	itemOK = true
-	desc = fmt.Sprintf("%d年内净利率:</br>%v", c.Options.CheckYears, jllList)
+	desc = fmt.Sprintf("%d年内净利率:<br/>%v", c.Options.CheckYears, jllList)
 	if c.Options.IsCheckJLLStability {
 		if !stock.HistoricalFinaMainData.IsStability(
 			ctx,
@@ -530,7 +530,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 			c.Options.CheckYears,
 			eastmoney.FinaReportTypeYear,
 		) {
-			desc = fmt.Sprintf("%d年内稳定性较差:</br>%v", c.Options.CheckYears, jllList)
+			desc = fmt.Sprintf("%d年内稳定性较差:<br/>%v", c.Options.CheckYears, jllList)
 			ok = false
 			itemOK = false
 		}
@@ -543,7 +543,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	// 净利率逐年递增
 	checkItemName = "净利率逐年递增且>0"
 	itemOK = true
-	desc = fmt.Sprintf("%d年内净利率:</br>%v", c.Options.CheckYears, jllList)
+	desc = fmt.Sprintf("%d年内净利率:<br/>%v", c.Options.CheckYears, jllList)
 	if c.Options.IsCheckJLLGrow && len(jllList) > 0 {
 		if revList[len(jllList)-1] <= 0 ||
 			!stock.HistoricalFinaMainData.IsIncreasingByYears(
@@ -567,11 +567,11 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("PEG:%v", stock.PEG)
 	if c.Options.MaxPEG != 0 {
 		if stock.PEG > c.Options.MaxPEG {
-			desc = fmt.Sprintf("PEG:%v</br>高于:%v", stock.PEG, c.Options.MaxPEG)
+			desc = fmt.Sprintf("PEG:%v<br/>高于:%v", stock.PEG, c.Options.MaxPEG)
 			ok = false
 			itemOK = false
 		} else if stock.PEG < 0 {
-			desc = fmt.Sprintf("PEG:%v</br>低于:0", stock.PEG)
+			desc = fmt.Sprintf("PEG:%v<br/>低于:0", stock.PEG)
 			ok = false
 			itemOK = false
 		}
@@ -587,7 +587,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	desc = fmt.Sprintf("当前本业营收比:%v", stock.BYYSRatio)
 	if c.Options.MinBYYSRatio != 0 && c.Options.MaxBYYSRatio != 0 {
 		if stock.BYYSRatio > c.Options.MaxBYYSRatio || stock.BYYSRatio < c.Options.MinBYYSRatio {
-			desc = fmt.Sprintf("当前本业营收比:%v</br>超出范围:%v-%v", stock.BYYSRatio, c.Options.MinBYYSRatio, c.Options.MaxBYYSRatio)
+			desc = fmt.Sprintf("当前本业营收比:%v<br/>超出范围:%v-%v", stock.BYYSRatio, c.Options.MinBYYSRatio, c.Options.MaxBYYSRatio)
 			ok = false
 			itemOK = false
 		}
@@ -645,7 +645,7 @@ func (c Checker) CheckFundamentals(ctx context.Context, stock models.Stock) (res
 	itemOK = true
 	if len(stock.HistoricalCashflowList) > 0 {
 		desc = fmt.Sprintf(
-			`经营活动产生的现金流量净额(>0):%s</br>投资活动产生的现金流量净额(<0):%s</br>筹资活动产生的现金流量净额:%s</br>自由现金流量(>0):%s`,
+			`经营活动产生的现金流量净额(>0):%s<br/>投资活动产生的现金流量净额(<0):%s<br/>筹资活动产生的现金流量净额:%s<br/>自由现金流量(>0):%s`,
 			goutils.YiWanString(stock.NetcashOperate),
 			goutils.YiWanString(stock.NetcashInvest),
 			goutils.YiWanString(stock.NetcashFinance),

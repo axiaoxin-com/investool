@@ -65,7 +65,7 @@ func (n NetInflowList) String() string {
 		netInflow40days = fmt.Sprintf("近40日主力资金净流入:%.2f万元", n[:40].SumMainNetIn(ctx))
 	}
 	return fmt.Sprintf(
-		"%s</br>%s</br>%s</br>%s</br>%s</br>%s",
+		"%s<br/>%s<br/>%s<br/>%s<br/>%s<br/>%s",
 		netInflow3days,
 		netInflow5days,
 		netInflow10days,

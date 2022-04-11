@@ -43,7 +43,7 @@ func (f FreeHolderList) String() string {
 		fs := fmt.Sprintf("%d.%s|%.2f%%|%v", i+1, h.HolderName, h.FreeHoldnumRatio, h.FreeRatioQoq)
 		s = append(s, fs)
 	}
-	return strings.Join(s, "</br>")
+	return strings.Join(s, "<br/>")
 }
 
 // RespFreeHolders QueryFreeHolders 返回json结构

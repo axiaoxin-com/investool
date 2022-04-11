@@ -145,10 +145,10 @@
                     {{ .NetAssetsScaleHuman  }}
                 </td>
                 <td class="hide t3">
-                    <a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid={{ .Manager.ID }}" target="_blank">{{ .Manager.Name }}</a></br>
-                    管理该基金:{{ .Manager.ManageDays }}天</br>
-                    任职回报:{{ .Manager.ManageRepay }}%</br>
-                    从业时间:{{ .Manager.WorkingDays }}天</br>
+                    <a href="https://appunit.1234567.com.cn/fundmanager/manager.html?managerid={{ .Manager.ID }}" target="_blank">{{ .Manager.Name }}</a><br/>
+                    管理该基金:{{ .Manager.ManageDays }}天<br/>
+                    任职回报:{{ .Manager.ManageRepay }}%<br/>
+                    从业时间:{{ .Manager.WorkingDays }}天<br/>
                     年均回报:{{ .Manager.YearsAvgRepay }}%
                 </td>
                 <td class="hide t4">
@@ -165,81 +165,81 @@
                     {{ .FixedInvestmentStatus }}
                 </td>
                 <td class="hide t7">
-                    近1年:{{ printf "%.2f" .Stddev.Year1 }}%</br>
-                    近3年:{{ printf "%.2f" .Stddev.Year3 }}%</br>
-                    近5年:{{ printf "%.2f" .Stddev.Year5 }}%</br>
+                    近1年:{{ printf "%.2f" .Stddev.Year1 }}%<br/>
+                    近3年:{{ printf "%.2f" .Stddev.Year3 }}%<br/>
+                    近5年:{{ printf "%.2f" .Stddev.Year5 }}%<br/>
                     1,3,5年均值:{{ printf "%.2f" .Stddev.Avg135 }}%
                 </td>
                 <td class="hide t8">
-                    近1年:{{ printf "%.2f" .MaxRetracement.Year1 }}%</br>
-                    近3年:{{ printf "%.2f" .MaxRetracement.Year3 }}%</br>
-                    近5年:{{ printf "%.2f" .MaxRetracement.Year5 }}%</br>
+                    近1年:{{ printf "%.2f" .MaxRetracement.Year1 }}%<br/>
+                    近3年:{{ printf "%.2f" .MaxRetracement.Year3 }}%<br/>
+                    近5年:{{ printf "%.2f" .MaxRetracement.Year5 }}%<br/>
                     1,3,5年均值:{{ printf "%.2f" .MaxRetracement.Avg135 }}%
                 </td>
                 <td class="hide t9">
-                    近1年:{{ printf "%.2f" .Sharp.Year1 }}%</br>
-                    近3年:{{ printf "%.2f" .Sharp.Year3 }}%</br>
-                    近5年:{{ printf "%.2f" .Sharp.Year5 }}%</br>
+                    近1年:{{ printf "%.2f" .Sharp.Year1 }}%<br/>
+                    近3年:{{ printf "%.2f" .Sharp.Year3 }}%<br/>
+                    近5年:{{ printf "%.2f" .Sharp.Year5 }}%<br/>
                     1,3,5年均值:{{ printf "%.2f" .Sharp.Avg135 }}%
                 </td>
                 <td class="hide t10">
-                    收益率:{{ printf "%.2f" .Performance.WeekProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.WeekAmplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.WeekKindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.WeekProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.WeekAmplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.WeekKindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.WeekRankRatio }}%({{ .Performance.WeekRankNum }}/{{ .Performance.WeekRankTotalCount }})
                 </td>
                 <td class="hide t11">
-                    收益率:{{ printf "%.2f" .Performance.Month1ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Month1Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Month1KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Month1ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Month1Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Month1KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Month1RankRatio }}%({{ .Performance.Month1RankNum }}/{{ .Performance.Month1RankTotalCount }})
                 </td>
                 <td class="hide t12">
-                    收益率:{{ printf "%.2f" .Performance.Month3ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Month3Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Month3KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Month3ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Month3Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Month3KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Month3RankRatio }}%({{ .Performance.Month3RankNum }}/{{ .Performance.Month3RankTotalCount }})
                 </td>
                 <td class="hide t13">
-                    收益率:{{ printf "%.2f" .Performance.Month6ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Month6Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Month6KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Month6ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Month6Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Month6KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Month6RankRatio }}%({{ .Performance.Month6RankNum }}/{{ .Performance.Month6RankTotalCount }})
                 </td>
                 <td class="hide t14">
-                    收益率:{{ printf "%.2f" .Performance.Year1ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Year1Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Year1KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Year1ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Year1Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Year1KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Year1RankRatio }}%({{ .Performance.Year1RankNum }}/{{ .Performance.Year1RankTotalCount }})
                 </td>
                 <td class="hide t15">
-                    收益率:{{ printf "%.2f" .Performance.Year2ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Year2Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Year2KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Year2ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Year2Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Year2KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Year2RankRatio }}%({{ .Performance.Year2RankNum }}/{{ .Performance.Year2RankTotalCount }})
                 </td>
                 <td class="hide t16">
-                    收益率:{{ printf "%.2f" .Performance.Year3ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Year3Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Year3KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Year3ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Year3Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Year3KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Year3RankRatio }}%({{ .Performance.Year3RankNum }}/{{ .Performance.Year3RankTotalCount }})
                 </td>
                 <td class="hide t17">
-                    收益率:{{ printf "%.2f" .Performance.Year5ProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.Year5Amplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.Year5KindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.Year5ProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.Year5Amplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.Year5KindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.Year5RankRatio }}%({{ .Performance.Year5RankNum }}/{{ .Performance.Year5RankTotalCount }})
                 </td>
                 <td class="hide t18">
-                    收益率:{{ printf "%.2f" .Performance.ThisYearProfitRatio }}%</br>
-                    涨跌幅:{{ printf "%.2f" .Performance.ThisYearAmplitude }}%</br>
-                    同类均值:{{ printf "%.2f" .Performance.ThisYearKindAvg }}%</br>
+                    收益率:{{ printf "%.2f" .Performance.ThisYearProfitRatio }}%<br/>
+                    涨跌幅:{{ printf "%.2f" .Performance.ThisYearAmplitude }}%<br/>
+                    同类均值:{{ printf "%.2f" .Performance.ThisYearKindAvg }}%<br/>
                     同类排名:前{{ printf "%.2f" .Performance.ThisYearRankRatio }}%({{ .Performance.ThisYearRankNum }}/{{ .Performance.ThisYearRankTotalCount }})
                 </td>
                 <td class="hide t19">
-                    收益率:{{ printf "%.2f" .Performance.HistoricalProfitRatio }}%</br>
-                    涨跌幅:--</br>
-                    同类均值:--</br>
+                    收益率:{{ printf "%.2f" .Performance.HistoricalProfitRatio }}%<br/>
+                    涨跌幅:--<br/>
+                    同类均值:--<br/>
                     同类排名:--
                 </td>
                 <td class="hide t20">
@@ -247,25 +247,25 @@
                         <a href="https://emwap.eastmoney.com/quote/stock/{{ $s.ExCode }}.{{ $s.Code }}.html" target="_blank">{{ $s.Name }}</a> |
                         {{ $s.HoldRatio }}% |
                         {{ $s.Industry }} |
-                        <span {{ if gt $s.AdjustRatio 0.0 }}class="red lighten-2"{{ else }}class="green lighten-2"{{ end }}>{{ $s.AdjustRatio }}%</span></br>
+                        <span {{ if gt $s.AdjustRatio 0.0 }}class="red lighten-2"{{ else }}class="green lighten-2"{{ end }}>{{ $s.AdjustRatio }}%</span><br/>
                     {{ end }}
                 </td>
                 <td class="hide t21">
-                    净资产:{{ .AssetsProportion.NetAssets }}</br>
-                    股票:{{ .AssetsProportion.Stock }}</br>
-                    债券:{{ .AssetsProportion.Bond }}</br>
-                    现金:{{ .AssetsProportion.Cash }}</br>
+                    净资产:{{ .AssetsProportion.NetAssets }}<br/>
+                    股票:{{ .AssetsProportion.Stock }}<br/>
+                    债券:{{ .AssetsProportion.Bond }}<br/>
+                    现金:{{ .AssetsProportion.Cash }}<br/>
                     其他:{{ .AssetsProportion.Other }}
                 <td class="hide t22">
                     {{ range  .IndustryProportions }}
-                        {{ .Industry }}:{{ .Prop }}%</br>
+                        {{ .Industry }}:{{ .Prop }}%<br/>
                     {{ end }}
                 </td>
                 <td class="hide t23">
                     {{ $hdlen := len .HistoricalDividends  }}
                     {{ if gt $hdlen 0 }}
                         {{ range .HistoricalDividends }}
-                            {{ .RationDate }} {{ .Value }}元</br>
+                            {{ .RationDate }} {{ .Value }}元<br/>
                         {{ end }}
                     {{ else }}
                         --

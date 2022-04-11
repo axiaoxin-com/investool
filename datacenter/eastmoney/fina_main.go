@@ -282,7 +282,7 @@ func (fvl FinaValueList) String() string {
 	for _, i := range fvl {
 		s = append(s, fmt.Sprint(i))
 	}
-	return strings.Join(s, "</br>")
+	return strings.Join(s, "<br/>")
 }
 
 // ValueList 获取历史数据值，最新的在最前面

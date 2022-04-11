@@ -32,7 +32,7 @@
             </td>
             <td>
                 {{ range $i, $s := .SameStocks }}
-                {{ $i }}.{{ $s }}</br>
+                {{ $i }}.{{ $s }}<br/>
                 {{end}}
             </td>
             <td>
@@ -47,9 +47,9 @@
     <div id="desc_similarity" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
         <div class="tap-target-content">
             <h4>持仓相似度</h4>
-            采用Jaccard相似系数计算基金持仓相似度，</br>
-            相似度越接近1表示重复持仓的股票越多。</br>
-            0 表示持仓股票完全不同，</br>
+            采用Jaccard相似系数计算基金持仓相似度，<br/>
+            相似度越接近1表示重复持仓的股票越多。<br/>
+            0 表示持仓股票完全不同，<br/>
             1 表示持仓股票完全相同。
         </div>
     </div>
