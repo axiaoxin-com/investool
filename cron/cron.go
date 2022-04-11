@@ -33,11 +33,11 @@ func RunCronJobs(async bool) {
 	logging.Debugf(nil, "cron timezone:%v", timezone)
 	sched := gocron.NewScheduler(timezone)
 	// 同步基金净值列表和4433列表
-	sched.Cron("0 18 * * 1-5").Do(SyncFund)
+	sched.Cron("0 5 * * 1-5").Do(SyncFund)
 	// 同步东方财富行业列表
 	sched.Cron("0 4 * * 1-5").Do(SyncIndustryList)
 	// 同步基金经理列表
-	sched.Cron("0 5 * * 1-5").Do(SyncFundManagers)
+	sched.Cron("0 3 * * 1-5").Do(SyncFundManagers)
 	if async {
 		sched.StartAsync()
 	} else {
