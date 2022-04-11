@@ -8,6 +8,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -33,11 +34,11 @@ func RunCronJobs(async bool) {
 	logging.Debugf(nil, "cron timezone:%v", timezone)
 	sched := gocron.NewScheduler(timezone)
 	// 同步基金净值列表和4433列表
-	sched.Cron("0 5 * * 1-5").Do(SyncFund)
+	sched.Cron(viper.GetString("app.cronexp.sync_fund")).Do(SyncFund)
 	// 同步东方财富行业列表
-	sched.Cron("0 4 * * 1-5").Do(SyncIndustryList)
+	sched.Cron(viper.GetString("app.cronexp.sync_industry_list")).Do(SyncIndustryList)
 	// 同步基金经理列表
-	sched.Cron("0 3 * * 1-5").Do(SyncFundManagers)
+	sched.Cron(viper.GetString("app.cronexp.sync_fund_managers")).Do(SyncFundManagers)
 	if async {
 		sched.StartAsync()
 	} else {

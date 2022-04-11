@@ -57,6 +57,9 @@ func InitWithConfigFile(configFile string) {
 	viper.SetDefault("basic_auth.username", "admin")
 	viper.SetDefault("basic_auth.password", "admin")
 
+	// 打印viper配置
+	logging.Infof(nil, "viper load all settings:%+v", viper.AllSettings())
+
 	// 初始化 sentry 并创建 sentry 客户端
 	sentryDSN := viper.GetString("sentry.dsn")
 	if sentryDSN == "" {

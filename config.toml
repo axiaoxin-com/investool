@@ -17,6 +17,11 @@ env = "localhost"
     # 并发拉取数据时channel的大小
     chan_size = 100
 
+    [app.cronexp]
+        sync_fund = "0 3 * * 1-5"
+        sync_fund_managers = "0 4 * * 1-5"
+        sync_industry_list = "0 5 * * 1-5"
+
 
 ########## server 相关配置
 [server]
