@@ -11,7 +11,6 @@ import (
 	"github.com/axiaoxin-com/investool/cmds"
 	"github.com/axiaoxin-com/investool/models"
 	"github.com/axiaoxin-com/investool/version"
-	"github.com/axiaoxin-com/logging"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
 )
@@ -77,7 +76,7 @@ func main() {
 	app.Commands = append(app.Commands, cmds.CommandIndex())
 
 	if err := app.Run(os.Args); err != nil {
-		logging.Fatal(nil, err.Error())
+		fmt.Println(err.Error())
 	}
 
 }

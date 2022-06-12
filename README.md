@@ -344,16 +344,22 @@ OPTIONS:
 
 ## index
 
-获取指数信息
+获取指数代码 000905 信息
 
 ```
-./investool index -i 000905 -d
+./investool index -c 000905 -d
 ```
 
-获取指数成分股：
+获取指数代码 000905 的成分股：
 
 ```
-./investool index -i 000905 -s
+./investool index -c 000905 -s
+```
+
+获取指数代码 000905 和指数代码 000922 的成分股交集：
+
+```
+./investool index -c 000905 -i 000922
 ```
 
 # 欢迎 Star

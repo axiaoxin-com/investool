@@ -19,8 +19,8 @@ const (
 func FlagsIndex() []cli.Flag {
 	return []cli.Flag{
 		&cli.StringFlag{
-			Name:     "index",
-			Aliases:  []string{"i"},
+			Name:     "code",
+			Aliases:  []string{"c"},
 			Value:    "",
 			Usage:    "指定指数代码",
 			Required: true,
@@ -39,6 +39,13 @@ func FlagsIndex() []cli.Flag {
 			Usage:    "返回指数成分股",
 			Required: false,
 		},
+		&cli.StringFlag{
+			Name:     "intersec",
+			Aliases:  []string{"i"},
+			Value:    "",
+			Usage:    "返回成分股交集",
+			Required: false,
+		},
 	}
 }
 
@@ -46,7 +53,7 @@ func FlagsIndex() []cli.Flag {
 func ActionIndex() func(c *cli.Context) error {
 	return func(c *cli.Context) error {
 		ctx := context.Background()
-		indexCode := c.String("index")
+		indexCode := c.String("code")
 
 		showDesc := c.Bool("desc")
 		if showDesc {
@@ -64,6 +71,19 @@ func ActionIndex() func(c *cli.Context) error {
 				return err
 			}
 			showIndexStocks(stocks)
+		}
+
+		intersecIndexCode := c.String("intersec")
+		if intersecIndexCode != "" {
+			stocks1, err := datacenter.EastMoney.ZSCFG(ctx, indexCode)
+			if err != nil {
+				return err
+			}
+			stocks2, err := datacenter.EastMoney.ZSCFG(ctx, intersecIndexCode)
+			if err != nil {
+				return err
+			}
+			showIntersecStocks(stocks1, stocks2)
 		}
 		return nil
 	}
