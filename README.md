@@ -344,6 +344,12 @@ OPTIONS:
 
 ## index
 
+获取指数信息
+
+```
+./investool index -i 000905 -d
+```
+
 获取指数成分股：
 
 ```

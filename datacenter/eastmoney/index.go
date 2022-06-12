@@ -18,7 +18,7 @@ type IndexData struct {
 	FullIndexName string      `json:"FullIndexName"`
 	NewPrice      string      `json:"NewPrice"` // 指数点数
 	NewPriceDate  string      `json:"NewPriceDate"`
-	NewCHG        string      `json:"NewCHG"`
+	NewCHG        string      `json:"NewCHG"`     // 最新涨幅
 	Reaprofile    string      `json:"reaprofile"` // 指数说明
 	MakerName     string      `json:"MakerName"`  // 指数编制方
 	Bkid          string      `json:"BKID"`
@@ -47,6 +47,23 @@ type IndexData struct {
 	PDate         string      `json:"PDate"`
 	TopicJJBID    interface{} `json:"TopicJJBId"`
 	Isstatic      string      `json:"ISSTATIC"`
+}
+
+// IndexValueCN 指数估值
+func (i *IndexData) IndexValueCN() string {
+	switch i.IndexvaluaCN {
+	case "-2":
+		return "低估"
+	case "-1":
+		return "较为低估"
+	case "0":
+		return "适中"
+	case "1":
+		return "较为高估"
+	case "2":
+		return "高估"
+	}
+	return "--"
 }
 
 // RspIndex Index接口返回结构
