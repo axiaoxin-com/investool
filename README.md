@@ -342,6 +342,14 @@ OPTIONS:
 
 随着时间的推移，从中报发布结束开始，满足默认筛选条件的公司会越来越多，筛选并检测的耗时也会逐渐增加，服务部署时反向代理的超时时间需调大。
 
+## index
+
+获取指数成分股：
+
+```
+./investool index -i 000905 -s
+```
+
 # 欢迎 Star
 
 [![Stargazers over time](https://starchart.cc/axiaoxin-com/investool.svg)](https://githuv.com/axiaoxin-com/investool)

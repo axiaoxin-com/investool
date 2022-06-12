@@ -12,12 +12,12 @@ import (
 
 // ZSCFGItem 指数成分股信息
 type ZSCFGItem struct {
-	IndexCode    string `json:"IndexCode"` // 指数代码
-	IndexName    string `json:"IndexName"` // 指数名称
-	StockCode    string `json:"StockCode"` // 股票代码
-	StockName    string `json:"StockName"` // 股票名称
-	Snewprice    string `json:"SNEWPRICE"`
-	Snewchg      string `json:"SNEWCHG"`
+	IndexCode    string `json:"IndexCode"`    // 指数代码
+	IndexName    string `json:"IndexName"`    // 指数名称
+	StockCode    string `json:"StockCode"`    // 股票代码
+	StockName    string `json:"StockName"`    // 股票名称
+	Snewprice    string `json:"SNEWPRICE"`    // 最新价格
+	Snewchg      string `json:"SNEWCHG"`      // 最新涨幅
 	Marketcappct string `json:"MARKETCAPPCT"` // 持仓比例（%）
 	StockTEXCH   string `json:"StockTEXCH"`
 	Dctexch      string `json:"DCTEXCH"`

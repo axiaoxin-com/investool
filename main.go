@@ -74,6 +74,7 @@ func main() {
 	app.Commands = append(app.Commands, cmds.CommandExportor())
 	app.Commands = append(app.Commands, cmds.CommandChecker())
 	app.Commands = append(app.Commands, cmds.CommandWebserver())
+	app.Commands = append(app.Commands, cmds.CommandIndex())
 
 	if err := app.Run(os.Args); err != nil {
 		logging.Fatal(nil, err.Error())
