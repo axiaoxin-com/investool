@@ -342,6 +342,26 @@ OPTIONS:
 
 随着时间的推移，从中报发布结束开始，满足默认筛选条件的公司会越来越多，筛选并检测的耗时也会逐渐增加，服务部署时反向代理的超时时间需调大。
 
+## index
+
+获取指数代码 000905 信息
+
+```
+./investool index -c 000905 -d
+```
+
+获取指数代码 000905 的成分股：
+
+```
+./investool index -c 000905 -s
+```
+
+获取指数代码 000905 和指数代码 000922 的成分股交集：
+
+```
+./investool index -c 000905 -i 000922
+```
+
 # 欢迎 Star
 
 [![Stargazers over time](https://starchart.cc/axiaoxin-com/investool.svg)](https://githuv.com/axiaoxin-com/investool)
