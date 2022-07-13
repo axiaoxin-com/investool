@@ -58,7 +58,7 @@ func main() {
 			Aliases:     []string{"l"},
 			Value:       DefaultLoglevel,
 			Usage:       "cmd 日志级别 [debug|info|warn|error]",
-			EnvVars:     []string{"XSTOCK_CMD_LOGLEVEL"},
+			EnvVars:     []string{"INVESTOOL_CMD_LOGLEVEL"},
 			DefaultText: DefaultLoglevel,
 		},
 	}
