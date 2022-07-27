@@ -19,11 +19,11 @@ var (
 	// DefaultLoglevel 日志级别默认值
 	DefaultLoglevel = "info"
 	// ProcessorOptions 要启动运行的进程可选项
-	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor, cmds.ProcessorWebserver}
+	ProcessorOptions = []string{cmds.ProcessorChecker, cmds.ProcessorExportor, cmds.ProcessorWebserver, cmds.ProcessorIndex, cmds.ProcessorJSON}
 )
 
 func init() {
-	viper.SetDefault("app.chan_size", 50)
+	viper.SetDefault("app.chan_size", 1)
 	models.InitGlobalVars()
 }
 
@@ -74,6 +74,7 @@ func main() {
 	app.Commands = append(app.Commands, cmds.CommandChecker())
 	app.Commands = append(app.Commands, cmds.CommandWebserver())
 	app.Commands = append(app.Commands, cmds.CommandIndex())
+	app.Commands = append(app.Commands, cmds.CommandJSON())
 
 	if err := app.Run(os.Args); err != nil {
 		fmt.Println(err.Error())

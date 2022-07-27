@@ -21,7 +21,7 @@ func SyncFund() {
 		return
 	}
 	ctx := context.Background()
-	logging.Infof(ctx, "SyncFund request start...")
+	logging.Info(ctx, "SyncFund request start...")
 
 	// 获取全量列表
 	efundlist, err := datacenter.EastMoney.QueryAllFundList(ctx, eastmoney.FundTypeALL)

@@ -15,7 +15,7 @@ env = "localhost"
 ########## 业务相关配置
 [app]
     # 并发拉取数据时channel的大小
-    chan_size = 100
+    chan_size = 1
 
     [app.cronexp]
         sync_fund = "0 6 * * 1-5"
@@ -48,7 +48,7 @@ env = "localhost"
 ########## token bucket 请求频率限制配置
 [ratelimiter]
     # 是否开启 ratelimiter 请求频率限制
-    enable = false
+    enable = true
     # 限频方式： mem->进程内存； redis.<WHICH>->使用用配置文件中对应的 redis 配置，如 redis.localhost
     type = "mem"
 
@@ -57,7 +57,7 @@ env = "localhost"
 ########## 日志相关配置
 [logging]
     # 日志级别，可选值： debug info warn error dpanic panic fatal
-    level = "debug"
+    level = "info"
     # 日志格式，可选值： json console
     format = "json"
     # 日志输出路径： stdout, stderr, logrotate:///path/to/logfile
@@ -119,14 +119,6 @@ env = "localhost"
 
 
 
-########## sentry 相关配置
-[sentry]
-    # sentry dsn
-    dsn = ""
-    debug = true
-
-
-
 ########## apidocs 相关配置
 [apidocs]
     # 文档标题
@@ -148,137 +140,3 @@ env = "localhost"
     username = "admin"
     # 登录密码
     password = "admin"
-
-
-
-########## MySQL 相关配置
-# mysql 按不同环境可以添加多个配置
-[mysql]
-
-    # mysql localhost 环境
-    [mysql.localhost]
-        host = "localhost"
-        port = 3306
-        username = "root"
-        password = "roooooot"
-        dbname = "tests"
-        log_mode = false
-        max_idle_conns = 20
-        max_open_conns = 20
-        conn_max_life_minutes = 10
-        conn_timeout = 3
-        read_timeout = 5
-        write_timeout = 5
-
-    # mysql other 环境
-    [mysql.other]
-
-
-
-########## SQLite3 相关配置
-[sqlite3]
-
-    # sqlite3 dev 环境
-    [sqlite3.dev]
-        dbname = "sqlite3.dev.db"
-        log_mode = false
-
-
-
-########## Postgres 相关配置
-[postgres]
-
-    # postgres localhost 环境
-    [postgres.localhost]
-        host = "localhost"
-        port = 5432
-        username = "root"
-        password = "roooooot"
-        dbname = "test"
-        log_mode = false
-        max_idle_conns = 20
-        max_open_conns = 20
-        conn_max_life_minutes = 10
-        disable_ssl = true
-
-
-
-########## Sqlserver 相关配置
-[sqlserver]
-
-    # sqlserver localhost 环境
-    [sqlserver.localhost]
-        host = "localhost"
-        port = 1433
-        username = "root"
-        password = "roooooot"
-        dbname = "test"
-        log_mode = false
-        max_idle_conns = 20
-        max_open_conns = 20
-        conn_max_life_minutes = 10
-
-
-
-########## Redis 相关配置
-# redis 按不同连接类型和不同环境添加多个配置
-[redis]
-
-    ## Redis Client 相关配置
-    # Redis Client localhost 环境
-    [redis.localhost]
-        # redis 地址
-        addr = "localhost:6379"
-        # 密码
-        password = ""
-        # 使用的 db 索引
-        db = 0
-        # 连接超时时间（秒）
-        dial_timeout = 5
-        # 读超时（秒）
-        read_timeout = 3
-        # 写超时（秒）
-        write_timeout = 3
-        # 连接池大小: 0 表示 10 * runtime.NumCPU()
-        pool_size = 0
-
-    # Redis Client other 环境
-    [redis.other]
-
-
-    ## Redis Sentinel 相关配置
-    [redis.sentinel]
-
-        # Redis Sentinel prod 环境
-        [redis.sentinel.prod]
-            # master 节点名
-            master_name = ""
-            # sentinel 地址列表
-            sentinel_addrs = [""]
-            # 密码
-            password = ""
-            # db 索引
-            db = 0
-            # 连接超时时间（秒）
-            dial_timeout = 5
-            # 读超时（秒）
-            read_timeout = 3
-            # 写超时（秒）
-            write_timeout = 3
-            # 连接池大小: 0 表示 10 * runtime.NumCPU()
-            pool_size = 0
-
-
-    ## Redis Cluster 相关配置
-    [redis.cluster]
-
-        # Redis Cluster prod 环境
-        [redis.cluster.prod]
-            # 集群节点地址列表
-            addrs = [""]
-            # 密码
-            password = ""
-            # 读超时（秒）
-            read_timeout = 3
-            # 写超时（秒）
-            write_timeout = 3
