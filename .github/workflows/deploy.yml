@@ -21,7 +21,7 @@ jobs:
     #   run: go test -race ./...
 
     - name: Build
-      run: CGO_ENABLED=0 go build -o app
+      run: CGO_ENABLED=0 go build -ldflags "-X github.com/axiaoxin-com/investool/version.Version=`TZ=Asia/Shanghai date +'%y%m%d%H%M'`" -o app
 
     - name: Tar
       run: sed -i "s/env = \"localhost\"/env = \"prod\"/g" config.toml && tar czvf app.tar.gz app statics config.toml
