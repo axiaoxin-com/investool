@@ -46,7 +46,7 @@ type TypedMaterialSeries map[string][]MaterialSeries
 type AllMaterialsList []TypedMaterialSeries
 
 // MaterialsFilename 资料JSON文件路径
-var MaterialsFilename = "materials.json"
+var MaterialsFilename = "materials"
 
 // Materials godoc
 func Materials(c *gin.Context) {
