@@ -4,9 +4,9 @@ package routes
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 
+	"github.com/axiaoxin-com/investool/statics"
 	"github.com/axiaoxin-com/investool/version"
 	"github.com/axiaoxin-com/logging"
 	"github.com/gin-gonic/gin"
@@ -46,7 +46,7 @@ type TypedMaterialSeries map[string][]MaterialSeries
 type AllMaterialsList []TypedMaterialSeries
 
 // MaterialsFilename 资料JSON文件路径
-var MaterialsFilename = "./materials"
+var MaterialsFilename = "materials.json"
 
 // Materials godoc
 func Materials(c *gin.Context) {
@@ -55,7 +55,7 @@ func Materials(c *gin.Context) {
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 资料",
 	}
-	f, err := ioutil.ReadFile(MaterialsFilename)
+	f, err := statics.Files.ReadFile(MaterialsFilename)
 	if err != nil {
 		logging.Errorf(c, "Read MaterialsFilename:%v err:%v", MaterialsFilename, err)
 		data["Error"] = err
