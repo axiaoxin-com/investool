@@ -101,8 +101,9 @@ func (s Searcher) SearchFunds(ctx context.Context, fundCodes []string) (map[stri
 		return nil, errors.New("empty fund codes")
 	}
 	start := time.Now()
-	logging.Infof(ctx, "SearchFunds request start...")
 	workerCount := int(math.Min(float64(codeLen), viper.GetFloat64("app.chan_size")))
+	logging.Infof(ctx, "SearchFunds request start... workerCount=%d", workerCount)
+
 	reqChan := make(chan string, workerCount)
 	result := map[string]*models.Fund{}
 	var wg sync.WaitGroup
