@@ -5,8 +5,7 @@ on:
     - cron: '30 5 * * 1,3'
 
 jobs:
-
-  build:
+  sync:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -18,3 +17,28 @@ jobs:
 
     - name: Build
       run: CGO_ENABLED=0 go build -o app
+
+    - name: Dump JSON Files
+      run: ./app json -d
+
+    - name: Tar JSON Files
+      run: tar czvf jsons.tar.gz ./*.json
+
+    - name: Scp JSON Files
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        port: ${{ secrets.REMOTE_PORT }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        source: 'jsons.tar.gz'
+        target: ${{ secrets.REMOTE_TARGET }}
+
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
+        port: ${{ secrets.REMOTE_PORT }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        script: cd ${{ secrets.REMOTE_TARGET }} && tar xzvf jsons.tar.gz

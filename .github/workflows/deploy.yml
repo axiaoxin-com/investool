@@ -24,7 +24,7 @@ jobs:
       run: CGO_ENABLED=0 go build -o app
 
     - name: Tar
-      run: tar czvf app.tar.gz app statics
+      run: sed -i "s/env = \"localhost\"/env = \"prod\"/g" config.toml && tar czvf app.tar.gz app statics config.toml
 
     - name: SCP Files
       uses: appleboy/scp-action@master
