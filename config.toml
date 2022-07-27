@@ -18,9 +18,10 @@ env = "localhost"
     chan_size = 1
 
     [app.cronexp]
-        sync_fund = "0 6 * * 1-5"
-        sync_fund_managers = "0 5 * * 1-5"
-        sync_industry_list = "0 4 * * 1-5"
+        # sync_fund = "0 6 * * 1-5"
+        # sync_fund_managers = "0 5 * * 1-5"
+        # sync_industry_list = "0 4 * * 1-5"
+        sync_global_vars = "0 6 * * 1-5"
 
 
 ########## server 相关配置

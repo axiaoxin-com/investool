@@ -19,7 +19,6 @@ archives:
       amd64: x86_64
     files:
       - config.toml
-      - statics/**/*
 checksum:
   name_template: 'checksums.txt'
 snapshot:
