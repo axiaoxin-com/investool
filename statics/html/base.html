@@ -1,157 +1,157 @@
 {{ define "header" }}
 <!DOCTYPE html>
 <html lang="cn">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="keywords" content="股票,基本面,技术面,东方财富,选股,基金,4433" />
-    <meta name="description" content="InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等" />
-    <meta name="author" content="axiaoxin" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="keywords" content="股票,基本面,技术面,东方财富,选股,基金,4433" />
+        <meta name="description" content="InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等" />
+        <meta name="author" content="axiaoxin" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
 
-    <link rel="shortcut icon" href="/statics/favicon.ico">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" rel="stylesheet" href="/statics/css/materialize.min.css" media="screen,projection" />
-    <link rel="stylesheet" href="/statics/css/app.css" />
-    <title>{{ .PageTitle }} - InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等</title>
-    <!-- 百度统计 -->
-    <script>
-    var _hmt = _hmt || [];
-    (function() {
-    var hm = document.createElement("script");
-    hm.src = "https://hm.baidu.com/hm.js?281f87a5501f74be56a6d65981d942a3";
-    var s = document.getElementsByTagName("script")[0];
-    s.parentNode.insertBefore(hm, s);
-    })();
-    </script>
-    <!-- 百度统计END -->
-</head>
+        <link rel="shortcut icon" href="/statics/favicon.ico">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://cdn.bootcdn.net/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/statics/css/app.css" />
+        <title>{{ .PageTitle }} - InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等</title>
+    </head>
 
 
-<body>
-<header>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
-            <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul class="right hide-on-med-and-down">
-                <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
-                <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
-                <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
-                <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
-                <li id="nav-materials"><a href="/materials"><i class="material-icons left">book</i>资料</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <ul class="sidenav" id="mobile-sidenav">
-        <li>
-            <div class="user-view">
-                <div class="background">
-                    <img src="/statics/img/sidenav_bg.png">
+    <body>
+        <header>
+            <nav>
+                <div class="nav-wrapper">
+                    <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
+                    <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <ul class="right hide-on-med-and-down">
+                        <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
+                        <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                        <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
+                        <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
+                        <li id="nav-materials"><a href="/materials"><i class="material-icons left">book</i>资料</a></li>
+                    </ul>
                 </div>
-                <a href="#!"><img class="circle" src="/statics/img/sidenav_icon.png"></a>
-                <a href="#!"><span class="white-text">InvesTool v{{ .Version }}</span></a>
-            </div>
-        </li>
-        <li><a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a></li>
-        <li><div class="divider"></div></li>
-        <li><a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
-        <li><div class="divider"></div></li>
-        <li><a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
-        <li><div class="divider"></div></li>
-        <li><a class="collapsible-header waves-effect waves-red" href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
-        <li><div class="divider"></div></li>
-        <li><a class="collapsible-header waves-effect waves-red" href="/materials"><i class="material-icons left">book</i>资料</a></li>
-    </ul>
+            </nav>
 
-    <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
-        <a id="tap-target-btn" class="btn btn-floating btn-large red lighten-2">
-            <i class="large material-icons">bookmark_border</i>
-        </a>
-        <ul>
-            <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
-            <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
-            <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
-            <li><a class="btn-floating purple tooltipped pulse" data-position="left" data-tooltip="留言" href="/comment"><i class="material-icons">chat_bubble_outline</i></a></li>
-            <li><a class="btn-floating brown tooltipped pulse" data-position="left" data-tooltip="资料" href="/materials"><i class="material-icons">book</i></a></li>
-            <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
-        </ul>
-    </div>
-</header>
+            <ul class="sidenav" id="mobile-sidenav">
+                <li>
+                    <div class="user-view">
+                        <div class="background">
+                            <img src="/statics/img/sidenav_bg.png">
+                        </div>
+                        <a href="#!"><img class="circle" src="/statics/img/sidenav_icon.png"></a>
+                        <a href="#!"><span class="white-text">InvesTool v{{ .Version }}</span></a>
+                    </div>
+                </li>
+                <li><a class="collapsible-header waves-effect waves-red" href="/"><i class="material-icons left">trending_up</i>股票</a></li>
+                <li><div class="divider"></div></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                <li><div class="divider"></div></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
+                <li><div class="divider"></div></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
+                <li><div class="divider"></div></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="/materials"><i class="material-icons left">book</i>资料</a></li>
+            </ul>
 
-<main class="container">
-    {{ if .Error }}
-    <div class="row">
-        <div class="chip flow-text orange lighten-1 col s12 center-align">
-            {{ .Error }}
-            <i class="close material-icons">close</i>
-        </div>
-    </div>
-    {{ end }}
-{{ end }}
-
-{{ define "footer" }}
-</main>
-
-<div class="container">
-<!-- cpu feeds block -->
-    <div class="cpu-feeds-block" data-site-id="275548247" data-block-id="92561"></div>
-    <script>
-        (function(){var url="//cpu.baidu.com";var getEntry=function(){var script=document.createElement("script");script.id="cpu-block-entry";script.src=url+"/js/cb.js";var scriptTag=document.getElementsByTagName("script")[0];scriptTag.parentNode.insertBefore(script,scriptTag)};var sentMsg=function(e){var msg={msg:e.toString()||"no err msg",line:e.lineno||-1};var img=document.createElement("img");img.src=url+"/msg?m=block&e="+encodeURIComponent(JSON.stringify(msg))};try{window.feedsbycpu=window.feedsbycpu||[];window.feedsbycpu.push({siteId:"275548247",blockId:"92561",display:"auto"});document.getElementById("cpu-block-entry")||getEntry()}catch(e){sentMsg(e)}})();
-    </script>
-<!-- cpu feeds block end-->
-</div>
-
-<footer class="page-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col l3 s12">
-                <h5 class="white-text">友情链接</h5>
+            <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
+                <a id="tap-target-btn" class="btn btn-floating btn-large red lighten-2">
+                    <i class="large material-icons">bookmark_border</i>
+                </a>
                 <ul>
-                    <li><a class="grey-text text-lighten-3" href="http://blog.axiaoxin.com" target="_blank">阿小信的博客</a></li>
-                    <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com" target="_blank">MBTI在线测试</a></li>
-                    <li><a class="grey-text text-lighten-3" href="http://home.psyctest.cn" target="_blank">赛可测试网</a></li>
-                    <li><a class="grey-text text-lighten-3" href="https://curl.qcloud.com/2LybNYEa" target="_blank">腾讯云特惠专区</a></li>
+                    <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/"><i class="material-icons">trending_up</i></a></li>
+                    <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
+                    <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
+                    <li><a class="btn-floating purple tooltipped pulse" data-position="left" data-tooltip="留言" href="/comment"><i class="material-icons">chat_bubble_outline</i></a></li>
+                    <li><a class="btn-floating brown tooltipped pulse" data-position="left" data-tooltip="资料" href="/materials"><i class="material-icons">book</i></a></li>
+                    <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
                 </ul>
             </div>
-            <div class="col l3 s12">
-                <h5 class="white-text">东方财富数据中心</h5>
-                <ul>
-                    <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/cjsj/cpi.html" target="_blank">经济数据</a></li>
-                    <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/other/index/" target="_blank">成分股数据</a></li>
-                    <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/yjfp/" target="_blank">分红送配</a></li>
-                    <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/report/" target="_blank">研报中心</a></li>
-                </ul>
+        </header>
+
+        <main class="container">
+            {{ if .Error }}
+            <div class="row">
+                <div class="chip flow-text orange lighten-1 col s12 center-align">
+                    {{ .Error }}
+                    <i class="close material-icons">close</i>
+                </div>
             </div>
+            {{ end }}
+            {{ end }}
+
+            {{ define "footer" }}
+        </main>
+
+        <div class="container">
+            <!-- cpu feeds block -->
+            <div class="cpu-feeds-block" data-site-id="275548247" data-block-id="92561"></div>
+            <script>
+                (function(){var url="//cpu.baidu.com";var getEntry=function(){var script=document.createElement("script");script.id="cpu-block-entry";script.src=url+"/js/cb.js";var scriptTag=document.getElementsByTagName("script")[0];scriptTag.parentNode.insertBefore(script,scriptTag)};var sentMsg=function(e){var msg={msg:e.toString()||"no err msg",line:e.lineno||-1};var img=document.createElement("img");img.src=url+"/msg?m=block&e="+encodeURIComponent(JSON.stringify(msg))};try{window.feedsbycpu=window.feedsbycpu||[];window.feedsbycpu.push({siteId:"275548247",blockId:"92561",display:"auto"});document.getElementById("cpu-block-entry")||getEntry()}catch(e){sentMsg(e)}})();
+            </script>
+            <!-- cpu feeds block end-->
         </div>
-    </div>
-    <div class="footer-copyright">
-        <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=investool&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
-        <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> InvesTool, All rights reserved.</p>
-    </div>
-</footer>
-<script type="text/javascript" src="/statics/js/jquery-3.6.0.min.js" ></script>
-<script type="text/javascript" src="/statics/js/materialize.min.js" ></script>
-<script type="text/javascript" src="/statics/js/tableExport.js" ></script>
-<script type="text/javascript" src="/statics/js/clipboard.min.js" ></script>
-<script type="text/javascript" src="/statics/js/chart.xkcd.min.js" ></script>
 
-<script type="text/javascript" src="/statics/js/app.js" ></script>
+        <footer class="page-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col l3 s12">
+                        <h5 class="white-text">友情链接</h5>
+                        <ul>
+                            <li><a class="grey-text text-lighten-3" href="http://blog.axiaoxin.com" target="_blank">阿小信的博客</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com" target="_blank">MBTI在线测试</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://home.psyctest.cn" target="_blank">赛可测试网</a></li>
+                            <li><a class="grey-text text-lighten-3" href="https://curl.qcloud.com/2LybNYEa" target="_blank">腾讯云特惠专区</a></li>
+                        </ul>
+                    </div>
+                    <div class="col l3 s12">
+                        <h5 class="white-text">东方财富数据中心</h5>
+                        <ul>
+                            <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/cjsj/cpi.html" target="_blank">经济数据</a></li>
+                            <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/other/index/" target="_blank">成分股数据</a></li>
+                            <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/yjfp/" target="_blank">分红送配</a></li>
+                            <li><a class="grey-text text-lighten-3" href="https://data.eastmoney.com/report/" target="_blank">研报中心</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=investool&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
+                <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> InvesTool, All rights reserved.</p>
+            </div>
+        </footer>
 
-<!-- google auto ads -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-     crossorigin="anonymous"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+        <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/TableExport/5.2.0/js/tableexport.min.js"></script>
+        <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+        <script type="text/javascript" src="/statics/js/chart.xkcd.min.js" ></script>
 
-  gtag('config', 'G-EHXJT6J0DM');
-</script>
-<script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/cm.js" async="async" defer="defer" ></script>
-</body>
+        <script type="text/javascript" src="/statics/js/app.js" ></script>
+
+        <!-- google auto ads -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
+                      crossorigin="anonymous"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-EHXJT6J0DM');
+        </script>
+        <!-- 百度统计 -->
+        <script type="text/javascript" src="//cpro.baidustatic.com/cpro/ui/cm.js" async="async" defer="defer" ></script>
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?281f87a5501f74be56a6d65981d942a3";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+        <!-- 百度统计END -->
+    </body>
 </html>
 {{ end }}
