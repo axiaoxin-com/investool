@@ -60,6 +60,8 @@ func InitGlobalVars() {
 	if err := InitFundManagers(); err != nil {
 		logging.Error(nil, "init models global vars error:"+err.Error())
 	}
+	// 更新同步时间
+	SyncFundTime = time.Now()
 }
 
 // InitIndustryList 初始化行业列表
