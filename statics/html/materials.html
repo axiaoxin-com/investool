@@ -1,18 +1,5 @@
 {{ template "header" . }}
-<div>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-        crossorigin="anonymous"></script>
-    <!-- investool资料页面顶部广告 -->
-    <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-3022214826355647"
-        data-ad-slot="3924733374"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-</div>
+<h1>投资学习资料</h1>
 
 <div class="_get2gvw6r3"></div>
 <script type="text/javascript">
@@ -26,10 +13,8 @@
 {{ range $TypedMaterialSeries := .AllMaterialsList }}
 <div class="section">
 {{ range $TypeName, $MaterialSeriesList := $TypedMaterialSeries }}
-    <h3 class="header">{{ $TypeName }}</h3>
+    <h2 class="header">{{ $TypeName }}</h2>
     <div>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-            crossorigin="anonymous"></script>
         <ins class="adsbygoogle"
             style="display:block"
             data-ad-format="fluid"
@@ -42,13 +27,13 @@
     </div>
     <ul class="collapsible">
     {{ range $i, $MaterialSeries := $MaterialSeriesList }}
-        <li {{ if eq $i 0 }}class="active"{{ end }}>
+        <li>
             {{ range $SeriesName, $MaterialItemList := $MaterialSeries }}
-                <div class="collapsible-header" id="{{ $SeriesName }}">{{ $SeriesName }}</div>
+            <div class="collapsible-header" id="{{ $SeriesName }}"><h3>{{ $SeriesName }}</h3></div>
                 <div class="collapsible-body collection">
                 {{ range $MaterialItem := $MaterialItemList }}
                     <div class="collection-item">
-                        <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank">{{ $MaterialItem.Name }}</a></p>
+                        <p><a href="{{ $MaterialItem.DownloadURL }}" target="_blank"><h4>{{ $MaterialItem.Name }}</h4></a></p>
                         <p>{{ $MaterialItem.Desc }}</p>
                     </div>
                 {{ end }}
