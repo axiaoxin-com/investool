@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col s12 m9 l9">
         <div id="about_site" class="scrollspy section">
-            <h5 class="header">关于网站</h5>
+            <h1 class="header">关于网站</h1>
             <br>
             <div class="row valign-wrapper">
                 <div class="col s2">
@@ -16,15 +16,13 @@
         </div>
 
         <div id="about_problem" class="scrollspy section">
-            <h5 class="header">InvesTool 解决什么问题？</h5>
+            <h2 class="header">InvesTool 解决什么问题？</h2>
             <p>InvesTool 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否值得投资。</p>
             <p>需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 InvesTool 来让这个过程自动化。</p>
             <p><b>如果本网站对您有帮助，请帮忙点击网站上的广告，感谢您的支持！</b></p>
         </div>
 
         <div>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                crossorigin="anonymous"></script>
             <ins class="adsbygoogle"
                 style="display:block; text-align:center;"
                 data-ad-layout="in-article"
@@ -37,7 +35,7 @@
         </div>
 
         <div id="about_good_company" class="scrollspy section">
-            <h5 class="header">InvesTool 对优质公司的判断标准</h5>
+            <h2 class="header">InvesTool 对优质公司的判断标准</h2>
             <p>能赚钱、不会倒、低估值、能成长的公司就是优质公司，但优质公司不代表当前股价在涨或近期会涨。</p>
             <p>买优质公司的股票买在高位也照样亏钱，按基本面选股筛选结果仅可作为长线存股的参考标的。</p>
             <p>InvesTool 的基本面选股认为符合以下条件的可以认定为优质公司:</p>
@@ -69,7 +67,7 @@
         </div>
 
         <div id="about_check" class="scrollspy section">
-            <h5 class="header">InvesTool 对股票的筛选和检测说明</h5>
+            <h2 class="header">InvesTool 对股票的筛选和检测说明</h2>
             <p>在基本面选股中，InvesTool 先通过东方财富选股器支持的条件进行筛选。当前最新一期财报的<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>是主要筛选指标，但检测均采用年报指标。默认值即为 InvesTool 认为的最优值，你也可以自行修改。</p>
             <p>其中<span onclick="$('#desc_roe').tapTarget('open')">ROE<i class="tiny material-icons">live_help</i></span>指标是按最新一期的财报作为筛选标准，可以适当调整，只要保证年报中该值不低于8%即满足条件。</p>
             <p>筛选出的股票默认是开启指标检测过滤的，不满足检测条件的将会被过滤。按默认条件筛选出的股票可以初步视为优质股票，至少当前优质，因此如果你不想进行检测过滤，可以去掉对应的检测勾选。</p>
@@ -99,8 +97,6 @@
         </div>
 
         <div>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                crossorigin="anonymous"></script>
             <ins class="adsbygoogle"
                 style="display:block"
                 data-ad-format="fluid"
@@ -113,7 +109,7 @@
         </div>
 
         <div id="about_4433" class="scrollspy section">
-            <h5 class="header">4433选基法则</h5>
+            <h2 class="header">4433选基法则</h2>
             <p>4433法则是由台大财务金融学系的邱显比教授提出来的基金选择法则:</p>
             <ul>
                 <li>4-最近1年收益率排名在同类型基金的前1/4</li>
@@ -126,7 +122,7 @@
             <p>使用基金检测可以根据给定的基金代码对该基金进行指定的收益率排名检测，同时也可以勾选检测持仓股票对其进行个股检测。</p>
         </div>
         <div id="about_fundsim" class="scrollspy section">
-            <h5 class="header">基金持仓相似度</h5>
+            <h2 class="header">基金持仓相似度</h2>
             <p>采用Jaccard相似系数计算基金持仓相似度，相似度越接近1表示重复持仓的股票越多。</p>
             <p>对于给定的一堆基金，对每一只基金和其余基金的持仓取交集得到相同持仓的个数再除以该基金与其余基金持仓的并集个数得出相似度，</p>
             <p>0 表示持仓股票完全不同，1 表示持仓股票完全相同。</p>
@@ -145,7 +141,7 @@
         </div>
 
         <div id="about_fundmgr" class="scrollspy section">
-            <h5 class="header">基金经理筛选说明</h5>
+            <h2 class="header">基金经理筛选说明</h2>
             <p>基金可以按收益率进行4433法则选择外，可以按基金经理进行筛选，毕竟买基金实质是买基金经理，是把钱交给专业的优秀基金经理人帮忙投资。</p>            <p>如何判断一位基金经理是否优秀？InvesTool 通过对基金经理的从业年限、年化收益率、管理基金的规模和数量进行筛选。符合以下条件的基金经理被认定位优秀基金经理，具体参考标准为：</p>
             <ul>
                 <li>从业年限5-8年以上，经历过一轮完整的牛熊市。</li>
@@ -157,8 +153,6 @@
         </div>
 
         <div>
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                crossorigin="anonymous"></script>
             <ins class="adsbygoogle"
                 style="display:block; text-align:center;"
                 data-ad-layout="in-article"
@@ -182,39 +176,6 @@
                 <li><a href="#about_fundsim" class="">基金持仓相似度</a></li>
                 <li><a href="#about_fundmgr" class="">基金经理筛选说明</a></li>
             </ul>
-
-            <div class="_d4j5esi7q3h"></div>
-            <script type="text/javascript">
-                (window.slotbydup = window.slotbydup || []).push({
-                    id: "u6682052",
-                    container: "_d4j5esi7q3h",
-                    async: true
-                });
-            </script>
-
-            <div class="_a7t6gw8e2rs section"></div>
-            <script type="text/javascript">
-                (window.slotbydup = window.slotbydup || []).push({
-                    id: "u6682045",
-                    container: "_a7t6gw8e2rs",
-                    async: true
-                });
-            </script>
-
-            <div class="section">
-                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                    crossorigin="anonymous"></script>
-                <!-- investool关于页面右侧广告 -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-3022214826355647"
-                    data-ad-slot="5705530972"
-                    data-ad-format="auto"
-                    data-full-width-responsive="true"></ins>
-                <script>
-                    (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            </div>
         </div>
     </div>
 
@@ -226,7 +187,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_roe" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>ROE</h5>
+                <h3>ROE</h3>
                 <p>ROE 全称 Return On Equity</p>
                 <p>又称每股收益或每股盈余，巴菲特最看重的指标</p>
                 <p>代表公司用股东的钱能帮股东赚到多少获利</p>
@@ -236,7 +197,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_eps" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>EPS</h5>
+                <h3>EPS</h3>
                 <p>EPS 全称 Earnings Per Share</p>
                 <p>又称股东权益报酬率或净资产收益率</p>
                 <p>代表每股给投资者/股东带来的收益</p>
@@ -246,7 +207,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_byb" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>本业营收比</h5>
+                <h3>本业营收比</h3>
                 <p>又称营业利益率</p>
                 <p><code>本业营收比=营业利润÷(营业利润+营业外收入)</code></p>
                 <p>代表公司获利仰赖业外收入，不靠本业可靠度不高</p>
@@ -256,7 +217,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_pe" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>PE</h5>
+                <h3>PE</h3>
                 <p>PE 全称 Price to Earning</p>
                 <p>又称市盈率或本益比</p>
                 <p>用来作为比较不同价格的股票是否被高估或者低估的指标</p>
@@ -266,7 +227,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_peg" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>PEG</h5>
+                <h3>PEG</h3>
                 <p><code>PEG=PE÷净利润3年复合增长率</code></p>
                 <p>彼得·林奇最爱用的指标</p>
                 <p>弥补了PE的不足，代表公司盈利潜力和成长动能</p>
@@ -276,7 +237,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_price" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>合理股价</h5>
+                <h3>合理股价</h3>
                 <p>估算方法有多种，仅供参考</p>
                 <p><code>合理价格=历史PE中位数×(EPS×(1+营收增长比))</code></p>
             </div>
@@ -285,7 +246,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_pb" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>PB</h5>
+                <h3>PB</h3>
                 <p>PB 全称 Price to Book</p>
                 <p>又称市净率或净值比</p>
                 <p>较适用于高风险行业拥有大量固定资产的企业</p>
@@ -295,7 +256,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_roa" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>ROA</h5>
+                <h3>ROA</h3>
                 <p>ROA 全称 Return on Assets</p>
                 <p>又称总资产收益率或总资产报酬率</p>
                 <p>代表每单位资产创造多少净利润</p>
@@ -305,7 +266,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_zbczl" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>资本充足率</h5>
+                <h3>资本充足率</h3>
                 <p>银行股特殊指标</p>
                 <p>代表商业银行在存款人和债权人的资产遭到损失之前，该银行能以自有资本承担损失的程度</p>
             </div>
@@ -314,7 +275,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_bldkl" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>不良贷款率</h5>
+                <h3>不良贷款率</h3>
                 <p>银行股特殊指标</p>
                 <p>不良贷款率高，可能无法收回的贷款占总贷款的比例越大</p>
             </div>
@@ -323,7 +284,7 @@
     <div class="tap-target-wrapper" style="">
         <div id="desc_bldkbbfgl" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>不良贷款拨备覆盖率</h5>
+                <h3>不良贷款拨备覆盖率</h3>
                 <p>银行股特殊指标</p>
                 <p>银行贷款可能发生的呆、坏账准备金的使用比率</p>
             </div>
@@ -332,7 +293,7 @@
     <div class="tap-target-wrapper">
         <div id="desc_hv" style="border-radius: 10%;" class="tap-target" data-target="tap-target-btn">
             <div class="tap-target-content">
-                <h5>历史波动率</h5>
+                <h3>历史波动率</h3>
                 <p>
                     计算方法：<br/>
                     1. 获得标的股票历史每天的股价<br/>

@@ -1,10 +1,10 @@
 {{ define "header" }}
 <!DOCTYPE html>
-<html lang="cn">
+<html lang="zh-cmn-Hans">
     <head>
         <meta charset="UTF-8" />
-        <meta name="keywords" content="股票,基本面,技术面,东方财富,选股,基金,4433" />
-        <meta name="description" content="InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等" />
+        <meta name="keywords" content="InvesTool,投资工具,财报分析,股票基本面分析,基本面选股,基金检测,基金筛选,4433法则,飙股在线等" />
+        <meta name="description" content="InvesTool是一个股票分析网站，主要提供公司财报分析，股票基本面分析，基本面选股，基金经理排行榜，基金4433法则筛选，基金排行榜等功能。" />
         <meta name="author" content="axiaoxin" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
@@ -13,7 +13,9 @@
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://cdn.bootcdn.net/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
         <link rel="stylesheet" href="/statics/css/app.css" />
-        <title>{{ .PageTitle }} - InvesTool, 财报分析，股票检测，基本面选股，基金检测，基金筛选，4433法则，飙股在线等</title>
+        <!-- google auto ads -->
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647" crossorigin="anonymous"></script>
+        <title>{{ .PageTitle }}</title>
     </head>
 
 
@@ -24,11 +26,11 @@
                     <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
                     <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
-                        <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i>股票</a></li>
-                        <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
-                        <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
-                        <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
-                        <li id="nav-materials"><a href="/materials"><i class="material-icons left">book</i>资料</a></li>
+                        <li id="nav-stock"><a href="/"><i class="material-icons left">trending_up</i><strong>股票</strong></a></li>
+                        <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i><strong>基金</strong></a></li>
+                        <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i><strong>关于</strong></a></li>
+                        <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i><strong>留言</strong></a></li>
+                        <li id="nav-materials"><a href="/materials"><i class="material-icons left">book</i><strong>资料</strong></a></li>
                     </ul>
                 </div>
             </nav>
@@ -78,18 +80,35 @@
                 </div>
             </div>
             {{ end }}
+
+            <div class="row">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3022214826355647"
+                     data-ad-slot="8885499138"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
             {{ end }}
 
             {{ define "footer" }}
         </main>
 
         <div class="container">
-            <!-- cpu feeds block -->
-            <div class="cpu-feeds-block" data-site-id="275548247" data-block-id="92561"></div>
-            <script>
-                (function(){var url="//cpu.baidu.com";var getEntry=function(){var script=document.createElement("script");script.id="cpu-block-entry";script.src=url+"/js/cb.js";var scriptTag=document.getElementsByTagName("script")[0];scriptTag.parentNode.insertBefore(script,scriptTag)};var sentMsg=function(e){var msg={msg:e.toString()||"no err msg",line:e.lineno||-1};var img=document.createElement("img");img.src=url+"/msg?m=block&e="+encodeURIComponent(JSON.stringify(msg))};try{window.feedsbycpu=window.feedsbycpu||[];window.feedsbycpu.push({siteId:"275548247",blockId:"92561",display:"auto"});document.getElementById("cpu-block-entry")||getEntry()}catch(e){sentMsg(e)}})();
-            </script>
-            <!-- cpu feeds block end-->
+            <div class="row">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3022214826355647"
+                     data-ad-slot="3924733374"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
         </div>
 
         <footer class="page-footer">
@@ -99,8 +118,8 @@
                         <h5 class="white-text">友情链接</h5>
                         <ul>
                             <li><a class="grey-text text-lighten-3" href="http://blog.axiaoxin.com" target="_blank">阿小信的博客</a></li>
-                            <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com" target="_blank">MBTI在线测试</a></li>
-                            <li><a class="grey-text text-lighten-3" href="http://home.psyctest.cn" target="_blank">赛可测试网</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://mbti.axiaoxin.com" target="_blank">MBTI职业性格测试</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://m.psyctest.cn" target="_blank">赛可测试网:免费心理测试</a></li>
                             <li><a class="grey-text text-lighten-3" href="https://curl.qcloud.com/2LybNYEa" target="_blank">腾讯云特惠专区</a></li>
                         </ul>
                     </div>
@@ -117,7 +136,7 @@
             </div>
             <div class="footer-copyright">
                 <iframe src="https://ghbtns.com/github-btn.html?user=axiaoxin-com&amp;repo=investool&amp;type=star&amp;count=true" allowtransparency="true" frameborder="0" scrolling="0" width="120" height="20"></iframe>
-                <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> InvesTool, All rights reserved.</p>
+                <p class="right">© 2021-<script type="text/javascript">document.write(new Date().getFullYear());</script> <a href="http://axiaoxin.com" target="_blank">axiaoxin</a>, All rights reserved.</p>
             </div>
         </footer>
 
@@ -129,9 +148,6 @@
 
         <script type="text/javascript" src="/statics/js/app.js" ></script>
 
-        <!-- google auto ads -->
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647"
-                      crossorigin="anonymous"></script>
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>
         <script>
@@ -145,13 +161,30 @@
         <script>
             var _hmt = _hmt || [];
             (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?281f87a5501f74be56a6d65981d942a3";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();
+                            var hm = document.createElement("script");
+                            hm.src = "https://hm.baidu.com/hm.js?281f87a5501f74be56a6d65981d942a3";
+                            var s = document.getElementsByTagName("script")[0];
+                            s.parentNode.insertBefore(hm, s);
+                        })();
         </script>
         <!-- 百度统计END -->
+
+        <!-- Matomo -->
+        <script>
+            var _paq = window._paq = window._paq || [];
+            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            _paq.push(['trackPageView']);
+            _paq.push(['enableLinkTracking']);
+            (function() {
+                            var u="https://matomo.axiaoxin.com/";
+                            _paq.push(['setTrackerUrl', u+'matomo.php']);
+                            _paq.push(['setSiteId', '4']);
+                            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+                            g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+                        })();
+        </script>
+        <!-- End Matomo Code -->
+
     </body>
 </html>
 {{ end }}
