@@ -352,23 +352,81 @@ $(document).ready(function () {
             );
             $(`#checker_result_${i}`).append(
               '<div class="row">' +
-                '<br/><h5 class="center">年报数据趋势概览</h5>' +
-                '<div class="col s12 m12 l6">' +
-                '<svg id="line-chart-' +
-                i +
-                '-0"></svg>' +
-                "</div>" +
-                '<div class="col s12 m12 l6">' +
-                '<svg id="line-chart-' +
-                i +
-                '-1"></svg>' +
+                '<br><h5 class="center">年报数据趋势概览</h5>' +
+                '<div class="col s12">' +
+                '<div id="line-chart-' + i + '" style="width:100%;height:400px;"></div>' +
                 "</div>" +
                 "</div>"
             );
-            for (let j = 0; j < 2; j++) {
-              const svg = document.querySelector(`#line-chart-${i}-${j}`);
-              new chartXkcd.Line(svg, data.Lines[i][j]);
-            }
+            var lineChart = echarts.init(document.querySelector(`#line-chart-${i}`));
+            var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: { type: 'cross' }
+                },
+                legend: {
+                    data: data.Lines[i].legends,
+                    top: 'bottom'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: {},
+                        magicType: { type: ['bar'] },
+                        restore: {},
+                    }
+                },
+                xAxis: {
+                    data: data.Lines[i].xAxis
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [
+                    {
+                        name: "ROE",
+                        type: 'line',
+                        data: data.Lines[i].data[0]
+                    },
+                    {
+                        name: "EPS",
+                        type: 'line',
+                        data: data.Lines[i].data[1]
+                    },
+                    {
+                        name: "ROA",
+                        type: 'line',
+                        data: data.Lines[i].data[2]
+                    },
+                    {
+                        name: "毛利率",
+                        type: 'line',
+                        data: data.Lines[i].data[3]
+                    },
+                    {
+                        name: "净利率",
+                        type: 'line',
+                        data: data.Lines[i].data[4]
+                    },
+                    {
+                        name: "营收",
+                        type: 'line',
+                        data: data.Lines[i].data[5]
+                    },
+                    {
+                        name: "毛利润",
+                        type: 'line',
+                        data: data.Lines[i].data[6]
+                    },
+                    {
+                        name: "净利润",
+                        type: 'line',
+                        data: data.Lines[i].data[7]
+                    },
+                ]
+            };
+            lineChart.setOption(option);
+            window.onresize = function() { lineChart.resize(); };
           });
         }
         $("html, body").animate({ scrollTop: 0 }, 0);

@@ -119,13 +119,9 @@ func StockChecker(c *gin.Context) {
 	stockNames := []string{}
 	finaReportNames := []string{}
 	finaAppointPublishDates := []string{}
-	lines := [][]gin.H{}
+	lines := []gin.H{}
 	mainInflows := []string{}
 
-	type dataset struct {
-		Label string    `json:"label"`
-		Data  []float64 `json:"data"`
-	}
 	for _, stock := range stocks {
 		result, _ := checker.CheckFundamentals(c, stock)
 		results = append(results, result)
@@ -154,94 +150,69 @@ func StockChecker(c *gin.Context) {
 		for i := yearcount; i > 0; i-- {
 			yearLabels = append(yearLabels, fmt.Sprint(year-i))
 		}
-		line0 := gin.H{
-			"title":  "",
-			"xLable": "年",
-			"yLabel": "",
-			"data": gin.H{
-				"labels": yearLabels,
-				"datasets": []dataset{
-					{
-						Label: "ROE",
-						Data:  roeList,
-					},
-					{
-						Label: "EPS",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeEPS,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-					{
-						Label: "ROA",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeROA,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-					{
-						Label: "毛利率",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeMLL,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-					{
-						Label: "净利率",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeJLL,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-				},
+		revenueList := []float64{}
+		for _, r := range goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+			c,
+			eastmoney.ValueListTypeRevenue,
+			param.CheckerOptions.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		)) {
+			revenueList = append(revenueList, r/100000000.0) // 亿
+		}
+		grossProfitList := []float64{}
+		for _, p := range goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+			c,
+			eastmoney.ValueListTypeGrossProfit,
+			param.CheckerOptions.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		)) {
+			grossProfitList = append(grossProfitList, p/100000000.0)
+		}
+		netProfitList := []float64{}
+		for _, p := range goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+			c,
+			eastmoney.ValueListTypeNetProfit,
+			param.CheckerOptions.CheckYears,
+			eastmoney.FinaReportTypeYear,
+		)) {
+			netProfitList = append(netProfitList, p/100000000.0)
+		}
+
+		line := gin.H{
+			"legends": []string{"ROE", "EPS", "ROA", "毛利率", "净利率", "营收", "毛利润", "净利润"},
+			"xAxis":   yearLabels,
+			"data": [][]float64{
+				roeList,
+				goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+					c,
+					eastmoney.ValueListTypeEPS,
+					param.CheckerOptions.CheckYears,
+					eastmoney.FinaReportTypeYear,
+				)),
+				goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+					c,
+					eastmoney.ValueListTypeROA,
+					param.CheckerOptions.CheckYears,
+					eastmoney.FinaReportTypeYear,
+				)),
+				goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+					c,
+					eastmoney.ValueListTypeMLL,
+					param.CheckerOptions.CheckYears,
+					eastmoney.FinaReportTypeYear,
+				)),
+				goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
+					c,
+					eastmoney.ValueListTypeJLL,
+					param.CheckerOptions.CheckYears,
+					eastmoney.FinaReportTypeYear,
+				)),
+				revenueList,
+				grossProfitList,
+				netProfitList,
 			},
 		}
-		line1 := gin.H{
-			"title":  "",
-			"xLable": "年",
-			"yLabel": "",
-			"data": gin.H{
-				"labels": yearLabels,
-				"datasets": []dataset{
-					{
-						Label: "营收",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeRevenue,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-					{
-						Label: "毛利",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeGrossProfit,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-					{
-						Label: "净利",
-						Data: goutils.ReversedFloat64Slice(stock.HistoricalFinaMainData.ValueList(
-							c,
-							eastmoney.ValueListTypeNetProfit,
-							param.CheckerOptions.CheckYears,
-							eastmoney.FinaReportTypeYear,
-						)),
-					},
-				},
-			},
-		}
-		lines = append(lines, []gin.H{line0, line1})
+		lines = append(lines, line)
 	}
 	data["Results"] = results
 	data["StockNames"] = stockNames
