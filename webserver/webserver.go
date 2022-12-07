@@ -23,14 +23,14 @@ func InitWithConfigFile(configFile string) {
 	// 加载配置文件内容到 viper 中以便使用
 	configPath, file := path.Split(configFile)
 	if configPath == "" {
-		configPath = "."
+		configPath = "./"
 	}
 	ext := path.Ext(file)
 	configType := strings.Trim(ext, ".")
 	configName := strings.TrimSuffix(file, ext)
 	logging.Infof(nil, "load %s type config file %s from %s", configType, configName, configPath)
 
-	if err := goutils.InitViper(configPath, configName, configType, func(e fsnotify.Event) {
+	if err := goutils.InitViper(configFile, func(e fsnotify.Event) {
 		logging.Warn(nil, "Config file changed:"+e.Name)
 		logging.SetLevel(viper.GetString("logging.level"))
 	}); err != nil {
@@ -48,8 +48,8 @@ func InitWithConfigFile(configFile string) {
 	viper.SetDefault("server.mode", gin.ReleaseMode)
 	viper.SetDefault("server.pprof", true)
 
-	viper.SetDefault("apidocs.title", "investool swagger apidocs")
-	viper.SetDefault("apidocs.desc", "Using investool to develop gin app on fly.")
+	viper.SetDefault("apidocs.title", "pink-lady swagger apidocs")
+	viper.SetDefault("apidocs.desc", "Using pink-lady to develop gin app on fly.")
 	viper.SetDefault("apidocs.host", "localhost:4869")
 	viper.SetDefault("apidocs.basepath", "/")
 	viper.SetDefault("apidocs.schemes", []string{"http"})
@@ -58,7 +58,7 @@ func InitWithConfigFile(configFile string) {
 	viper.SetDefault("basic_auth.password", "admin")
 
 	// 打印viper配置
-	logging.Infof(nil, "viper load all settings:%+v", viper.AllSettings())
+	logging.Infof(nil, "viper load all settings:%v", viper.AllSettings())
 
 	// 初始化 sentry 并创建 sentry 客户端
 	sentryDSN := viper.GetString("sentry.dsn")
@@ -114,9 +114,6 @@ func InitWithConfigFile(configFile string) {
 // Run 以 viper 加载的 app 配置启动运行 http.Handler 的 app
 // 注意：这里依赖 viper ，必须在外部先对 viper 配置进行加载
 func Run(app http.Handler) {
-	// 结束时关闭 db 连接
-	defer goutils.CloseGormInstances()
-
 	// 判断是否加载 viper 配置
 	if !goutils.IsInitedViper() {
 		panic("Running server must init viper by config file first!")
@@ -130,10 +127,9 @@ func Run(app http.Handler) {
 		ReadTimeout:  5 * time.Minute,
 		WriteTimeout: 10 * time.Minute,
 	}
-	// Shutdown 时关闭 db 和 redis 连接
+	// Shutdown 时需要调用的方法
 	srv.RegisterOnShutdown(func() {
-		goutils.CloseGormInstances()
-		goutils.CloseRedisInstances()
+		// TODO
 	})
 
 	// 启动 http server
@@ -152,7 +148,7 @@ func Run(app http.Handler) {
 			}
 		}
 		if err := srv.Serve(ln); err != nil {
-			logging.Fatal(nil, err.Error())
+			logging.Error(nil, err.Error())
 		}
 	}()
 	logging.Infof(nil, "Server is running on %s", srv.Addr)
@@ -170,7 +166,7 @@ func Run(app http.Handler) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logging.Fatal(nil, "Server shutdown with error: "+err.Error())
+		logging.Error(nil, "Server shutdown with error: "+err.Error())
 	}
 	logging.Info(nil, "Server exit.")
 }

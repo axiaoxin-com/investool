@@ -4,7 +4,6 @@ package routes
 
 import (
 	"github.com/axiaoxin-com/investool/routes/response"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/investool/version"
 
 	"github.com/gin-gonic/gin"
@@ -23,10 +22,7 @@ import (
 // @Router /x/ping [get]
 func Ping(c *gin.Context) {
 	data := gin.H{
-		"version":             version.Version,
-		"mysql":               services.CheckMySQL(c),
-		"redis":               services.CheckRedis(c),
-		"atomic_level_server": services.CheckAtomicLevelServer(c),
+		"version": version.Version,
 	}
 	response.JSON(c, data)
 	return

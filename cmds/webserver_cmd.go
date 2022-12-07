@@ -6,9 +6,7 @@ import (
 	"github.com/axiaoxin-com/investool/cron"
 	"github.com/axiaoxin-com/investool/routes"
 	"github.com/axiaoxin-com/investool/routes/response"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/axiaoxin-com/investool/webserver"
-	"github.com/axiaoxin-com/logging"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"github.com/urfave/cli/v2"
@@ -53,11 +51,6 @@ func ActionWebserver() func(c *cli.Context) error {
 	return func(c *cli.Context) error {
 		configFile := c.String("config")
 		webserver.InitWithConfigFile(configFile)
-
-		// 初始化或加载外部依赖服务
-		if err := services.Init(); err != nil {
-			logging.Error(nil, "services init error:"+err.Error())
-		}
 
 		// 启动定时任务
 		cron.RunCronJobs(true)

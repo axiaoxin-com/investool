@@ -33,10 +33,6 @@ func NewGinEngine(middlewares ...gin.HandlerFunc) *gin.Engine {
 	engine := gin.New()
 	// ///a///b -> /a/b
 	engine.RemoveExtraSlash = true
-	// get client ip
-	engine.ForwardedByClientIP = true
-	engine.RemoteIPHeaders = []string{"X-Forwarded-For", "X-Real-IP"}
-	engine.TrustedProxies = []string{"127.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8", "::1/128", "localhost"}
 
 	// use middlewares
 	for _, middleware := range middlewares {
@@ -46,8 +42,9 @@ func NewGinEngine(middlewares ...gin.HandlerFunc) *gin.Engine {
 	// load html template
 	tmplPath := viper.GetString("statics.tmpl_path")
 	if tmplPath != "" {
-		engine.FuncMap = TemplFuncs
-		t := template.Must(template.ParseFS(&statics.Files, tmplPath))
+		// add temp func for template parse
+		// template func usage: {{ funcname xx }}
+		t := template.Must(template.New("").Funcs(TemplFuncs).ParseFS(&statics.Files, tmplPath))
 		engine.SetHTMLTemplate(t)
 	}
 	// register statics
