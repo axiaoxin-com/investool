@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/axiaoxin-com/goutils"
-	"github.com/axiaoxin-com/investool/services"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
@@ -18,8 +17,6 @@ func TestRegisterRoutes(t *testing.T) {
 	viper.Set("basic_auth.password", "admin")
 	viper.Set("env", "localhost")
 	defer viper.Reset()
-
-	services.Init()
 
 	Register(r)
 	recorder, err := goutils.RequestHTTPHandler(
