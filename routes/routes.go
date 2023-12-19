@@ -6,7 +6,8 @@ import "github.com/gin-gonic/gin"
 
 // Routes 注册 API URL 路由
 func Routes(app *gin.Engine) {
-	app.GET("/", StockIndex)
+	app.GET("/", FundIndex)
+	app.GET("/stock", StockIndex)
 	app.POST("/selector", StockSelector)
 	app.POST("/checker", StockChecker)
 	app.GET("/fund", FundIndex)
