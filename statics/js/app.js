@@ -50,8 +50,9 @@ $(document).ready(function () {
     $("#model_header").text($(this).text() + "中，请稍候...");
     $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
     $("#load_modal").modal("open");
+    var url = $("#selector_submit_btn").attr("actionurl");
     $.ajax({
-      url: "/selector",
+      url: url,
       type: "post",
       data: $("#selector_form").serialize(),
       success: function (data) {
@@ -291,8 +292,9 @@ $(document).ready(function () {
     $("#model_header").text($(this).text() + "中，请稍候...");
     $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
     $("#load_modal").modal("open");
+    var url = $("#checker_submit_btn").attr("actionurl");
     $.ajax({
-      url: "/checker",
+      url: url,
       type: "post",
       data: $("#checker_form").serialize(),
       success: function (data) {
@@ -527,8 +529,9 @@ $(document).ready(function () {
     $("#model_header").text($(this).text() + "中，请稍候...");
     $("#load_modal").modal()[0].M_Modal.options.dismissible = false;
     $("#load_modal").modal("open");
+    var url = $("#check_fund_submit_btn").attr("actionurl");
     $.ajax({
-      url: "/fund/check",
+      url: url,
       type: "post",
       data: $("#fundcheck_form").serialize(),
       success: function (data) {

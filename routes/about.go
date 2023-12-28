@@ -16,6 +16,7 @@ func About(c *gin.Context) {
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 关于",
+		"HostURL":   viper.GetString("server.host_url"),
 	}
 	c.HTML(http.StatusOK, "about.html", data)
 	return

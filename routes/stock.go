@@ -22,6 +22,7 @@ import (
 func StockIndex(c *gin.Context) {
 	data := gin.H{
 		"Env":          viper.GetString("env"),
+		"HostURL":      viper.GetString("server.host_url"),
 		"Version":      version.Version,
 		"PageTitle":    "InvesTool | 股票",
 		"Error":        "",
@@ -41,6 +42,7 @@ type ParamStockSelector struct {
 // StockSelector 返回基本面筛选结果json
 func StockSelector(c *gin.Context) {
 	data := gin.H{
+		"HostURL":   viper.GetString("server.host_url"),
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 股票 | 基本面筛选",
@@ -86,6 +88,7 @@ type ParamStockChecker struct {
 func StockChecker(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
+		"HostURL":   viper.GetString("server.host_url"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 股票 | 个股检测",
 		"Error":     "",

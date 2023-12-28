@@ -34,6 +34,7 @@ env = "localhost"
     pprof = true
     # 开启 prometheus metrics
     metrics = true
+    host_url = "https://axiaoxin.com/investool"
 
 
 

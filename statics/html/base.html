@@ -9,10 +9,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1.0, maximum-scale=1, shrink-to-fit=no" />
 
-        <link rel="shortcut icon" href="/statics/favicon.ico">
+        <link rel="shortcut icon" href="{{ .HostURL }}/statics/favicon.ico">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://cdn.bootcdn.net/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/statics/css/app.css" />
+        <link rel="stylesheet" href="{{ .HostURL }}/statics/css/app.css" />
         <!-- google auto ads -->
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3022214826355647" crossorigin="anonymous"></script>
         <title>{{ .PageTitle }}</title>
@@ -23,14 +23,14 @@
         <header>
             <nav>
                 <div class="nav-wrapper">
-                    <a href="/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
+                    <a href="{{ .HostURL }}/" class="brand-logo"><i class="material-icons">local_atm</i>InvesTool</a>
                     <a href="#" data-target="mobile-sidenav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul class="right hide-on-med-and-down">
-                        <!-- <li id="nav-stock"><a href="/stock"><i class="material-icons left">trending_up</i><strong>股票</strong></a></li> -->
-                        <li id="nav-fund"><a href="/fund"><i class="material-icons left">timeline</i><strong>基金</strong></a></li>
-                        <li id="nav-about"><a href="/about"><i class="material-icons left">info_outline</i><strong>关于</strong></a></li>
-                        <li id="nav-comment"><a href="/comment"><i class="material-icons left">chat_bubble_outline</i><strong>留言</strong></a></li>
-                        <li id="nav-materials"><a href="/materials"><i class="material-icons left">book</i><strong>资料</strong></a></li>
+                        <!-- <li id="nav-stock"><a href="{{ .HostURL }}/stock"><i class="material-icons left">trending_up</i><strong>股票</strong></a></li> -->
+                        <li id="nav-fund"><a href="{{ .HostURL }}/fund"><i class="material-icons left">timeline</i><strong>基金</strong></a></li>
+                        <li id="nav-about"><a href="{{ .HostURL }}/about"><i class="material-icons left">info_outline</i><strong>关于</strong></a></li>
+                        <li id="nav-comment"><a href="{{ .HostURL }}/comment"><i class="material-icons left">chat_bubble_outline</i><strong>留言</strong></a></li>
+                        <li id="nav-materials"><a href="{{ .HostURL }}/materials"><i class="material-icons left">book</i><strong>资料</strong></a></li>
                     </ul>
                 </div>
             </nav>
@@ -39,21 +39,21 @@
                 <li>
                     <div class="user-view">
                         <div class="background">
-                            <img src="/statics/img/sidenav_bg.png">
+                            <img src="{{ .HostURL }}/statics/img/sidenav_bg.png">
                         </div>
-                        <a href="#!"><img class="circle" src="/statics/img/sidenav_icon.png"></a>
+                        <a href="#!"><img class="circle" src="{{ .HostURL }}/statics/img/sidenav_icon.png"></a>
                         <a href="#!"><span class="white-text">InvesTool v{{ .Version }}</span></a>
                     </div>
                 </li>
-                <!-- <li><a class="collapsible-header waves-effect waves-red" href="/stock"><i class="material-icons left">trending_up</i>股票</a></li> -->
+                <!-- <li><a class="collapsible-header waves-effect waves-red" href="{{ .HostURL }}/stock"><i class="material-icons left">trending_up</i>股票</a></li> -->
                 <li><div class="divider"></div></li>
-                <li><a class="collapsible-header waves-effect waves-red" href="/fund"><i class="material-icons left">timeline</i>基金</a></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="{{ .HostURL }}/fund"><i class="material-icons left">timeline</i>基金</a></li>
                 <li><div class="divider"></div></li>
-                <li><a class="collapsible-header waves-effect waves-red" href="/about"><i class="material-icons left">info_outline</i>关于</a></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="{{ .HostURL }}/about"><i class="material-icons left">info_outline</i>关于</a></li>
                 <li><div class="divider"></div></li>
-                <li><a class="collapsible-header waves-effect waves-red" href="/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="{{ .HostURL }}/comment"><i class="material-icons left">chat_bubble_outline</i>留言</a></li>
                 <li><div class="divider"></div></li>
-                <li><a class="collapsible-header waves-effect waves-red" href="/materials"><i class="material-icons left">book</i>资料</a></li>
+                <li><a class="collapsible-header waves-effect waves-red" href="{{ .HostURL }}/materials"><i class="material-icons left">book</i>资料</a></li>
             </ul>
 
             <div id="fixed-action-btn" class="fixed-action-btn" style="bottom: 74px; right: 24px;">
@@ -61,11 +61,11 @@
                     <i class="large material-icons">bookmark_border</i>
                 </a>
                 <ul>
-                    <!-- <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="/stock"><i class="material-icons">trending_up</i></a></li> -->
-                    <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="/fund"><i class="material-icons">timeline</i></a></li>
-                    <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="/about"><i class="material-icons">info_outline</i></a></li>
-                    <li><a class="btn-floating purple tooltipped pulse" data-position="left" data-tooltip="留言" href="/comment"><i class="material-icons">chat_bubble_outline</i></a></li>
-                    <li><a class="btn-floating brown tooltipped pulse" data-position="left" data-tooltip="资料" href="/materials"><i class="material-icons">book</i></a></li>
+                    <!-- <li><a class="btn-floating red tooltipped pulse" data-position="left" data-tooltip="股票" href="{{ .HostURL }}/stock"><i class="material-icons">trending_up</i></a></li> -->
+                    <li><a class="btn-floating orange tooltipped pulse" data-position="left" data-tooltip="基金" href="{{ .HostURL }}/fund"><i class="material-icons">timeline</i></a></li>
+                    <li><a class="btn-floating blue tooltipped pulse" data-position="left" data-tooltip="关于" href="{{ .HostURL }}/about"><i class="material-icons">info_outline</i></a></li>
+                    <li><a class="btn-floating purple tooltipped pulse" data-position="left" data-tooltip="留言" href="{{ .HostURL }}/comment"><i class="material-icons">chat_bubble_outline</i></a></li>
+                    <li><a class="btn-floating brown tooltipped pulse" data-position="left" data-tooltip="资料" href="{{ .HostURL }}/materials"><i class="material-icons">book</i></a></li>
                     <li><a id="to-top" class="btn-floating green tooltipped pulse" data-position="left" data-tooltip="返回顶部"><i class="material-icons">publish</i></a></li>
                 </ul>
             </div>
@@ -146,7 +146,7 @@
         <script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
         <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.0/echarts.min.js"></script>
 
-        <script type="text/javascript" src="/statics/js/app.js" ></script>
+        <script type="text/javascript" src="{{ .HostURL }}/statics/js/app.js" ></script>
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHXJT6J0DM"></script>
@@ -162,7 +162,7 @@ gtag('config', 'G-EHXJT6J0DM');
             var _hmt = _hmt || [];
             (function() {
                             var hm = document.createElement("script");
-                            hm.src = "https://hm.baidu.com/hm.js?281f87a5501f74be56a6d65981d942a3";
+                            hm.src = "https://hm.baidu.com/hm.js?21169b062c3bc9615b5bdf9b9ef71937";
                             var s = document.getElementsByTagName("script")[0];
                             s.parentNode.insertBefore(hm, s);
                         })();

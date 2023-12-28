@@ -6,9 +6,9 @@
 [![GitHub release](https://img.shields.io/github/release/axiaoxin-com/investool.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/axiaoxin-com/investool/total.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
 
-[![](./statics/img/sidenav_icon.png)](http://investool.axiaoxin.com?from=github)
+[![](./statics/img/sidenav_icon.png)](http://axiaoxin.com/investool)
 
-<http://investool.axiaoxin.com?from=github>
+<http://axiaoxin.com/investool>
 
 InvesTool 项目是使用 Golang 实现的个人投资分析工具，主要是为了提高按基本面选股和基金筛选的效率工具。最初是本地的脚本，后来使用 Golang 实现提供命令行版本，目前主要以 Web 网页版为主实现相关功能。数据来源于东方财富网、亿牛网、新浪财经、天天基金。
 
@@ -46,7 +46,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 完善命令行使用方式，筛选参数和检测参数支持命令行自定义
 - 支持负债流动比检测
 - 支持现金流检测
-- 提供 WEB 界面操作 <http://investool.axiaoxin.com?from=github>
+- 提供 WEB 界面操作 <http://axiaoxin.com/investool>
 - 支持基金 4433 筛选
 - 自定义基金筛选
 - 基金检测
@@ -149,7 +149,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 支持 4433 指标的灵活配置，可以按自定义排名值进行筛选
 - 由于基金规模太小有存在清盘风险，规模太大不利于基金经理的灵活调仓，所以筛选 4433 时支持对基金规模进行筛选。建议值为 2-50 亿
 
-当前基金筛选、检测等操作目前只支持 WEB 界面操作<http://investool.axiaoxin.com/fund?from=github>，命令行暂未支持。
+当前基金筛选、检测等操作目前只支持 WEB 界面操作<http://axiaoxin.com/investool/fund>，命令行暂未支持。
 
 # 使用方法
 
@@ -165,7 +165,7 @@ NAME:
 USAGE:
    该程序不构成任何投资建议，程序只是个人辅助工具，具体分析仍然需要自己判断。
 
-官网地址: http://investool.axiaoxin.com
+官网地址: http://axiaoxin.com/investool
 
 VERSION:
    0.0.7

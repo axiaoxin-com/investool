@@ -35,6 +35,7 @@ func FundIndex(c *gin.Context) {
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金",
 			"Error":     err.Error(),
@@ -57,9 +58,10 @@ func FundIndex(c *gin.Context) {
 	result := fundList[pagi.StartIndex:pagi.EndIndex]
 	data := gin.H{
 		"Env":           viper.GetString("env"),
+		"HostURL":       viper.GetString("server.host_url"),
 		"Version":       version.Version,
 		"PageTitle":     "InvesTool | 基金",
-		"URLPath":       "/fund",
+		"URLPath":       viper.GetString("server.host_url") + "/fund",
 		"FundList":      result,
 		"Pagination":    pagi,
 		"IndexParam":    p,
@@ -100,6 +102,7 @@ func FundFilter(c *gin.Context) {
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金严选",
 			"Error":     err.Error(),
@@ -122,9 +125,10 @@ func FundFilter(c *gin.Context) {
 	result := fundList[pagi.StartIndex:pagi.EndIndex]
 	data := gin.H{
 		"Env":         viper.GetString("env"),
+		"HostURL":     viper.GetString("server.host_url"),
 		"Version":     version.Version,
 		"PageTitle":   "InvesTool | 基金 | 基金严选",
-		"URLPath":     "/fund/filter",
+		"URLPath":     viper.GetString("server.host_url") + "/fund/filter",
 		"FundList":    result,
 		"Pagination":  pagi,
 		"IndexParam":  p.ParamFundIndex,
@@ -183,6 +187,7 @@ func FundCheck(c *gin.Context) {
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     err.Error(),
@@ -194,6 +199,7 @@ func FundCheck(c *gin.Context) {
 	if p.Code == "" {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     "请填写基金代码",
@@ -208,6 +214,7 @@ func FundCheck(c *gin.Context) {
 	if err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     err.Error(),
@@ -219,6 +226,7 @@ func FundCheck(c *gin.Context) {
 	if !p.CheckStocks {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Funds":     funds,
@@ -231,6 +239,7 @@ func FundCheck(c *gin.Context) {
 	if len(funds) > 50 {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金检测",
 			"Error":     "基金数量超过限制",
@@ -263,6 +272,7 @@ func FundCheck(c *gin.Context) {
 	wg.Wait()
 	data := gin.H{
 		"Env":               viper.GetString("env"),
+		"HostURL":           viper.GetString("server.host_url"),
 		"Version":           version.Version,
 		"PageTitle":         "InvesTool | 基金 | 基金检测",
 		"Funds":             funds,
@@ -284,6 +294,7 @@ func FundSimilarity(c *gin.Context) {
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     err.Error(),
@@ -294,6 +305,7 @@ func FundSimilarity(c *gin.Context) {
 	if p.Codes == "" {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     "请填写待检测的基金代码",
@@ -307,6 +319,7 @@ func FundSimilarity(c *gin.Context) {
 	if err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 持仓相似度",
 			"Error":     err.Error(),
@@ -316,6 +329,7 @@ func FundSimilarity(c *gin.Context) {
 	}
 	data := gin.H{
 		"Env":       viper.GetString("env"),
+		"HostURL":   viper.GetString("server.host_url"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 基金 | 持仓相似度",
 		"Result":    result,
@@ -358,6 +372,7 @@ func FundManagers(c *gin.Context) {
 	if err := c.ShouldBind(&p); err != nil {
 		data := gin.H{
 			"Env":       viper.GetString("env"),
+			"HostURL":   viper.GetString("server.host_url"),
 			"Version":   version.Version,
 			"PageTitle": "InvesTool | 基金 | 基金经理",
 			"Error":     err.Error(),
@@ -425,9 +440,10 @@ func FundManagers(c *gin.Context) {
 
 	data := gin.H{
 		"Env":        viper.GetString("env"),
+		"HostURL":    viper.GetString("server.host_url"),
 		"Version":    version.Version,
 		"PageTitle":  "InvesTool | 基金 | 基金经理",
-		"URLPath":    "/fund/managers",
+		"URLPath":    viper.GetString("server.host_url") + "/fund/managers",
 		"Managers":   result,
 		"Pagination": pagi,
 		"Params":     p,

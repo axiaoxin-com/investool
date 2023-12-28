@@ -21,6 +21,7 @@ type ParamQueryFundByStock struct {
 func QueryFundByStock(c *gin.Context) {
 	data := gin.H{
 		"Env":       viper.GetString("env"),
+		"HostURL":   viper.GetString("server.host_url"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 基金 | 股票选基",
 		"Error":     "",

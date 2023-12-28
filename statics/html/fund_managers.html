@@ -75,17 +75,17 @@
     </div>
     <ul class="pagination center">
         <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num=1&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">first_page</i></a>
+            <a href="{{ .HostURL }}/fund/managers?page_num=1&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">first_page</i></a>
         </li>
         <li {{ if .Pagination.HasPrev }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_left</i></a>
+            <a href="{{ .HostURL }}/fund/managers?page_num={{ .Pagination.PrevPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_left</i></a>
         </li>
         <li><a class="tooltipped" data-position="top" data-tooltip="共{{ .Pagination.TotalCount }}位基金经理" href="#!">{{ .Pagination.PageNum }} / {{ .Pagination.PagesCount }}</a></li>
         <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_right</i></a>
+            <a href="{{ .HostURL }}/fund/managers?page_num={{ .Pagination.NextPageNum }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">chevron_right</i></a>
         </li>
         <li {{ if .Pagination.HasNext }}class="waves-effect waves-red"{{ else }}class="disabled"{{ end }}>
-            <a href="/fund/managers?page_num={{ .Pagination.PagesCount }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">last_page</i></a>
+            <a href="{{ .HostURL }}/fund/managers?page_num={{ .Pagination.PagesCount }}&page_size={{ .Params.PageSize }}&sort={{ .Params.Sort }}&min_working_years={{ .Params.MinWorkingYears }}&min_yieldse={{ .Params.MinYieldse }}&max_current_fund_count={{ .Params.MaxCurrentFundCount }}&min_scale={{ .Params.MinScale }}&fund_type={{ .Params.FundType }}"><i class="material-icons">last_page</i></a>
         </li>
     </ul>
 </div>

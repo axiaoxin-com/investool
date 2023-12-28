@@ -16,6 +16,7 @@ func Comment(c *gin.Context) {
 		"Env":       viper.GetString("env"),
 		"Version":   version.Version,
 		"PageTitle": "InvesTool | 留言",
+		"HostURL":   viper.GetString("server.host_url"),
 	}
 	c.HTML(http.StatusOK, "comment.html", data)
 	return
