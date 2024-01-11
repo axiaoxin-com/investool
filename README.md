@@ -6,25 +6,22 @@
 [![GitHub release](https://img.shields.io/github/release/axiaoxin-com/investool.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
 [![Github all releases](https://img.shields.io/github/downloads/axiaoxin-com/investool/total.svg)](https://gitHub.com/axiaoxin-com/investool/releases/)
 
-[![](./statics/img/sidenav_icon.png)](http://axiaoxin.com/investool)
-
-<http://axiaoxin.com/investool>
+![](./statics/img/sidenav_icon.png)
 
 InvesTool 项目是使用 Golang 实现的个人投资分析工具，主要是为了提高按基本面选股和基金筛选的效率工具。最初是本地的脚本，后来使用 Golang 实现提供命令行版本，目前主要以 Web 网页版为主实现相关功能。数据来源于东方财富网、亿牛网、新浪财经、天天基金。
 
-该程序不构成任何投资建议，仅作为个人对股票、基金投资有限认知的辅助工具，不一定适用于任何人。如果网站对您有帮助，可以点击网页上的广告进行支持：）
+## 郑重声明
 
-Web 服务使用的是[pink-lady 项目模板](https://github.com/axiaoxin-com/pink-lady)
+**免责声明：程序代码仅供本人学习研究使用，如作他用所承受的法律责任一概与作者无关（下载使用即代表你同意上述观点）。使用者不得干扰或破坏数据来源网站的服务或与服务相连的服务器和网络，且本程序不对您构成任何投资建议，据此操作，风险自担。**
 
-数据接口封装在 datacenter 包中，相关 API 文档地址：https://pkg.go.dev/github.com/axiaoxin-com/investool/datacenter
 
-# InvesTool 解决什么问题？
+## InvesTool 解决什么问题？
 
 InvesTool 要解决的问题是，在使用东方财富选股器按设置的条件筛选出股票后，通常筛选出的股票数量较多，需要人工对每一支股票的财报指标进行分析以判断是否可以长期持有。
 
 需要分析的指标较多，并且有一些指标无法直接获取，需要进行计算或根据历史财务数据进行计算，在大量股票需要分析的时候这是一个繁琐的工作，因此开发了 InvesTool 来让这个过程自动化。
 
-# 功能
+## 功能
 
 当前已实现的功能：
 
@@ -46,7 +43,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 完善命令行使用方式，筛选参数和检测参数支持命令行自定义
 - 支持负债流动比检测
 - 支持现金流检测
-- 提供 WEB 界面操作 <http://axiaoxin.com/investool>
+- 提供 WEB 界面操作
 - 支持基金 4433 筛选
 - 自定义基金筛选
 - 基金检测
@@ -54,13 +51,11 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 股票持仓相似度检测
 - 基金经理筛选
 
-其余 TODO 记录在 issue 中。
-
-# 我的选股规则
+## 我的选股规则
 
 根据各种指标筛选值得长期持有其股票进行投资的优质公司。（优质公司不代表当前股价在涨，长线存股）
 
-## 1. 财务优质
+### 1. 财务优质
 
 - 最新 ROE 高于 8%
 - ROE 平均值小于 20 时，至少 3 年内逐年递增
@@ -73,12 +68,12 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 本业营收比 90%-110% 之间，经营内容具备基础、垄断、必要性服务等特征。`本业比=营业利润/(营业利润+营业外收入)`
 - PEG 低于 1.5 `PEG=PE/净利润复合增长率` <0.8 低估成长动能，0.8-1.2 股价与成长动能匹配，1.2-1.5 市场给出较高评价，>1.5 股价与成长动能不匹配（个别股王除外）
 
-## 2. 估值优质
+### 2. 估值优质
 
 - 估值较低或中等
 - 股价低于合理价格（`合理价格 = 历史市盈率中位数 * (EPS * (1 + 营收增长比))`）
 
-## 3. 配置均衡
+### 3. 配置均衡
 
 - 选择行业分散配置
 - 历史波动率在 1 以内，进行持仓占比： 0.5 以下:0.5 以上 = 6:4
@@ -101,7 +96,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 2. ROE 不低于 8%
 3. 配发股利
 
-# 个人长线存股的买卖条件
+## 个人长线存股的买卖条件
 
 个人对长线存股的理解，股|票分为股和票。短线买的是票，追涨杀跌也好，高抛低吸也好，就是需要去炒它赚短期的价差；长线想买的是手里的持股数，尽量以相对较低的价格买到较多的股数成为该公司的一个股东，目标并不是立刻盈利，主要是作为退休养老金进行存股，买好公司的股票，做公司股东。
 
@@ -115,7 +110,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 基本面不符合预期
 - 找到更好的标的
 
-# 关于 ETF 的选择标准
+## 关于 ETF 的选择标准
 
 - 基本面看净值
 - 完美 ETF：市价与净值相等
@@ -123,7 +118,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 折价率大于 3%时考虑买入，溢价率大于 3%时考虑卖出
 - 公式：`溢价率=(市价 - 净值) / 净值`
 
-# 基金经理筛选标准
+## 基金经理筛选标准
 
 基金可以按收益率进行 4433 法则选择外，可以按基金经理进行筛选，毕竟买基金实质是买基金经理，基金经理的选择参考标准为：
 
@@ -132,7 +127,7 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 管理规模不低于 60 亿
 - 同时管理的基金不超过 10 支，同时管理太多只精力不一定够
 
-# 基金 4433 筛选方法
+## 基金 4433 筛选方法
 
 基金筛选使用简单的 4433 法则进行筛选，即：
 
@@ -149,9 +144,11 @@ InvesTool 要解决的问题是，在使用东方财富选股器按设置的条�
 - 支持 4433 指标的灵活配置，可以按自定义排名值进行筛选
 - 由于基金规模太小有存在清盘风险，规模太大不利于基金经理的灵活调仓，所以筛选 4433 时支持对基金规模进行筛选。建议值为 2-50 亿
 
-当前基金筛选、检测等操作目前只支持 WEB 界面操作<http://axiaoxin.com/investool/fund>，命令行暂未支持。
+当前基金筛选、检测等操作目前只支持 WEB 界面操作，命令行暂未支持。
 
-# 使用方法
+## 使用方法
+
+数据接口封装在 datacenter 包中，相关 API 文档地址：https://pkg.go.dev/github.com/axiaoxin-com/investool/datacenter
 
 [点击下载对应系统最新版本解压得到可执行文件](https://github.com/axiaoxin-com/investool/releases/)
 
@@ -187,7 +184,7 @@ COPYRIGHT:
    (c) 2021 axiaoxin
 ```
 
-## exportor
+### exportor
 
 exportor 是数据导出器，不使用参数默认导出 EXCEL 文件。
 
@@ -289,7 +286,7 @@ OPTIONS:
 ./investool -l error exportor -f ./stocks.xlsx --filter.special_security_name_abbr_list 福莱特 --filter.special_security_name_abbr_list 旗滨集团 --disable_check
 ```
 
-## checker
+### checker
 
 给定关键词/股票代码搜索股票进行评估检测
 
@@ -330,9 +327,11 @@ OPTIONS:
 ./investool -l error checker -k 比亚迪
 ```
 
-## webserver
+### webserver
 
 启动 WEB 服务：
+
+Web 服务使用的是[pink-lady 项目模板](https://github.com/axiaoxin-com/pink-lady)
 
 ```
 ./investool webserver
@@ -342,7 +341,7 @@ OPTIONS:
 
 随着时间的推移，从中报发布结束开始，满足默认筛选条件的公司会越来越多，筛选并检测的耗时也会逐渐增加，服务部署时反向代理的超时时间需调大。
 
-## index
+### index
 
 获取指数代码 000905 信息
 
@@ -362,18 +361,11 @@ OPTIONS:
 ./investool index -c 000905 -i 000922
 ```
 
-# 欢迎 Star
+
+## 最后
+
+程序输出的所有数据与信息仅供参考，不构成投资建议。再次强调，本程序代码仅供本人学习研究使用，如作他用所承受的法律责任一概与作者无关（下载使用即代表你同意上述观点）。
+
+祝大家投资顺利。
 
 [![Stargazers over time](https://starchart.cc/axiaoxin-com/investool.svg)](https://githuv.com/axiaoxin-com/investool)
-
-# 最后
-
-程序输出的所有数据与信息仅供参考，不构成投资建议。
-
-程序开发耗费个人大量业余时间，如果对您有帮助，您喜欢的话，感谢您的打赏，100 不嫌多 1 毛不嫌少，感谢您的支持。
-
-祝各位早日财务自由！
-
-| 微信                         | 支付宝                        |
-| ---------------------------- | ----------------------------- |
-| ![](./statics/img/wxpay.jpg) | ![](./statics/img/alipay.jpg) |
